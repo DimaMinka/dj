@@ -144,20 +144,20 @@ const t = useTranslations(lang);
       isTransitioningSlide = true;
       const targetIndex = index;
 
-      // 1. PHASE 1: Fade out current card & unveil pure landscape
+      // 1. PHASE 1: Gentle fade out of current card & unveil pure landscape
       viewport.classList.add('card-is-departing');
       window.dispatchEvent(
         new CustomEvent('dj:space-transitioning', { detail: { active: true } })
       );
 
-      // 2. PHASE 2 (after 260ms): Swap background layer and glide to new slide
+      // 2. PHASE 2 (after 420ms): Swap background layer and glide to new slide
       setTimeout(() => {
         currentIndex = targetIndex;
         dragOffset = 0;
         emitSpaceChange(currentIndex);
         updateTrackPosition(false); // Move track while invisible
 
-        // 3. PHASE 3 (after 380ms): Fade back in the new card & restore subtle vignettes
+        // 3. PHASE 3 (after 360ms pause on pure background): Gently manifest the new card
         setTimeout(() => {
           viewport.classList.remove('card-is-departing');
           window.dispatchEvent(
@@ -165,9 +165,9 @@ const t = useTranslations(lang);
           );
           setTimeout(() => {
             isTransitioningSlide = false;
-          }, 350);
-        }, 180);
-      }, 260);
+          }, 550);
+        }, 360);
+      }, 420);
     }
 
     function nextSlide() {

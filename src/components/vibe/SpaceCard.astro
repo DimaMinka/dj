@@ -106,17 +106,17 @@ const t = useTranslations(lang);
                 0 0 28px rgba(var(--card-glow-rgb), 0.14),
                 inset 0 1px 1px rgba(255, 255, 255, 0.7);
     transition: var(--transition-theme), 
-                transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
-                opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                border-color 0.4s ease, 
-                box-shadow 0.4s ease;
+                transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), 
+                opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.6s ease, 
+                box-shadow 0.6s ease;
     will-change: transform, opacity;
   }
 
-  /* Fade out during space change to reveal the background landscape */
+  /* Gentle dissolution during space change to reveal the background landscape */
   :global(.card-is-departing) .art-book-card {
     opacity: 0;
-    transform: scale(0.92) translateY(12px);
+    transform: scale(0.96) translateY(6px);
     pointer-events: none;
   }
 
