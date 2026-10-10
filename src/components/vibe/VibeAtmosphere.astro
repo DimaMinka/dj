@@ -38,8 +38,9 @@ import { spaces } from '../../data/spaces';
     const layers = document.querySelectorAll('.space-bg-layer');
     if (!canvas || !dynamicAura) return;
 
+    // When space changes, activate target layer and update aura
     window.addEventListener('dj:space-change', ((e: CustomEvent) => {
-      const { index, glowRgb, glowColor } = e.detail || {};
+      const { index, glowRgb } = e.detail || {};
       if (typeof index !== 'number') return;
 
       layers.forEach((layer, idx) => {
@@ -51,8 +52,14 @@ import { spaces } from '../../data/spaces';
       });
 
       if (glowRgb) {
-        dynamicAura.style.background = `radial-gradient(circle at 50% 38%, rgba(${glowRgb}, 0.28) 0%, rgba(${glowRgb}, 0.08) 45%, transparent 70%)`;
+        dynamicAura.style.background = `radial-gradient(circle at 50% 38%, rgba(${glowRgb}, 0.35) 0%, rgba(${glowRgb}, 0.12) 48%, transparent 72%)`;
       }
+    }) as EventListener);
+
+    // Cinematic reveal during swipe: lighten vignettes to let full watercolor shine
+    window.addEventListener('dj:space-transitioning', ((e: CustomEvent) => {
+      const isTransitioning = Boolean(e.detail?.active);
+      canvas.classList.toggle('is-revealing-background', isTransitioning);
     }) as EventListener);
   }
 
@@ -109,7 +116,7 @@ import { spaces } from '../../data/spaces';
       rgba(11, 11, 13, 0.98) 100%
     );
     opacity: 1;
-    transition: opacity 0.6s ease;
+    transition: opacity 0.6s cubic-bezier(0.2, 0.8, 0.3, 1);
   }
 
   /* Day Vignette */
@@ -124,7 +131,7 @@ import { spaces } from '../../data/spaces';
       rgba(252, 248, 251, 0.98) 100%
     );
     opacity: 0;
-    transition: opacity 0.6s ease;
+    transition: opacity 0.6s cubic-bezier(0.2, 0.8, 0.3, 1);
   }
 
   :global(html[data-theme="day"]:not(.dark)) .space-vignette-night {
@@ -133,6 +140,24 @@ import { spaces } from '../../data/spaces';
 
   :global(html[data-theme="day"]:not(.dark)) .space-vignette-day {
     opacity: 1;
+  }
+
+  /* Cinematic Reveal: during space transitions, fade out vignettes to reveal the breathtaking landscape */
+  .vibe-atmosphere-canvas.is-revealing-background .space-vignette-night {
+    opacity: 0.22;
+  }
+
+  :global(html[data-theme="day"]:not(.dark)) .vibe-atmosphere-canvas.is-revealing-background .space-vignette-day {
+    opacity: 0.15;
+  }
+
+  .vibe-atmosphere-canvas.is-revealing-background .space-bg-img {
+    filter: brightness(0.92) contrast(1.15) saturate(1.1);
+  }
+
+  :global(html[data-theme="day"]:not(.dark)) .vibe-atmosphere-canvas.is-revealing-background .space-bg-img {
+    opacity: 0.85;
+    filter: brightness(1.02) contrast(1.12) saturate(1.08);
   }
 
   /* Dynamic Aura */
