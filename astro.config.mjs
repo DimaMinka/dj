@@ -7,6 +7,9 @@ import markdownForAgents from '@puralex/astro-markdown-for-agents';
 export default defineConfig({
   site: 'https://dj.dimaminka.com',
   adapter: cloudflare(),
+  devToolbar: {
+    enabled: false,
+  },
   integrations: [
     markdownForAgents(),
   ],
