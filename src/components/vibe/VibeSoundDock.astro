@@ -12,7 +12,12 @@ const t = useTranslations(lang);
 const initialSpace = spaces[initialIndex] || spaces[0];
 ---
 
-<div class="sound-dock-wrapper" id="soundDockContainer" data-initial-slug={initialSpace.slug}>
+<div
+  class="sound-dock-wrapper"
+  id="soundDockContainer"
+  data-initial-slug={initialSpace.slug}
+  style={`--player-color: ${initialSpace.glowColor}; --player-rgb: ${initialSpace.glowRgb};`}
+>
   <!-- Minimalist Live Audio Stream Bar from Stitch -->
   <div class="audio-stream-card">
     <div class="stream-telemetry">
@@ -71,7 +76,7 @@ const initialSpace = spaces[initialIndex] || spaces[0];
     const eqBars = document.querySelectorAll('.wave-bar');
 
     const container = document.getElementById('soundDockContainer');
-    let currentSlug = container?.dataset?.initialSlug || 'sunset';
+    let currentSlug = container?.dataset?.initialSlug || 'aegean';
     let isHarmonicActive = false;
     let audioCtx: AudioContext | null = null;
     let osc: OscillatorNode | null = null;
@@ -85,6 +90,12 @@ const initialSpace = spaces[initialIndex] || spaces[0];
         currentSlug = space.slug;
         if (titleEl) titleEl.textContent = space.trackTitle;
         if (subtitleEl) subtitleEl.textContent = space.trackSubtitle;
+
+        // Dynamically tint player button, equalizer and CTA to active vibe color
+        if (container) {
+          container.style.setProperty('--player-color', space.glowColor);
+          container.style.setProperty('--player-rgb', space.glowRgb);
+        }
       }
     }) as EventListener);
 
@@ -201,20 +212,20 @@ const initialSpace = spaces[initialIndex] || spaces[0];
     height: 2.65rem;
     flex-shrink: 0;
     border-radius: var(--radius-full);
-    background: var(--color-primary);
+    background: var(--player-color, var(--color-primary));
     border: none;
     color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 4px 14px rgba(217, 119, 6, 0.35);
-    transition: transform 0.2s ease, background-color 0.2s ease;
+    box-shadow: 0 4px 14px rgba(var(--player-rgb, 217, 119, 6), 0.38);
+    transition: transform 0.2s ease, background-color 0.4s ease, box-shadow 0.4s ease;
   }
 
   .play-circle-btn:hover {
     transform: scale(1.05);
-    background: #c96c05;
+    filter: brightness(1.1);
   }
 
   .play-circle-btn:active {
@@ -277,16 +288,17 @@ const initialSpace = spaces[initialIndex] || spaces[0];
     width: 2.5px;
     height: 6px;
     border-radius: var(--radius-full);
-    background: var(--color-primary);
-    transition: height 0.24s ease;
+    background: var(--player-color, var(--color-primary));
+    opacity: 0.85;
+    transition: height 0.24s ease, background-color 0.4s ease;
   }
 
   .bar-2, .bar-4 {
-    background: #f59e0b;
+    opacity: 1;
   }
 
   .bar-6 {
-    background: #d97706;
+    opacity: 0.9;
   }
 
   /* Elegant Art-Book CTA Button Link */
@@ -296,10 +308,10 @@ const initialSpace = spaces[initialIndex] || spaces[0];
     padding-inline: 1.25rem;
     border-radius: var(--radius-full);
     background: rgba(245, 237, 227, 0.92);
-    border: 1px solid rgba(217, 119, 6, 0.35);
+    border: 1px solid rgba(var(--player-rgb, 217, 119, 6), 0.35);
     color: #3b2c22;
     text-decoration: none;
-    box-shadow: 0 4px 16px rgba(180, 130, 90, 0.12), 0 0 20px rgba(217, 119, 6, 0.08);
+    box-shadow: 0 4px 16px rgba(180, 130, 90, 0.12), 0 0 20px rgba(var(--player-rgb, 217, 119, 6), 0.12);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     display: flex;
@@ -310,29 +322,29 @@ const initialSpace = spaces[initialIndex] || spaces[0];
     user-select: none;
     -webkit-user-select: none;
     box-sizing: border-box;
-    transition: var(--transition-theme), transform 0.2s ease, border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+    transition: var(--transition-theme), transform 0.2s ease, border-color 0.4s ease, box-shadow 0.4s ease, background-color 0.25s ease;
   }
 
   :global(html[data-theme="night"]) .cta-location-btn,
   :global(html.dark) .cta-location-btn {
     background: rgba(36, 29, 25, 0.88);
-    border-color: rgba(255, 198, 101, 0.3);
+    border-color: rgba(var(--player-rgb, 255, 198, 101), 0.35);
     color: #f7eee4;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 25px rgba(229, 169, 60, 0.12);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 25px rgba(var(--player-rgb, 229, 169, 60), 0.18);
   }
 
   .cta-location-btn:hover {
     background: #faefe1;
-    border-color: var(--color-primary);
-    box-shadow: 0 8px 24px rgba(217, 119, 6, 0.22), 0 0 24px rgba(217, 119, 6, 0.18);
+    border-color: var(--player-color, var(--color-primary));
+    box-shadow: 0 8px 24px rgba(var(--player-rgb, 217, 119, 6), 0.25), 0 0 24px rgba(var(--player-rgb, 217, 119, 6), 0.22);
     transform: translateY(-1px);
   }
 
   :global(html[data-theme="night"]) .cta-location-btn:hover,
   :global(html.dark) .cta-location-btn:hover {
     background: rgba(48, 38, 33, 0.95);
-    border-color: var(--color-primary);
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5), 0 0 30px rgba(229, 169, 60, 0.22);
+    border-color: var(--player-color, var(--color-primary));
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5), 0 0 30px rgba(var(--player-rgb, 229, 169, 60), 0.28);
   }
 
   .cta-location-btn:active {
@@ -343,10 +355,10 @@ const initialSpace = spaces[initialIndex] || spaces[0];
     width: 0.45rem;
     height: 0.45rem;
     border-radius: var(--radius-full);
-    background: var(--color-primary);
-    box-shadow: 0 0 8px var(--color-primary);
+    background: var(--player-color, var(--color-primary));
+    box-shadow: 0 0 8px var(--player-color, var(--color-primary));
     flex-shrink: 0;
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, background-color 0.4s ease, box-shadow 0.4s ease;
   }
 
   .cta-location-btn:hover .cta-dot {
@@ -365,8 +377,8 @@ const initialSpace = spaces[initialIndex] || spaces[0];
 
   .cta-arrow {
     font-size: 1rem;
-    color: var(--color-primary);
-    transition: transform 0.2s ease;
+    color: var(--player-color, var(--color-primary));
+    transition: transform 0.2s ease, color 0.4s ease;
     flex-shrink: 0;
   }
 
