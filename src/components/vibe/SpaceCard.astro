@@ -1,0 +1,340 @@
+---
+import { type SupportedLang, defaultLang, useTranslations } from '../../i18n/ui';
+import type { Space } from '../../data/spaces';
+
+interface Props {
+  space: Space;
+  lang?: SupportedLang;
+}
+
+const { space, lang = defaultLang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<article
+  class="space-card"
+  data-space-slug={space.slug}
+  data-space-id={space.id}
+  style={`--card-glow-color: ${space.glowColor}; --card-glow-rgb: ${space.glowRgb};`}
+>
+  <div class="card-inner">
+    <!-- Top Metadata Badge Row -->
+    <div class="meta-row">
+      <div class="category-pill">
+        <span class="category-dot"></span>
+        <span class="category-text">{space.category[lang] || space.category.en}</span>
+      </div>
+
+      <div class="audio-specs">
+        <span class="audio-bpm">{space.bpm} BPM</span>
+        <span class="audio-sep">•</span>
+        <span class="audio-key">{space.keySignature}</span>
+        <span class="audio-sep">•</span>
+        <span class="audio-freq">{space.frequency} Hz</span>
+      </div>
+    </div>
+
+    <!-- Main Title & Location Horizon -->
+    <div class="title-block">
+      <span class="title-number">{space.numberLabel}</span>
+      <h2 class="space-title">
+        {space.title[lang] || space.title.en}
+      </h2>
+      <p class="space-subtitle">
+        {space.subtitle[lang] || space.subtitle.en}
+      </p>
+    </div>
+
+    <!-- Poetic Lyric Quotation -->
+    <blockquote class="poetry-quote">
+      <span class="quote-mark">“</span>
+      <span class="quote-text">{space.poetry[lang] || space.poetry.en}</span>
+    </blockquote>
+
+    <!-- Description & Atmosphere Narrative -->
+    <p class="space-description">
+      {space.description[lang] || space.description.en}
+    </p>
+
+    <!-- Aesthetic Atmosphere Tags -->
+    <div class="tags-row" aria-label="Atmospheric tags">
+      {(space.tags[lang] || space.tags.en).map((tag: string) => (
+        <span class="tag-chip">{tag}</span>
+      ))}
+    </div>
+
+    <!-- Action Trigger: Open Setup Drawer -->
+    <div class="card-action-row">
+      <button
+        type="button"
+        class="setup-trigger-btn"
+        data-trigger-setup={space.slug}
+        aria-label={`Open technical and lighting setup for ${space.title[lang] || space.title.en}`}
+      >
+        <span class="material-symbols-outlined btn-setup-icon" aria-hidden="true">tune</span>
+        <span class="btn-setup-text">{t('experienceSetupBtn')}</span>
+        <span class="material-symbols-outlined btn-setup-arrow" aria-hidden="true">arrow_outward</span>
+      </button>
+    </div>
+  </div>
+</article>
+
+<script>
+  function initSetupButtons() {
+    const buttons = document.querySelectorAll('[data-trigger-setup]');
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        const slug = (btn as HTMLElement).dataset.triggerSetup;
+        window.dispatchEvent(
+          new CustomEvent('dj:open-setup', {
+            detail: { slug },
+          })
+        );
+      });
+    });
+  }
+
+  initSetupButtons();
+</script>
+
+<style>
+  .space-card {
+    position: relative;
+    width: 100%;
+    max-width: 27rem;
+    margin-inline: auto;
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .card-inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem 1.15rem;
+    border-radius: var(--radius-xl);
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(var(--card-glow-rgb), 0.15);
+    transition: var(--transition-theme), transform 0.3s ease, border-color 0.4s ease;
+  }
+
+  @media (min-height: 750px) {
+    .card-inner {
+      padding: 1.6rem 1.35rem;
+      gap: 0.15rem;
+    }
+  }
+
+  .meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-block-end: 0.65rem;
+  }
+
+  .category-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding-inline: 0.55rem;
+    padding-block: 0.2rem;
+    border-radius: var(--radius-full);
+    background: rgba(var(--card-glow-rgb), 0.12);
+    border: 1px solid rgba(var(--card-glow-rgb), 0.25);
+  }
+
+  .category-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: var(--radius-full);
+    background: var(--card-glow-color);
+    box-shadow: 0 0 6px var(--card-glow-color);
+  }
+
+  .category-text {
+    font-family: var(--font-body);
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--card-glow-color);
+  }
+
+  .audio-specs {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    letter-spacing: 0.08em;
+    color: var(--color-text-subtle);
+  }
+
+  .audio-sep {
+    opacity: 0.4;
+  }
+
+  .audio-bpm {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .title-block {
+    display: flex;
+    flex-direction: column;
+    margin-block-end: 0.5rem;
+  }
+
+  .title-number {
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--color-text-subtle);
+    opacity: 0.7;
+    margin-block-end: 0.2rem;
+  }
+
+  .space-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.45rem, 5vw, 2.15rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    margin: 0;
+    color: var(--color-text-main);
+  }
+
+  .space-subtitle {
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--card-glow-color);
+    margin: 0.25rem 0 0;
+  }
+
+  .poetry-quote {
+    position: relative;
+    margin: 0.45rem 0;
+    padding-inline-start: 0.85rem;
+    border-inline-start: 2px solid var(--card-glow-color);
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--color-text-muted);
+  }
+
+  .quote-mark {
+    position: absolute;
+    inset-inline-start: 0.1rem;
+    top: -0.3rem;
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    color: var(--card-glow-color);
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  .space-description {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: var(--color-text-subtle);
+    margin: 0.25rem 0 0.65rem;
+  }
+
+  .tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-block-end: 0.85rem;
+  }
+
+  .tag-chip {
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    letter-spacing: 0.04em;
+    padding-inline: 0.5rem;
+    padding-block: 0.2rem;
+    border-radius: var(--radius-full);
+    background: var(--color-surface-container);
+    border: 1px solid var(--color-glass-border);
+    color: var(--color-text-main);
+    opacity: 0.9;
+  }
+
+  .card-action-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .setup-trigger-btn {
+    position: relative;
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: 0.95rem;
+    padding-block: 0.65rem;
+    border-radius: var(--radius-lg);
+    background: var(--color-surface-container);
+    border: 1px solid var(--color-glass-border);
+    color: var(--color-text-main);
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: var(--transition-theme), transform 0.2s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .setup-trigger-btn:hover {
+    border-color: var(--card-glow-color);
+    box-shadow: 0 0 15px rgba(var(--card-glow-rgb), 0.3);
+    transform: translateY(-1px);
+  }
+
+  .setup-trigger-btn:active {
+    transform: scale(0.98);
+  }
+
+  .btn-setup-icon {
+    font-size: 1.125rem;
+    color: var(--card-glow-color);
+  }
+
+  .btn-setup-text {
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-main);
+  }
+
+  .btn-setup-arrow {
+    font-size: 1rem;
+    color: var(--card-glow-color);
+    transition: transform 0.2s ease;
+  }
+
+  :global([dir="rtl"]) .btn-setup-arrow {
+    transform: rotate(90deg);
+  }
+
+  .setup-trigger-btn:hover .btn-setup-arrow {
+    transform: translate(2px, -2px);
+  }
+
+  :global([dir="rtl"]) .setup-trigger-btn:hover .btn-setup-arrow {
+    transform: translate(-2px, -2px) rotate(90deg);
+  }
+</style>

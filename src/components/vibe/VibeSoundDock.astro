@@ -1,0 +1,339 @@
+---
+import { defaultLang, type SupportedLang, useTranslations } from '../../i18n/ui';
+import { spaces } from '../../data/spaces';
+
+interface Props {
+  lang?: SupportedLang;
+}
+
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang);
+const initialSpace = spaces[0];
+---
+
+<div class="sound-dock-container" id="soundDockContainer">
+  <div class="sound-dock-bar">
+    <!-- Active Space Audio Telemetry -->
+    <div class="dock-telemetry">
+      <button
+        id="dockAudioToggle"
+        class="dock-play-btn"
+        type="button"
+        aria-label="Toggle ambient harmonic tone"
+      >
+        <span class="material-symbols-outlined play-icon" id="dockPlayIcon" aria-hidden="true">graphic_eq</span>
+      </button>
+
+      <div class="dock-info">
+        <span id="dockSpaceTitle" class="dock-title">{initialSpace.title[lang] || initialSpace.title.en}</span>
+        <div class="dock-meta-row">
+          <span class="dock-status">{t('dockPlaying')}</span>
+          <span class="dock-sep">•</span>
+          <span id="dockBpm" class="dock-bpm">{initialSpace.bpm} {t('dockBpm')}</span>
+          <span class="dock-sep">•</span>
+          <span class="dock-freq">432 Hz</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Harmonic Equalizer Waves -->
+    <div class="dock-equalizer" id="dockEqualizer" aria-hidden="true">
+      <span class="eq-bar bar-1"></span>
+      <span class="eq-bar bar-2"></span>
+      <span class="eq-bar bar-3"></span>
+      <span class="eq-bar bar-4"></span>
+      <span class="eq-bar bar-5"></span>
+    </div>
+
+    <!-- Right Quick Action: Open Current Setup Drawer -->
+    <button
+      id="dockSetupAction"
+      class="dock-action-btn"
+      type="button"
+      aria-label="Open lighting and acoustics rider"
+    >
+      <span class="material-symbols-outlined action-icon" aria-hidden="true">tune</span>
+      <span class="action-label">{t('experienceSetupBtn')}</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  function initSoundDock() {
+    const titleEl = document.getElementById('dockSpaceTitle');
+    const bpmEl = document.getElementById('dockBpm');
+    const playBtn = document.getElementById('dockAudioToggle');
+    const playIcon = document.getElementById('dockPlayIcon');
+    const setupBtn = document.getElementById('dockSetupAction');
+    const eqBars = document.querySelectorAll('.eq-bar');
+
+    let currentSlug = 'sunset';
+    let isHarmonicActive = false;
+    let audioCtx: AudioContext | null = null;
+    let osc: OscillatorNode | null = null;
+    let gainNode: GainNode | null = null;
+
+    // Listen to space changes
+    window.addEventListener('dj:space-change', ((e: CustomEvent) => {
+      const { slug, title, bpm, glowColor } = e.detail || {};
+      if (slug) currentSlug = slug;
+
+      if (titleEl && title) {
+        const lang = document.documentElement.lang || 'en';
+        titleEl.textContent = title[lang] || title.en || title;
+      }
+
+      if (bpmEl && bpm) {
+        bpmEl.textContent = `${bpm} BPM`;
+      }
+
+      if (glowColor) {
+        eqBars.forEach((bar) => {
+          (bar as HTMLElement).style.backgroundColor = glowColor;
+          (bar as HTMLElement).style.boxShadow = `0 0 6px ${glowColor}`;
+        });
+      }
+    }) as EventListener);
+
+    // Open current setup drawer from dock
+    setupBtn?.addEventListener('click', () => {
+      window.dispatchEvent(
+        new CustomEvent('dj:open-setup', {
+          detail: { slug: currentSlug },
+        })
+      );
+    });
+
+    // Web Audio Harmonic Ambient Synthesizer
+    function toggleAmbientSound() {
+      try {
+        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+        if (!audioCtx) {
+          audioCtx = new AudioContextClass();
+        }
+
+        if (isHarmonicActive) {
+          // Stop gently
+          if (gainNode && audioCtx) {
+            gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.5);
+            setTimeout(() => {
+              osc?.stop();
+              osc?.disconnect();
+              osc = null;
+            }, 500);
+          }
+          isHarmonicActive = false;
+          playIcon?.classList.remove('is-playing');
+        } else {
+          // Start harmonic drone
+          if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+          }
+
+          osc = audioCtx.createOscillator();
+          gainNode = audioCtx.createGain();
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(432, audioCtx.currentTime); // Solfeggio 432Hz
+
+          gainNode.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.05, audioCtx.currentTime + 0.8);
+
+          osc.connect(gainNode);
+          gainNode.connect(audioCtx.destination);
+
+          osc.start();
+          isHarmonicActive = true;
+          playIcon?.classList.add('is-playing');
+        }
+      } catch (e) {
+        console.warn('Dock sound error:', e);
+      }
+    }
+
+    playBtn?.addEventListener('click', toggleAmbientSound);
+
+    // Animate equalizer bars
+    setInterval(() => {
+      eqBars.forEach((bar) => {
+        const h = Math.floor(Math.random() * 14) + 4;
+        (bar as HTMLElement).style.height = `${h}px`;
+      });
+    }, 220);
+  }
+
+  initSoundDock();
+</script>
+
+<style>
+  .sound-dock-container {
+    position: relative;
+    z-index: 20;
+    width: 100%;
+    padding-inline: 1.25rem;
+    padding-block-end: 0.5rem;
+    box-sizing: border-box;
+    flex-shrink: 0;
+  }
+
+  .sound-dock-bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    max-width: 32rem;
+    margin-inline: auto;
+    padding-inline: 0.85rem;
+    padding-block: 0.65rem;
+    border-radius: var(--radius-full);
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 15px var(--color-primary-glow);
+    transition: var(--transition-theme);
+  }
+
+  .dock-telemetry {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .dock-play-btn {
+    width: 2.25rem;
+    height: 2.25rem;
+    flex-shrink: 0;
+    border-radius: var(--radius-full);
+    background: var(--color-surface-container);
+    border: 1px solid var(--color-glass-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 0 12px var(--color-primary-glow);
+    transition: var(--transition-theme), transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  .dock-play-btn:hover {
+    border-color: var(--color-primary);
+    transform: scale(1.05);
+  }
+
+  .play-icon {
+    font-size: 1.15rem;
+    color: var(--color-primary);
+    transition: color 0.3s ease;
+  }
+
+  .play-icon.is-playing {
+    color: var(--color-resonance);
+    animation: icon-pulse 1.2s infinite;
+  }
+
+  @keyframes icon-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+
+  .dock-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .dock-title {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .dock-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.5rem;
+    letter-spacing: 0.05em;
+    color: var(--color-text-subtle);
+    margin-block-start: 0.1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .dock-status {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .dock-sep {
+    opacity: 0.4;
+  }
+
+  .dock-equalizer {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 1.15rem;
+    padding-inline: 0.25rem;
+  }
+
+  .eq-bar {
+    width: 2px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background-color: var(--color-primary);
+    box-shadow: 0 0 6px var(--color-primary-glow);
+    transition: height 0.22s ease, background-color 0.4s ease;
+  }
+
+  .dock-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding-inline: 0.75rem;
+    padding-block: 0.4rem;
+    border-radius: var(--radius-full);
+    background: var(--color-surface-container);
+    border: 1px solid var(--color-glass-border);
+    color: var(--color-text-main);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: var(--transition-theme), transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  .dock-action-btn:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-1px);
+  }
+
+  .action-icon {
+    font-size: 0.875rem;
+    color: var(--color-primary);
+  }
+
+  .action-label {
+    display: none;
+    font-family: var(--font-body);
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 500px) {
+    .action-label {
+      display: inline;
+    }
+  }
+</style>
