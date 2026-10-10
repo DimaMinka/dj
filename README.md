@@ -51,7 +51,10 @@ dj/
 │   │   └── tokens.css                       # Design tokens, themes & page transitions
 │   └── pages/
 │       ├── index.astro                      # Intro Gateway page entrypoint
-│       └── vibe.astro                       # Sound Worlds (Vibe Space) entrypoint
+│       ├── vibe.astro                       # Legacy alias (redirects to /vibes/sunset)
+│       └── vibes/
+│           ├── index.astro                  # Redirect to /vibes/sunset
+│           └── [slug].astro                 # Deep-linked Vibe Space (/vibes/sunset, /vibes/garden, etc.)
 ├── astro.config.mjs                         # Cloudflare adapter & site config
 ├── wrangler.jsonc                           # Cloudflare Workers configuration
 └── AGENTS.md                                # Local agent development workflow rules
@@ -80,7 +83,11 @@ Follow guidelines from [AGENTS.md](./AGENTS.md):
 
 ## 🗺️ Next Steps Roadmap
 1. [x] **Phase 1: Intro Gateway Screen** (`feature/intro-screen` -> `main`) — Complete with Day/Night resonance, 432 Hz ritual, and mobile adaptations.
-2. [x] **Phase 2: Sound Worlds / Vibe Space** (`feature/vibe-space`) — Complete 5-space horizontal swipe carousel (Sunset Villa, Garden Sanctuary, Twilight Vineyard, Desert Nomad, Nordic Peaks), dynamic glow transitions, Web Audio ambient synth dock, and slide-up lighting/audio setup rider.
+2. [x] **Phase 2: Sound Worlds / Vibe Space** (`feature/vibe-space`) — Complete 5-space interactive exhibition (Sunset Villa, Garden Sanctuary, Twilight Vineyard, Desert Nomad, Nordic Peaks):
+   * **Deep-Linked Routing (`/vibes/[slug]`):** Static routes with dynamic browser URL synchronization via `history.replaceState`.
+   * **Cinematic In-Place Transitions:** Staggered sequence (instant interface & pagination dissolve -> fast background fade to deep darkness -> pure landscape reveal -> real-time frosted glass blur -> staged content & gold ornament arrival).
+   * **Dynamic Luminous Dust:** Floating ambient particles color-tinted to match each space's unique aura (amber, emerald, amethyst, flame, glacial).
+   * **Interactive Sound Dock & Riders:** Live ambient Solfeggio synthesizer dock and slide-up technical lighting/audio setup drawer.
 3. [ ] **Phase 3: Curatorial Tape & Mix Showcase** — Full mix streaming audio player, waveform scrubbing, tracklist cues, and tape aesthetics.
 4. [ ] **Phase 4: Lighting & Equipment Atelier** — Interactive 3D/photographic gallery of 12+ wireless light fixtures (2200K blinders, moving heads, fire pods).
 5. [ ] **Phase 5: Booking & Inquiry Portal** — Direct booking experience for private retreats, boutique festivals, and villa residencies.
