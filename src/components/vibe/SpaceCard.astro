@@ -18,42 +18,48 @@ const t = useTranslations(lang);
   style={`--card-glow-color: ${space.glowColor}; --card-glow-rgb: ${space.glowRgb};`}
 >
   <div class="art-book-card">
+    <!-- Dedicated Glass Backdrop Plate with real-time blur -->
+    <div class="card-glass-layer" aria-hidden="true"></div>
+
     <!-- 4 Ornamental Gold-accent Corner Brackets -->
     <div class="card-corner corner-tl" aria-hidden="true"></div>
     <div class="card-corner corner-tr" aria-hidden="true"></div>
     <div class="card-corner corner-bl" aria-hidden="true"></div>
     <div class="card-corner corner-br" aria-hidden="true"></div>
 
-    <!-- Category Supertitle (e.g. — PRIVATE VILLA ATELIER —) -->
-    <div class="supertitle-row">
-      <span class="supertitle-text">
-        {space.supertitle[lang] || space.supertitle.en}
-      </span>
-    </div>
+    <!-- Staged Content: emerges after blur establishes -->
+    <div class="card-inner-content">
+      <!-- Category Supertitle (e.g. — PRIVATE VILLA ATELIER —) -->
+      <div class="supertitle-row">
+        <span class="supertitle-text">
+          {space.supertitle[lang] || space.supertitle.en}
+        </span>
+      </div>
 
-    <!-- Main Headline with Elegant Serif + Italic Accent -->
-    <h2 class="card-headline">
-      <span class="headline-prefix">{space.headlinePrefix[lang] || space.headlinePrefix.en}</span>
-      <span class="headline-accent">{space.headlineAccent[lang] || space.headlineAccent.en}</span>
-    </h2>
+      <!-- Main Headline with Elegant Serif + Italic Accent -->
+      <h2 class="card-headline">
+        <span class="headline-prefix">{space.headlinePrefix[lang] || space.headlinePrefix.en}</span>
+        <span class="headline-accent">{space.headlineAccent[lang] || space.headlineAccent.en}</span>
+      </h2>
 
-    <!-- Poetic Editorial Subtext: Harmony of landscape & acoustics -->
-    <p class="card-poetry">
-      {space.poetry[lang] || space.poetry.en}
-    </p>
+      <!-- Poetic Editorial Subtext: Harmony of landscape & acoustics -->
+      <p class="card-poetry">
+        {space.poetry[lang] || space.poetry.en}
+      </p>
 
-    <!-- Center Setup & Vintage Lighting Pill Button -->
-    <div class="btn-wrap">
-      <button
-        type="button"
-        class="setup-pill-btn group"
-        data-trigger-setup={space.slug}
-        aria-label={`Open technical and lighting setup for ${space.headerBadge}`}
-      >
-        <span class="pill-dot" aria-hidden="true"></span>
-        <span class="pill-text">{t('experienceSetupBtn')}</span>
-        <span class="material-symbols-outlined pill-arrow" aria-hidden="true">arrow_forward</span>
-      </button>
+      <!-- Center Setup & Vintage Lighting Pill Button -->
+      <div class="btn-wrap">
+        <button
+          type="button"
+          class="setup-pill-btn group"
+          data-trigger-setup={space.slug}
+          aria-label={`Open technical and lighting setup for ${space.headerBadge}`}
+        >
+          <span class="pill-dot" aria-hidden="true"></span>
+          <span class="pill-text">{t('experienceSetupBtn')}</span>
+          <span class="material-symbols-outlined pill-arrow" aria-hidden="true">arrow_forward</span>
+        </button>
+      </div>
     </div>
   </div>
 </article>
@@ -97,23 +103,41 @@ const t = useTranslations(lang);
     text-align: center;
     padding: 1.65rem 1.35rem;
     border-radius: 28px;
+    box-sizing: border-box;
+  }
+
+  /* Dedicated Glass Plate with Real-Time Backdrop Blur */
+  .card-glass-layer {
+    position: absolute;
+    inset: 0;
+    border-radius: 28px;
     background: rgba(255, 255, 255, 0.45);
     border: 1px solid rgba(255, 255, 255, 0.65);
-    backdrop-filter: blur(32px) saturate(180%);
-    -webkit-backdrop-filter: blur(32px) saturate(180%);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
     box-shadow: 0 10px 30px -5px rgba(180, 130, 90, 0.16), 
                 0 4px 12px -2px rgba(180, 130, 90, 0.08),
                 0 0 28px rgba(var(--card-glow-rgb), 0.14),
                 inset 0 1px 1px rgba(255, 255, 255, 0.7);
-    transition: var(--transition-theme), 
+    opacity: 0;
+    transform: scale(0.98);
+    transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
                 border-color 0.8s ease, 
                 box-shadow 0.8s ease;
+    pointer-events: none;
+    z-index: 1;
   }
 
-  /* Night Mode glass styling from Stitch with multi-layered soft shadow */
-  :global(html[data-theme="night"]) .art-book-card,
-  :global(html.dark) .art-book-card {
-    background: rgba(22, 18, 16, 0.52);
+  :global(.carousel-card-slot.is-active) .card-glass-layer {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Night Mode glass styling from Stitch */
+  :global(html[data-theme="night"]) .card-glass-layer,
+  :global(html.dark) .card-glass-layer {
+    background: rgba(22, 18, 16, 0.42);
     border-color: rgba(255, 255, 255, 0.12);
     box-shadow: 0 12px 35px -5px rgba(0, 0, 0, 0.6), 
                 0 4px 14px -2px rgba(0, 0, 0, 0.4),
@@ -127,13 +151,38 @@ const t = useTranslations(lang);
     }
   }
 
+  /* Staged Appearance: content emerges AFTER glass blur is established */
+  .card-inner-content {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  :global(.carousel-card-slot.is-active) .card-inner-content {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.42s, 
+                transform 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.42s;
+  }
+
   /* 4 Ornamental Gold-accent Corner Brackets */
   .card-corner {
     position: absolute;
     width: 0.875rem;
     height: 0.875rem;
     pointer-events: none;
-    transition: border-color 0.4s ease;
+    opacity: 0;
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.22s, border-color 0.4s ease;
+  }
+
+  :global(.carousel-card-slot.is-active) .card-corner {
+    opacity: 0.65;
   }
 
   .corner-tl {
@@ -141,7 +190,6 @@ const t = useTranslations(lang);
     left: 0.75rem;
     border-top: 1.5px solid var(--card-glow-color);
     border-left: 1.5px solid var(--card-glow-color);
-    opacity: 0.65;
   }
 
   .corner-tr {
@@ -149,7 +197,6 @@ const t = useTranslations(lang);
     right: 0.75rem;
     border-top: 1.5px solid var(--card-glow-color);
     border-right: 1.5px solid var(--card-glow-color);
-    opacity: 0.65;
   }
 
   .corner-bl {
@@ -157,7 +204,6 @@ const t = useTranslations(lang);
     left: 0.75rem;
     border-bottom: 1.5px solid var(--card-glow-color);
     border-left: 1.5px solid var(--card-glow-color);
-    opacity: 0.65;
   }
 
   .corner-br {
@@ -165,7 +211,6 @@ const t = useTranslations(lang);
     right: 0.75rem;
     border-bottom: 1.5px solid var(--card-glow-color);
     border-right: 1.5px solid var(--card-glow-color);
-    opacity: 0.65;
   }
 
   /* Category Supertitle */

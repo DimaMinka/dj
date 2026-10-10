@@ -13,6 +13,7 @@ const initialSpace = spaces[initialIndex] || spaces[0];
   class="vibe-atmosphere-canvas"
   id="vibeAtmosphere"
   data-initial-index={initialIndex}
+  style={`--active-dust-color: ${initialSpace.glowColor}; --active-dust-rgb: ${initialSpace.glowRgb};`}
   aria-hidden="true"
 >
   <!-- Multi-layered Space Watercolor Backgrounds with smooth sequential fade -->
@@ -69,7 +70,7 @@ const initialSpace = spaces[initialIndex] || spaces[0];
 
     // 2. Sequential Step: New background blooms and aura floods in
     window.addEventListener('dj:space-change', ((e: CustomEvent) => {
-      const { index, glowRgb } = e.detail || {};
+      const { index, glowRgb, glowColor } = e.detail || {};
       if (typeof index !== 'number') return;
 
       layers.forEach((layer, idx) => {
@@ -85,6 +86,10 @@ const initialSpace = spaces[initialIndex] || spaces[0];
 
       if (glowRgb) {
         dynamicAura.style.background = `radial-gradient(circle at 50% 38%, rgba(${glowRgb}, 0.35) 0%, rgba(${glowRgb}, 0.12) 48%, transparent 72%)`;
+        canvas.style.setProperty('--active-dust-rgb', glowRgb);
+      }
+      if (glowColor) {
+        canvas.style.setProperty('--active-dust-color', glowColor);
       }
     }) as EventListener);
 
@@ -121,7 +126,7 @@ const initialSpace = spaces[initialIndex] || spaces[0];
     opacity: 0;
     z-index: 2;
     transform: scale(1.01);
-    transition: opacity 0.45s ease-out;
+    transition: opacity 0.28s ease-out;
   }
 
   .space-bg-layer.is-active {
@@ -157,7 +162,7 @@ const initialSpace = spaces[initialIndex] || spaces[0];
       rgba(11, 11, 13, 0.98) 100%
     );
     opacity: 1;
-    transition: opacity 1.1s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: opacity 1.0s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   /* Day Vignette */
@@ -172,7 +177,7 @@ const initialSpace = spaces[initialIndex] || spaces[0];
       rgba(252, 248, 251, 0.98) 100%
     );
     opacity: 0;
-    transition: opacity 1.1s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: opacity 1.0s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   :global(html[data-theme="day"]:not(.dark)) .space-vignette-night {
@@ -183,13 +188,13 @@ const initialSpace = spaces[initialIndex] || spaces[0];
     opacity: 1;
   }
 
-  /* Cinematic Reveal: during space transitions, fade out vignettes gently to reveal the breathtaking landscape */
+  /* Cinematic Reveal: during pure artwork pause, vignettes dissolve to reveal 100% unobstructed landscape */
   .vibe-atmosphere-canvas.is-revealing-background .space-vignette-night {
-    opacity: 0.25;
+    opacity: 0;
   }
 
   :global(html[data-theme="day"]:not(.dark)) .vibe-atmosphere-canvas.is-revealing-background .space-vignette-day {
-    opacity: 0.2;
+    opacity: 0;
   }
 
   .vibe-atmosphere-canvas.is-revealing-background .space-bg-img {
@@ -205,9 +210,16 @@ const initialSpace = spaces[initialIndex] || spaces[0];
   .dynamic-aura {
     position: absolute;
     inset: 0;
+    z-index: 3;
+    opacity: 1;
     background: radial-gradient(circle at 50% 38%, rgba(245, 166, 35, 0.26) 0%, rgba(245, 166, 35, 0.08) 45%, transparent 70%);
-    transition: background 1.4s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: opacity 1.0s cubic-bezier(0.16, 1, 0.3, 1), background 1.4s cubic-bezier(0.25, 1, 0.5, 1);
     mix-blend-mode: screen;
+  }
+
+  /* When pure artwork landscape is revealed: hide aura completely */
+  .vibe-atmosphere-canvas.is-revealing-background .dynamic-aura {
+    opacity: 0;
   }
 
   :global(html[data-theme="day"]:not(.dark)) .dynamic-aura {
@@ -215,12 +227,21 @@ const initialSpace = spaces[initialIndex] || spaces[0];
     opacity: 0.6;
   }
 
+  :global(html[data-theme="day"]:not(.dark)) .vibe-atmosphere-canvas.is-revealing-background .dynamic-aura {
+    opacity: 0;
+  }
+
   /* Floating Dust Particles */
+  /* Floating Luminous Dust Particles (tinted with active space glow) */
   .dust-particle {
     position: absolute;
+    z-index: 4;
     border-radius: var(--radius-full);
     pointer-events: none;
-    transition: background-color 0.6s ease;
+    background: var(--active-dust-color, var(--color-primary));
+    box-shadow: 0 0 10px rgba(var(--active-dust-rgb), 0.7), 0 0 4px var(--active-dust-color);
+    transition: background-color 1.2s cubic-bezier(0.2, 0.8, 0.4, 1), 
+                box-shadow 1.2s cubic-bezier(0.2, 0.8, 0.4, 1);
   }
 
   .dust-1 {
@@ -228,9 +249,8 @@ const initialSpace = spaces[initialIndex] || spaces[0];
     left: 15%;
     width: 5px;
     height: 5px;
-    background: var(--color-primary);
-    opacity: 0.45;
-    filter: blur(1px);
+    opacity: 0.65;
+    filter: blur(0.8px);
     animation-delay: 0s;
   }
 
@@ -239,31 +259,28 @@ const initialSpace = spaces[initialIndex] || spaces[0];
     right: 20%;
     width: 7px;
     height: 7px;
-    background: var(--color-resonance);
-    opacity: 0.35;
-    filter: blur(1.5px);
+    opacity: 0.55;
+    filter: blur(1.2px);
     animation-delay: 2.2s;
   }
 
   .dust-3 {
     bottom: 25%;
     left: 28%;
-    width: 6px;
-    height: 6px;
-    background: var(--color-primary);
-    opacity: 0.3;
-    filter: blur(1px);
+    width: 4px;
+    height: 4px;
+    opacity: 0.75;
+    filter: blur(0.5px);
     animation-delay: 4s;
   }
 
   .dust-4 {
     top: 65%;
     right: 12%;
-    width: 5px;
-    height: 5px;
-    background: var(--color-secondary);
-    opacity: 0.4;
-    filter: blur(1.2px);
+    width: 6px;
+    height: 6px;
+    opacity: 0.6;
+    filter: blur(1px);
     animation-delay: 1.5s;
   }
 </style>

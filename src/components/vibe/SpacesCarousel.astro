@@ -131,22 +131,21 @@ const t = useTranslations(lang);
         new CustomEvent('dj:space-transitioning', { detail: { active: true } })
       );
 
-      // Phase 1 (0ms): Central card dissolves in place into transparency
+      // Phase 1 (0ms): Central card AND active background dissolve simultaneously into deep canvas
       if (currentSlot) {
         currentSlot.classList.remove('is-active');
         currentSlot.classList.add('is-fading-out');
       }
 
-      // Phase 2 (380ms): Fade out the current background layer to dark canvas
-      setTimeout(() => {
-        window.dispatchEvent(
-          new CustomEvent('dj:space-bg-fadeout', {
-            detail: { oldIndex: currentIndex, newIndex: targetIndex },
-          })
-        );
+      window.dispatchEvent(
+        new CustomEvent('dj:space-bg-fadeout', {
+          detail: { oldIndex: currentIndex, newIndex: targetIndex },
+        })
+      );
 
-        // Phase 3 (850ms): Reveal new vibe background & aura glow + Update URL & Telemetry
-        setTimeout(() => {
+      // Phase 2 (480ms): Old background dissolved at 280ms, card finishes at 480ms.
+      // Reveal new vibe background & aura glow + Update URL & Telemetry
+      setTimeout(() => {
           if (currentSlot) {
             currentSlot.classList.remove('is-fading-out');
           }
@@ -170,8 +169,15 @@ const t = useTranslations(lang);
           emitSpaceChange(targetIndex);
 
           // Phase 4 (1750ms total - ~900ms pause on pure artwork background):
-          // Gentle manifestation of new card over 1.0s slow animation
+          // Gentle manifestation of new card AND pagination together
           setTimeout(() => {
+            // Signal atmosphere to bring back subtle vignette synchronized with the card
+            window.dispatchEvent(
+              new CustomEvent('dj:space-transitioning', { detail: { active: false } })
+            );
+
+            wrapper.classList.add('is-revealing-card');
+
             if (targetSlot) {
               targetSlot.classList.add('is-active');
             }
@@ -180,15 +186,11 @@ const t = useTranslations(lang);
             setTimeout(() => {
               currentIndex = targetIndex;
               isLocked = false;
-              wrapper.classList.remove('is-animating');
-              window.dispatchEvent(
-                new CustomEvent('dj:space-transitioning', { detail: { active: false } })
-              );
+              wrapper.classList.remove('is-animating', 'is-revealing-card');
             }, 1050);
           }, 900);
-        }, 470);
-      }, 380);
-    }
+        }, 480);
+      }
 
     function nextSlide() {
       goToIndex(currentIndex + 1);
@@ -336,27 +338,20 @@ const t = useTranslations(lang);
     display: flex;
     justify-content: center;
     align-items: center;
-    opacity: 0;
     pointer-events: none;
     visibility: hidden;
-    transform: scale(0.97);
-    transition: opacity 1.0s cubic-bezier(0.16, 1, 0.3, 1), transform 1.0s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: opacity, transform;
   }
 
   .carousel-card-slot.is-active {
-    opacity: 1;
     pointer-events: auto;
     visibility: visible;
-    transform: scale(1);
   }
 
   .carousel-card-slot.is-fading-out {
     opacity: 0;
     pointer-events: none;
     visibility: visible;
-    transform: scale(0.97);
-    transition: opacity 0.38s cubic-bezier(0.25, 1, 0.5, 1), transform 0.38s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: opacity 0.48s cubic-bezier(0.25, 1, 0.5, 1);
   }
 
   /* Desktop Navigation Arrows */
@@ -400,17 +395,42 @@ const t = useTranslations(lang);
     transform: translateY(-50%) scale(1.08);
   }
 
-  .nav-arrow:active {
-    transform: translateY(-50%) scale(0.95);
+  /* Desktop Navigation Arrows transition */
+  .nav-arrow {
+    transition: var(--transition-theme), transform 0.2s ease, border-color 0.2s ease, opacity 0.3s ease;
   }
 
-  /* Pagination & Hints */
+  .carousel-wrapper.is-animating .nav-arrow {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .carousel-wrapper.is-revealing-card .nav-arrow {
+    opacity: 1;
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.4s;
+  }
+
+  /* Pagination & Hints: Disappears immediately on swipe, returns with card text */
   .carousel-pagination {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.4rem;
     margin-block-start: 0.75rem;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+
+  .carousel-wrapper.is-animating .carousel-pagination {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease-out;
+  }
+
+  .carousel-wrapper.is-revealing-card .carousel-pagination {
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.42s;
   }
 
   .dots-row {
