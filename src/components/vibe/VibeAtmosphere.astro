@@ -13,7 +13,7 @@ const initialSpace = spaces[initialIndex] || spaces[0];
   class="vibe-atmosphere-canvas"
   id="vibeAtmosphere"
   data-initial-index={initialIndex}
-  style={`--active-dust-color: ${initialSpace.glowColor}; --active-dust-rgb: ${initialSpace.glowRgb};`}
+  style={`--active-dust-color-light: ${initialSpace.glowColor}; --active-dust-rgb-light: ${initialSpace.glowRgb}; --active-dust-color-dark: ${initialSpace.glowColorDark}; --active-dust-rgb-dark: ${initialSpace.glowRgbDark};`}
   aria-hidden="true"
 >
   <!-- Multi-layered Space Watercolor Backgrounds with smooth sequential fade -->
@@ -68,9 +68,26 @@ const initialSpace = spaces[initialIndex] || spaces[0];
       }
     }) as EventListener);
 
+    // Helper to update dynamic aura & dust properties based on theme
+    function updateAuraTheme(spaceIndex: number) {
+      const space = spaces[spaceIndex];
+      if (!space) return;
+
+      const isNight = document.documentElement.getAttribute('data-theme') !== 'day' || document.documentElement.classList.contains('dark');
+      const activeRgb = isNight ? space.glowRgbDark : space.glowRgb;
+      const activeColor = isNight ? space.glowColorDark : space.glowColor;
+
+      dynamicAura.style.background = `radial-gradient(circle at 50% 38%, rgba(${activeRgb}, 0.35) 0%, rgba(${activeRgb}, 0.12) 48%, transparent 72%)`;
+
+      canvas.style.setProperty('--active-dust-color-light', space.glowColor);
+      canvas.style.setProperty('--active-dust-rgb-light', space.glowRgb);
+      canvas.style.setProperty('--active-dust-color-dark', space.glowColorDark);
+      canvas.style.setProperty('--active-dust-rgb-dark', space.glowRgbDark);
+    }
+
     // 2. Sequential Step: New background blooms and aura floods in
     window.addEventListener('dj:space-change', ((e: CustomEvent) => {
-      const { index, glowRgb, glowColor } = e.detail || {};
+      const { index } = e.detail || {};
       if (typeof index !== 'number') return;
 
       layers.forEach((layer, idx) => {
@@ -83,14 +100,12 @@ const initialSpace = spaces[initialIndex] || spaces[0];
       });
 
       currentActiveIndex = index;
+      updateAuraTheme(index);
+    }) as EventListener);
 
-      if (glowRgb) {
-        dynamicAura.style.background = `radial-gradient(circle at 50% 38%, rgba(${glowRgb}, 0.35) 0%, rgba(${glowRgb}, 0.12) 48%, transparent 72%)`;
-        canvas.style.setProperty('--active-dust-rgb', glowRgb);
-      }
-      if (glowColor) {
-        canvas.style.setProperty('--active-dust-color', glowColor);
-      }
+    // Update aura when theme is toggled between Day and Night
+    window.addEventListener('dj:theme-change', (() => {
+      updateAuraTheme(currentActiveIndex);
     }) as EventListener);
 
     // Cinematic reveal during transition: lighten vignettes to let pure watercolor landscape shine
@@ -105,11 +120,19 @@ const initialSpace = spaces[initialIndex] || spaces[0];
 
 <style>
   .vibe-atmosphere-canvas {
+    --active-dust-color: var(--active-dust-color-light);
+    --active-dust-rgb: var(--active-dust-rgb-light);
     position: absolute;
     inset: 0;
     z-index: 0;
     pointer-events: none;
     overflow: hidden;
+  }
+
+  :global(html[data-theme="night"]) .vibe-atmosphere-canvas,
+  :global(html.dark) .vibe-atmosphere-canvas {
+    --active-dust-color: var(--active-dust-color-dark);
+    --active-dust-rgb: var(--active-dust-rgb-dark);
   }
 
   .space-bg-layer {

@@ -62,7 +62,7 @@ const t = useTranslations(lang);
           data-dot-index={idx}
           aria-label={`Go to ${space.title[lang] || space.title.en}`}
           aria-selected={idx === initialIndex ? 'true' : 'false'}
-          style={`--dot-color: ${space.glowColor};`}
+          style={`--dot-color-light: ${space.glowColor}; --dot-color-dark: ${space.glowColorDark};`}
         >
           <span class="dot-core"></span>
         </button>
@@ -103,6 +103,8 @@ const t = useTranslations(lang);
             slug: activeSpace.slug,
             glowColor: activeSpace.glowColor,
             glowRgb: activeSpace.glowRgb,
+            glowColorDark: activeSpace.glowColorDark,
+            glowRgbDark: activeSpace.glowRgbDark,
             title: activeSpace.title,
             bpm: activeSpace.bpm,
             frequency: activeSpace.frequency,
@@ -440,6 +442,7 @@ const t = useTranslations(lang);
   }
 
   .pagination-dot {
+    --dot-color: var(--dot-color-light);
     position: relative;
     width: 1.5rem;
     height: 1.5rem;
@@ -450,6 +453,11 @@ const t = useTranslations(lang);
     border: none;
     padding: 0;
     cursor: pointer;
+  }
+
+  :global(html[data-theme="night"]) .pagination-dot,
+  :global(html.dark) .pagination-dot {
+    --dot-color: var(--dot-color-dark);
   }
 
   .dot-core {

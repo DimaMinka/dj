@@ -15,7 +15,7 @@ const t = useTranslations(lang);
   class="space-card-container"
   data-space-slug={space.slug}
   data-space-id={space.id}
-  style={`--card-glow-color: ${space.glowColor}; --card-glow-rgb: ${space.glowRgb};`}
+  style={`--vibe-color-light: ${space.glowColor}; --vibe-rgb-light: ${space.glowRgb}; --vibe-color-dark: ${space.glowColorDark}; --vibe-rgb-dark: ${space.glowRgbDark};`}
 >
   <div class="art-book-card">
     <!-- Dedicated Glass Backdrop Plate with real-time blur -->
@@ -85,6 +85,8 @@ const t = useTranslations(lang);
 
 <style>
   .space-card-container {
+    --card-glow-color: var(--vibe-color-light);
+    --card-glow-rgb: var(--vibe-rgb-light);
     position: relative;
     width: 100%;
     max-width: 350px;
@@ -93,6 +95,13 @@ const t = useTranslations(lang);
     box-sizing: border-box;
     user-select: none;
     -webkit-user-select: none;
+    transition: --card-glow-color 0.4s ease;
+  }
+
+  :global(html[data-theme="night"]) .space-card-container,
+  :global(html.dark) .space-card-container {
+    --card-glow-color: var(--vibe-color-dark);
+    --card-glow-rgb: var(--vibe-rgb-dark);
   }
 
   .art-book-card {

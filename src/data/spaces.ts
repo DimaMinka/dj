@@ -22,8 +22,10 @@ export interface Space {
   bpm: number;
   frequency: number;
   keySignature: string;
-  glowColor: string;
+  glowColor: string; // Day / Light mode accent
   glowRgb: string;
+  glowColorDark: string; // Night / Dark mode luminous accent
+  glowRgbDark: string;
   bgWatercolor: string;
   setup: SpaceSetup;
 }
@@ -65,8 +67,10 @@ export const spaces: Space[] = [
     bpm: 120,
     frequency: 432,
     keySignature: 'G major',
-    glowColor: '#65a30d',
-    glowRgb: '101, 163, 13',
+    glowColor: '#4d7c0f',
+    glowRgb: '77, 124, 15',
+    glowColorDark: '#84cc16',
+    glowRgbDark: '132, 204, 22',
     bgWatercolor: '/assets/spaces/aegean-bg.jpg',
     setup: {
       id: 'setup-aegean',
@@ -126,8 +130,10 @@ export const spaces: Space[] = [
     bpm: 123,
     frequency: 432,
     keySignature: 'D minor',
-    glowColor: '#7c3aed',
-    glowRgb: '124, 58, 237',
+    glowColor: '#6d28d9',
+    glowRgb: '109, 40, 217',
+    glowColorDark: '#a855f7',
+    glowRgbDark: '168, 85, 247',
     bgWatercolor: '/assets/spaces/twilight-bg.jpg',
     setup: {
       id: 'setup-twilight',
@@ -187,8 +193,10 @@ export const spaces: Space[] = [
     bpm: 120,
     frequency: 432,
     keySignature: 'A minor',
-    glowColor: '#f59e0b',
-    glowRgb: '245, 158, 11',
+    glowColor: '#b45309',
+    glowRgb: '180, 83, 9',
+    glowColorDark: '#f59e0b',
+    glowRgbDark: '245, 158, 11',
     bgWatercolor: '/assets/spaces/sunset-bg.jpg',
     setup: {
       id: 'setup-sunset',
@@ -248,8 +256,10 @@ export const spaces: Space[] = [
     bpm: 118,
     frequency: 432,
     keySignature: 'C major',
-    glowColor: '#0d9488',
-    glowRgb: '13, 148, 136',
+    glowColor: '#0f766e',
+    glowRgb: '15, 118, 110',
+    glowColorDark: '#14b8a6',
+    glowRgbDark: '20, 184, 166',
     bgWatercolor: '/assets/spaces/beach-bg.jpg',
     setup: {
       id: 'setup-beach',
@@ -309,8 +319,10 @@ export const spaces: Space[] = [
     bpm: 122,
     frequency: 432,
     keySignature: 'F# minor',
-    glowColor: '#10b981',
-    glowRgb: '16, 185, 129',
+    glowColor: '#047857',
+    glowRgb: '4, 120, 87',
+    glowColorDark: '#10b981',
+    glowRgbDark: '16, 185, 129',
     bgWatercolor: '/assets/spaces/garden-bg.jpg',
     setup: {
       id: 'setup-garden',
@@ -370,8 +382,10 @@ export const spaces: Space[] = [
     bpm: 122,
     frequency: 432,
     keySignature: 'F minor',
-    glowColor: '#c026d3',
-    glowRgb: '192, 38, 211',
+    glowColor: '#a21caf',
+    glowRgb: '162, 28, 175',
+    glowColorDark: '#e879f9',
+    glowRgbDark: '232, 121, 249',
     bgWatercolor: '/assets/spaces/estate-bg.jpg',
     setup: {
       id: 'setup-estate',
@@ -431,8 +445,10 @@ export const spaces: Space[] = [
     bpm: 121,
     frequency: 432,
     keySignature: 'E minor',
-    glowColor: '#f97316',
-    glowRgb: '249, 115, 22',
+    glowColor: '#c2410c',
+    glowRgb: '194, 65, 12',
+    glowColorDark: '#fb923c',
+    glowRgbDark: '251, 146, 60',
     bgWatercolor: '/assets/spaces/desert-bg.jpg',
     setup: {
       id: 'setup-desert',
@@ -492,8 +508,10 @@ export const spaces: Space[] = [
     bpm: 124,
     frequency: 432,
     keySignature: 'B minor',
-    glowColor: '#22d3ee',
-    glowRgb: '34, 211, 238',
+    glowColor: '#0e7490',
+    glowRgb: '14, 116, 144',
+    glowColorDark: '#22d3ee',
+    glowRgbDark: '34, 211, 238',
     bgWatercolor: '/assets/spaces/nordic-bg.jpg',
     setup: {
       id: 'setup-nordic',

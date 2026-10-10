@@ -16,7 +16,7 @@ const initialSpace = spaces[initialIndex] || spaces[0];
   class="sound-dock-wrapper"
   id="soundDockContainer"
   data-initial-slug={initialSpace.slug}
-  style={`--player-color: ${initialSpace.glowColor}; --player-rgb: ${initialSpace.glowRgb};`}
+  style={`--player-color-light: ${initialSpace.glowColor}; --player-rgb-light: ${initialSpace.glowRgb}; --player-color-dark: ${initialSpace.glowColorDark}; --player-rgb-dark: ${initialSpace.glowRgbDark};`}
 >
   <!-- Minimalist Live Audio Stream Bar from Stitch -->
   <div class="audio-stream-card">
@@ -93,8 +93,10 @@ const initialSpace = spaces[initialIndex] || spaces[0];
 
         // Dynamically tint player button, equalizer and CTA to active vibe color
         if (container) {
-          container.style.setProperty('--player-color', space.glowColor);
-          container.style.setProperty('--player-rgb', space.glowRgb);
+          container.style.setProperty('--player-color-light', space.glowColor);
+          container.style.setProperty('--player-rgb-light', space.glowRgb);
+          container.style.setProperty('--player-color-dark', space.glowColorDark);
+          container.style.setProperty('--player-rgb-dark', space.glowRgbDark);
         }
       }
     }) as EventListener);
@@ -160,6 +162,8 @@ const initialSpace = spaces[initialIndex] || spaces[0];
 
 <style>
   .sound-dock-wrapper {
+    --player-color: var(--player-color-light);
+    --player-rgb: var(--player-rgb-light);
     position: relative;
     z-index: 20;
     width: 100%;
@@ -172,6 +176,12 @@ const initialSpace = spaces[initialIndex] || spaces[0];
     flex-direction: column;
     gap: 0.65rem;
     flex-shrink: 0;
+  }
+
+  :global(html[data-theme="night"]) .sound-dock-wrapper,
+  :global(html.dark) .sound-dock-wrapper {
+    --player-color: var(--player-color-dark);
+    --player-rgb: var(--player-rgb-dark);
   }
 
   .audio-stream-card {
