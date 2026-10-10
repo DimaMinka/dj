@@ -257,6 +257,8 @@ const t = useTranslations(lang);
     cursor: grab;
     user-select: none;
     -webkit-user-select: none;
+    padding-block: 1.5rem;
+    margin-block: -1.5rem;
   }
 
   .carousel-viewport:active {
@@ -267,6 +269,7 @@ const t = useTranslations(lang);
     display: flex;
     width: 100%;
     will-change: transform;
+    align-items: center;
   }
 
   .carousel-slide {
@@ -274,6 +277,7 @@ const t = useTranslations(lang);
     flex: 0 0 100%;
     width: 100%;
     padding-inline: 1.25rem;
+    padding-block: 0.5rem;
     box-sizing: border-box;
     display: flex;
     justify-content: center;
