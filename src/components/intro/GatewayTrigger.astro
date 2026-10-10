@@ -215,14 +215,36 @@ const t = useTranslations(lang);
   .shimmer-sweep {
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+    background: linear-gradient(
+      105deg,
+      transparent 0%,
+      rgba(255, 198, 101, 0.04) 28%,
+      rgba(255, 255, 255, 0.18) 50%,
+      rgba(255, 198, 101, 0.04) 72%,
+      transparent 100%
+    );
     transform: translateX(-100%);
-    animation: shimmer 4s infinite;
+    animation: shimmer 4.6s ease-in-out infinite;
     pointer-events: none;
+    z-index: 1;
+  }
+
+  :global(html[data-theme="day"]:not(.dark)) .shimmer-sweep {
+    background: linear-gradient(
+      105deg,
+      transparent 0%,
+      rgba(217, 119, 6, 0.03) 22%,
+      rgba(217, 119, 6, 0.1) 42%,
+      rgba(255, 255, 255, 0.55) 50%,
+      rgba(217, 119, 6, 0.1) 58%,
+      rgba(217, 119, 6, 0.03) 78%,
+      transparent 100%
+    );
   }
 
   @keyframes shimmer {
-    100% { transform: translateX(100%); }
+    0% { transform: translateX(-100%); }
+    55%, 100% { transform: translateX(100%); }
   }
 
   .hold-progress-bar {
