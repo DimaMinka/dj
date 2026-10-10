@@ -431,8 +431,8 @@ export const spaces: Space[] = [
     bpm: 121,
     frequency: 432,
     keySignature: 'E minor',
-    glowColor: '#0284c7',
-    glowRgb: '2, 132, 199',
+    glowColor: '#d97706',
+    glowRgb: '217, 119, 6',
     bgWatercolor: '/assets/spaces/desert-bg.jpg',
     setup: {
       id: 'setup-desert',
@@ -492,8 +492,8 @@ export const spaces: Space[] = [
     bpm: 124,
     frequency: 432,
     keySignature: 'B minor',
-    glowColor: '#1d4ed8',
-    glowRgb: '29, 78, 216',
+    glowColor: '#475569',
+    glowRgb: '71, 85, 105',
     bgWatercolor: '/assets/spaces/nordic-bg.jpg',
     setup: {
       id: 'setup-nordic',
