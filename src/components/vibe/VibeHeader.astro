@@ -4,14 +4,20 @@ import { spaces } from '../../data/spaces';
 
 interface Props {
   lang?: SupportedLang;
+  initialIndex?: number;
 }
 
-const { lang = defaultLang } = Astro.props;
+const { lang = defaultLang, initialIndex = 0 } = Astro.props;
 const t = useTranslations(lang);
-const initialSpace = spaces[0];
+const initialSpace = spaces[initialIndex] || spaces[0];
 ---
 
-<header class="vibe-header">
+<header
+  class="vibe-header"
+  id="vibeHeader"
+  data-initial-index={initialIndex}
+  style={`--vibe-logo-color-light: ${initialSpace.glowColor}; --vibe-logo-rgb-light: ${initialSpace.glowRgb}; --vibe-logo-color-dark: ${initialSpace.glowColorDark}; --vibe-logo-rgb-dark: ${initialSpace.glowRgbDark};`}
+>
   <!-- Brand Group as Link to Intro Gateway -->
   <a href="/" class="brand-group" aria-label="Return to Intro Portal">
     <div class="logo-box">
@@ -40,14 +46,34 @@ const initialSpace = spaces[0];
 </header>
 
 <script>
+  import { spaces } from '../../data/spaces';
+
   function initVibeHeader() {
+    const header = document.getElementById('vibeHeader');
     const btn = document.getElementById('vibeThemeToggleBtn');
     const label = document.getElementById('vibeThemeToggleLabel');
+    if (!header) return;
+
+    let currentIndex = Number(header.dataset.initialIndex || 0);
 
     function updateLabel(theme: string) {
       if (!label) return;
       const isNight = theme === 'night';
       label.textContent = isNight ? 'Night Resonance' : 'Day Resonance';
+    }
+
+    function updateLogoVibe(index: number) {
+      const space = spaces[index];
+      if (!space) return;
+
+      const isNight = document.documentElement.getAttribute('data-theme') !== 'day' || document.documentElement.classList.contains('dark');
+      const activeColor = isNight ? space.glowColorDark : space.glowColor;
+      const activeRgb = isNight ? space.glowRgbDark : space.glowRgb;
+
+      header.style.setProperty('--vibe-logo-color', activeColor);
+      header.style.setProperty('--vibe-logo-rgb', activeRgb);
+      header.style.setProperty('--vibe-logo-glow', `rgba(${activeRgb}, ${isNight ? '0.55' : '0.38'})`);
+      header.style.setProperty('--vibe-logo-border', `rgba(${activeRgb}, ${isNight ? '0.35' : '0.22'})`);
     }
 
     const currentTheme = document.documentElement.getAttribute('data-theme') || 'night';
@@ -61,13 +87,36 @@ const initialSpace = spaces[0];
       document.documentElement.classList.toggle('dark', next === 'night');
       localStorage.setItem('dj-theme-resonance', next);
       updateLabel(next);
+      updateLogoVibe(currentIndex);
 
       window.dispatchEvent(new CustomEvent('dj:theme-change', { detail: { theme: next } }));
     });
 
+    // Space changes: start morphing logo color smoothly as soon as fadeout begins
+    window.addEventListener('dj:space-bg-fadeout', ((e: CustomEvent) => {
+      const { newIndex } = e.detail || {};
+      if (typeof newIndex === 'number' && spaces[newIndex]) {
+        currentIndex = newIndex;
+        updateLogoVibe(newIndex);
+      }
+    }) as EventListener);
+
+    window.addEventListener('dj:space-change', ((e: CustomEvent) => {
+      const { index, slug } = e.detail || {};
+      const targetIndex = typeof index === 'number' ? index : spaces.findIndex(s => s.slug === slug);
+      if (targetIndex !== -1) {
+        currentIndex = targetIndex;
+        updateLogoVibe(targetIndex);
+      }
+    }) as EventListener);
+
     window.addEventListener('dj:theme-change', ((e: CustomEvent) => {
       if (e.detail?.theme) updateLabel(e.detail.theme);
+      updateLogoVibe(currentIndex);
     }) as EventListener);
+
+    // Initial sync
+    updateLogoVibe(currentIndex);
   }
 
   initVibeHeader();
@@ -75,6 +124,10 @@ const initialSpace = spaces[0];
 
 <style>
   .vibe-header {
+    --vibe-logo-color: var(--vibe-logo-color-light);
+    --vibe-logo-rgb: var(--vibe-logo-rgb-light);
+    --vibe-logo-glow: rgba(var(--vibe-logo-rgb), 0.38);
+    --vibe-logo-border: rgba(var(--vibe-logo-rgb), 0.22);
     position: relative;
     z-index: 25;
     display: flex;
@@ -85,6 +138,14 @@ const initialSpace = spaces[0];
     width: 100%;
     box-sizing: border-box;
     flex-shrink: 0;
+  }
+
+  :global(html[data-theme="night"]) .vibe-header,
+  :global(html.dark) .vibe-header {
+    --vibe-logo-color: var(--vibe-logo-color-dark);
+    --vibe-logo-rgb: var(--vibe-logo-rgb-dark);
+    --vibe-logo-glow: rgba(var(--vibe-logo-rgb), 0.55);
+    --vibe-logo-border: rgba(var(--vibe-logo-rgb), 0.35);
   }
 
   .brand-group {
@@ -111,23 +172,23 @@ const initialSpace = spaces[0];
     height: 2.5rem;
     border-radius: var(--radius-lg);
     background: var(--color-surface-glass);
-    border: 1px solid var(--color-glass-border);
+    border: 1px solid var(--vibe-logo-border, var(--color-glass-border));
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0.375rem;
-    box-shadow: 0 0 15px var(--color-primary-glow);
+    box-shadow: 0 0 16px var(--vibe-logo-glow, var(--color-primary-glow));
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    transition: var(--transition-theme);
+    transition: var(--transition-theme), border-color 0.8s cubic-bezier(0.2, 0.8, 0.4, 1), box-shadow 0.8s cubic-bezier(0.2, 0.8, 0.4, 1);
   }
 
   .logo-svg {
     width: 1.5rem;
     height: 1.5rem;
-    color: var(--color-primary);
-    filter: drop-shadow(0 0 8px var(--color-primary-glow));
-    transition: color 0.4s ease;
+    color: var(--vibe-logo-color, var(--color-primary));
+    filter: drop-shadow(0 0 8px var(--vibe-logo-glow, var(--color-primary-glow)));
+    transition: color 0.8s cubic-bezier(0.2, 0.8, 0.4, 1), filter 0.8s cubic-bezier(0.2, 0.8, 0.4, 1);
   }
 
   .brand-text {
@@ -151,9 +212,10 @@ const initialSpace = spaces[0];
     font-size: 0.5625rem;
     letter-spacing: 0.25em;
     text-transform: uppercase;
-    color: var(--color-primary);
+    color: var(--vibe-logo-color, var(--color-primary));
     opacity: 0.85;
     margin-block-start: 0.25rem;
+    transition: color 0.8s ease;
   }
 
   .actions-group {
@@ -170,13 +232,13 @@ const initialSpace = spaces[0];
     padding-block: 0.35rem;
     border-radius: var(--radius-full);
     background: var(--color-surface-glass);
-    border: 1px solid var(--color-glass-border);
+    border: 1px solid var(--vibe-logo-border, var(--color-glass-border));
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     color: var(--color-text-main);
     cursor: pointer;
-    transition: var(--transition-theme), transform 0.2s ease, border-color 0.2s ease;
+    transition: var(--transition-theme), transform 0.2s ease, border-color 0.8s ease;
   }
 
   @media (min-width: 640px) {
@@ -187,7 +249,7 @@ const initialSpace = spaces[0];
 
   .theme-toggle:hover {
     transform: translateY(-1px);
-    border-color: var(--color-primary);
+    border-color: var(--vibe-logo-color, var(--color-primary));
   }
 
   .theme-toggle:active {
@@ -208,21 +270,24 @@ const initialSpace = spaces[0];
 
   .bar-1 {
     height: 0.375rem;
-    background: var(--color-primary);
+    background: var(--vibe-logo-color, var(--color-primary));
     animation: pulse 1.2s ease-in-out infinite;
+    transition: background-color 0.8s ease;
   }
 
   .bar-2 {
     height: 0.75rem;
-    background: var(--color-resonance);
-    box-shadow: 0 0 6px var(--color-resonance-glow);
+    background: var(--vibe-logo-color, var(--color-resonance));
+    box-shadow: 0 0 6px var(--vibe-logo-glow, var(--color-resonance-glow));
     animation: pulse 0.9s ease-in-out infinite 0.2s;
+    transition: background-color 0.8s ease, box-shadow 0.8s ease;
   }
 
   .bar-3 {
     height: 0.5rem;
-    background: var(--color-primary);
+    background: var(--vibe-logo-color, var(--color-primary));
     animation: pulse 1.4s ease-in-out infinite 0.4s;
+    transition: background-color 0.8s ease;
   }
 
   .theme-label {

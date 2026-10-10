@@ -15,7 +15,7 @@ const t = useTranslations(lang);
   class="space-card-container"
   data-space-slug={space.slug}
   data-space-id={space.id}
-  style={`--card-glow-color: ${space.glowColor}; --card-glow-rgb: ${space.glowRgb};`}
+  style={`--vibe-color-light: ${space.glowColor}; --vibe-rgb-light: ${space.glowRgb}; --vibe-color-dark: ${space.glowColorDark}; --vibe-rgb-dark: ${space.glowRgbDark};`}
 >
   <div class="art-book-card">
     <!-- Dedicated Glass Backdrop Plate with real-time blur -->
@@ -29,36 +29,131 @@ const t = useTranslations(lang);
 
     <!-- Staged Content: emerges after blur establishes -->
     <div class="card-inner-content">
-      <!-- Category Supertitle (e.g. — PRIVATE VILLA ATELIER —) -->
-      <div class="supertitle-row">
-        <span class="supertitle-text">
-          {space.supertitle[lang] || space.supertitle.en}
-        </span>
+      <!-- Left Column: Curated Sound & Poetry (Default mobile card + desktop sound side) -->
+      <div class="card-sound-col">
+        <!-- Category Supertitle (e.g. — PRIVATE VILLA ATELIER —) -->
+        <div class="supertitle-row">
+          <span class="supertitle-text">
+            {space.supertitle[lang] || space.supertitle.en}
+          </span>
+        </div>
+
+        <!-- Main Headline with Elegant Serif + Italic Accent -->
+        <h2 class="card-headline">
+          <span class="headline-prefix">{space.headlinePrefix[lang] || space.headlinePrefix.en}</span>
+          <span class="headline-accent">{space.headlineAccent[lang] || space.headlineAccent.en}</span>
+        </h2>
+
+        <!-- Poetic Editorial Subtext: Harmony of landscape & acoustics -->
+        <p class="card-poetry">
+          {space.poetry[lang] || space.poetry.en}
+        </p>
+
+        <!-- Desktop Telemetry Badges (BPM, Frequency, Key Signature) -->
+        <div class="desktop-telemetry-row" aria-label="Acoustic specs">
+          <div class="telemetry-pill">
+            <span class="material-symbols-outlined telemetry-icon" aria-hidden="true">graphic_eq</span>
+            <span class="telemetry-val">{space.frequency} Hz</span>
+          </div>
+          <div class="telemetry-pill">
+            <span class="material-symbols-outlined telemetry-icon" aria-hidden="true">speed</span>
+            <span class="telemetry-val">{space.bpm} BPM</span>
+          </div>
+          <div class="telemetry-pill">
+            <span class="material-symbols-outlined telemetry-icon" aria-hidden="true">music_note</span>
+            <span class="telemetry-val">{space.keySignature}</span>
+          </div>
+        </div>
+
+        <!-- Embedded Desktop Audio Player (Visible ONLY on >= 1024px) -->
+        <div class="desktop-card-player" aria-label="Acoustic live preview">
+          <div class="card-player-main">
+            <button
+              type="button"
+              class="card-play-btn"
+              data-card-play={space.slug}
+              aria-label={`Play atmospheric live preview for ${space.title[lang] || space.title.en}`}
+            >
+              <span class="material-symbols-outlined card-play-icon" aria-hidden="true">play_arrow</span>
+            </button>
+            <div class="card-track-info">
+              <span class="card-track-title">{space.trackTitle}</span>
+              <span class="card-track-sub">{space.trackSubtitle}</span>
+            </div>
+          </div>
+          <div class="card-player-equalizer" aria-hidden="true">
+            <span class="card-wave-bar cbar-1"></span>
+            <span class="card-wave-bar cbar-2"></span>
+            <span class="card-wave-bar cbar-3"></span>
+            <span class="card-wave-bar cbar-4"></span>
+            <span class="card-wave-bar cbar-5"></span>
+          </div>
+        </div>
+
+        <!-- Mobile Center Setup Pill Button (Hidden on Desktop >= 1024px) -->
+        <div class="btn-wrap">
+          <button
+            type="button"
+            class="setup-pill-btn group"
+            data-trigger-setup={space.slug}
+            aria-label={`Open technical and lighting setup for ${space.headerBadge}`}
+          >
+            <span class="pill-dot" aria-hidden="true"></span>
+            <span class="pill-text">{t('experienceSetupBtn')}</span>
+            <span class="material-symbols-outlined pill-arrow" aria-hidden="true">arrow_forward</span>
+          </button>
+        </div>
       </div>
 
-      <!-- Main Headline with Elegant Serif + Italic Accent -->
-      <h2 class="card-headline">
-        <span class="headline-prefix">{space.headlinePrefix[lang] || space.headlinePrefix.en}</span>
-        <span class="headline-accent">{space.headlineAccent[lang] || space.headlineAccent.en}</span>
-      </h2>
+      <!-- Desktop Right Column: Direct Hardware Rig & Lighting Specs (Visible ONLY on >= 1024px) -->
+      <div class="card-setup-col" aria-label="Integrated stage and lighting setup">
+        <!-- Hardware Setup Visual Photograph -->
+        <div class="desktop-setup-image-wrap">
+          <img
+            src={space.setup.image}
+            alt={space.setup.name[lang] || space.setup.name.en}
+            class="desktop-setup-img"
+            loading="lazy"
+          />
+          <div class="desktop-setup-overlay"></div>
+          <div class="desktop-setup-badge">
+            <span class="material-symbols-outlined badge-icon" aria-hidden="true">verified</span>
+            <span class="badge-text">{space.setup.name[lang] || space.setup.name.en}</span>
+          </div>
+        </div>
 
-      <!-- Poetic Editorial Subtext: Harmony of landscape & acoustics -->
-      <p class="card-poetry">
-        {space.poetry[lang] || space.poetry.en}
-      </p>
+        <!-- 3 Structured Specification Rows -->
+        <div class="desktop-specs-list">
+          <div class="desktop-spec-item">
+            <div class="desktop-spec-icon-box">
+              <span class="material-symbols-outlined" aria-hidden="true">lightbulb</span>
+            </div>
+            <div class="desktop-spec-text">
+              <span class="desktop-spec-label">{t('setupLights')}</span>
+              <span class="desktop-spec-val">{space.setup.lightsCount}</span>
+            </div>
+          </div>
 
-      <!-- Center Setup & Vintage Lighting Pill Button -->
-      <div class="btn-wrap">
-        <button
-          type="button"
-          class="setup-pill-btn group"
-          data-trigger-setup={space.slug}
-          aria-label={`Open technical and lighting setup for ${space.headerBadge}`}
-        >
-          <span class="pill-dot" aria-hidden="true"></span>
-          <span class="pill-text">{t('experienceSetupBtn')}</span>
-          <span class="material-symbols-outlined pill-arrow" aria-hidden="true">arrow_forward</span>
-        </button>
+          <div class="desktop-spec-item">
+            <div class="desktop-spec-icon-box">
+              <span class="material-symbols-outlined" aria-hidden="true">speaker</span>
+            </div>
+            <div class="desktop-spec-text">
+              <span class="desktop-spec-label">{t('setupSound')}</span>
+              <span class="desktop-spec-val">{space.setup.soundType[lang] || space.setup.soundType.en}</span>
+            </div>
+          </div>
+
+          <div class="desktop-spec-item">
+            <div class="desktop-spec-icon-box">
+              <span class="material-symbols-outlined" aria-hidden="true">groups</span>
+            </div>
+            <div class="desktop-spec-text">
+              <span class="desktop-spec-label">{t('setupAudience')}</span>
+              <span class="desktop-spec-val">{space.setup.idealFor[lang] || space.setup.idealFor.en}</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -66,6 +161,7 @@ const t = useTranslations(lang);
 
 <script>
   function initCardTriggers() {
+    // 1. Mobile Setup Drawer trigger
     const buttons = document.querySelectorAll('[data-trigger-setup]');
     buttons.forEach((btn) => {
       btn.addEventListener('click', (e) => {
@@ -78,6 +174,37 @@ const t = useTranslations(lang);
         );
       });
     });
+
+    // 2. Desktop Card Player trigger (dispatches global audio toggle so both dock & card stay synced)
+    const cardPlayButtons = document.querySelectorAll('[data-card-play]');
+    cardPlayButtons.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        window.dispatchEvent(new CustomEvent('dj:toggle-audio'));
+      });
+    });
+
+    // 3. Listen to audio state changes to update card play icon & equalizer
+    window.addEventListener('dj:audio-state-change', ((e: CustomEvent) => {
+      const isPlaying = Boolean(e.detail?.isPlaying);
+      const icons = document.querySelectorAll('.card-play-icon');
+      icons.forEach((icon) => {
+        icon.textContent = isPlaying ? 'pause' : 'play_arrow';
+      });
+      const eqContainers = document.querySelectorAll('.card-player-equalizer');
+      eqContainers.forEach((eq) => {
+        eq.classList.toggle('is-playing', isPlaying);
+      });
+    }) as EventListener);
+
+    // Dynamic wave animation for card equalizer
+    setInterval(() => {
+      const bars = document.querySelectorAll('.card-player-equalizer.is-playing .card-wave-bar');
+      bars.forEach((bar) => {
+        const h = Math.floor(Math.random() * 14) + 4;
+        (bar as HTMLElement).style.height = `${h}px`;
+      });
+    }, 240);
   }
 
   initCardTriggers();
@@ -85,6 +212,8 @@ const t = useTranslations(lang);
 
 <style>
   .space-card-container {
+    --card-glow-color: var(--vibe-color-light);
+    --card-glow-rgb: var(--vibe-rgb-light);
     position: relative;
     width: 100%;
     max-width: 350px;
@@ -93,6 +222,13 @@ const t = useTranslations(lang);
     box-sizing: border-box;
     user-select: none;
     -webkit-user-select: none;
+    transition: --card-glow-color 0.4s ease;
+  }
+
+  :global(html[data-theme="night"]) .space-card-container,
+  :global(html.dark) .space-card-container {
+    --card-glow-color: var(--vibe-color-dark);
+    --card-glow-rgb: var(--vibe-rgb-dark);
   }
 
   .art-book-card {
@@ -361,5 +497,400 @@ const t = useTranslations(lang);
 
   :global([dir="rtl"]) .setup-pill-btn:hover .pill-arrow {
     transform: translateX(-2px) rotate(180deg);
+  }
+
+  /* ========================================================
+     DESKTOP EXPANDED SPLIT ART-BOOK STYLING (>= 1024px)
+     Strictly isolated: mobile styles above remain untouched!
+     ======================================================== */
+
+  /* Default mobile state for newly added desktop elements */
+  .desktop-telemetry-row {
+    display: none;
+  }
+
+  .desktop-card-player {
+    display: none;
+  }
+
+  .card-setup-col {
+    display: none;
+  }
+
+  .card-sound-col {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @media (min-width: 1024px) {
+    .space-card-container {
+      max-width: 860px;
+      padding-block: 0;
+    }
+
+    .art-book-card {
+      padding: 2.2rem 2.4rem;
+      border-radius: 32px;
+    }
+
+    .card-glass-layer {
+      border-radius: 32px;
+    }
+
+    /* Split-column Grid */
+    .card-inner-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: stretch;
+      text-align: start;
+    }
+
+    .card-sound-col {
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .supertitle-row {
+      margin-block-end: 0.75rem;
+    }
+
+    .card-headline {
+      font-size: 2.35rem;
+      line-height: 1.15;
+    }
+
+    .card-poetry {
+      max-width: 100%;
+      margin: 1rem 0 0;
+      font-size: 0.875rem;
+      line-height: 1.65;
+    }
+
+    /* Hide the mobile setup pill button on desktop */
+    .btn-wrap {
+      display: none;
+    }
+
+    /* Desktop Telemetry Badges */
+    .desktop-telemetry-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      margin-block-start: 1.5rem;
+    }
+
+    .telemetry-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.45);
+      border: 1px solid rgba(var(--card-glow-rgb), 0.25);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    }
+
+    :global(html[data-theme="night"]) .telemetry-pill,
+    :global(html.dark) .telemetry-pill {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(var(--card-glow-rgb), 0.3);
+    }
+
+    .telemetry-icon {
+      font-size: 0.875rem;
+      color: var(--card-glow-color);
+    }
+
+    .telemetry-val {
+      font-family: var(--font-mono);
+      font-size: 0.625rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: var(--color-text-main);
+    }
+
+    /* Embedded Desktop Card Audio Player */
+    .desktop-card-player {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.85rem;
+      width: 100%;
+      margin-block-start: 1.25rem;
+      padding: 0.65rem 0.85rem;
+      border-radius: var(--radius-xl);
+      background: rgba(255, 255, 255, 0.4);
+      border: 1px solid rgba(var(--card-glow-rgb), 0.22);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+      box-sizing: border-box;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    :global(html[data-theme="night"]) .desktop-card-player,
+    :global(html.dark) .desktop-card-player {
+      background: rgba(22, 18, 16, 0.55);
+      border-color: rgba(var(--card-glow-rgb), 0.25);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-player-main {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .card-play-btn {
+      width: 2.35rem;
+      height: 2.35rem;
+      border-radius: var(--radius-full);
+      background: var(--card-glow-color);
+      border: none;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      box-shadow: 0 2px 10px rgba(var(--card-glow-rgb), 0.35);
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .card-play-btn:hover {
+      transform: scale(1.08);
+      filter: brightness(1.12);
+    }
+
+    .card-play-btn:active {
+      transform: scale(0.95);
+    }
+
+    .card-play-icon {
+      font-size: 1.25rem;
+      margin-inline-start: 1px;
+      font-variation-settings: 'FILL' 1;
+    }
+
+    .card-track-info {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .card-track-title {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--color-text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.2;
+    }
+
+    .card-track-sub {
+      font-family: var(--font-body);
+      font-size: 0.625rem;
+      color: var(--color-text-subtle);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-block-start: 0.15rem;
+    }
+
+    .card-player-equalizer {
+      display: flex;
+      align-items: flex-end;
+      gap: 2.5px;
+      height: 1.15rem;
+      padding-inline: 0.25rem;
+      flex-shrink: 0;
+    }
+
+    .card-wave-bar {
+      width: 2px;
+      height: 5px;
+      border-radius: var(--radius-full);
+      background: var(--card-glow-color);
+      opacity: 0.5;
+      transition: height 0.24s ease, opacity 0.3s ease;
+    }
+
+    .card-player-equalizer.is-playing .card-wave-bar {
+      opacity: 0.95;
+    }
+
+    /* Desktop Setup Column (Right side) */
+    .card-setup-col {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      position: relative;
+      padding-inline-start: 2rem;
+      border-inline-start: 1px solid rgba(var(--card-glow-rgb), 0.18);
+    }
+
+    :global([dir="rtl"]) .card-setup-col {
+      border-inline-start: 1px solid rgba(var(--card-glow-rgb), 0.18);
+    }
+
+    .desktop-setup-image-wrap {
+      position: relative;
+      width: 100%;
+      height: 10rem;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      border: 1px solid rgba(var(--card-glow-rgb), 0.22);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .desktop-setup-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .desktop-setup-image-wrap:hover .desktop-setup-img {
+      transform: scale(1.04);
+    }
+
+    .desktop-setup-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.1) 60%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .desktop-setup-badge {
+      position: absolute;
+      bottom: 0.65rem;
+      inset-inline-start: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-full);
+      background: rgba(18, 14, 12, 0.75);
+      border: 1px solid var(--card-glow-color);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .badge-icon {
+      font-size: 0.8125rem;
+      color: var(--card-glow-color);
+    }
+
+    .badge-text {
+      font-family: var(--font-display);
+      font-size: 0.625rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #ffffff;
+      white-space: nowrap;
+    }
+
+    /* 3 Structured Specification Rows */
+    .desktop-specs-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .desktop-spec-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      padding: 0.5rem 0.65rem;
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(var(--card-glow-rgb), 0.12);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: background-color 0.25s ease, border-color 0.25s ease;
+    }
+
+    :global(html[data-theme="night"]) .desktop-spec-item,
+    :global(html.dark) .desktop-spec-item {
+      background: rgba(255, 255, 255, 0.03);
+      border-color: rgba(255, 255, 255, 0.06);
+    }
+
+    .desktop-spec-item:hover {
+      border-color: var(--card-glow-color);
+      background: rgba(var(--card-glow-rgb), 0.06);
+    }
+
+    .desktop-spec-icon-box {
+      width: 1.75rem;
+      height: 1.75rem;
+      border-radius: var(--radius-full);
+      background: rgba(var(--card-glow-rgb), 0.12);
+      border: 1px solid rgba(var(--card-glow-rgb), 0.22);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--card-glow-color);
+    }
+
+    .desktop-spec-icon-box .material-symbols-outlined {
+      font-size: 0.95rem;
+    }
+
+    .desktop-spec-text {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .desktop-spec-label {
+      font-family: var(--font-mono);
+      font-size: 0.5rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-text-subtle);
+      line-height: 1;
+    }
+
+    .desktop-spec-val {
+      font-family: var(--font-body);
+      font-size: 0.6875rem;
+      line-height: 1.35;
+      font-weight: 500;
+      color: var(--color-text-main);
+      margin-block-start: 0.2rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .space-card-container {
+      max-width: 920px;
+    }
+
+    .art-book-card {
+      padding: 2.4rem 2.8rem;
+    }
+
+    .card-headline {
+      font-size: 2.6rem;
+    }
+
+    .desktop-setup-image-wrap {
+      height: 11.5rem;
+    }
   }
 </style>
