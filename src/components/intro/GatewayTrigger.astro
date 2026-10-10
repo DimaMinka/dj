@@ -1,0 +1,317 @@
+---
+import { defaultLang, type SupportedLang, useTranslations } from '../../i18n/ui';
+
+interface Props {
+  lang?: SupportedLang;
+}
+
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<div class="gateway-container">
+  <div class="ritual-button-wrap">
+    <button
+      id="gatewayRitualBtn"
+      class="gateway-btn"
+      type="button"
+      aria-label="Hold to enter audio sanctuary"
+    >
+      <!-- Shimmer light sweep -->
+      <div class="shimmer-sweep" aria-hidden="true"></div>
+
+      <!-- Progressive Fill Bar (0% to 100% in 800ms) -->
+      <div id="holdProgress" class="hold-progress-bar" aria-hidden="true"></div>
+
+      <!-- Icon with glowing aura -->
+      <div class="btn-icon-aura">
+        <span class="material-symbols-outlined btn-icon">sensors</span>
+      </div>
+
+      <!-- Call to Action Text -->
+      <div class="btn-text-col">
+        <span class="btn-primary-text">{t('gatewayTouch')}</span>
+        <span class="btn-sub-text">{t('gatewayHoldInstruction')}</span>
+      </div>
+
+      <!-- Forward Arrow Motif (RTL aware) -->
+      <span class="material-symbols-outlined arrow-icon">arrow_forward</span>
+    </button>
+  </div>
+
+  <!-- Headphones hint -->
+  <div class="hint-row">
+    <span class="material-symbols-outlined hint-icon">headphones</span>
+    <span class="hint-text">{t('gatewayHint')}</span>
+  </div>
+
+  <!-- Fineprint metadata -->
+  <div class="fineprint-row">
+    <p class="fineprint-text">{t('footerMeta')}</p>
+  </div>
+</div>
+
+<script>
+  function initGatewayHold() {
+    const btn = document.getElementById('gatewayRitualBtn');
+    const progress = document.getElementById('holdProgress');
+    if (!btn || !progress) return;
+
+    let holdStartTime = 0;
+    let progressTimer: number | null = null;
+    let isCompleted = false;
+
+    // Web Audio Synthesizer / Audio Unlocker
+    function triggerSensoryEntry() {
+      isCompleted = true;
+      btn?.classList.add('is-unlocked');
+
+      try {
+        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+        if (AudioContextClass) {
+          const ctx = new AudioContextClass();
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(432, ctx.currentTime); // 432 Hz Solfeggio harmonic
+          osc.frequency.exponentialRampToValueAtTime(864, ctx.currentTime + 0.8);
+
+          gain.gain.setValueAtTime(0.01, ctx.currentTime);
+          gain.gain.linearRampToValueAtTime(0.15, ctx.currentTime + 0.4);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.2);
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+
+          osc.start();
+          osc.stop(ctx.currentTime + 1.2);
+        }
+      } catch (e) {
+        console.warn('Audio context init deferred:', e);
+      }
+
+      // Notify parent / page of successful entry
+      window.dispatchEvent(new CustomEvent('dj:gateway-unlocked'));
+    }
+
+    const startHold = () => {
+      if (isCompleted) return;
+      holdStartTime = Date.now();
+      progress.style.opacity = '1';
+
+      if (progressTimer) clearInterval(progressTimer);
+
+      progressTimer = window.setInterval(() => {
+        const elapsed = Date.now() - holdStartTime;
+        const pct = Math.min(100, (elapsed / 800) * 100);
+        progress.style.width = `${pct}%`;
+
+        if (pct >= 100) {
+          if (progressTimer) clearInterval(progressTimer);
+          triggerSensoryEntry();
+        }
+      }, 16);
+    };
+
+    const endHold = () => {
+      if (isCompleted) return;
+      if (progressTimer) clearInterval(progressTimer);
+      progress.style.width = '0%';
+    };
+
+    btn.addEventListener('mousedown', startHold);
+    btn.addEventListener('mouseup', endHold);
+    btn.addEventListener('mouseleave', endHold);
+    btn.addEventListener('touchstart', startHold, { passive: true });
+    btn.addEventListener('touchend', endHold);
+  }
+
+  initGatewayHold();
+</script>
+
+<style>
+  .gateway-container {
+    position: relative;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.875rem;
+    padding-inline: 1.25rem;
+    padding-block-end: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .ritual-button-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 20rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .gateway-btn {
+    position: relative;
+    width: 100%;
+    padding-block: 1rem;
+    padding-inline: 1.5rem;
+    border-radius: var(--radius-full);
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-glass-border);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4), 0 0 20px var(--color-primary-glow);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    transition: var(--transition-theme), transform 0.2s ease, box-shadow 0.4s ease;
+  }
+
+  .gateway-btn:hover {
+    border-color: var(--color-primary);
+  }
+
+  .gateway-btn:active {
+    transform: scale(0.98);
+  }
+
+  .gateway-btn.is-unlocked {
+    box-shadow: 0 0 45px var(--color-primary-glow), 0 0 10px var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  .shimmer-sweep {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+    transform: translateX(-100%);
+    animation: shimmer 4s infinite;
+    pointer-events: none;
+  }
+
+  @keyframes shimmer {
+    100% { transform: translateX(100%); }
+  }
+
+  .hold-progress-bar {
+    position: absolute;
+    inset-inline-start: 0;
+    top: 0;
+    bottom: 0;
+    width: 0%;
+    background: var(--color-primary-glow);
+    pointer-events: none;
+    transition: width 0.05s linear;
+  }
+
+  .btn-icon-aura {
+    width: 2rem;
+    height: 2rem;
+    border-radius: var(--radius-full);
+    background: var(--color-surface-container);
+    border: 1px solid var(--color-glass-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 12px var(--color-primary-glow);
+    transition: var(--transition-theme);
+  }
+
+  .btn-icon {
+    font-size: 1.125rem;
+    color: var(--color-primary);
+    font-variation-settings: 'FILL' 1;
+  }
+
+  .btn-text-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .btn-primary-text {
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-text-main);
+    transition: color 0.3s ease;
+  }
+
+  .gateway-btn:hover .btn-primary-text {
+    color: var(--color-primary);
+  }
+
+  .btn-sub-text {
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    opacity: 0.8;
+    margin-block-start: 0.15rem;
+  }
+
+  .arrow-icon {
+    font-size: 1.125rem;
+    color: var(--color-primary);
+    opacity: 0.7;
+    transition: transform 0.3s ease;
+  }
+
+  :global([dir="rtl"]) .arrow-icon {
+    transform: rotate(180deg);
+  }
+
+  .gateway-btn:hover .arrow-icon {
+    transform: translateX(3px);
+  }
+
+  :global([dir="rtl"]) .gateway-btn:hover .arrow-icon {
+    transform: translateX(-3px) rotate(180deg);
+  }
+
+  .hint-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--color-text-subtle);
+  }
+
+  .hint-icon {
+    font-size: 0.8125rem;
+    color: var(--color-primary);
+    opacity: 0.8;
+  }
+
+  .hint-text {
+    font-size: 0.6875rem;
+    letter-spacing: 0.02em;
+    font-weight: 400;
+  }
+
+  .fineprint-row {
+    text-align: center;
+    padding-block-start: 0.25rem;
+  }
+
+  .fineprint-text {
+    font-family: var(--font-mono);
+    font-size: 0.5rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-text-subtle);
+    opacity: 0.6;
+    margin: 0;
+  }
+</style>
