@@ -9,7 +9,7 @@ export interface SpaceSetup {
 
 export interface Space {
   id: number;
-  slug: 'aegean' | 'sunset' | 'twilight' | 'beach' | 'garden' | 'estate' | 'desert' | 'nordic';
+  slug: 'aegean' | 'twilight' | 'sunset' | 'beach' | 'garden' | 'estate' | 'desert' | 'nordic';
   numberLabel: string;
   headerBadge: string;
   title: { en: string; ru: string; he: string };
@@ -29,72 +29,11 @@ export interface Space {
 }
 
 export const spaces: Space[] = [
-  // 1. Twilight Vineyard (Истинный эталон)
+  // 1. Botanical Sound Atelier (Aegean Terraces) - First in list!
   {
     id: 1,
-    slug: 'twilight',
-    numberLabel: '01 / 08',
-    headerBadge: 'TWILIGHT VINEYARD • TERROIR',
-    title: {
-      en: 'Twilight Vineyard',
-      ru: 'Twilight Vineyard',
-      he: 'כרם בין השמשות',
-    },
-    supertitle: {
-      en: '— TERROIR SOUND ATELIER —',
-      ru: '— TERROIR SOUND ATELIER —',
-      he: '— TERROIR SOUND ATELIER —',
-    },
-    headlinePrefix: {
-      en: 'Twilight vines & ',
-      ru: 'Лозы заката и ',
-      he: 'גפני בין השמשות ו',
-    },
-    headlineAccent: {
-      en: 'whispering leaves.',
-      ru: 'шелест крон.',
-      he: 'רשרוש העלים.',
-    },
-    poetry: {
-      en: 'Private acoustic session beneath ancient oak trees among rolling vineyard hills. Gentle candle shimmer and evening terroir resonance.',
-      ru: 'Приватная акустическая сессия под вековым дубом среди винных холмов. Мягкое мерцание свечей, барные бочки и вечерний резонанс.',
-      he: 'סשן אקוסטי אינטימי תחת אלון עתיק בין גבעות הכרמים. נצנוץ נרות עדין, חביות עץ אלון ותהודת ערב עמוקה.',
-    },
-    trackTitle: 'Twilight Vineyard Resonance',
-    trackSubtitle: 'Live at Oak Barrel Rig • Melodic Session',
-    bpm: 123,
-    frequency: 432,
-    keySignature: 'D minor',
-    glowColor: '#9333ea',
-    glowRgb: '147, 51, 234',
-    bgWatercolor: '/assets/spaces/twilight-bg.jpg',
-    setup: {
-      id: 'setup-twilight',
-      name: {
-        en: 'Craft Oak Barrel Console & Candles',
-        ru: 'Консоль из натурального дуба & Свечи',
-        he: 'עמדת חבית עץ אלון טבעית ונרות',
-      },
-      lightsCount: 'CRAFT EDITION • WARM CANDLELIGHT',
-      soundType: {
-        en: 'Seamless integration: French oak wine barrel console with ambient warm candle lanterns',
-        ru: 'Бесшовное растворение аппаратуры: дубовая бочка, живой огонь свечей и природная архитектура террасы',
-        he: 'הטמעה מושלמת: עמדת חבית אלון צרפתית, עששיות נרות חמות וסאונד עוטף',
-      },
-      idealFor: {
-        en: 'Boutique wineries, private tastings, sunset estate dinners',
-        ru: 'Бутиковые винодельни, дегустации, ужины на закате',
-        he: 'יקבי בוטיק, טעימות יין יוקרתיות, ארוחות שקיעה באחוזה',
-      },
-      image: '/assets/spaces/twilight-setup.jpg',
-    },
-  },
-
-  // 2. Botanical Sound Atelier (Aegean Terraces)
-  {
-    id: 2,
     slug: 'aegean',
-    numberLabel: '02 / 08',
+    numberLabel: '01 / 08',
     headerBadge: 'AEGEAN TERRACES • BOTANICAL',
     title: {
       en: 'Aegean Terraces',
@@ -148,6 +87,67 @@ export const spaces: Space[] = [
         he: 'טרסות ים-תיכוניות, מטעי זיתים, אחוזות חוף, עד 100 אורחים',
       },
       image: '/assets/spaces/aegean-setup.jpg',
+    },
+  },
+
+  // 2. Twilight Vineyard (Истинный эталон)
+  {
+    id: 2,
+    slug: 'twilight',
+    numberLabel: '02 / 08',
+    headerBadge: 'TWILIGHT VINEYARD • TERROIR',
+    title: {
+      en: 'Twilight Vineyard',
+      ru: 'Twilight Vineyard',
+      he: 'כרם בין השמשות',
+    },
+    supertitle: {
+      en: '— TERROIR SOUND ATELIER —',
+      ru: '— TERROIR SOUND ATELIER —',
+      he: '— TERROIR SOUND ATELIER —',
+    },
+    headlinePrefix: {
+      en: 'Twilight vines & ',
+      ru: 'Лозы заката и ',
+      he: 'גפני בין השמשות ו',
+    },
+    headlineAccent: {
+      en: 'whispering leaves.',
+      ru: 'шелест крон.',
+      he: 'רשרוש העלים.',
+    },
+    poetry: {
+      en: 'Private acoustic session beneath ancient oak trees among rolling vineyard hills. Gentle candle shimmer and evening terroir resonance.',
+      ru: 'Приватная акустическая сессия под вековым дубом среди винных холмов. Мягкое мерцание свечей, барные бочки и вечерний резонанс.',
+      he: 'סשן אקוסטי אינטימי תחת אלון עתיק בין גבעות הכרמים. נצנוץ נרות עדין, חביות עץ אלון ותהודת ערב עמוקה.',
+    },
+    trackTitle: 'Twilight Vineyard Resonance',
+    trackSubtitle: 'Live at Oak Barrel Rig • Melodic Session',
+    bpm: 123,
+    frequency: 432,
+    keySignature: 'D minor',
+    glowColor: '#9333ea',
+    glowRgb: '147, 51, 234',
+    bgWatercolor: '/assets/spaces/twilight-bg.jpg',
+    setup: {
+      id: 'setup-twilight',
+      name: {
+        en: 'Craft Oak Barrel Console & Candles',
+        ru: 'Консоль из натурального дуба & Свечи',
+        he: 'עמדת חבית עץ אלון טבעית ונרות',
+      },
+      lightsCount: 'CRAFT EDITION • WARM CANDLELIGHT',
+      soundType: {
+        en: 'Seamless integration: French oak wine barrel console with ambient warm candle lanterns',
+        ru: 'Бесшовное растворение аппаратуры: дубовая бочка, живой огонь свечей и природная архитектура террасы',
+        he: 'הטמעה מושלמת: עמדת חבית אלון צרפתית, עששיות נרות חמות וסאונד עוטף',
+      },
+      idealFor: {
+        en: 'Boutique wineries, private tastings, sunset estate dinners',
+        ru: 'Бутиковые винодельни, дегустации, ужины на закате',
+        he: 'יקבי בוטיק, טעימות יין יוקרתיות, ארוחות שקיעה באחוזה',
+      },
+      image: '/assets/spaces/twilight-setup.jpg',
     },
   },
 
