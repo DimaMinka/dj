@@ -94,11 +94,11 @@ const t = useTranslations(lang);
       // Notify parent / page of successful entry
       window.dispatchEvent(new CustomEvent('dj:gateway-unlocked'));
 
-      // Seamless transition to Sound Worlds (/vibe)
+      // Seamless transition to Sound Worlds (/vibes/sunset)
       window.setTimeout(() => {
         document.documentElement.classList.add('page-exit');
         window.setTimeout(() => {
-          window.location.assign('/vibe');
+          window.location.assign('/vibes/sunset');
         }, 550);
       }, 750);
     }

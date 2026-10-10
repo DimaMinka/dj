@@ -3,15 +3,16 @@ import { defaultLang, type SupportedLang, useTranslations } from '../../i18n/ui'
 import { spaces } from '../../data/spaces';
 
 interface Props {
+  initialIndex?: number;
   lang?: SupportedLang;
 }
 
-const { lang = defaultLang } = Astro.props;
+const { initialIndex = 0, lang = defaultLang } = Astro.props;
 const t = useTranslations(lang);
-const initialSpace = spaces[0];
+const initialSpace = spaces[initialIndex] || spaces[0];
 ---
 
-<div class="sound-dock-wrapper" id="soundDockContainer">
+<div class="sound-dock-wrapper" id="soundDockContainer" data-initial-slug={initialSpace.slug}>
   <!-- Minimalist Live Audio Stream Bar from Stitch -->
   <div class="audio-stream-card">
     <div class="stream-telemetry">
@@ -69,7 +70,8 @@ const initialSpace = spaces[0];
     const ctaBtn = document.getElementById('dockMainCtaBtn');
     const eqBars = document.querySelectorAll('.wave-bar');
 
-    let currentSlug = 'sunset';
+    const container = document.getElementById('soundDockContainer');
+    let currentSlug = container?.dataset?.initialSlug || 'sunset';
     let isHarmonicActive = false;
     let audioCtx: AudioContext | null = null;
     let osc: OscillatorNode | null = null;

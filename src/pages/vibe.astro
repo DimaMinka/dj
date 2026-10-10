@@ -1,115 +1,15 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import VibeAtmosphere from "../components/vibe/VibeAtmosphere.astro";
-import VibeHeader from "../components/vibe/VibeHeader.astro";
-import SpacesCarousel from "../components/vibe/SpacesCarousel.astro";
-import VibeSoundDock from "../components/vibe/VibeSoundDock.astro";
-import VibeSetupDrawer from "../components/vibe/VibeSetupDrawer.astro";
-import { spaces } from "../data/spaces";
-import { defaultLang } from "../i18n/ui";
+return Astro.redirect('/vibes/sunset');
 ---
-
-<Layout
-  title="DJ Dima Minka — Sound Worlds (Vibe Space)"
-  description="Explore the five site-specific soundscapes of DJ Dima Minka: Sunset Villa, Garden Sanctuary, Twilight Vineyard, Desert Nomad, and Nordic Peaks."
-  lang={defaultLang}
->
-  <main class="vibe-viewport pt-safe pb-safe page-enter">
-    <!-- Multi-layered watercolor background & dynamic glow flood -->
-    <VibeAtmosphere />
-
-    <!-- Delicate Art-Book Ornamental Frame Lines from Stitch -->
-    <div class="art-book-perimeter-frame" aria-hidden="true">
-      <div class="frame-inner-border"></div>
-      <div class="frame-corner corner-top-left"></div>
-      <div class="frame-corner corner-top-right"></div>
-      <div class="frame-corner corner-bottom-left"></div>
-      <div class="frame-corner corner-bottom-right"></div>
-    </div>
-
-    <!-- Compact upper navigation bar -->
-    <VibeHeader lang={defaultLang} />
-
-    <!-- Horizontal Swipe Carousel (5 Sound Worlds) -->
-    <SpacesCarousel spaces={spaces} lang={defaultLang} />
-
-    <!-- Floating Sound Dock with Live Telemetry & Amber Gradient CTA -->
-    <VibeSoundDock lang={defaultLang} />
-
-    <!-- Accessible bottom sheet specifications drawer -->
-    <VibeSetupDrawer lang={defaultLang} />
-  </main>
-</Layout>
-
-<style>
-  .vibe-viewport {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    min-height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    overflow: hidden;
-    box-sizing: border-box;
-  }
-
-  /* Perimeter Art-Book Ornamental Frame from Stitch */
-  .art-book-perimeter-frame {
-    position: absolute;
-    inset: 0.35rem;
-    pointer-events: none;
-    z-index: 5;
-  }
-
-  .frame-inner-border {
-    position: absolute;
-    inset: 0;
-    border-radius: 28px;
-    border: 1px solid rgba(168, 144, 120, 0.2);
-  }
-
-  :global(html[data-theme="night"]) .frame-inner-border,
-  :global(html.dark) .frame-inner-border {
-    border-color: rgba(255, 255, 255, 0.07);
-  }
-
-  .frame-corner {
-    position: absolute;
-    width: 0.75rem;
-    height: 0.75rem;
-  }
-
-  .corner-top-left {
-    top: 0.35rem;
-    left: 0.35rem;
-    border-top: 1px solid rgba(141, 75, 0, 0.35);
-    border-left: 1px solid rgba(141, 75, 0, 0.35);
-  }
-
-  .corner-top-right {
-    top: 0.35rem;
-    right: 0.35rem;
-    border-top: 1px solid rgba(141, 75, 0, 0.35);
-    border-right: 1px solid rgba(141, 75, 0, 0.35);
-  }
-
-  .corner-bottom-left {
-    bottom: 0.35rem;
-    left: 0.35rem;
-    border-bottom: 1px solid rgba(141, 75, 0, 0.35);
-    border-left: 1px solid rgba(141, 75, 0, 0.35);
-  }
-
-  .corner-bottom-right {
-    bottom: 0.35rem;
-    right: 0.35rem;
-    border-bottom: 1px solid rgba(141, 75, 0, 0.35);
-    border-right: 1px solid rgba(141, 75, 0, 0.35);
-  }
-
-  :global(html[data-theme="night"]) .frame-corner,
-  :global(html.dark) .frame-corner {
-    border-color: rgba(245, 166, 35, 0.3);
-  }
-</style>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content="0;url=/vibes/sunset" />
+    <link rel="canonical" href="/vibes/sunset" />
+    <title>Redirecting to Vibe Space...</title>
+  </head>
+  <body>
+    <script>window.location.replace('/vibes/sunset');</script>
+  </body>
+</html>

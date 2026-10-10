@@ -106,18 +106,8 @@ const t = useTranslations(lang);
                 0 0 28px rgba(var(--card-glow-rgb), 0.14),
                 inset 0 1px 1px rgba(255, 255, 255, 0.7);
     transition: var(--transition-theme), 
-                transform 1.05s cubic-bezier(0.16, 1, 0.3, 1), 
-                opacity 1.0s cubic-bezier(0.16, 1, 0.3, 1),
                 border-color 0.8s ease, 
                 box-shadow 0.8s ease;
-    will-change: transform, opacity;
-  }
-
-  /* Gentle dissolution during space change to reveal the background landscape */
-  :global(.card-is-departing) .art-book-card {
-    opacity: 0;
-    transform: scale(0.96) translateY(8px);
-    pointer-events: none;
   }
 
   /* Night Mode glass styling from Stitch with multi-layered soft shadow */

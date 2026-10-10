@@ -5,14 +5,19 @@ import SpaceCard from './SpaceCard.astro';
 
 interface Props {
   spaces: Space[];
+  initialIndex?: number;
   lang?: SupportedLang;
 }
 
-const { spaces, lang = defaultLang } = Astro.props;
+const { spaces, initialIndex = 0, lang = defaultLang } = Astro.props;
 const t = useTranslations(lang);
 ---
 
-<div class="carousel-wrapper" id="spacesCarouselWrapper">
+<div
+  class="carousel-wrapper"
+  id="spacesCarouselWrapper"
+  data-initial-index={initialIndex}
+>
   <!-- Desktop Left Navigation Arrow -->
   <button
     id="carouselPrevBtn"
@@ -23,15 +28,17 @@ const t = useTranslations(lang);
     <span class="material-symbols-outlined" aria-hidden="true">chevron_left</span>
   </button>
 
-  <!-- Slider Viewport & Moving Track -->
-  <div class="carousel-viewport" id="carouselViewport">
-    <div class="carousel-track" id="carouselTrack">
-      {spaces.map((space, index) => (
-        <div class="carousel-slide" data-index={index}>
-          <SpaceCard space={space} lang={lang} />
-        </div>
-      ))}
-    </div>
+  <!-- Central In-Place Stage with Stacked Card Slots -->
+  <div class="carousel-stage" id="carouselStage">
+    {spaces.map((space, index) => (
+      <div
+        class={`carousel-card-slot ${index === initialIndex ? 'is-active' : ''}`}
+        data-slot-index={index}
+        data-slot-slug={space.slug}
+      >
+        <SpaceCard space={space} lang={lang} />
+      </div>
+    ))}
   </div>
 
   <!-- Desktop Right Navigation Arrow -->
@@ -51,10 +58,10 @@ const t = useTranslations(lang);
         <button
           type="button"
           role="tab"
-          class={`pagination-dot ${idx === 0 ? 'is-active' : ''}`}
+          class={`pagination-dot ${idx === initialIndex ? 'is-active' : ''}`}
           data-dot-index={idx}
           aria-label={`Go to ${space.title[lang] || space.title.en}`}
-          aria-selected={idx === 0 ? 'true' : 'false'}
+          aria-selected={idx === initialIndex ? 'true' : 'false'}
           style={`--dot-color: ${space.glowColor};`}
         >
           <span class="dot-core"></span>
@@ -73,22 +80,17 @@ const t = useTranslations(lang);
 
   function initSpacesCarousel() {
     const wrapper = document.getElementById('spacesCarouselWrapper');
-    const viewport = document.getElementById('carouselViewport');
-    const track = document.getElementById('carouselTrack');
+    const stage = document.getElementById('carouselStage');
     const prevBtn = document.getElementById('carouselPrevBtn');
     const nextBtn = document.getElementById('carouselNextBtn');
     const dots = document.querySelectorAll('.pagination-dot');
-    if (!track || !viewport) return;
+    const slots = document.querySelectorAll('.carousel-card-slot');
+    if (!wrapper || !stage || slots.length === 0) return;
 
-    let currentIndex = 0;
+    let currentIndex = Number(wrapper.dataset.initialIndex || 0);
     const totalSlides = spaces.length;
     const isRtl = document.documentElement.getAttribute('dir') === 'rtl';
-
-    // Touch / Pointer Gestures state
-    let isDragging = false;
-    let startX = 0;
-    let currentX = 0;
-    let dragOffset = 0;
+    let isLocked = false;
 
     function emitSpaceChange(index: number) {
       const activeSpace = spaces[index];
@@ -110,83 +112,93 @@ const t = useTranslations(lang);
       );
     }
 
-    function updateTrackPosition(animate = true) {
-      if (animate) {
-        track.style.transition = 'transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-      } else {
-        track.style.transition = 'none';
-      }
+    function goToIndex(targetIndex: number, updateUrl = true) {
+      if (isLocked) return;
+      if (targetIndex < 0) targetIndex = totalSlides - 1;
+      if (targetIndex >= totalSlides) targetIndex = 0;
+      if (targetIndex === currentIndex) return;
 
-      const directionMultiplier = isRtl ? 1 : -1;
-      const targetPercent = currentIndex * 100 * directionMultiplier;
-      track.style.transform = `translate3d(calc(${targetPercent}% + ${dragOffset}px), 0, 0)`;
+      // Lock all interactions strictly during the multi-phase transition
+      isLocked = true;
+      wrapper.classList.add('is-animating');
 
-      // Update dots
-      dots.forEach((dot, idx) => {
-        const isActive = idx === currentIndex;
-        dot.classList.toggle('is-active', isActive);
-        dot.setAttribute('aria-selected', isActive ? 'true' : 'false');
-      });
-    }
+      const currentSlot = slots[currentIndex];
+      const targetSlot = slots[targetIndex];
+      const targetSpace = spaces[targetIndex];
 
-    let isTransitioningSlide = false;
-
-    function goToIndex(index: number) {
-      if (isTransitioningSlide) return;
-      if (index < 0) index = 0;
-      if (index >= totalSlides) index = totalSlides - 1;
-      if (index === currentIndex) {
-        dragOffset = 0;
-        updateTrackPosition(true);
-        return;
-      }
-
-      isTransitioningSlide = true;
-      const targetIndex = index;
-
-      // 1. PHASE 1: Gentle fade out of current card & unveil pure landscape
-      viewport.classList.add('card-is-departing');
+      // Notify atmosphere to lighten vignettes for artwork reveal
       window.dispatchEvent(
         new CustomEvent('dj:space-transitioning', { detail: { active: true } })
       );
 
-      // 2. PHASE 2 (after 450ms): Swap background layer and reposition track
-      setTimeout(() => {
-        currentIndex = targetIndex;
-        dragOffset = 0;
-        emitSpaceChange(currentIndex);
-        updateTrackPosition(false); // Move track while invisible
+      // Phase 1 (0ms): Central card dissolves in place into transparency
+      if (currentSlot) {
+        currentSlot.classList.remove('is-active');
+        currentSlot.classList.add('is-fading-out');
+      }
 
-        // 3. PHASE 3 (after 1000ms total pause on pure background): Manifest new card slowly over 1.0s
+      // Phase 2 (380ms): Fade out the current background layer to dark canvas
+      setTimeout(() => {
+        window.dispatchEvent(
+          new CustomEvent('dj:space-bg-fadeout', {
+            detail: { oldIndex: currentIndex, newIndex: targetIndex },
+          })
+        );
+
+        // Phase 3 (850ms): Reveal new vibe background & aura glow + Update URL & Telemetry
         setTimeout(() => {
-          viewport.classList.remove('card-is-departing');
-          window.dispatchEvent(
-            new CustomEvent('dj:space-transitioning', { detail: { active: false } })
-          );
+          if (currentSlot) {
+            currentSlot.classList.remove('is-fading-out');
+          }
+
+          // Update URL in browser without full reload
+          if (updateUrl && window.history && window.history.replaceState) {
+            window.history.replaceState(null, '', `/vibes/${targetSpace.slug}`);
+          }
+
+          // Update page title
+          document.title = `DJ Dima Minka — ${targetSpace.title.en} (Vibe Space)`;
+
+          // Update pagination dots
+          dots.forEach((dot, idx) => {
+            const isActive = idx === targetIndex;
+            dot.classList.toggle('is-active', isActive);
+            dot.setAttribute('aria-selected', isActive ? 'true' : 'false');
+          });
+
+          // Notify components of active space
+          emitSpaceChange(targetIndex);
+
+          // Phase 4 (1750ms total - ~900ms pause on pure artwork background):
+          // Gentle manifestation of new card over 1.0s slow animation
           setTimeout(() => {
-            isTransitioningSlide = false;
-          }, 1050);
-        }, 1000);
-      }, 450);
+            if (targetSlot) {
+              targetSlot.classList.add('is-active');
+            }
+
+            // Phase 5 (2800ms): Complete transition & unlock gestures
+            setTimeout(() => {
+              currentIndex = targetIndex;
+              isLocked = false;
+              wrapper.classList.remove('is-animating');
+              window.dispatchEvent(
+                new CustomEvent('dj:space-transitioning', { detail: { active: false } })
+              );
+            }, 1050);
+          }, 900);
+        }, 470);
+      }, 380);
     }
 
     function nextSlide() {
-      if (currentIndex < totalSlides - 1) {
-        goToIndex(currentIndex + 1);
-      } else {
-        goToIndex(0); // loop
-      }
+      goToIndex(currentIndex + 1);
     }
 
     function prevSlide() {
-      if (currentIndex > 0) {
-        goToIndex(currentIndex - 1);
-      } else {
-        goToIndex(totalSlides - 1); // loop
-      }
+      goToIndex(currentIndex - 1);
     }
 
-    // Dot navigation clicks
+    // Dot navigation
     dots.forEach((dot) => {
       dot.addEventListener('click', () => {
         const idx = Number((dot as HTMLElement).dataset.dotIndex);
@@ -194,12 +206,13 @@ const t = useTranslations(lang);
       });
     });
 
-    // Arrow navigation clicks
+    // Arrow navigation
     prevBtn?.addEventListener('click', isRtl ? nextSlide : prevSlide);
     nextBtn?.addEventListener('click', isRtl ? prevSlide : nextSlide);
 
     // Keyboard navigation
     window.addEventListener('keydown', (e) => {
+      if (isLocked) return;
       if (e.key === 'ArrowRight') {
         isRtl ? prevSlide() : nextSlide();
       } else if (e.key === 'ArrowLeft') {
@@ -207,95 +220,76 @@ const t = useTranslations(lang);
       }
     });
 
-    // Touch and Pointer gesture listeners (robust mobile swipe support)
-    function startDrag(clientX: number) {
-      isDragging = true;
+    // Browser popstate support (Back / Forward navigation)
+    window.addEventListener('popstate', () => {
+      const match = window.location.pathname.match(/\/vibes\/([a-z0-9_-]+)/);
+      if (match) {
+        const slug = match[1];
+        const foundIdx = spaces.findIndex((s) => s.slug === slug);
+        if (foundIdx !== -1 && foundIdx !== currentIndex) {
+          goToIndex(foundIdx, false);
+        }
+      }
+    });
+
+    // Swipe Intent Detection (Strict trigger, no physical card dragging!)
+    let startX = 0;
+    let startY = 0;
+    let isTracking = false;
+
+    function onTouchStart(clientX: number, clientY: number) {
+      if (isLocked) return;
       startX = clientX;
-      currentX = clientX;
-      dragOffset = 0;
-      track.style.transition = 'none';
+      startY = clientY;
+      isTracking = true;
     }
 
-    function moveDrag(clientX: number) {
-      if (!isDragging) return;
-      currentX = clientX;
-      dragOffset = currentX - startX;
+    function onTouchEnd(clientX: number, clientY: number) {
+      if (!isTracking || isLocked) return;
+      isTracking = false;
+      const deltaX = clientX - startX;
+      const deltaY = clientY - startY;
 
-      // Elastic resistance at boundaries
-      if (
-        (currentIndex === 0 && (isRtl ? dragOffset < 0 : dragOffset > 0)) ||
-        (currentIndex === totalSlides - 1 && (isRtl ? dragOffset > 0 : dragOffset < 0))
-      ) {
-        dragOffset *= 0.35;
-      }
-
-      updateTrackPosition(false);
-    }
-
-    function endDrag() {
-      if (!isDragging) return;
-      isDragging = false;
-
-      const swipeThreshold = 35;
-      const effectiveDrag = isRtl ? -dragOffset : dragOffset;
-
-      if (effectiveDrag < -swipeThreshold) {
-        nextSlide();
-      } else if (effectiveDrag > swipeThreshold) {
-        prevSlide();
-      } else {
-        dragOffset = 0;
-        updateTrackPosition(true);
+      // Check if primarily horizontal swipe with threshold of 35px
+      if (Math.abs(deltaX) > 35 && Math.abs(deltaX) > Math.abs(deltaY)) {
+        if (deltaX < 0) {
+          isRtl ? prevSlide() : nextSlide();
+        } else {
+          isRtl ? nextSlide() : prevSlide();
+        }
       }
     }
 
-    // Pointer events (Desktop & Modern mobile)
-    viewport.addEventListener('pointerdown', (e: PointerEvent) => {
+    // Pointer Events
+    stage.addEventListener('pointerdown', (e: PointerEvent) => {
       if ((e.target as HTMLElement).closest('button, a')) return;
-      startDrag(e.clientX);
-      try {
-        viewport.setPointerCapture(e.pointerId);
-      } catch (err) {}
+      onTouchStart(e.clientX, e.clientY);
     });
 
-    viewport.addEventListener('pointermove', (e: PointerEvent) => {
-      moveDrag(e.clientX);
+    stage.addEventListener('pointerup', (e: PointerEvent) => {
+      onTouchEnd(e.clientX, e.clientY);
     });
 
-    const onPointerUp = (e: PointerEvent) => {
-      try {
-        viewport.releasePointerCapture(e.pointerId);
-      } catch (err) {}
-      endDrag();
-    };
+    stage.addEventListener('pointercancel', () => {
+      isTracking = false;
+    });
 
-    viewport.addEventListener('pointerup', onPointerUp);
-    viewport.addEventListener('pointercancel', onPointerUp);
-
-    // Native Touch fallback for iOS Safari / Mobile webviews
-    viewport.addEventListener('touchstart', (e: TouchEvent) => {
+    // Touch fallback for mobile Safari
+    stage.addEventListener('touchstart', (e: TouchEvent) => {
       if ((e.target as HTMLElement).closest('button, a')) return;
       if (e.touches.length === 1) {
-        startDrag(e.touches[0].clientX);
+        onTouchStart(e.touches[0].clientX, e.touches[0].clientY);
       }
     }, { passive: true });
 
-    viewport.addEventListener('touchmove', (e: TouchEvent) => {
-      if (e.touches.length === 1) {
-        moveDrag(e.touches[0].clientX);
+    stage.addEventListener('touchend', (e: TouchEvent) => {
+      if (e.changedTouches.length === 1) {
+        onTouchEnd(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
       }
     }, { passive: true });
 
-    viewport.addEventListener('touchend', () => {
-      endDrag();
-    }, { passive: true });
-
-    viewport.addEventListener('touchcancel', () => {
-      endDrag();
-    }, { passive: true });
-
-    // Initial event emission
-    emitSpaceChange(0);
+    // Initial event emission for initialIndex
+    emitSpaceChange(currentIndex);
   }
 
   initSpacesCarousel();
@@ -312,41 +306,57 @@ const t = useTranslations(lang);
     justify-content: center;
     margin-block: auto;
     box-sizing: border-box;
+    padding-inline: 1rem;
   }
 
-  .carousel-viewport {
-    position: relative;
+  /* Strict interaction lock during transitions */
+  .carousel-wrapper.is-animating {
+    pointer-events: none;
+  }
+
+  .carousel-stage {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
     width: 100%;
-    overflow: hidden;
+    max-width: 360px;
+    margin-inline: auto;
+    align-items: center;
+    justify-items: center;
     touch-action: pan-y;
     cursor: grab;
     user-select: none;
     -webkit-user-select: none;
-    padding-block: 1.5rem;
-    margin-block: -1.5rem;
   }
 
-  .carousel-viewport:active {
-    cursor: grabbing;
-  }
-
-  .carousel-track {
-    display: flex;
+  .carousel-card-slot {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
     width: 100%;
-    will-change: transform;
-    align-items: center;
-  }
-
-  .carousel-slide {
-    position: relative;
-    flex: 0 0 100%;
-    width: 100%;
-    padding-inline: 1.25rem;
-    padding-block: 0.5rem;
-    box-sizing: border-box;
     display: flex;
     justify-content: center;
     align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    transform: scale(0.97);
+    transition: opacity 1.0s cubic-bezier(0.16, 1, 0.3, 1), transform 1.0s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+
+  .carousel-card-slot.is-active {
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+    transform: scale(1);
+  }
+
+  .carousel-card-slot.is-fading-out {
+    opacity: 0;
+    pointer-events: none;
+    visibility: visible;
+    transform: scale(0.97);
+    transition: opacity 0.38s cubic-bezier(0.25, 1, 0.5, 1), transform 0.38s cubic-bezier(0.25, 1, 0.5, 1);
   }
 
   /* Desktop Navigation Arrows */
