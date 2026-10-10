@@ -19,17 +19,17 @@ export const ui = {
     nightModeBtn: 'Night',
     
     // Sonic Portal / Hero
-    preludeTag: 'Sensory Prelude',
-    heroTitlePrefix: 'IMMERSION',
-    heroTitleAccent: 'INTO FREQUENCY',
-    heroManifesto: 'Every set is a dialogue with space. Light, landscape architecture, and sound, handcrafted for a single unrepeatable moment.',
+    preludeTag: 'Official Artist Experience • Intro',
+    heroTitlePrefix: 'ATMOSPHERIC',
+    heroTitleAccent: 'SOUND & LIGHT ARCHITECTURE',
+    heroManifesto: 'Welcome to the official sanctuary of DJ Dima Minka. Explore bespoke melodic house sets, 12+ custom wireless light installations, and site-specific soundscapes crafted for private villas, vineyards, and mountain retreats.',
     frequencyBadge: '432 Hz',
     
     // Gateway Button
-    gatewayTouch: 'TOUCH THE REALM',
-    gatewayHoldInstruction: 'Hold to Enter Sanctuary',
-    gatewayHint: 'Recommended with headphones • Custom tuned sound & light',
-    footerMeta: 'SITE-SPECIFIC ACOUSTIC CURATION • BESPOKE LIGHT RIG • CURATED IN HARMONY',
+    gatewayTouch: 'ENTER THE EXPERIENCE',
+    gatewayHoldInstruction: 'Hold to Explore Sets, Light Rig & Booking',
+    gatewayHint: 'Headphones recommended • Live audio preview & visual portfolio inside',
+    footerMeta: 'SOUND CURATION • BESPOKE 12+ LIGHT RIG • PRIVATE RETREATS & BOUTIQUE EVENTS',
   },
   ru: {
     artistName: 'DJ DIMA MINKA',
@@ -39,16 +39,16 @@ export const ui = {
     dayModeBtn: 'День',
     nightModeBtn: 'Ночь',
     
-    preludeTag: 'Сенсорный пролог',
-    heroTitlePrefix: 'ПОГРУЖЕНИЕ',
-    heroTitleAccent: 'В ЧАСТОТУ',
-    heroManifesto: 'Каждый сет — это диалог с пространством. Свет, архитектура ландшафта и звук, созданные вручную для одного неповторимого момента.',
+    preludeTag: 'Официальный сайт артиста • Интро',
+    heroTitlePrefix: 'АРХИТЕКТУРА',
+    heroTitleAccent: 'ЗВУКА И СВЕТА',
+    heroManifesto: 'Добро пожаловать в официальное пространство DJ Dima Minka. Авторские сеты Melodic House & Techno, комплект из 12+ беспроводных световых приборов и сайт-специфичный звук для частных вилл, виноградников и уединённых ретритов.',
     frequencyBadge: '432 Гц',
     
-    gatewayTouch: 'ПРИКОСНУТЬСЯ К МИРУ',
-    gatewayHoldInstruction: 'Удерживайте для входа в святилище',
-    gatewayHint: 'Рекомендуется в наушниках • Звук и свет настроены вручную',
-    footerMeta: 'САЙТ-СПЕЦИФИЧНЫЙ САУНД-ДИЗАЙН • АВТОРСКИЙ СВЕТ • ГАРМОНИЯ ПРОСТРАНСТВА',
+    gatewayTouch: 'ВОЙТИ В ПРОСТРАНСТВО',
+    gatewayHoldInstruction: 'Удерживайте для перехода к сетам, свету и букингу',
+    gatewayHint: 'Рекомендуется в наушниках • Внутри аудио-превью и портфолио сетапов',
+    footerMeta: 'КУРАТОРСТВО ЗВУКА • 12+ СВЕТОВЫХ ПРИБОРОВ • ЗАКРЫТЫЕ МЕРОПРИЯТИЯ И ВИЛЛЫ',
   },
   he: {
     artistName: 'DJ DIMA MINKA',
@@ -58,16 +58,16 @@ export const ui = {
     dayModeBtn: 'יום',
     nightModeBtn: 'לילה',
     
-    preludeTag: 'פרלוד תחושתי',
-    heroTitlePrefix: 'טבילה',
-    heroTitleAccent: 'לתוך התדר',
-    heroManifesto: 'כל סט הוא דיאלוג עם המרחב. תאורה, אדריכלות נוף וצליל, מותאמים בעבודת יד לרגע יחיד שאינו חוזר.',
+    preludeTag: 'האתר הרשמי של האמן • פתיח',
+    heroTitlePrefix: 'אדריכלות של',
+    heroTitleAccent: 'סאונד ותאורה',
+    heroManifesto: 'ברוכים הבאים למרחב הרשמי של דיג׳יי דימה מינקה. סטים ייחודיים של מלודיק האוס, מערך של 12+ גופי תאורה אלחוטיים והתאמה אקוסטית לווילות פרטיות, כרמים ואירועי בוטיק.',
     frequencyBadge: '432 Hz',
     
-    gatewayTouch: 'לגעת במרחב',
-    gatewayHoldInstruction: 'החזק כדי להיכנס למקדש הצליל',
-    gatewayHint: 'מומלץ באוזניות • סאונד ותאורה מכוילים אישית',
-    footerMeta: 'אוצרות אקוסטית מותאמת אתר • מערך תאורה ייעודי • בהרמוניה מוחלטת',
+    gatewayTouch: 'כניסה למרחב',
+    gatewayHoldInstruction: 'החזק כדי לגלות סטים, תאורה והזמנות',
+    gatewayHint: 'מומלץ באוזניות • בפנים הדגמות סאונד ותיק עבודות',
+    footerMeta: 'אוצרות סאונד • מערך 12+ גופי תאורה • אירועי יוקרה ונופש פרטי',
   },
 } as const;
 
