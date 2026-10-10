@@ -18,13 +18,22 @@ import { defaultLang } from '../i18n/ui';
     <!-- Multi-layered watercolor background & dynamic glow flood -->
     <VibeAtmosphere />
 
+    <!-- Delicate Art-Book Ornamental Frame Lines from Stitch -->
+    <div class="art-book-perimeter-frame" aria-hidden="true">
+      <div class="frame-inner-border"></div>
+      <div class="frame-corner corner-top-left"></div>
+      <div class="frame-corner corner-top-right"></div>
+      <div class="frame-corner corner-bottom-left"></div>
+      <div class="frame-corner corner-bottom-right"></div>
+    </div>
+
     <!-- Compact upper navigation bar -->
     <VibeHeader lang={defaultLang} />
 
     <!-- Horizontal Swipe Carousel (5 Sound Worlds) -->
     <SpacesCarousel spaces={spaces} lang={defaultLang} />
 
-    <!-- Floating Sound Dock with Solfeggio 432 Hz Synthesizer -->
+    <!-- Floating Sound Dock with Live Telemetry & Amber Gradient CTA -->
     <VibeSoundDock lang={defaultLang} />
 
     <!-- Accessible bottom sheet specifications drawer -->
@@ -43,5 +52,70 @@ import { defaultLang } from '../i18n/ui';
     justify-content: space-between;
     overflow: hidden;
     box-sizing: border-box;
+  }
+
+  /* Perimeter Art-Book Ornamental Frame from Stitch */
+  .art-book-perimeter-frame {
+    position: absolute;
+    inset: 0.75rem;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  @media (min-width: 768px) {
+    .art-book-perimeter-frame {
+      inset: 1.25rem;
+    }
+  }
+
+  .frame-inner-border {
+    position: absolute;
+    inset: 0;
+    border-radius: 28px;
+    border: 1px solid rgba(168, 144, 120, 0.2);
+  }
+
+  :global(html[data-theme="night"]) .frame-inner-border,
+  :global(html.dark) .frame-inner-border {
+    border-color: rgba(255, 255, 255, 0.07);
+  }
+
+  .frame-corner {
+    position: absolute;
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
+  .corner-top-left {
+    top: 0.35rem;
+    left: 0.35rem;
+    border-top: 1px solid rgba(141, 75, 0, 0.35);
+    border-left: 1px solid rgba(141, 75, 0, 0.35);
+  }
+
+  .corner-top-right {
+    top: 0.35rem;
+    right: 0.35rem;
+    border-top: 1px solid rgba(141, 75, 0, 0.35);
+    border-right: 1px solid rgba(141, 75, 0, 0.35);
+  }
+
+  .corner-bottom-left {
+    bottom: 0.35rem;
+    left: 0.35rem;
+    border-bottom: 1px solid rgba(141, 75, 0, 0.35);
+    border-left: 1px solid rgba(141, 75, 0, 0.35);
+  }
+
+  .corner-bottom-right {
+    bottom: 0.35rem;
+    right: 0.35rem;
+    border-bottom: 1px solid rgba(141, 75, 0, 0.35);
+    border-right: 1px solid rgba(141, 75, 0, 0.35);
+  }
+
+  :global(html[data-theme="night"]) .frame-corner,
+  :global(html.dark) .frame-corner {
+    border-color: rgba(245, 166, 35, 0.3);
   }
 </style>

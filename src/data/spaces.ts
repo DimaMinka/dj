@@ -11,12 +11,14 @@ export interface Space {
   id: number;
   slug: 'sunset' | 'garden' | 'twilight' | 'desert' | 'nordic';
   numberLabel: string;
+  headerBadge: string;
   title: { en: string; ru: string; he: string };
-  subtitle: { en: string; ru: string; he: string };
-  category: { en: string; ru: string; he: string };
+  supertitle: { en: string; ru: string; he: string };
+  headlinePrefix: { en: string; ru: string; he: string };
+  headlineAccent: { en: string; ru: string; he: string };
   poetry: { en: string; ru: string; he: string };
-  description: { en: string; ru: string; he: string };
-  tags: { en: string[]; ru: string[]; he: string[] };
+  trackTitle: string;
+  trackSubtitle: string;
   bpm: number;
   frequency: number;
   keySignature: string;
@@ -31,115 +33,111 @@ export const spaces: Space[] = [
     id: 1,
     slug: 'sunset',
     numberLabel: '01 / 05',
+    headerBadge: 'SUNSET VILLA • 432 HZ',
     title: {
       en: 'Sunset Villa',
       ru: 'Sunset Villa',
       he: 'וילת שקיעה',
     },
-    subtitle: {
-      en: 'Aegean Terraces • Warm Amber Sea Vista',
-      ru: 'Террасы Эгеиды • Янтарный закат над морем',
-      he: 'טרסות אגאיות • אופק ענברי חם מעל הים',
+    supertitle: {
+      en: '— PRIVATE VILLA ATELIER —',
+      ru: '— PRIVATE VILLA ATELIER —',
+      he: '— PRIVATE VILLA ATELIER —',
     },
-    category: {
-      en: 'Coastal Sanctuary',
-      ru: 'Прибрежное святилище',
-      he: 'מקדש חוף',
+    headlinePrefix: {
+      en: 'Golden horizon and ',
+      ru: 'Золотой горизонт и ',
+      he: 'אופק מוזהב ו',
+    },
+    headlineAccent: {
+      en: 'whispering tide.',
+      ru: 'шепот воды.',
+      he: 'לחישת המים.',
     },
     poetry: {
-      en: 'When the golden sun dissolves into the tide, organic house warms the limestone.',
-      ru: 'Когда закатное солнце растворяется в приливе, органик-хаус согревает известняк.',
-      he: 'כשהשמש השוקעת נמסה אל תוך הגלים, האוס אורגני מחמם את אבני הגיר.',
+      en: 'Resonance of evening quietude, sunset breeze and open water acoustics in natural 432 Hz harmony.',
+      ru: 'Резонанс вечерней тишины, закатного бриза и акустики открытой воды в естественной гармонии 432 Гц.',
+      he: 'תהודה של דממת ערב, בריזת שקיעה ואקוסטיקת מים פתוחים בהרמוניה טבעית של 432 הרץ.',
     },
-    description: {
-      en: 'Minimalist Mediterranean villa patio, infinity pool reflecting dusk, ancient olive trees and 2200K warm honeycomb blinders softly illuminating the shoreline breeze.',
-      ru: 'Минималистичное патио средиземноморской виллы, инфинити-бассейн с отражением заката, оливы и теплые соты блайндеров 2200K в такт морскому бризу.',
-      he: 'פטיו ים-תיכוני מינימליסטי, בריכת אינפיניטי המשקפת שקיעה, עצי זית עתיקים ותאורת חלת-דבש חמימה 2200K לקצב רוח הים.',
-    },
-    tags: {
-      en: ['Organic House', 'Deep Melodic', 'Sunset Vibe', 'Acoustic Clarity'],
-      ru: ['Organic House', 'Deep Melodic', 'Закатный вайб', 'Акустика камня'],
-      he: ['אורגניק האוס', 'דיפ מלודיק', 'אווירת שקיעה', 'אקוסטיקה פתוחה'],
-    },
+    trackTitle: 'Sunset Horizon Deep',
+    trackSubtitle: 'Live at Sunset Villa • 432 Hz Organic',
     bpm: 120,
     frequency: 432,
     keySignature: 'A minor',
-    glowColor: '#f5a623',
-    glowRgb: '245, 166, 35',
-    bgWatercolor: 'https://lh3.googleusercontent.com/aida/AEtjO1XvLRf7UsfEKTgdHLvUoyLPS7zZgyZe3CJMW5nfPgDrATtNAOoE5ZIi1q6f1DVdZqotNEHjDmLvIRZx8fF5mZFREhK008wFuRkCmZownBihQYd5DwlFr-u6uoVX12rUGCrCDudwfhpMPYvISwClriKFYOPIUnucYOfpeMET4VrBSmQJ9_lTvLCcwOYiP2KC_7MdN_gglojaXi-gyBuobJ_EkpcZR4I82Td-O5BY9XYD_9wyqD7vg4m-ovlI',
+    glowColor: '#d97706',
+    glowRgb: '217, 119, 6',
+    bgWatercolor: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCf_Ki5CRPeg5xjJZsjX2F7GUXUAF9_CKzZUCGw4w_Rjp9L4zCcPxi3SlYKQB2HRsf5E_vwm0Dij8QvvTCIsEHZ6eQ5gsysTtwnxsWLLb59euLV4KPujpk4bnXRfHGPoOoZgpb_BNG54hB3YwHLx3eSi_-HmrviXJJfcd1RtQZdledkdd0SEYc0pSHCJhx8J2XSRdfG5wIMwsx_ADgtCf9AXNgbOQWE5-dXnNH8A-L7htCbCq0Jrx_TQA',
     setup: {
       id: 'setup-sunset',
       name: {
         en: 'Chamber Sunset Rig',
-        ru: 'Камерный сет Sunset Rig',
-        he: 'מערך אינטימי Sunset Rig',
+        ru: 'Теплый аналоговый свет & Сетап',
+        he: 'מערך תאורת רטרו וסאונד אינטימי',
       },
-      lightsCount: '6x Wireless Warm Blinders (2200K)',
+      lightsCount: '2200K • WARM RETRO BLINDERS',
       soundType: {
-        en: 'Point-source warm wooden column array',
-        ru: 'Точечный массив теплых деревянных колонок',
-        he: 'מערך רמקולים בגימור עץ טבעי',
+        en: 'Point-source warm wooden column array for limestone patios',
+        ru: 'Винтажные соты блайндеров с бархатным угасанием нити накала и точечный массив колонок',
+        he: 'כוורות תאורה חמימות 2200K ומערך רמקולים בעץ טבעי',
       },
       idealFor: {
         en: 'Private villa patios, poolsides, up to 60 guests',
         ru: 'Патио частных вилл, зона бассейна, до 60 гостей',
         he: 'פטיו בוילה פרטית, שפת הבריכה, עד 60 אורחים',
       },
-      image: 'https://lh3.googleusercontent.com/aida/AEtjO1W5dOEbj96zDaIz1aPVtYFcyqkuL9Zsw8fxLZGaHek93MJyqxY-SHG6IOzjpct1ViS7--YKMwzv-Jzq8xyQCNVZNd_PYUhd7hkBPyGqwr1330E8Wwim6xswITZT5RTTgzriyK1zyWxRXvg0iE2p2Xo7Zl1LvFZM4Um0pMEAo75BfyfNWP47aAfWED2OoNtXSoEmDVGYMQhAwyYlTA5-4DCkHDnikSUQ8FYH1qn3KEQMK4HH3icCz2enrk6K',
+      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA-zOCQV34RgCCD6wVCoG793KJ-EACkFxrz7rMCxcKZeNQicNCu9sB7MCl8EoRQ6HEM6zoLCcjVclPjhQuxtTqt3Cp9yN-6WZjjVkYOd1Im78pw4DAXX-Apab05IPwvi6g9kAEzCv7cw6hqK7QOR0kyL8zwn-HJdISo2Mm5vkW24DPqtOpi9Py7sqhcpPAsZAEzzxo3TtDOSEVtSb7JrBW2tJNbASqm6uiCj3TvFr5_MlyyCKgmk-ErjnjC2ULXCgp9le4',
     },
   },
   {
     id: 2,
     slug: 'garden',
     numberLabel: '02 / 05',
+    headerBadge: 'GARDEN SANCTUARY • 432 HZ',
     title: {
       en: 'Garden Sanctuary',
       ru: 'Лесной сад',
       he: 'גן יער מקודש',
     },
-    subtitle: {
-      en: 'Botanical Oasis • Twilight Tree Crown Wash',
-      ru: 'Ботанический оазис • Подсветка крон в сумерках',
-      he: 'נווה מדבר בוטני • תאורת צמרות בין הערביים',
+    supertitle: {
+      en: '— BOTANICAL SOUND ATELIER —',
+      ru: '— BOTANICAL SOUND ATELIER —',
+      he: '— BOTANICAL SOUND ATELIER —',
     },
-    category: {
-      en: 'Forest Pavilion',
-      ru: 'Лесной павильон',
-      he: 'ביתן יער',
+    headlinePrefix: {
+      en: 'Sound shaped by ',
+      ru: 'Звук, рожденный ',
+      he: 'צליל שנולד מ',
+    },
+    headlineAccent: {
+      en: 'the landscape.',
+      ru: 'ландшафтом.',
+      he: 'הנוף.',
     },
     poetry: {
-      en: 'Emerald canopies breathe in sync with sub-bass, moss softly dampens every chime.',
-      ru: 'Изумрудные кроны дышат в унисон с саб-басом, мох мягко поглощает эхо перезвона.',
-      he: 'צמרות האזמרגד נושמות בסנכרון עם הבס, טחב רך בולע כל צלצול.',
+      en: 'Subtle resonance of warm stone, garden foliage and intimate acoustics in 432 Hz organic harmony.',
+      ru: 'Тонкий резонанс теплого известняка, морского бриза и камерной акустики в естественной гармонии 432 Гц.',
+      he: 'תהודה מעודנת של אבן חמה, עלוות הגן ואקוסטיקה אינטימית בהרמוניה טבעית של 432 הרץ.',
     },
-    description: {
-      en: 'Ancient cypress and pine grove, ground LED uplighting washing the foliage in emerald and amber, creating a sacred secluded forest atelier under the stars.',
-      ru: 'Роща кипарисов и реликтовых сосен, грунтовые заливные LED приборы окрашивают кроны изумрудным и янтарем, создавая уединенное лесное ателье звука.',
-      he: 'חורשת ברושים עתיקה, תאורת קרקע שוטפת את העלווה בירוק אמרלד וענבר, ויוצרת סטודיו סאונד קסום תחת הכוכבים.',
-    },
-    tags: {
-      en: ['Botanical Deep', 'Forest Acoustics', 'LED Canopy Wash', '122 BPM'],
-      ru: ['Botanical Deep', 'Акустика леса', 'Подсветка крон', '122 BPM'],
-      he: ['בוטניקל דיפ', 'אקוסטיקת יער', 'שטיפת צמרות', '122 BPM'],
-    },
+    trackTitle: 'Botanical Canopy Dusk',
+    trackSubtitle: 'Live at Garden Sanctuary • 432 Hz Deep',
     bpm: 122,
     frequency: 432,
     keySignature: 'F# minor',
-    glowColor: '#4ade80',
-    glowRgb: '74, 222, 128',
+    glowColor: '#16a34a',
+    glowRgb: '22, 163, 74',
     bgWatercolor: 'https://lh3.googleusercontent.com/aida/AEtjO1VjsLz6bx5cS1-9MRUkv6xaGHuh7SRMVkQQmqT4GxtuhWHX5DJTXT73xLSEKUY40n7RXyJfJKEZWkN5IT1oAUioymECTOzM-8MRTws1EWMGhuIq5AIcM10-110fe8tRwMh8bmNJKk_4jHyAJ5GLkWDc1U6GelQ2iIzeo8Q5fhgzZaiyvI8Dy51XJrW0ww77soHkRscOrRoTf1PTN9bQrD-NPBwxaUbJzHZgFtQCP3vzTUQexvxduZZ688L4',
     setup: {
       id: 'setup-garden',
       name: {
         en: 'Standard Botanical Atelier',
-        ru: 'Стандартный Botanical Atelier',
-        he: 'סטנדרט בוטניקל Atelier',
+        ru: 'Архитектурный свет крон & Саунд-ателье',
+        he: 'תאורת צמרות אדריכלית ואטלייה בוטני',
       },
-      lightsCount: '12x Architectural IP65 Wireless Fixtures',
+      lightsCount: '12x IP65 WIRELESS LED CANOPY WASH',
       soundType: {
-        en: 'Distributed 360° sound field for natural dispersion',
-        ru: 'Распределенное 360° звуковое поле без эха',
-        he: 'פיזור סאונד היקפי 360 מעלות ללא הד',
+        en: '360° distributed acoustic field for natural dispersion without echo',
+        ru: 'Беспроводные приборы заливки крон (изумруд, янтарь) и распределенное 360° звуковое поле',
+        he: 'שטיפת צמרות אלחוטית ופיזור סאונד 360 מעלות ללא הד',
       },
       idealFor: {
         en: 'Botanical gardens, forest retreats, estate lawns, up to 120 guests',
@@ -153,115 +151,111 @@ export const spaces: Space[] = [
     id: 3,
     slug: 'twilight',
     numberLabel: '03 / 05',
+    headerBadge: 'TWILIGHT VINEYARD • 432 HZ',
     title: {
       en: 'Twilight Vineyard',
       ru: 'Twilight Vineyard',
       he: 'כרם בין השמשות',
     },
-    subtitle: {
-      en: 'Wine Country Hills • Oak Barrel Console & Candle Lanterns',
-      ru: 'Холмы виноградников • Консоль из дубовой бочки и свечи',
-      he: 'גבעות הכרמים • עמדת חבית עץ אלון ונרות חמים',
+    supertitle: {
+      en: '— TERROIR SOUND ATELIER —',
+      ru: '— TERROIR SOUND ATELIER —',
+      he: '— TERROIR SOUND ATELIER —',
     },
-    category: {
-      en: 'Terroir Melodic',
-      ru: 'Мелодика терруара',
-      he: 'מלודיקת טרואר',
+    headlinePrefix: {
+      en: 'Vines, aged oak & ',
+      ru: 'Лозы, дуб и ',
+      he: 'גפנים, עץ אלון ו',
+    },
+    headlineAccent: {
+      en: 'twilight mist.',
+      ru: 'магия сумерек.',
+      he: 'קסם הדמדומים.',
     },
     poetry: {
-      en: 'Aged oak barrel, delicate violet sky, and deep hypnotic chords between the vines.',
-      ru: 'Дубовая бочка, фиолетовый купол сумерек и глубокие аккорды среди виноградных лоз.',
-      he: 'חבית עץ אלון עתיקה, כיפת שמיים סגולה ואקורדים עמוקים בין הגפנים.',
+      en: 'Velvet acoustics rolling across vineyard hills, candle lanterns, and authentic craft oak barrel console.',
+      ru: 'Бархатный звук над холмами виноградников, винная бочка со свечами и глубокий гипнотический бас.',
+      he: 'סאונד קטיפתי מעל גבעות הכרמים, חבית אלון עם נרות ובס מהפנט.',
     },
-    description: {
-      en: 'Signature handcrafted vintage French oak barrel DJ console, surrounded by copper candle lanterns, olive branches, and panoramic views of rolling vineyard terraces.',
-      ru: 'Фирменная диджей-консоль из винной дубовой бочки, окруженная медными фонарями со свечами, ветвями оливы и панорамой террасных виноградников.',
-      he: 'עמדת DJ ייחודית מחבית עץ אלון צרפתית, מוקפת עששיות נרות מפליז, ענפי זית ונוף פנורמי של כרמים מתגלגלים.',
-    },
-    tags: {
-      en: ['Bespoke Oak Barrel', 'Melodic Techno', 'Candle Ambiance', '123 BPM'],
-      ru: ['Дубовая бочка', 'Melodic Techno', 'Свечной свет', '123 BPM'],
-      he: ['עמדת חבית אלון', 'מלודיק טכנו', 'אור נרות חם', '123 BPM'],
-    },
+    trackTitle: 'Twilight Vineyard Resonance',
+    trackSubtitle: 'Live at Oak Barrel Rig • 432 Hz Melodic',
     bpm: 123,
     frequency: 432,
     keySignature: 'D minor',
-    glowColor: '#a855f7',
-    glowRgb: '168, 85, 247',
+    glowColor: '#9333ea',
+    glowRgb: '147, 51, 234',
     bgWatercolor: 'https://lh3.googleusercontent.com/aida/AEtjO1Uuo9DGCJ_Xjde8SrnoMZ4fDJbQHyGKvBH2cwDiuAPmQPUO5PrH3SpysXZFyNFuYjqK2fTtwp8FsJSrugB_-2wooPITCUNQ7ToOxJAbZVt_NOe57R7Is1uwqMjkNvTjsVGBrSWNxOiA55OT1FnJrrv6RqxM59eyK2b6nIfNN4YIKddCjYaZ7NctTPtoFOkI4qrftyhj1ohrZyE59Zk4DJwDQnfEpVvl3uDZL_VtmNBUFZsrdxKrkl9OuOJ3',
     setup: {
       id: 'setup-twilight',
       name: {
-        en: 'Terroir Signature Oak Console',
-        ru: 'Авторский Terroir Oak Console',
-        he: 'עמדת Terroir ייחודית מחבית אלון',
+        en: 'Craft Oak Barrel Console & Candles',
+        ru: 'Консоль из натурального дуба & Свечи',
+        he: 'עמדת חבית עץ אלון טבעית ונרות',
       },
-      lightsCount: 'Vintage Warm Filament Lamps + Candle Glass Shrouds',
+      lightsCount: 'CRAFT EDITION • WARM CANDLELIGHT',
       soundType: {
-        en: 'Acoustic warm bass tuning for open hillside reflections',
-        ru: 'Теплая басовая калибровка под холмистый рельеф',
-        he: 'כיול בס חם מותאם להחזרי גבעות פתוחות',
+        en: 'Seamless integration: French oak wine barrel console with ambient warm candle lanterns',
+        ru: 'Бесшовное растворение аппаратуры: дубовая бочка, живой огонь свечей и природная архитектура террасы',
+        he: 'הטמעה מושלמת: עמדת חבית אלון צרפתית, עששיות נרות חמות וסאונד עוטף',
       },
       idealFor: {
         en: 'Boutique wineries, private tastings, sunset estate dinners',
         ru: 'Бутиковые винодельни, дегустации, ужины на закате',
         he: 'יקבי בוטיק, טעימות יין יוקרתיות, ארוחות שקיעה באחוזה',
       },
-      image: 'https://lh3.googleusercontent.com/aida/AEtjO1Uuo9DGCJ_Xjde8SrnoMZ4fDJbQHyGKvBH2cwDiuAPmQPUO5PrH3SpysXZFyNFuYjqK2fTtwp8FsJSrugB_-2wooPITCUNQ7ToOxJAbZVt_NOe57R7Is1uwqMjkNvTjsVGBrSWNxOiA55OT1FnJrrv6RqxM59eyK2b6nIfNN4YIKddCjYaZ7NctTPtoFOkI4qrftyhj1ohrZyE59Zk4DJwDQnfEpVvl3uDZL_VtmNBUFZsrdxKrkl9OuOJ3',
+      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCxjdQVOov066MNEkNgDnMRv-Am2s2xmdLeFZ0sAKv-pL28FbgYldSVHxLYH5a3v41raPc7xlkf2vPvdW6vYkGALy2lyOspkmpSQkQwjAVEFkP0T7d8ptnQAnXyIahOH6gKRgdZE_Y71VdUXDie3RXjdLMIKjAuCqjBwJveyZ8-uN_OJ42ZARZ_YNi1IjR2TbsM3aGAjJN44MmY7v1XmD2FPx2a3F1oKRBzsNl8_7h0l77am3nozrEbGEotJIJ0qhgkSnI',
     },
   },
   {
     id: 4,
     slug: 'desert',
     numberLabel: '04 / 05',
+    headerBadge: 'DESERT NOMAD • 432 HZ',
     title: {
       en: 'Desert Nomad',
       ru: 'Desert Nomad',
       he: 'נווד מדבר',
     },
-    subtitle: {
-      en: 'Rolling Sand Dunes • Fire Pit & Fremen Sartorial Resonance',
-      ru: 'Золотые барханы • Живой огонь и эстетика кочевников',
-      he: 'דיונות זהב • מדורת אבן פתוחה ואסתטיקה מדברית',
+    supertitle: {
+      en: '— DUNE NOMAD SANCTUARY —',
+      ru: '— DUNE NOMAD SANCTUARY —',
+      he: '— DUNE NOMAD SANCTUARY —',
     },
-    category: {
-      en: 'Dune Sanctuary',
-      ru: 'Святилище дюн',
-      he: 'מקדש דיונות',
+    headlinePrefix: {
+      en: 'Whispering dunes & ',
+      ru: 'Шепот барханов и ',
+      he: 'לחישת הדיונות ו',
+    },
+    headlineAccent: {
+      en: 'living fire.',
+      ru: 'живое пламя.',
+      he: 'אש חיה.',
     },
     poetry: {
-      en: 'Whispering sands and flickering flames carry ancestral percussions under the galaxy.',
-      ru: 'Шепчущие пески и живое пламя несут древнюю перкуссию под куполом галактики.',
-      he: 'חולות לוחשים ולהבות מרצדות נושאים מקצב קדמוני תחת שביל החלב.',
+      en: 'Ancient desert percussion, warmth of natural stone fire pit and hypnotic organic grooves under the galaxy.',
+      ru: 'Древние ритмы песков, тепло дикого костра и парящий саундтрек кочевников под куполом звезд.',
+      he: 'מקצבים מדבריים קדמוניים, חמימות מדורת אבן ופסקול נוודים מהפנט תחת הכוכבים.',
     },
-    description: {
-      en: 'Intimate nomadic lounge among wind-sculpted golden dunes, woven Moroccan kilim rugs, natural stone fire pit, and hypnotic desert deep grooves.',
-      ru: 'Интимный лаунж среди золотых барханов, ковры килим, кострище из дикого камня и гипнотический ориентальный дип-грув.',
-      he: 'לאונג׳ נוודים אינטימי בין דיונות מוזהבות, שטיחי קילים מרוקאיים, מדורת אבן ומקצבים מדבריים מהפנטים.',
-    },
-    tags: {
-      en: ['Afro & Oriental Deep', 'Live Percussion', 'Fire Pit Warmth', '121 BPM'],
-      ru: ['Afro & Oriental Deep', 'Живая перкуссия', 'Тепло костра', '121 BPM'],
-      he: ['אפרו ואוריינטל דיפ', 'כלי הקשה חיים', 'חמימות האש', '121 BPM'],
-    },
+    trackTitle: 'Desert Dunes Starlight',
+    trackSubtitle: 'Live at Nomad Camp • 432 Hz Afro Deep',
     bpm: 121,
     frequency: 432,
     keySignature: 'E minor',
-    glowColor: '#d4a96a',
-    glowRgb: '212, 169, 106',
+    glowColor: '#d97706',
+    glowRgb: '217, 119, 6',
     bgWatercolor: 'https://lh3.googleusercontent.com/aida/AEtjO1WLbJZgRuFIhgwckVwar6G93ef2X-CPwE_Y8abKf9vp6vcdzhJWidTQr7bBYy70mGEqgdoNlrSGfcYQF17IQyCfSqiBP6wE2UeIkq-jVkN_bvHENKtNjNbjgabVXzQOSHdqy_qWH36j46eR_M7pHszxi_P8-yr3g60SBwUbSolr8p1sk-wfvByOJILjX8EH2nnFLe5bBJBItFT_8wWjyUxLeaxkiAUissFe-lmqBGxa2lm1gBMO2hNBs7M',
     setup: {
       id: 'setup-desert',
       name: {
-        en: 'Nomad Fire Sanctuary',
-        ru: 'Кочевой сетап Nomad Fire',
-        he: 'מערך נוודים Nomad Fire',
+        en: 'Nomad Fire Sanctuary Rig',
+        ru: 'Огни кочевников & Автономный звук',
+        he: 'אורות נוודים וסאונד עצמאי שקט',
       },
-      lightsCount: 'Flame-torch lanterns & low brass amber floor pods',
+      lightsCount: 'FLAME TORCHES & LOW AMBER PODS',
       soundType: {
-        en: 'Ultra-low distortion battery-capable high fidelity speakers',
-        ru: 'Высокоточная автономная акустика без шума генераторов',
-        he: 'סאונד עוצמתי אוטונומי ללא רעש גנרטורים',
+        en: 'Ultra-low distortion battery-driven acoustic system with zero generator noise',
+        ru: 'Полностью автономная высокоточная акустика без гула генераторов в гармонии с огнем',
+        he: 'מערכת סאונד אוטונומית שקטה ללא גנרטורים המשתלבת עם להבות האש',
       },
       idealFor: {
         en: 'Remote desert escapes, glamping retreats, stargazing sound journeys',
@@ -275,54 +269,52 @@ export const spaces: Space[] = [
     id: 5,
     slug: 'nordic',
     numberLabel: '05 / 05',
+    headerBadge: 'NORDIC PEAKS • 432 HZ',
     title: {
       en: 'Nordic Peaks',
       ru: 'Nordic Peaks',
       he: 'פסגות נורדיות',
     },
-    subtitle: {
-      en: 'Mountain Cliff Shelter • Misty Volcanic Horizons & Warm Fire',
-      ru: 'Горный шелтер • Туманные пики и тепло живого огня',
-      he: 'מחסה צוקים הררי • אופק געשי ערפילי ואש חמה',
+    supertitle: {
+      en: '— ALPINE CLIFF SHELTER —',
+      ru: '— ALPINE CLIFF SHELTER —',
+      he: '— ALPINE CLIFF SHELTER —',
     },
-    category: {
-      en: 'Alpine Sanctuary',
-      ru: 'Альпийское святилище',
-      he: 'מקדש אלפיני',
+    headlinePrefix: {
+      en: 'Glacial crags & ',
+      ru: 'Пики скал и ',
+      he: 'פסגות סלע ו',
+    },
+    headlineAccent: {
+      en: 'pyramid flame.',
+      ru: 'тепло огня.',
+      he: 'להבות חמות.',
     },
     poetry: {
-      en: 'Crisp glacial air, drifting drizzle, and deep driving rhythms warming the mountain ledge.',
-      ru: 'Чистый воздух ледников, моросящий дождь и мощный теплый ритм на краю обрыва.',
-      he: 'אוויר פסגות צלול, ערפל דק ומקצב חם וסוחף על שפת המצוק.',
+      en: 'Crisp mountain air, radiant pyramid flame heaters on the cliff ledge and deep driving rhythmic warmth.',
+      ru: 'Прохладный горный воздух, пирамиды живого огня на краю обрыва и согревающий мощный ритм.',
+      he: 'אוויר פסגות צלול, תנורי להבה על שפת המצוק ומקצב חם וסוחף.',
     },
-    description: {
-      en: 'Exclusive cliffside lounge terrace under a timber-and-glass canopy, pyramid patio flame heaters radiating amber warmth against moody Nordic slate blues and drifting clouds.',
-      ru: 'Эксклюзивная терраса на краю скалы под стеклянным навесом, пирамиды огня согревают янтарем на фоне северного сланца и плывущих облаков.',
-      he: 'טרסת לאונג׳ אקסקלוסיבית על קצה צוק, תנורי להבה חמימים על רקע סלעי בזלת נורדיים ועננים חולפים.',
-    },
-    tags: {
-      en: ['Progressive House', 'Peak Energy', 'Nordic Mist', '124 BPM'],
-      ru: ['Progressive House', 'Пиковая энергия', 'Северный туман', '124 BPM'],
-      he: ['פרוגרסיב האוס', 'אנרגיית שיא', 'ערפל נורדי', '124 BPM'],
-    },
+    trackTitle: 'Nordic Peaks Glacial Drive',
+    trackSubtitle: 'Live at Cliff Terrace • 432 Hz Peak',
     bpm: 124,
     frequency: 432,
     keySignature: 'B minor',
-    glowColor: '#7dd3fc',
-    glowRgb: '125, 211, 252',
+    glowColor: '#0284c7',
+    glowRgb: '2, 132, 199',
     bgWatercolor: 'https://lh3.googleusercontent.com/aida/AEtjO1U2PTqMBjtkK_ITtpLPBYxr6vxbbc5mePrpuaOSzqY14m2pymob0Xj5_ueCaUcRu2oO3zHbmn0FdC_XcRB8Y9ttQv99jZM7oaomtA_ddsYUaBAN4y2bl5WXdEgDKp0dYG0DW3pKxxgxWH_t642VoEH1XxegYkiImUjxBy2wHMblJwRAtnlkap6MEvfALfmhG8RlciR9cKge8UzDZRAc-rTgJb5r-vPtvU6tAVUrjw6byHRfzDxRlR3B46Mq',
     setup: {
       id: 'setup-nordic',
       name: {
-        en: 'Grand Alpine Horizon',
-        ru: 'Иммерсивный Grand Alpine',
-        he: 'מערך Grand אלפיני עוצמתי',
+        en: 'Grand Alpine Moving Lights & Fire',
+        ru: 'Мощный Grand сетап & Пирамиды огня',
+        he: 'מערך Grand אלפיני ותנורי להבה',
       },
-      lightsCount: 'Cold-resistant Architectural Moving Heads + Warm Flame Blinders',
+      lightsCount: 'COLD-PROOF MOVING HEADS & WARM FLAME HEATERS',
       soundType: {
-        en: 'High-power sub-bass array cutting through wind and open valleys',
-        ru: 'Мощный сабвуферный массив, прорезающий ветер открытых долин',
-        he: 'מערך בס עוצמתי החודר את הרוח והמרחבים הפתוחים',
+        en: 'High-power sub-bass array cutting through wind and open mountain valleys',
+        ru: 'Мощный сабвуферный массив, прорезающий ветер открытых долин, в сочетании с огнем',
+        he: 'מערך סאונד עוצמתי החודר את הרוח והמרחבים הפתוחים בשילוב להבות חמות',
       },
       idealFor: {
         en: 'Mountain chalets, cliffside panoramic terraces, luxury winter retreats',

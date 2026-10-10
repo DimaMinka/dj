@@ -2,6 +2,8 @@
 
 :root {
   --font-display: 'Syne', sans-serif;
+  --font-serif-art: 'Cormorant Garamond', 'Times New Roman', serif;
+  --font-grotesk: 'Space Grotesk', sans-serif;
   --font-body: 'Manrope', 'Heebo', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
   

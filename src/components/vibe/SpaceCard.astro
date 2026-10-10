@@ -12,78 +12,58 @@ const t = useTranslations(lang);
 ---
 
 <article
-  class="space-card"
+  class="space-card-container"
   data-space-slug={space.slug}
   data-space-id={space.id}
   style={`--card-glow-color: ${space.glowColor}; --card-glow-rgb: ${space.glowRgb};`}
 >
-  <div class="card-inner">
-    <!-- Top Metadata Badge Row -->
-    <div class="meta-row">
-      <div class="category-pill">
-        <span class="category-dot"></span>
-        <span class="category-text">{space.category[lang] || space.category.en}</span>
-      </div>
+  <div class="art-book-card">
+    <!-- 4 Ornamental Gold-accent Corner Brackets -->
+    <div class="card-corner corner-tl" aria-hidden="true"></div>
+    <div class="card-corner corner-tr" aria-hidden="true"></div>
+    <div class="card-corner corner-bl" aria-hidden="true"></div>
+    <div class="card-corner corner-br" aria-hidden="true"></div>
 
-      <div class="audio-specs">
-        <span class="audio-bpm">{space.bpm} BPM</span>
-        <span class="audio-sep">•</span>
-        <span class="audio-key">{space.keySignature}</span>
-        <span class="audio-sep">•</span>
-        <span class="audio-freq">{space.frequency} Hz</span>
-      </div>
+    <!-- Category Supertitle (e.g. — PRIVATE VILLA ATELIER —) -->
+    <div class="supertitle-row">
+      <span class="supertitle-text">
+        {space.supertitle[lang] || space.supertitle.en}
+      </span>
     </div>
 
-    <!-- Main Title & Location Horizon -->
-    <div class="title-block">
-      <span class="title-number">{space.numberLabel}</span>
-      <h2 class="space-title">
-        {space.title[lang] || space.title.en}
-      </h2>
-      <p class="space-subtitle">
-        {space.subtitle[lang] || space.subtitle.en}
-      </p>
-    </div>
+    <!-- Main Headline with Elegant Serif + Italic Accent -->
+    <h2 class="card-headline">
+      <span class="headline-prefix">{space.headlinePrefix[lang] || space.headlinePrefix.en}</span>
+      <span class="headline-accent">{space.headlineAccent[lang] || space.headlineAccent.en}</span>
+    </h2>
 
-    <!-- Poetic Lyric Quotation -->
-    <blockquote class="poetry-quote">
-      <span class="quote-mark">“</span>
-      <span class="quote-text">{space.poetry[lang] || space.poetry.en}</span>
-    </blockquote>
-
-    <!-- Description & Atmosphere Narrative -->
-    <p class="space-description">
-      {space.description[lang] || space.description.en}
+    <!-- Poetic Editorial Subtext: Harmony of landscape & acoustics -->
+    <p class="card-poetry">
+      {space.poetry[lang] || space.poetry.en}
     </p>
 
-    <!-- Aesthetic Atmosphere Tags -->
-    <div class="tags-row" aria-label="Atmospheric tags">
-      {(space.tags[lang] || space.tags.en).map((tag: string) => (
-        <span class="tag-chip">{tag}</span>
-      ))}
-    </div>
-
-    <!-- Action Trigger: Open Setup Drawer -->
-    <div class="card-action-row">
+    <!-- Center Setup & Vintage Lighting Pill Button -->
+    <div class="btn-wrap">
       <button
         type="button"
-        class="setup-trigger-btn"
+        class="setup-pill-btn group"
         data-trigger-setup={space.slug}
-        aria-label={`Open technical and lighting setup for ${space.title[lang] || space.title.en}`}
+        aria-label={`Open technical and lighting setup for ${space.headerBadge}`}
       >
-        <span class="material-symbols-outlined btn-setup-icon" aria-hidden="true">tune</span>
-        <span class="btn-setup-text">{t('experienceSetupBtn')}</span>
-        <span class="material-symbols-outlined btn-setup-arrow" aria-hidden="true">arrow_outward</span>
+        <span class="pill-dot" aria-hidden="true"></span>
+        <span class="pill-text">{t('experienceSetupBtn')}</span>
+        <span class="material-symbols-outlined pill-arrow" aria-hidden="true">arrow_forward</span>
       </button>
     </div>
   </div>
 </article>
 
 <script>
-  function initSetupButtons() {
+  function initCardTriggers() {
     const buttons = document.querySelectorAll('[data-trigger-setup]');
     buttons.forEach((btn) => {
       btn.addEventListener('click', (e) => {
+        e.stopPropagation();
         const slug = (btn as HTMLElement).dataset.triggerSetup;
         window.dispatchEvent(
           new CustomEvent('dj:open-setup', {
@@ -94,247 +74,238 @@ const t = useTranslations(lang);
     });
   }
 
-  initSetupButtons();
+  initCardTriggers();
 </script>
 
 <style>
-  .space-card {
+  .space-card-container {
     position: relative;
     width: 100%;
-    max-width: 27rem;
+    max-width: 350px;
     margin-inline: auto;
     box-sizing: border-box;
     user-select: none;
     -webkit-user-select: none;
   }
 
-  .card-inner {
+  .art-book-card {
     position: relative;
     display: flex;
     flex-direction: column;
-    padding: 1.25rem 1.15rem;
-    border-radius: var(--radius-xl);
-    background: var(--color-surface-glass);
-    border: 1px solid var(--color-glass-border);
+    align-items: center;
+    text-align: center;
+    padding: 1.65rem 1.35rem;
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.65);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(var(--card-glow-rgb), 0.15);
+    box-shadow: 0 18px 45px rgba(180, 130, 90, 0.12), 0 0 25px rgba(var(--card-glow-rgb), 0.12);
     transition: var(--transition-theme), transform 0.3s ease, border-color 0.4s ease;
   }
 
+  /* Night Mode glass styling from Stitch */
+  :global(html[data-theme="night"]) .art-book-card,
+  :global(html.dark) .art-book-card {
+    background: rgba(30, 25, 22, 0.86);
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.55), 0 0 30px rgba(var(--card-glow-rgb), 0.18);
+  }
+
   @media (min-height: 750px) {
-    .card-inner {
-      padding: 1.6rem 1.35rem;
-      gap: 0.15rem;
+    .art-book-card {
+      padding: 2rem 1.6rem;
     }
   }
 
-  .meta-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5rem;
+  /* 4 Ornamental Gold-accent Corner Brackets */
+  .card-corner {
+    position: absolute;
+    width: 0.875rem;
+    height: 0.875rem;
+    pointer-events: none;
+    transition: border-color 0.4s ease;
+  }
+
+  .corner-tl {
+    top: 0.75rem;
+    left: 0.75rem;
+    border-top: 1.5px solid var(--card-glow-color);
+    border-left: 1.5px solid var(--card-glow-color);
+    opacity: 0.65;
+  }
+
+  .corner-tr {
+    top: 0.75rem;
+    right: 0.75rem;
+    border-top: 1.5px solid var(--card-glow-color);
+    border-right: 1.5px solid var(--card-glow-color);
+    opacity: 0.65;
+  }
+
+  .corner-bl {
+    bottom: 0.75rem;
+    left: 0.75rem;
+    border-bottom: 1.5px solid var(--card-glow-color);
+    border-left: 1.5px solid var(--card-glow-color);
+    opacity: 0.65;
+  }
+
+  .corner-br {
+    bottom: 0.75rem;
+    right: 0.75rem;
+    border-bottom: 1.5px solid var(--card-glow-color);
+    border-right: 1.5px solid var(--card-glow-color);
+    opacity: 0.65;
+  }
+
+  /* Category Supertitle */
+  .supertitle-row {
     margin-block-end: 0.65rem;
   }
 
-  .category-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding-inline: 0.55rem;
-    padding-block: 0.2rem;
-    border-radius: var(--radius-full);
-    background: rgba(var(--card-glow-rgb), 0.12);
-    border: 1px solid rgba(var(--card-glow-rgb), 0.25);
-  }
-
-  .category-dot {
-    width: 5px;
-    height: 5px;
-    border-radius: var(--radius-full);
-    background: var(--card-glow-color);
-    box-shadow: 0 0 6px var(--card-glow-color);
-  }
-
-  .category-text {
-    font-family: var(--font-body);
-    font-size: 0.625rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--card-glow-color);
-  }
-
-  .audio-specs {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-family: var(--font-mono);
-    font-size: 0.5625rem;
-    letter-spacing: 0.08em;
-    color: var(--color-text-subtle);
-  }
-
-  .audio-sep {
-    opacity: 0.4;
-  }
-
-  .audio-bpm {
-    color: var(--color-primary);
-    font-weight: 600;
-  }
-
-  .title-block {
-    display: flex;
-    flex-direction: column;
-    margin-block-end: 0.5rem;
-  }
-
-  .title-number {
-    font-family: var(--font-mono);
-    font-size: 0.5625rem;
+  .supertitle-text {
+    font-family: var(--font-display);
+    font-size: 0.65625rem; /* ~10.5px */
     letter-spacing: 0.25em;
     text-transform: uppercase;
-    color: var(--color-text-subtle);
-    opacity: 0.7;
-    margin-block-end: 0.2rem;
-  }
-
-  .space-title {
-    font-family: var(--font-display);
-    font-size: clamp(1.45rem, 5vw, 2.15rem);
-    font-weight: 700;
-    line-height: 1.1;
-    letter-spacing: -0.01em;
-    text-transform: uppercase;
-    margin: 0;
-    color: var(--color-text-main);
-  }
-
-  .space-subtitle {
-    font-family: var(--font-body);
-    font-size: 0.6875rem;
     font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
     color: var(--card-glow-color);
-    margin: 0.25rem 0 0;
   }
 
-  .poetry-quote {
-    position: relative;
-    margin: 0.45rem 0;
-    padding-inline-start: 0.85rem;
-    border-inline-start: 2px solid var(--card-glow-color);
-    font-family: var(--font-body);
+  /* Main Headline with Serif + Italic Accent */
+  .card-headline {
+    font-family: var(--font-serif-art);
+    font-size: clamp(1.85rem, 6vw, 2.15rem); /* ~31-35px */
+    line-height: 1.18;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    margin: 0;
+    color: #211a16;
+    transition: color 0.4s ease;
+  }
+
+  :global(html[data-theme="night"]) .card-headline,
+  :global(html.dark) .card-headline {
+    color: #f9f5f0;
+  }
+
+  .headline-prefix {
+    display: block;
+  }
+
+  .headline-accent {
+    display: block;
     font-style: italic;
-    font-size: 0.8125rem;
-    line-height: 1.45;
-    color: var(--color-text-muted);
-  }
-
-  .quote-mark {
-    position: absolute;
-    inset-inline-start: 0.1rem;
-    top: -0.3rem;
-    font-family: var(--font-display);
-    font-size: 1.25rem;
+    font-weight: 400;
     color: var(--card-glow-color);
-    opacity: 0.4;
-    pointer-events: none;
+    filter: drop-shadow(0 0 12px rgba(var(--card-glow-rgb), 0.25));
   }
 
-  .space-description {
-    font-family: var(--font-body);
-    font-size: 0.75rem;
-    line-height: 1.5;
-    color: var(--color-text-subtle);
-    margin: 0.25rem 0 0.65rem;
+  /* Poetic Editorial Subtext */
+  .card-poetry {
+    font-family: var(--font-grotesk);
+    font-size: 0.8125rem; /* ~13px */
+    line-height: 1.6;
+    font-weight: 300;
+    color: #68584f;
+    max-width: 285px;
+    margin: 0.85rem 0 0;
+    transition: color 0.4s ease;
   }
 
-  .tags-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.35rem;
-    margin-block-end: 0.85rem;
+  :global(html[data-theme="night"]) .card-poetry,
+  :global(html.dark) .card-poetry {
+    color: #c7b9b0;
   }
 
-  .tag-chip {
-    font-family: var(--font-mono);
-    font-size: 0.5625rem;
-    letter-spacing: 0.04em;
-    padding-inline: 0.5rem;
-    padding-block: 0.2rem;
-    border-radius: var(--radius-full);
-    background: var(--color-surface-container);
-    border: 1px solid var(--color-glass-border);
-    color: var(--color-text-main);
-    opacity: 0.9;
-  }
-
-  .card-action-row {
-    display: flex;
-    align-items: center;
+  /* Center Setup & Vintage Lighting Pill Button */
+  .btn-wrap {
+    margin-block-start: 1.25rem;
     width: 100%;
+    display: flex;
+    justify-content: center;
   }
 
-  .setup-trigger-btn {
-    position: relative;
-    width: 100%;
+  .setup-pill-btn {
     display: inline-flex;
     align-items: center;
-    justify-content: space-between;
-    padding-inline: 0.95rem;
-    padding-block: 0.65rem;
-    border-radius: var(--radius-lg);
-    background: var(--color-surface-container);
-    border: 1px solid var(--color-glass-border);
-    color: var(--color-text-main);
+    gap: 0.5rem;
+    padding-inline: 1rem;
+    padding-block: 0.55rem;
+    border-radius: var(--radius-full);
+    background: #f6eee5;
+    border: 1px solid #e5d3c0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     cursor: pointer;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    transition: var(--transition-theme), transform 0.2s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    transition: var(--transition-theme), transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
   }
 
-  .setup-trigger-btn:hover {
+  :global(html[data-theme="night"]) .setup-pill-btn,
+  :global(html.dark) .setup-pill-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .setup-pill-btn:hover {
+    background: #faefe2;
     border-color: var(--card-glow-color);
-    box-shadow: 0 0 15px rgba(var(--card-glow-rgb), 0.3);
     transform: translateY(-1px);
   }
 
-  .setup-trigger-btn:active {
-    transform: scale(0.98);
+  :global(html[data-theme="night"]) .setup-pill-btn:hover,
+  :global(html.dark) .setup-pill-btn:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: var(--card-glow-color);
   }
 
-  .btn-setup-icon {
-    font-size: 1.125rem;
-    color: var(--card-glow-color);
+  .setup-pill-btn:active {
+    transform: scale(0.96);
   }
 
-  .btn-setup-text {
-    font-family: var(--font-body);
-    font-size: 0.6875rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--color-text-main);
+  .pill-dot {
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: var(--radius-full);
+    background: var(--card-glow-color);
+    box-shadow: 0 0 6px var(--card-glow-color);
+    transition: transform 0.2s ease;
   }
 
-  .btn-setup-arrow {
-    font-size: 1rem;
+  .setup-pill-btn:hover .pill-dot {
+    transform: scale(1.3);
+  }
+
+  .pill-text {
+    font-family: var(--font-display);
+    font-size: 0.6875rem; /* ~11px */
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: #4c3b31;
+    white-space: nowrap;
+    transition: color 0.3s ease;
+  }
+
+  :global(html[data-theme="night"]) .pill-text,
+  :global(html.dark) .pill-text {
+    color: #eedbce;
+  }
+
+  .pill-arrow {
+    font-size: 0.875rem;
     color: var(--card-glow-color);
     transition: transform 0.2s ease;
   }
 
-  :global([dir="rtl"]) .btn-setup-arrow {
-    transform: rotate(90deg);
+  :global([dir="rtl"]) .pill-arrow {
+    transform: rotate(180deg);
   }
 
-  .setup-trigger-btn:hover .btn-setup-arrow {
-    transform: translate(2px, -2px);
+  .setup-pill-btn:hover .pill-arrow {
+    transform: translateX(2px);
   }
 
-  :global([dir="rtl"]) .setup-trigger-btn:hover .btn-setup-arrow {
-    transform: translate(-2px, -2px) rotate(90deg);
+  :global([dir="rtl"]) .setup-pill-btn:hover .pill-arrow {
+    transform: translateX(-2px) rotate(180deg);
   }
 </style>

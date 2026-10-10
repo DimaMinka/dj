@@ -8,69 +8,70 @@ interface Props {
 
 const { lang = defaultLang } = Astro.props;
 const t = useTranslations(lang);
+const initialSpace = spaces[0];
 ---
 
 <header class="vibe-header">
   <div class="nav-left">
     <!-- Back to Intro Gateway -->
-    <a href="/" class="back-btn" aria-label="Return to Portal Gateway">
+    <a href="/" class="round-back-btn" aria-label="Return to Portal Gateway">
       <span class="material-symbols-outlined back-arrow" aria-hidden="true">arrow_back</span>
-      <span class="back-label">{t('vibeBackToIntro')}</span>
     </a>
 
-    <!-- DM Monogram Logo -->
-    <div class="logo-box">
-      <svg class="logo-svg" viewBox="0 0 576.59 678.28" fill="currentColor">
-        <path d="m199.66 44.95v518.06l-199.65 115.27c0-222.21 0-444.42-.01-666.63 35.16 20.39 70.32 40.78 105.48 61.18-.11 28.59-.22 57.18-.33 85.77-9.46-5.46-18.92-10.92-28.37-16.38.09 135.02.19 270.04.28 405.06 14.98-8.59 29.95-17.18 44.93-25.78v-521.5c25.89 14.98 51.78 29.97 77.67 44.95z"></path>
-        <path d="m576.59 345.02c-7.56 4.49-15.13 8.98-22.69 13.47l-153 88.34v-85.85c4.26-2.34 8.57-4.77 12.92-7.29 4.93-2.85 9.74-5.7 14.43-8.55-13.8-8.06-27.6-16.12-41.41-24.18.02 44.65.04 89.29.06 133.95l-78 45.03c-.02-74.58-.03-149.16-.05-223.73-4.65-2.77-9.3-5.54-13.95-8.31.02 80.03.03 160.06.05 240.09.01 22.36.01 44.72.02 67.08v10.49c-25.52 14.72-51.03 29.45-76.54 44.17l-3.56 2.05v-10.47c-.01-22.36-.02-44.71-.02-67.07-.04-139.38-.08-278.76-.12-418.14 120.62 69.64 241.24 139.28 361.86 208.92z"></path>
-      </svg>
+    <!-- Active Location Telemetry Pill from Stitch -->
+    <div class="telemetry-pill">
+      <span class="telemetry-ping-wrap" aria-hidden="true">
+        <span class="telemetry-ping" id="telemetryPing"></span>
+        <span class="telemetry-dot" id="telemetryDot"></span>
+      </span>
+      <span id="headerSpaceBadge" class="telemetry-badge-text">
+        {initialSpace.headerBadge}
+      </span>
     </div>
   </div>
 
-  <!-- Center Active Index Counter -->
-  <div class="nav-center">
-    <div class="counter-badge">
-      <span id="activeSpaceNum" class="counter-num">01</span>
-      <span class="counter-sep">/</span>
-      <span class="counter-total">{String(spaces.length).padStart(2, '0')}</span>
-    </div>
-  </div>
-
-  <!-- Right Actions: Theme Toggle -->
+  <!-- Right Actions: Dima Minka Brand Signature & Theme Switcher -->
   <div class="nav-right">
+    <div class="artist-signature-pill">
+      <div class="logo-box">
+        <svg class="logo-svg" viewBox="0 0 576.59 678.28" fill="currentColor">
+          <path d="m199.66 44.95v518.06l-199.65 115.27c0-222.21 0-444.42-.01-666.63 35.16 20.39 70.32 40.78 105.48 61.18-.11 28.59-.22 57.18-.33 85.77-9.46-5.46-18.92-10.92-28.37-16.38.09 135.02.19 270.04.28 405.06 14.98-8.59 29.95-17.18 44.93-25.78v-521.5c25.89 14.98 51.78 29.97 77.67 44.95z"></path>
+          <path d="m576.59 345.02c-7.56 4.49-15.13 8.98-22.69 13.47l-153 88.34v-85.85c4.26-2.34 8.57-4.77 12.92-7.29 4.93-2.85 9.74-5.7 14.43-8.55-13.8-8.06-27.6-16.12-41.41-24.18.02 44.65.04 89.29.06 133.95l-78 45.03c-.02-74.58-.03-149.16-.05-223.73-4.65-2.77-9.3-5.54-13.95-8.31.02 80.03.03 160.06.05 240.09.01 22.36.01 44.72.02 67.08v10.49c-25.52 14.72-51.03 29.45-76.54 44.17l-3.56 2.05v-10.47c-.01-22.36-.02-44.71-.02-67.07-.04-139.38-.08-278.76-.12-418.14 120.62 69.64 241.24 139.28 361.86 208.92z"></path>
+        </svg>
+      </div>
+      <span class="artist-sig-text">DIMA MINKA</span>
+    </div>
+
+    <!-- Theme Toggle -->
     <button id="vibeThemeToggleBtn" class="theme-toggle" type="button" aria-label="Toggle theme resonance">
       <div class="equalizer-bars" aria-hidden="true">
         <span class="bar bar-1"></span>
         <span class="bar bar-2"></span>
         <span class="bar bar-3"></span>
       </div>
-      <span id="vibeThemeToggleLabel" class="theme-label">{t('nightResonance')}</span>
     </button>
   </div>
 </header>
 
 <script>
-  function initVibeHeader() {
-    const numDisplay = document.getElementById('activeSpaceNum');
-    const themeBtn = document.getElementById('vibeThemeToggleBtn');
-    const themeLabel = document.getElementById('vibeThemeToggleLabel');
+  import { spaces } from '../../data/spaces';
 
-    // Update active space counter from slider event
+  function initVibeHeader() {
+    const badgeText = document.getElementById('headerSpaceBadge');
+    const pingDot = document.getElementById('telemetryDot');
+    const pingWave = document.getElementById('telemetryPing');
+    const themeBtn = document.getElementById('vibeThemeToggleBtn');
+
+    // Update active space telemetry badge from slider event
     window.addEventListener('dj:space-change', ((e: CustomEvent) => {
       const idx = e.detail?.index;
-      if (typeof idx === 'number' && numDisplay) {
-        numDisplay.textContent = String(idx + 1).padStart(2, '0');
+      const glowColor = e.detail?.glowColor;
+      if (typeof idx === 'number' && spaces[idx]) {
+        if (badgeText) badgeText.textContent = spaces[idx].headerBadge;
+        if (pingDot && glowColor) pingDot.style.backgroundColor = glowColor;
+        if (pingWave && glowColor) pingWave.style.backgroundColor = glowColor;
       }
     }) as EventListener);
-
-    // Theme resonance management
-    function updateLabel(theme: string) {
-      if (!themeLabel) return;
-      themeLabel.textContent = theme === 'night' ? 'Night Resonance' : 'Day Resonance';
-    }
-
-    const currentTheme = document.documentElement.getAttribute('data-theme') || 'night';
-    updateLabel(currentTheme);
 
     themeBtn?.addEventListener('click', () => {
       const active = document.documentElement.getAttribute('data-theme') || 'night';
@@ -79,14 +80,9 @@ const t = useTranslations(lang);
       document.documentElement.setAttribute('data-theme', next);
       document.documentElement.classList.toggle('dark', next === 'night');
       localStorage.setItem('dj-theme-resonance', next);
-      updateLabel(next);
 
       window.dispatchEvent(new CustomEvent('dj:theme-change', { detail: { theme: next } }));
     });
-
-    window.addEventListener('dj:theme-change', ((e: CustomEvent) => {
-      if (e.detail?.theme) updateLabel(e.detail.theme);
-    }) as EventListener);
   }
 
   initVibeHeader();
@@ -99,6 +95,7 @@ const t = useTranslations(lang);
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 0.5rem;
     padding-inline: 1.25rem;
     padding-block-start: 0.5rem;
     width: 100%;
@@ -109,134 +106,201 @@ const t = useTranslations(lang);
   .nav-left {
     display: flex;
     align-items: center;
-    gap: 0.625rem;
+    gap: 0.5rem;
+    min-width: 0;
   }
 
-  .back-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding-inline: 0.625rem;
-    padding-block: 0.375rem;
+  .round-back-btn {
+    width: 2.25rem;
+    height: 2.25rem;
+    flex-shrink: 0;
     border-radius: var(--radius-full);
-    background: var(--color-surface-glass);
-    border: 1px solid var(--color-glass-border);
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(141, 75, 0, 0.15);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
-    color: var(--color-text-main);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #4a3b32;
     text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     transition: var(--transition-theme), transform 0.2s ease, border-color 0.2s ease;
   }
 
-  .back-btn:hover {
-    border-color: var(--color-primary);
-    transform: translateX(-2px);
+  :global(html[data-theme="night"]) .round-back-btn,
+  :global(html.dark) .round-back-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.12);
+    color: #eedecb;
   }
 
-  :global([dir="rtl"]) .back-btn:hover {
-    transform: translateX(2px);
+  .round-back-btn:hover {
+    transform: scale(1.05);
+    border-color: var(--color-primary);
+  }
+
+  .round-back-btn:active {
+    transform: scale(0.94);
   }
 
   .back-arrow {
-    font-size: 1rem;
-    color: var(--color-primary);
-    transition: transform 0.2s ease;
+    font-size: 1.15rem;
   }
 
   :global([dir="rtl"]) .back-arrow {
     transform: rotate(180deg);
   }
 
-  .back-label {
-    font-family: var(--font-body);
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-
-  .logo-box {
-    width: 2.25rem;
-    height: 2.25rem;
-    border-radius: var(--radius-md);
-    background: var(--color-surface-glass);
-    border: 1px solid var(--color-glass-border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.3rem;
-    box-shadow: 0 0 12px var(--color-primary-glow);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    transition: var(--transition-theme);
-  }
-
-  .logo-svg {
-    width: 1.25rem;
-    height: 1.25rem;
-    color: var(--color-primary);
-    filter: drop-shadow(0 0 6px var(--color-primary-glow));
-  }
-
-  .nav-center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .counter-badge {
+  .telemetry-pill {
     display: inline-flex;
-    align-items: baseline;
-    gap: 0.25rem;
+    align-items: center;
+    gap: 0.45rem;
     padding-inline: 0.75rem;
-    padding-block: 0.25rem;
+    padding-block: 0.4rem;
     border-radius: var(--radius-full);
-    background: var(--color-surface-glass);
-    border: 1px solid var(--color-glass-border);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(141, 75, 0, 0.15);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  :global(html[data-theme="night"]) .telemetry-pill,
+  :global(html.dark) .telemetry-pill {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .telemetry-ping-wrap {
+    position: relative;
+    display: flex;
+    width: 0.5rem;
+    height: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .telemetry-ping {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-full);
+    background: var(--color-primary);
+    opacity: 0.75;
+    animation: ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  .telemetry-dot {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--radius-full);
+    background: var(--color-primary);
+  }
+
+  @keyframes ping {
+    75%, 100% {
+      transform: scale(2.2);
+      opacity: 0;
+    }
+  }
+
+  .telemetry-badge-text {
+    font-family: var(--font-display);
+    font-size: 0.65625rem; /* ~10.5px */
     font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #5a483e;
+    transition: color 0.3s ease;
   }
 
-  .counter-num {
-    color: var(--color-primary);
-  }
-
-  .counter-sep {
-    color: var(--color-text-subtle);
-    opacity: 0.5;
-  }
-
-  .counter-total {
-    color: var(--color-text-subtle);
+  :global(html[data-theme="night"]) .telemetry-badge-text,
+  :global(html.dark) .telemetry-badge-text {
+    color: #f1e6dc;
   }
 
   .nav-right {
     display: flex;
     align-items: center;
+    gap: 0.45rem;
   }
 
-  .theme-toggle {
+  .artist-signature-pill {
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
     padding-inline: 0.65rem;
     padding-block: 0.35rem;
     border-radius: var(--radius-full);
-    background: var(--color-surface-glass);
-    border: 1px solid var(--color-glass-border);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    color: var(--color-text-main);
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(141, 75, 0, 0.15);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  :global(html[data-theme="night"]) .artist-signature-pill,
+  :global(html.dark) .artist-signature-pill {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .logo-box {
+    width: 1.125rem;
+    height: 1.125rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+  }
+
+  .logo-svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .artist-sig-text {
+    font-family: var(--font-display);
+    font-size: 0.625rem; /* ~10px */
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #2f2723;
+  }
+
+  :global(html[data-theme="night"]) .artist-sig-text,
+  :global(html.dark) .artist-sig-text {
+    color: #f8f5f2;
+  }
+
+  .theme-toggle {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(141, 75, 0, 0.15);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    transition: var(--transition-theme), transform 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: var(--transition-theme), transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  :global(html[data-theme="night"]) .theme-toggle,
+  :global(html.dark) .theme-toggle {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
   }
 
   .theme-toggle:hover {
     border-color: var(--color-primary);
-    transform: translateY(-1px);
+    transform: scale(1.05);
   }
 
   .equalizer-bars {
@@ -268,22 +332,6 @@ const t = useTranslations(lang);
     height: 0.45rem;
     background: var(--color-primary);
     animation: pulse 1.4s ease-in-out infinite 0.4s;
-  }
-
-  .theme-label {
-    display: none;
-    font-family: var(--font-body);
-    font-size: 0.625rem;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--color-text-main);
-  }
-
-  @media (min-width: 640px) {
-    .theme-label {
-      display: inline;
-    }
   }
 
   @keyframes pulse {
