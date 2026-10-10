@@ -1,12 +1,12 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import VibeAtmosphere from '../components/vibe/VibeAtmosphere.astro';
-import VibeHeader from '../components/vibe/VibeHeader.astro';
-import SpacesCarousel from '../components/vibe/SpacesCarousel.astro';
-import VibeSoundDock from '../components/vibe/VibeSoundDock.astro';
-import VibeSetupDrawer from '../components/vibe/VibeSetupDrawer.astro';
-import { spaces } from '../data/spaces';
-import { defaultLang } from '../i18n/ui';
+import Layout from "../layouts/Layout.astro";
+import VibeAtmosphere from "../components/vibe/VibeAtmosphere.astro";
+import VibeHeader from "../components/vibe/VibeHeader.astro";
+import SpacesCarousel from "../components/vibe/SpacesCarousel.astro";
+import VibeSoundDock from "../components/vibe/VibeSoundDock.astro";
+import VibeSetupDrawer from "../components/vibe/VibeSetupDrawer.astro";
+import { spaces } from "../data/spaces";
+import { defaultLang } from "../i18n/ui";
 ---
 
 <Layout
@@ -57,15 +57,9 @@ import { defaultLang } from '../i18n/ui';
   /* Perimeter Art-Book Ornamental Frame from Stitch */
   .art-book-perimeter-frame {
     position: absolute;
-    inset: 0.75rem;
+    inset: 0.35rem;
     pointer-events: none;
     z-index: 5;
-  }
-
-  @media (min-width: 768px) {
-    .art-book-perimeter-frame {
-      inset: 1.25rem;
-    }
   }
 
   .frame-inner-border {

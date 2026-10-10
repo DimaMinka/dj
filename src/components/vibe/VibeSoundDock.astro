@@ -45,16 +45,17 @@ const initialSpace = spaces[0];
     </div>
   </div>
 
-  <!-- Primary Amber Gradient Action Button: Feel in Your Location -->
-  <button
+  <!-- Primary Art-Book Action Link: Navigate to Sets / Booking Experience -->
+  <a
     id="dockMainCtaBtn"
     class="cta-location-btn"
-    type="button"
+    href="/sets"
     aria-label="Experience this soundscape in your private location"
   >
-    <span class="material-symbols-outlined cta-icon" aria-hidden="true">eco</span>
+    <span class="cta-dot" aria-hidden="true"></span>
     <span class="cta-text">{t('listenVibeBtn')}</span>
-  </button>
+    <span class="material-symbols-outlined cta-arrow" aria-hidden="true">arrow_forward</span>
+  </a>
 </div>
 
 <script>
@@ -74,7 +75,7 @@ const initialSpace = spaces[0];
     let osc: OscillatorNode | null = null;
     let gainNode: GainNode | null = null;
 
-    // Listen to space changes
+    // Space change updates
     window.addEventListener('dj:space-change', ((e: CustomEvent) => {
       const { index, slug } = e.detail || {};
       if (typeof index === 'number' && spaces[index]) {
@@ -84,15 +85,6 @@ const initialSpace = spaces[0];
         if (subtitleEl) subtitleEl.textContent = space.trackSubtitle;
       }
     }) as EventListener);
-
-    // Open setup drawer from main CTA
-    ctaBtn?.addEventListener('click', () => {
-      window.dispatchEvent(
-        new CustomEvent('dj:open-setup', {
-          detail: { slug: currentSlug },
-        })
-      );
-    });
 
     // Web Audio Harmonic Ambient Synthesizer
     function toggleAmbientSound() {
@@ -295,46 +287,96 @@ const initialSpace = spaces[0];
     background: #d97706;
   }
 
-  /* Primary Amber Gradient CTA Button */
+  /* Elegant Art-Book CTA Button Link */
   .cta-location-btn {
     width: 100%;
-    padding-block: 0.85rem;
+    padding-block: 0.75rem;
     padding-inline: 1.25rem;
-    border-radius: var(--radius-xl);
-    background: linear-gradient(to right, #d97706 0%, #e28418 50%, #c76e05 100%);
-    border: 1px solid rgba(254, 240, 138, 0.3);
-    color: #ffffff;
-    box-shadow: 0 10px 25px rgba(217, 119, 6, 0.32);
+    border-radius: var(--radius-full);
+    background: rgba(245, 237, 227, 0.92);
+    border: 1px solid rgba(217, 119, 6, 0.35);
+    color: #3b2c22;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(180, 130, 90, 0.12), 0 0 20px rgba(217, 119, 6, 0.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 0.55rem;
     cursor: pointer;
     user-select: none;
     -webkit-user-select: none;
-    transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
+    transition: var(--transition-theme), transform 0.2s ease, border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+  }
+
+  :global(html[data-theme="night"]) .cta-location-btn,
+  :global(html.dark) .cta-location-btn {
+    background: rgba(36, 29, 25, 0.88);
+    border-color: rgba(255, 198, 101, 0.3);
+    color: #f7eee4;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 25px rgba(229, 169, 60, 0.12);
   }
 
   .cta-location-btn:hover {
-    filter: brightness(1.06);
-    box-shadow: 0 12px 30px rgba(217, 119, 6, 0.45);
+    background: #faefe1;
+    border-color: var(--color-primary);
+    box-shadow: 0 8px 24px rgba(217, 119, 6, 0.22), 0 0 24px rgba(217, 119, 6, 0.18);
     transform: translateY(-1px);
+  }
+
+  :global(html[data-theme="night"]) .cta-location-btn:hover,
+  :global(html.dark) .cta-location-btn:hover {
+    background: rgba(48, 38, 33, 0.95);
+    border-color: var(--color-primary);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5), 0 0 30px rgba(229, 169, 60, 0.22);
   }
 
   .cta-location-btn:active {
     transform: scale(0.98);
   }
 
-  .cta-icon {
-    font-size: 1.15rem;
-    color: #fef08a;
+  .cta-dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: var(--radius-full);
+    background: var(--color-primary);
+    box-shadow: 0 0 8px var(--color-primary);
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  .cta-location-btn:hover .cta-dot {
+    transform: scale(1.25);
   }
 
   .cta-text {
-    font-family: var(--font-display);
-    font-size: 0.8125rem; /* ~13px */
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    font-family: var(--font-serif-art);
+    font-size: 1.0625rem; /* ~17px */
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    white-space: nowrap;
+    transition: color 0.2s ease;
+  }
+
+  .cta-arrow {
+    font-size: 1rem;
+    color: var(--color-primary);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  :global([dir="rtl"]) .cta-arrow {
+    transform: rotate(180deg);
+  }
+
+  .cta-location-btn:hover .cta-arrow {
+    transform: translateX(3px);
+  }
+
+  :global([dir="rtl"]) .cta-location-btn:hover .cta-arrow {
+    transform: translateX(-3px) rotate(180deg);
   }
 </style>
