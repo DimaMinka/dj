@@ -13,7 +13,7 @@ const initialSpace = spaces[initialIndex] || spaces[0];
   class="vibe-atmosphere-canvas"
   id="vibeAtmosphere"
   data-initial-index={initialIndex}
-  style={`--active-dust-color-light: ${initialSpace.glowColor}; --active-dust-rgb-light: ${initialSpace.glowRgb}; --active-dust-color-dark: ${initialSpace.glowColorDark}; --active-dust-rgb-dark: ${initialSpace.glowRgbDark};`}
+  style={`--active-dust-color: ${initialSpace.glowColorDark}; --active-dust-rgb: ${initialSpace.glowRgbDark}; --active-dust-color-light: ${initialSpace.glowColor}; --active-dust-rgb-light: ${initialSpace.glowRgb}; --active-dust-color-dark: ${initialSpace.glowColorDark}; --active-dust-rgb-dark: ${initialSpace.glowRgbDark};`}
   aria-hidden="true"
 >
   <!-- Multi-layered Space Watercolor Backgrounds with smooth sequential fade -->
@@ -46,6 +46,8 @@ const initialSpace = spaces[initialIndex] || spaces[0];
 </div>
 
 <script>
+  import { spaces } from '../../data/spaces';
+
   function initAtmosphereTransitions() {
     const canvas = document.getElementById('vibeAtmosphere');
     const dynamicAura = document.getElementById('dynamicAura');
@@ -54,18 +56,7 @@ const initialSpace = spaces[initialIndex] || spaces[0];
 
     let currentActiveIndex = Number(canvas.dataset.initialIndex || 0);
 
-    // 1. Sequential Step: Old background fades out to dark canvas
-    window.addEventListener('dj:space-bg-fadeout', ((e: CustomEvent) => {
-      const { oldIndex } = e.detail || {};
-      const activeIdx = typeof oldIndex === 'number' ? oldIndex : currentActiveIndex;
-      const oldLayer = layers[activeIdx];
-      if (oldLayer) {
-        oldLayer.classList.remove('is-active');
-        oldLayer.classList.add('is-fading-out');
-      }
-    }) as EventListener);
-
-    // Helper to update dynamic aura & dust properties based on theme
+    // Helper to update dynamic aura & dust properties based on theme and active space
     function updateAuraTheme(spaceIndex: number) {
       const space = spaces[spaceIndex];
       if (!space) return;
@@ -76,28 +67,53 @@ const initialSpace = spaces[initialIndex] || spaces[0];
 
       dynamicAura.style.background = `radial-gradient(circle at 50% 38%, rgba(${activeRgb}, 0.35) 0%, rgba(${activeRgb}, 0.12) 48%, transparent 72%)`;
 
-      canvas.style.setProperty('--active-dust-color-light', space.glowColor);
-      canvas.style.setProperty('--active-dust-rgb-light', space.glowRgb);
-      canvas.style.setProperty('--active-dust-color-dark', space.glowColorDark);
-      canvas.style.setProperty('--active-dust-rgb-dark', space.glowRgbDark);
+      // 1. Set CSS custom properties on canvas container
+      canvas.style.setProperty('--active-dust-color', activeColor);
+      canvas.style.setProperty('--active-dust-rgb', activeRgb);
+
+      // 2. Directly update each dust particle element to ensure smooth, immediate color transition
+      const dustParticles = canvas.querySelectorAll('.dust-particle');
+      dustParticles.forEach((particle) => {
+        const p = particle as HTMLElement;
+        p.style.backgroundColor = activeColor;
+        p.style.boxShadow = isNight
+          ? `0 0 14px rgba(${activeRgb}, 0.9), 0 0 5px ${activeColor}`
+          : `0 0 12px rgba(${activeRgb}, 0.55), 0 0 4px ${activeColor}`;
+      });
     }
+
+    // 1. Sequential Step: Old background fades out to dark canvas; begin aura & dust transition to new space
+    window.addEventListener('dj:space-bg-fadeout', ((e: CustomEvent) => {
+      const { oldIndex, newIndex } = e.detail || {};
+      const activeIdx = typeof oldIndex === 'number' ? oldIndex : currentActiveIndex;
+      const oldLayer = layers[activeIdx];
+      if (oldLayer) {
+        oldLayer.classList.remove('is-active');
+        oldLayer.classList.add('is-fading-out');
+      }
+      if (typeof newIndex === 'number' && spaces[newIndex]) {
+        currentActiveIndex = newIndex;
+        updateAuraTheme(newIndex);
+      }
+    }) as EventListener);
 
     // 2. Sequential Step: New background blooms and aura floods in
     window.addEventListener('dj:space-change', ((e: CustomEvent) => {
-      const { index } = e.detail || {};
-      if (typeof index !== 'number') return;
+      const { index, slug } = e.detail || {};
+      const targetIndex = typeof index === 'number' ? index : spaces.findIndex(s => s.slug === slug);
+      if (targetIndex === -1) return;
 
       layers.forEach((layer, idx) => {
         layer.classList.remove('is-fading-out');
-        if (idx === index) {
+        if (idx === targetIndex) {
           layer.classList.add('is-active');
         } else {
           layer.classList.remove('is-active');
         }
       });
 
-      currentActiveIndex = index;
-      updateAuraTheme(index);
+      currentActiveIndex = targetIndex;
+      updateAuraTheme(targetIndex);
     }) as EventListener);
 
     // Update aura when theme is toggled between Day and Night
@@ -110,6 +126,9 @@ const initialSpace = spaces[initialIndex] || spaces[0];
       const isTransitioning = Boolean(e.detail?.active);
       canvas.classList.toggle('is-revealing-background', isTransitioning);
     }) as EventListener);
+
+    // Initial sync of aura & dust colors with the current theme & space
+    updateAuraTheme(currentActiveIndex);
   }
 
   initAtmosphereTransitions();
@@ -117,19 +136,11 @@ const initialSpace = spaces[initialIndex] || spaces[0];
 
 <style>
   .vibe-atmosphere-canvas {
-    --active-dust-color: var(--active-dust-color-light);
-    --active-dust-rgb: var(--active-dust-rgb-light);
     position: absolute;
     inset: 0;
     z-index: 0;
     pointer-events: none;
     overflow: hidden;
-  }
-
-  :global(html[data-theme="night"]) .vibe-atmosphere-canvas,
-  :global(html.dark) .vibe-atmosphere-canvas {
-    --active-dust-color: var(--active-dust-color-dark);
-    --active-dust-rgb: var(--active-dust-rgb-dark);
   }
 
   .space-bg-layer {
@@ -266,10 +277,11 @@ const initialSpace = spaces[initialIndex] || spaces[0];
     z-index: 4;
     border-radius: var(--radius-full);
     pointer-events: none;
-    background: var(--active-dust-color, var(--color-primary));
-    box-shadow: 0 0 10px rgba(var(--active-dust-rgb), 0.7), 0 0 4px var(--active-dust-color);
-    transition: background-color 1.2s cubic-bezier(0.2, 0.8, 0.4, 1), 
-                box-shadow 1.2s cubic-bezier(0.2, 0.8, 0.4, 1);
+    background-color: var(--active-dust-color, var(--color-primary));
+    box-shadow: 0 0 12px rgba(var(--active-dust-rgb), 0.75), 0 0 4px var(--active-dust-color, var(--color-primary));
+    transition: background-color 0.8s cubic-bezier(0.2, 0.8, 0.4, 1), 
+                box-shadow 0.8s cubic-bezier(0.2, 0.8, 0.4, 1),
+                opacity 0.8s ease;
   }
 
   .dust-1 {
