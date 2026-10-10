@@ -1,0 +1,142 @@
+/* Design Tokens from Stitch: Nocturne Solstice (Day & Night Resonance) */
+
+:root {
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'Manrope', 'Heebo', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+  
+  --transition-theme: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                      color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                      border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                      box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 🌙 Night Resonance (Default / Dark) */
+:root,
+html[data-theme="night"],
+html.dark {
+  color-scheme: dark;
+  
+  --color-bg: #0b0b0d;
+  --color-surface: #131315;
+  --color-surface-dim: #09090b;
+  --color-surface-container: #201f21;
+  --color-surface-container-high: #2a2a2c;
+  --color-surface-glass: rgba(19, 19, 21, 0.75);
+  --color-glass-border: rgba(244, 244, 246, 0.08);
+  
+  --color-text-main: #e5e1e4;
+  --color-text-muted: #d4c4b0;
+  --color-text-subtle: #8f94a6;
+  
+  --color-primary: #ffc665;
+  --color-primary-container: #e5a93c;
+  --color-primary-glow: rgba(229, 169, 60, 0.35);
+  --color-on-primary: #432c00;
+  
+  --color-secondary: #ffb68b;
+  --color-secondary-container: #ff7f1c;
+  
+  --color-tertiary: #e6c2ff;
+  --color-resonance: #9d4edd;
+  --color-resonance-glow: rgba(157, 78, 221, 0.4);
+  
+  --color-aura-1: rgba(229, 169, 60, 0.18);
+  --color-aura-2: rgba(157, 78, 221, 0.14);
+}
+
+/* ☀️ Day Resonance (Light) */
+html[data-theme="day"]:not(.dark) {
+  color-scheme: light;
+  
+  --color-bg: #fcf8fb;
+  --color-surface: #ffffff;
+  --color-surface-dim: #f5eff3;
+  --color-surface-container: #f5eff3;
+  --color-surface-container-high: #ede6eb;
+  --color-surface-glass: rgba(255, 255, 255, 0.85);
+  --color-glass-border: rgba(217, 119, 6, 0.15);
+  
+  --color-text-main: #111413;
+  --color-text-muted: #4b5563;
+  --color-text-subtle: #6b7280;
+  
+  --color-primary: #d97706;
+  --color-primary-container: #b45309;
+  --color-primary-glow: rgba(217, 119, 6, 0.25);
+  --color-on-primary: #ffffff;
+  
+  --color-secondary: #ff7f1c;
+  --color-secondary-container: #d97706;
+  
+  --color-tertiary: #712ae2;
+  --color-resonance: #b45309;
+  --color-resonance-glow: rgba(217, 119, 6, 0.3);
+  
+  --color-aura-1: rgba(217, 119, 6, 0.14);
+  --color-aura-2: rgba(113, 42, 226, 0.08);
+}
+
+/* Base resets & typography */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  font-family: var(--font-body);
+  transition: var(--transition-theme);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Animations from Stitch */
+@keyframes pulse-ring {
+  0% { transform: scale(0.85); opacity: 0.7; }
+  50% { transform: scale(1.15); opacity: 0.2; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+@keyframes pulse-ring-slow {
+  0% { transform: scale(0.9); opacity: 0.45; }
+  50% { transform: scale(1.3); opacity: 0.12; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+@keyframes float-dust {
+  0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.3; }
+  50% { transform: translateY(-14px) translateX(8px); opacity: 0.7; }
+}
+
+@keyframes aura-rotate {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.05); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+.animate-pulse-ring-1 {
+  animation: pulse-ring 3s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+}
+
+.animate-pulse-ring-2 {
+  animation: pulse-ring 3s cubic-bezier(0.2, 0.8, 0.4, 1) infinite 1.2s;
+}
+
+.animate-pulse-ring-slow {
+  animation: pulse-ring-slow 4.5s ease-out infinite;
+}
+
+.animate-float-dust {
+  animation: float-dust 7s ease-in-out infinite;
+}
+
+.animate-aura-spin {
+  animation: aura-rotate 22s linear infinite;
+}

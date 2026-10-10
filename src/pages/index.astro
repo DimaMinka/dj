@@ -1,63 +1,38 @@
 ---
-const title = "Hello World — dj.dimaminka.com";
+import Layout from '../layouts/Layout.astro';
+import AtmosphereBackground from '../components/intro/AtmosphereBackground.astro';
+import IntroHeader from '../components/intro/IntroHeader.astro';
+import SonicPortal from '../components/intro/SonicPortal.astro';
+import GatewayTrigger from '../components/intro/GatewayTrigger.astro';
+import { defaultLang } from '../i18n/ui';
 ---
 
-<html lang="ru">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-		<style>
-			:root {
-				font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-				color-scheme: dark light;
-			}
-			body {
-				margin: 0;
-				min-height: 100vh;
-				display: grid;
-				place-items: center;
-				background: radial-gradient(circle at 50% 20%, #1e1e2f 0%, #0d0e15 100%);
-				color: #f3f4f6;
-			}
-			main {
-				text-align: center;
-				padding: 2rem;
-				max-width: 600px;
-			}
-			h1 {
-				font-size: 3rem;
-				font-weight: 800;
-				margin-bottom: 0.5rem;
-				background: linear-gradient(135deg, #a78bfa 0%, #38bdf8 100%);
-				-webkit-background-clip: text;
-				-webkit-text-fill-color: transparent;
-			}
-			p {
-				font-size: 1.25rem;
-				color: #9ca3af;
-				margin-bottom: 1.5rem;
-			}
-			.badge {
-				display: inline-block;
-				padding: 0.35rem 0.85rem;
-				border-radius: 9999px;
-				font-size: 0.875rem;
-				font-weight: 500;
-				background: rgba(255, 255, 255, 0.08);
-				border: 1px solid rgba(255, 255, 255, 0.15);
-				color: #e5e7eb;
-			}
-		</style>
-	</head>
-	<body>
-		<main>
-			<div class="badge">Astro v5</div>
-			<h1>Hello World</h1>
-			<p>Astro проект успешно запущен на <strong>dj.dimaminka.com</strong>!</p>
-		</main>
-	</body>
-</html>
+<Layout title="DJ Dima Minka — Immersion Into Frequency" lang={defaultLang}>
+  <main class="intro-viewport pt-safe pb-safe">
+    <!-- Atmosphere Depth Canvas (Day / Night Crossfade) -->
+    <AtmosphereBackground />
+
+    <!-- Top Navigation & Resonance Switcher -->
+    <IntroHeader lang={defaultLang} />
+
+    <!-- Central Sensory Portal 432 Hz -->
+    <SonicPortal lang={defaultLang} />
+
+    <!-- Tactile Gateway Entry -->
+    <GatewayTrigger lang={defaultLang} />
+  </main>
+</Layout>
+
+<style>
+  .intro-viewport {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+</style>

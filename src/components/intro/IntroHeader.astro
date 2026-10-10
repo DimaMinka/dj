@@ -1,0 +1,224 @@
+---
+import { defaultLang, type SupportedLang, useTranslations } from '../../i18n/ui';
+
+interface Props {
+  lang?: SupportedLang;
+}
+
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<header class="intro-header">
+  <div class="brand-group">
+    <!-- SVG Monogram Logo from Stitch -->
+    <div class="logo-box">
+      <svg class="logo-svg" viewBox="0 0 576.59 678.28" fill="currentColor">
+        <path d="m199.66 44.95v518.06l-199.65 115.27c0-222.21 0-444.42-.01-666.63 35.16 20.39 70.32 40.78 105.48 61.18-.11 28.59-.22 57.18-.33 85.77-9.46-5.46-18.92-10.92-28.37-16.38.09 135.02.19 270.04.28 405.06 14.98-8.59 29.95-17.18 44.93-25.78v-521.5c25.89 14.98 51.78 29.97 77.67 44.95z"></path>
+        <path d="m576.59 345.02c-7.56 4.49-15.13 8.98-22.69 13.47l-153 88.34v-85.85c4.26-2.34 8.57-4.77 12.92-7.29 4.93-2.85 9.74-5.7 14.43-8.55-13.8-8.06-27.6-16.12-41.41-24.18.02 44.65.04 89.29.06 133.95l-78 45.03c-.02-74.58-.03-149.16-.05-223.73-4.65-2.77-9.3-5.54-13.95-8.31.02 80.03.03 160.06.05 240.09.01 22.36.01 44.72.02 67.08v10.49c-25.52 14.72-51.03 29.45-76.54 44.17l-3.56 2.05v-10.47c-.01-22.36-.02-44.71-.02-67.07-.04-139.38-.08-278.76-.12-418.14 120.62 69.64 241.24 139.28 361.86 208.92z"></path>
+      </svg>
+    </div>
+    <div class="brand-text">
+      <span class="artist-title">{t('artistName')}</span>
+      <span class="coordinates">{t('coordinates')}</span>
+    </div>
+  </div>
+
+  <div class="actions-group">
+    <!-- Theme Resonance Toggle Pill -->
+    <button id="themeToggleBtn" class="theme-toggle" type="button" aria-label="Toggle theme resonance">
+      <div class="equalizer-bars" aria-hidden="true">
+        <span class="bar bar-1"></span>
+        <span class="bar bar-2"></span>
+        <span class="bar bar-3"></span>
+      </div>
+      <span id="themeToggleLabel" class="theme-label">{t('nightResonance')}</span>
+    </button>
+  </div>
+</header>
+
+<script>
+  function initThemeToggle() {
+    const btn = document.getElementById('themeToggleBtn');
+    const label = document.getElementById('themeToggleLabel');
+
+    function updateLabel(theme: string) {
+      if (!label) return;
+      const isNight = theme === 'night';
+      label.textContent = isNight ? 'Night Resonance' : 'Day Resonance';
+    }
+
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'night';
+    updateLabel(currentTheme);
+
+    btn?.addEventListener('click', () => {
+      const active = document.documentElement.getAttribute('data-theme') || 'night';
+      const next = active === 'night' ? 'day' : 'night';
+
+      document.documentElement.setAttribute('data-theme', next);
+      document.documentElement.classList.toggle('dark', next === 'night');
+      localStorage.setItem('dj-theme-resonance', next);
+      updateLabel(next);
+
+      window.dispatchEvent(new CustomEvent('dj:theme-change', { detail: { theme: next } }));
+    });
+
+    window.addEventListener('dj:theme-change', ((e: CustomEvent) => {
+      if (e.detail?.theme) updateLabel(e.detail.theme);
+    }) as EventListener);
+  }
+
+  initThemeToggle();
+</script>
+
+<style>
+  .intro-header {
+    position: relative;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: 1.25rem;
+    padding-block-start: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .brand-group {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+  }
+
+  .logo-box {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-lg);
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-glass-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.375rem;
+    box-shadow: 0 0 15px var(--color-primary-glow);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: var(--transition-theme);
+  }
+
+  .logo-svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--color-primary);
+    filter: drop-shadow(0 0 8px var(--color-primary-glow));
+    transition: color 0.4s ease;
+  }
+
+  .brand-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .artist-title {
+    font-family: var(--font-display);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-text-main);
+    line-height: 1;
+  }
+
+  .coordinates {
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    opacity: 0.85;
+    margin-block-start: 0.25rem;
+  }
+
+  .actions-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .theme-toggle {
+    display: none;
+    align-items: center;
+    gap: 0.4rem;
+    padding-inline: 0.75rem;
+    padding-block: 0.35rem;
+    border-radius: var(--radius-full);
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-glass-border);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    color: var(--color-text-main);
+    cursor: pointer;
+    transition: var(--transition-theme), transform 0.2s ease;
+  }
+
+  @media (min-width: 640px) {
+    .theme-toggle {
+      display: inline-flex;
+    }
+  }
+
+  .theme-toggle:hover {
+    transform: translateY(-1px);
+    border-color: var(--color-primary);
+  }
+
+  .theme-toggle:active {
+    transform: scale(0.97);
+  }
+
+  .equalizer-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 0.75rem;
+  }
+
+  .bar {
+    width: 2px;
+    border-radius: 999px;
+  }
+
+  .bar-1 {
+    height: 0.375rem;
+    background: var(--color-primary);
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+
+  .bar-2 {
+    height: 0.75rem;
+    background: var(--color-resonance);
+    box-shadow: 0 0 6px var(--color-resonance-glow);
+    animation: pulse 0.9s ease-in-out infinite 0.2s;
+  }
+
+  .bar-3 {
+    height: 0.5rem;
+    background: var(--color-primary);
+    animation: pulse 1.4s ease-in-out infinite 0.4s;
+  }
+
+  .theme-label {
+    font-family: var(--font-body);
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-text-main);
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; height: 3px; }
+    50% { opacity: 1; height: 11px; }
+  }
+</style>

@@ -1,0 +1,322 @@
+---
+import { defaultLang, type SupportedLang, useTranslations } from '../../i18n/ui';
+
+interface Props {
+  lang?: SupportedLang;
+}
+
+const { lang = defaultLang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<div class="sonic-portal-container">
+  <!-- Central Luminous Aperture / Sonic Rings -->
+  <div class="portal-core" id="portalCore">
+    <!-- Animated Expanding Rings -->
+    <div class="ring ring-outer animate-pulse-ring-slow"></div>
+    <div class="ring ring-mid-1 animate-pulse-ring-1"></div>
+    <div class="ring ring-mid-2 animate-pulse-ring-2"></div>
+    <div class="ring ring-ambient animate-pulse-ring-slow" style="animation-delay: 1.5s;"></div>
+    
+    <!-- Rotating Ambient Aura -->
+    <div class="aura-glow animate-aura-spin"></div>
+
+    <!-- Sacred Frequency Orb -->
+    <div class="frequency-orb" id="orbBtn" role="button" tabindex="0" aria-label="Frequency artifact">
+      <span class="material-symbols-outlined orb-icon" aria-hidden="true">graphic_eq</span>
+      <span class="frequency-label">{t('frequencyBadge')}</span>
+    </div>
+
+    <!-- Laser Axis Crosshairs -->
+    <div class="axis-x"></div>
+    <div class="axis-y"></div>
+  </div>
+
+  <!-- Poetic Typography & Manifest -->
+  <div class="manifesto-block">
+    <div class="prelude-tag-wrap">
+      <span class="line-deco"></span>
+      <span class="prelude-tag">{t('preludeTag')}</span>
+      <span class="line-deco"></span>
+    </div>
+
+    <h1 class="hero-title">
+      <span class="title-prefix">{t('heroTitlePrefix')}</span>
+      <span class="title-accent">{t('heroTitleAccent')}</span>
+    </h1>
+
+    <p class="hero-manifesto">
+      {t('heroManifesto')}
+    </p>
+
+    <!-- Breathing Ambient Waveform Preview Bar -->
+    <div class="ambient-waveform" id="ambientWave" aria-hidden="true">
+      <span class="wave-bar bar-accent" style="height: 10px;"></span>
+      <span class="wave-bar bar-res" style="height: 14px;"></span>
+      <span class="wave-bar bar-accent" style="height: 20px;"></span>
+      <span class="wave-bar bar-accent" style="height: 11px;"></span>
+      <span class="wave-bar bar-accent" style="height: 24px;"></span>
+      <span class="wave-bar bar-res" style="height: 18px;"></span>
+      <span class="wave-bar bar-accent" style="height: 22px;"></span>
+      <span class="wave-bar bar-res" style="height: 12px;"></span>
+      <span class="wave-bar bar-accent" style="height: 19px;"></span>
+      <span class="wave-bar bar-accent" style="height: 8px;"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+  function initAmbientWaveform() {
+    const waveContainer = document.getElementById('ambientWave');
+    if (!waveContainer) return;
+
+    setInterval(() => {
+      const bars = waveContainer.children;
+      for (let i = 0; i < bars.length; i++) {
+        const randH = Math.floor(Math.random() * 20) + 6;
+        (bars[i] as HTMLElement).style.height = `${randH}px`;
+      }
+    }, 260);
+  }
+
+  initAmbientWaveform();
+</script>
+
+<style>
+  .sonic-portal-container {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-inline: 1.25rem;
+    text-align: center;
+    margin-block: auto;
+    padding-block: 0.25rem;
+  }
+
+  .portal-core {
+    position: relative;
+    width: 8.5rem;
+    height: 8.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-block-end: 0.875rem;
+  }
+
+  @media (min-height: 750px) {
+    .portal-core {
+      width: 10.5rem;
+      height: 10.5rem;
+      margin-block-end: 1.25rem;
+    }
+  }
+
+  .ring {
+    position: absolute;
+    border-radius: var(--radius-full);
+    pointer-events: none;
+    border: 1px solid var(--color-primary);
+    transition: var(--transition-theme);
+  }
+
+  .ring-outer {
+    inset: 0;
+    opacity: 0.2;
+  }
+
+  .ring-mid-1 {
+    inset: 0.75rem;
+    opacity: 0.3;
+  }
+
+  .ring-mid-2 {
+    inset: 1.5rem;
+    opacity: 0.25;
+    border-color: var(--color-resonance);
+  }
+
+  .ring-ambient {
+    inset: 0.25rem;
+    opacity: 0.2;
+  }
+
+  .aura-glow {
+    position: absolute;
+    inset: 1rem;
+    border-radius: var(--radius-full);
+    background: radial-gradient(circle at 30% 30%, var(--color-primary-glow), transparent 70%);
+    filter: blur(14px);
+    pointer-events: none;
+  }
+
+  .frequency-orb {
+    position: relative;
+    width: 6rem;
+    height: 6rem;
+    border-radius: var(--radius-full);
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-glass-border);
+    box-shadow: 0 0 35px var(--color-primary-glow);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    cursor: pointer;
+    transition: var(--transition-theme), transform 0.4s ease;
+    user-select: none;
+  }
+
+  .frequency-orb:hover {
+    transform: scale(1.05);
+    border-color: var(--color-primary);
+  }
+
+  .orb-icon {
+    font-size: 1.75rem;
+    color: var(--color-primary);
+    filter: drop-shadow(0 0 10px var(--color-primary-glow));
+    font-variation-settings: 'FILL' 1;
+    transition: transform 0.3s ease;
+  }
+
+  .frequency-orb:hover .orb-icon {
+    transform: scale(1.1);
+  }
+
+  .frequency-label {
+    font-family: var(--font-mono);
+    font-size: 0.5rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin-block-start: 0.25rem;
+    font-weight: 600;
+  }
+
+  .axis-x {
+    position: absolute;
+    inset-inline: -15%;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-glass-border), transparent);
+    pointer-events: none;
+  }
+
+  .axis-y {
+    position: absolute;
+    inset-block: -15%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--color-glass-border), transparent);
+    pointer-events: none;
+  }
+
+  .manifesto-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    max-width: 22rem;
+  }
+
+  @media (min-height: 750px) {
+    .manifesto-block {
+      gap: 0.75rem;
+    }
+  }
+
+  .prelude-tag-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .line-deco {
+    width: 1.25rem;
+    height: 1px;
+    background: var(--color-primary);
+    opacity: 0.4;
+  }
+
+  .prelude-tag {
+    font-family: var(--font-body);
+    font-size: 0.5625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 4.5vw, 2rem);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .title-prefix {
+    display: block;
+    color: var(--color-text-main);
+  }
+
+  .title-accent {
+    display: block;
+    background: linear-gradient(to right, var(--color-primary), var(--color-secondary), var(--color-resonance));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 15px var(--color-primary-glow));
+  }
+
+  .hero-manifesto {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: var(--color-text-muted);
+    font-weight: 300;
+    letter-spacing: 0.01em;
+    margin: 0;
+    padding-block-start: 0.15rem;
+  }
+
+  @media (min-height: 750px) {
+    .hero-manifesto {
+      font-size: 0.8125rem;
+      line-height: 1.6;
+    }
+  }
+
+  .ambient-waveform {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 4px;
+    height: 1.75rem;
+    margin-block-start: 0.5rem;
+    opacity: 0.85;
+  }
+
+  .wave-bar {
+    width: 2px;
+    border-radius: var(--radius-full);
+    transition: height 0.26s ease;
+  }
+
+  .bar-accent {
+    background: var(--color-primary);
+  }
+
+  .bar-res {
+    background: var(--color-resonance);
+    box-shadow: 0 0 6px var(--color-resonance-glow);
+  }
+</style>
