@@ -176,25 +176,21 @@ const t = useTranslations(lang);
       }
     });
 
-    // Pointer events (works for touch, pen, and mouse)
-    viewport.addEventListener('pointerdown', (e: PointerEvent) => {
-      // Don't drag if clicked on a button or link
-      if ((e.target as HTMLElement).closest('button, a')) return;
-
+    // Touch and Pointer gesture listeners (robust mobile swipe support)
+    function startDrag(clientX: number) {
       isDragging = true;
-      startX = e.clientX;
-      currentX = e.clientX;
+      startX = clientX;
+      currentX = clientX;
       dragOffset = 0;
-      viewport.setPointerCapture(e.pointerId);
       track.style.transition = 'none';
-    });
+    }
 
-    viewport.addEventListener('pointermove', (e: PointerEvent) => {
+    function moveDrag(clientX: number) {
       if (!isDragging) return;
-      currentX = e.clientX;
+      currentX = clientX;
       dragOffset = currentX - startX;
 
-      // Elastic resistance at carousel boundaries
+      // Elastic resistance at boundaries
       if (
         (currentIndex === 0 && (isRtl ? dragOffset < 0 : dragOffset > 0)) ||
         (currentIndex === totalSlides - 1 && (isRtl ? dragOffset > 0 : dragOffset < 0))
@@ -203,16 +199,13 @@ const t = useTranslations(lang);
       }
 
       updateTrackPosition(false);
-    });
+    }
 
-    const handlePointerEnd = (e: PointerEvent) => {
+    function endDrag() {
       if (!isDragging) return;
       isDragging = false;
-      try {
-        viewport.releasePointerCapture(e.pointerId);
-      } catch (err) {}
 
-      const swipeThreshold = 45;
+      const swipeThreshold = 35;
       const effectiveDrag = isRtl ? -dragOffset : dragOffset;
 
       if (effectiveDrag < -swipeThreshold) {
@@ -220,14 +213,55 @@ const t = useTranslations(lang);
       } else if (effectiveDrag > swipeThreshold) {
         prevSlide();
       } else {
-        // Snap back
         dragOffset = 0;
         updateTrackPosition(true);
       }
+    }
+
+    // Pointer events (Desktop & Modern mobile)
+    viewport.addEventListener('pointerdown', (e: PointerEvent) => {
+      if ((e.target as HTMLElement).closest('button, a')) return;
+      startDrag(e.clientX);
+      try {
+        viewport.setPointerCapture(e.pointerId);
+      } catch (err) {}
+    });
+
+    viewport.addEventListener('pointermove', (e: PointerEvent) => {
+      moveDrag(e.clientX);
+    });
+
+    const onPointerUp = (e: PointerEvent) => {
+      try {
+        viewport.releasePointerCapture(e.pointerId);
+      } catch (err) {}
+      endDrag();
     };
 
-    viewport.addEventListener('pointerup', handlePointerEnd);
-    viewport.addEventListener('pointercancel', handlePointerEnd);
+    viewport.addEventListener('pointerup', onPointerUp);
+    viewport.addEventListener('pointercancel', onPointerUp);
+
+    // Native Touch fallback for iOS Safari / Mobile webviews
+    viewport.addEventListener('touchstart', (e: TouchEvent) => {
+      if ((e.target as HTMLElement).closest('button, a')) return;
+      if (e.touches.length === 1) {
+        startDrag(e.touches[0].clientX);
+      }
+    }, { passive: true });
+
+    viewport.addEventListener('touchmove', (e: TouchEvent) => {
+      if (e.touches.length === 1) {
+        moveDrag(e.touches[0].clientX);
+      }
+    }, { passive: true });
+
+    viewport.addEventListener('touchend', () => {
+      endDrag();
+    }, { passive: true });
+
+    viewport.addEventListener('touchcancel', () => {
+      endDrag();
+    }, { passive: true });
 
     // Initial event emission
     emitSpaceChange(0);
