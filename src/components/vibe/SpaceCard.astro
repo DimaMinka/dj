@@ -1,0 +1,365 @@
+---
+import { type SupportedLang, defaultLang, useTranslations } from '../../i18n/ui';
+import type { Space } from '../../data/spaces';
+
+interface Props {
+  space: Space;
+  lang?: SupportedLang;
+}
+
+const { space, lang = defaultLang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<article
+  class="space-card-container"
+  data-space-slug={space.slug}
+  data-space-id={space.id}
+  style={`--card-glow-color: ${space.glowColor}; --card-glow-rgb: ${space.glowRgb};`}
+>
+  <div class="art-book-card">
+    <!-- Dedicated Glass Backdrop Plate with real-time blur -->
+    <div class="card-glass-layer" aria-hidden="true"></div>
+
+    <!-- 4 Ornamental Gold-accent Corner Brackets -->
+    <div class="card-corner corner-tl" aria-hidden="true"></div>
+    <div class="card-corner corner-tr" aria-hidden="true"></div>
+    <div class="card-corner corner-bl" aria-hidden="true"></div>
+    <div class="card-corner corner-br" aria-hidden="true"></div>
+
+    <!-- Staged Content: emerges after blur establishes -->
+    <div class="card-inner-content">
+      <!-- Category Supertitle (e.g. — PRIVATE VILLA ATELIER —) -->
+      <div class="supertitle-row">
+        <span class="supertitle-text">
+          {space.supertitle[lang] || space.supertitle.en}
+        </span>
+      </div>
+
+      <!-- Main Headline with Elegant Serif + Italic Accent -->
+      <h2 class="card-headline">
+        <span class="headline-prefix">{space.headlinePrefix[lang] || space.headlinePrefix.en}</span>
+        <span class="headline-accent">{space.headlineAccent[lang] || space.headlineAccent.en}</span>
+      </h2>
+
+      <!-- Poetic Editorial Subtext: Harmony of landscape & acoustics -->
+      <p class="card-poetry">
+        {space.poetry[lang] || space.poetry.en}
+      </p>
+
+      <!-- Center Setup & Vintage Lighting Pill Button -->
+      <div class="btn-wrap">
+        <button
+          type="button"
+          class="setup-pill-btn group"
+          data-trigger-setup={space.slug}
+          aria-label={`Open technical and lighting setup for ${space.headerBadge}`}
+        >
+          <span class="pill-dot" aria-hidden="true"></span>
+          <span class="pill-text">{t('experienceSetupBtn')}</span>
+          <span class="material-symbols-outlined pill-arrow" aria-hidden="true">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</article>
+
+<script>
+  function initCardTriggers() {
+    const buttons = document.querySelectorAll('[data-trigger-setup]');
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const slug = (btn as HTMLElement).dataset.triggerSetup;
+        window.dispatchEvent(
+          new CustomEvent('dj:open-setup', {
+            detail: { slug },
+          })
+        );
+      });
+    });
+  }
+
+  initCardTriggers();
+</script>
+
+<style>
+  .space-card-container {
+    position: relative;
+    width: 100%;
+    max-width: 350px;
+    margin-inline: auto;
+    padding-block: 0.5rem;
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .art-book-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1.65rem 1.35rem;
+    border-radius: 28px;
+    box-sizing: border-box;
+  }
+
+  /* Dedicated Glass Plate with Real-Time Backdrop Blur */
+  .card-glass-layer {
+    position: absolute;
+    inset: 0;
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    box-shadow: 0 10px 30px -5px rgba(180, 130, 90, 0.16), 
+                0 4px 12px -2px rgba(180, 130, 90, 0.08),
+                0 0 28px rgba(var(--card-glow-rgb), 0.14),
+                inset 0 1px 1px rgba(255, 255, 255, 0.7);
+    opacity: 0;
+    transform: scale(0.98);
+    transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.8s ease, 
+                box-shadow 0.8s ease;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  :global(.carousel-card-slot.is-active) .card-glass-layer {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Night Mode glass styling from Stitch */
+  :global(html[data-theme="night"]) .card-glass-layer,
+  :global(html.dark) .card-glass-layer {
+    background: rgba(22, 18, 16, 0.42);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 12px 35px -5px rgba(0, 0, 0, 0.6), 
+                0 4px 14px -2px rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(var(--card-glow-rgb), 0.2),
+                inset 0 1px 1px rgba(255, 255, 255, 0.12);
+  }
+
+  @media (min-height: 750px) {
+    .art-book-card {
+      padding: 2rem 1.6rem;
+    }
+  }
+
+  /* Staged Appearance: content emerges AFTER glass blur is established */
+  .card-inner-content {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  :global(.carousel-card-slot.is-active) .card-inner-content {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.42s, 
+                transform 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.42s;
+  }
+
+  /* 4 Ornamental Gold-accent Corner Brackets */
+  .card-corner {
+    position: absolute;
+    width: 0.875rem;
+    height: 0.875rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.22s, border-color 0.4s ease;
+  }
+
+  :global(.carousel-card-slot.is-active) .card-corner {
+    opacity: 0.65;
+  }
+
+  .corner-tl {
+    top: 0.75rem;
+    left: 0.75rem;
+    border-top: 1.5px solid var(--card-glow-color);
+    border-left: 1.5px solid var(--card-glow-color);
+  }
+
+  .corner-tr {
+    top: 0.75rem;
+    right: 0.75rem;
+    border-top: 1.5px solid var(--card-glow-color);
+    border-right: 1.5px solid var(--card-glow-color);
+  }
+
+  .corner-bl {
+    bottom: 0.75rem;
+    left: 0.75rem;
+    border-bottom: 1.5px solid var(--card-glow-color);
+    border-left: 1.5px solid var(--card-glow-color);
+  }
+
+  .corner-br {
+    bottom: 0.75rem;
+    right: 0.75rem;
+    border-bottom: 1.5px solid var(--card-glow-color);
+    border-right: 1.5px solid var(--card-glow-color);
+  }
+
+  /* Category Supertitle */
+  .supertitle-row {
+    margin-block-end: 0.65rem;
+  }
+
+  .supertitle-text {
+    font-family: var(--font-display);
+    font-size: 0.65625rem; /* ~10.5px */
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--card-glow-color);
+  }
+
+  /* Main Headline with Serif + Italic Accent */
+  .card-headline {
+    font-family: var(--font-serif-art);
+    font-size: clamp(1.85rem, 6vw, 2.15rem); /* ~31-35px */
+    line-height: 1.18;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    margin: 0;
+    color: #211a16;
+    transition: color 0.4s ease;
+  }
+
+  :global(html[data-theme="night"]) .card-headline,
+  :global(html.dark) .card-headline {
+    color: #f9f5f0;
+  }
+
+  .headline-prefix {
+    display: block;
+  }
+
+  .headline-accent {
+    display: block;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--card-glow-color);
+    filter: drop-shadow(0 0 12px rgba(var(--card-glow-rgb), 0.25));
+  }
+
+  /* Poetic Editorial Subtext */
+  .card-poetry {
+    font-family: var(--font-grotesk);
+    font-size: 0.8125rem; /* ~13px */
+    line-height: 1.6;
+    font-weight: 300;
+    color: #68584f;
+    max-width: 285px;
+    margin: 0.85rem 0 0;
+    transition: color 0.4s ease;
+  }
+
+  :global(html[data-theme="night"]) .card-poetry,
+  :global(html.dark) .card-poetry {
+    color: #c7b9b0;
+  }
+
+  /* Center Setup & Vintage Lighting Pill Button */
+  .btn-wrap {
+    margin-block-start: 1.25rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .setup-pill-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-inline: 1rem;
+    padding-block: 0.55rem;
+    border-radius: var(--radius-full);
+    background: #f6eee5;
+    border: 1px solid #e5d3c0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    cursor: pointer;
+    transition: var(--transition-theme), transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+  }
+
+  :global(html[data-theme="night"]) .setup-pill-btn,
+  :global(html.dark) .setup-pill-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .setup-pill-btn:hover {
+    background: #faefe2;
+    border-color: var(--card-glow-color);
+    transform: translateY(-1px);
+  }
+
+  :global(html[data-theme="night"]) .setup-pill-btn:hover,
+  :global(html.dark) .setup-pill-btn:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: var(--card-glow-color);
+  }
+
+  .setup-pill-btn:active {
+    transform: scale(0.96);
+  }
+
+  .pill-dot {
+    width: 0.4rem;
+    height: 0.4rem;
+    border-radius: var(--radius-full);
+    background: var(--card-glow-color);
+    box-shadow: 0 0 6px var(--card-glow-color);
+    transition: transform 0.2s ease;
+  }
+
+  .setup-pill-btn:hover .pill-dot {
+    transform: scale(1.3);
+  }
+
+  .pill-text {
+    font-family: var(--font-display);
+    font-size: 0.6875rem; /* ~11px */
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: #4c3b31;
+    white-space: nowrap;
+    transition: color 0.3s ease;
+  }
+
+  :global(html[data-theme="night"]) .pill-text,
+  :global(html.dark) .pill-text {
+    color: #eedbce;
+  }
+
+  .pill-arrow {
+    font-size: 0.875rem;
+    color: var(--card-glow-color);
+    transition: transform 0.2s ease;
+  }
+
+  :global([dir="rtl"]) .pill-arrow {
+    transform: rotate(180deg);
+  }
+
+  .setup-pill-btn:hover .pill-arrow {
+    transform: translateX(2px);
+  }
+
+  :global([dir="rtl"]) .setup-pill-btn:hover .pill-arrow {
+    transform: translateX(-2px) rotate(180deg);
+  }
+</style>

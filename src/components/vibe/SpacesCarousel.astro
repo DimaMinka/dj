@@ -1,0 +1,493 @@
+---
+import { defaultLang, type SupportedLang, useTranslations } from '../../i18n/ui';
+import type { Space } from '../../data/spaces';
+import SpaceCard from './SpaceCard.astro';
+
+interface Props {
+  spaces: Space[];
+  initialIndex?: number;
+  lang?: SupportedLang;
+}
+
+const { spaces, initialIndex = 0, lang = defaultLang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<div
+  class="carousel-wrapper"
+  id="spacesCarouselWrapper"
+  data-initial-index={initialIndex}
+>
+  <!-- Desktop Left Navigation Arrow -->
+  <button
+    id="carouselPrevBtn"
+    class="nav-arrow nav-arrow-prev"
+    type="button"
+    aria-label="Previous sound space"
+  >
+    <span class="material-symbols-outlined" aria-hidden="true">chevron_left</span>
+  </button>
+
+  <!-- Central In-Place Stage with Stacked Card Slots -->
+  <div class="carousel-stage" id="carouselStage">
+    {spaces.map((space, index) => (
+      <div
+        class={`carousel-card-slot ${index === initialIndex ? 'is-active' : ''}`}
+        data-slot-index={index}
+        data-slot-slug={space.slug}
+      >
+        <SpaceCard space={space} lang={lang} />
+      </div>
+    ))}
+  </div>
+
+  <!-- Desktop Right Navigation Arrow -->
+  <button
+    id="carouselNextBtn"
+    class="nav-arrow nav-arrow-next"
+    type="button"
+    aria-label="Next sound space"
+  >
+    <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+  </button>
+
+  <!-- Pagination Dots & Mobile Swipe Indicator -->
+  <div class="carousel-pagination" id="carouselPagination">
+    <div class="dots-row" role="tablist" aria-label="Spaces pagination">
+      {spaces.map((space, idx) => (
+        <button
+          type="button"
+          role="tab"
+          class={`pagination-dot ${idx === initialIndex ? 'is-active' : ''}`}
+          data-dot-index={idx}
+          aria-label={`Go to ${space.title[lang] || space.title.en}`}
+          aria-selected={idx === initialIndex ? 'true' : 'false'}
+          style={`--dot-color: ${space.glowColor};`}
+        >
+          <span class="dot-core"></span>
+        </button>
+      ))}
+    </div>
+    <div class="swipe-hint-pill">
+      <span class="material-symbols-outlined swipe-icon" aria-hidden="true">swipe</span>
+      <span class="swipe-hint-text">{t('swipeHint')}</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { spaces } from '../../data/spaces';
+
+  function initSpacesCarousel() {
+    const wrapper = document.getElementById('spacesCarouselWrapper');
+    const stage = document.getElementById('carouselStage');
+    const prevBtn = document.getElementById('carouselPrevBtn');
+    const nextBtn = document.getElementById('carouselNextBtn');
+    const dots = document.querySelectorAll('.pagination-dot');
+    const slots = document.querySelectorAll('.carousel-card-slot');
+    if (!wrapper || !stage || slots.length === 0) return;
+
+    let currentIndex = Number(wrapper.dataset.initialIndex || 0);
+    const totalSlides = spaces.length;
+    const isRtl = document.documentElement.getAttribute('dir') === 'rtl';
+    let isLocked = false;
+
+    function emitSpaceChange(index: number) {
+      const activeSpace = spaces[index];
+      if (!activeSpace) return;
+
+      window.dispatchEvent(
+        new CustomEvent('dj:space-change', {
+          detail: {
+            index,
+            slug: activeSpace.slug,
+            glowColor: activeSpace.glowColor,
+            glowRgb: activeSpace.glowRgb,
+            title: activeSpace.title,
+            bpm: activeSpace.bpm,
+            frequency: activeSpace.frequency,
+            setup: activeSpace.setup,
+          },
+        })
+      );
+    }
+
+    function goToIndex(targetIndex: number, updateUrl = true) {
+      if (isLocked) return;
+      if (targetIndex < 0) targetIndex = totalSlides - 1;
+      if (targetIndex >= totalSlides) targetIndex = 0;
+      if (targetIndex === currentIndex) return;
+
+      // Lock all interactions strictly during the multi-phase transition
+      isLocked = true;
+      wrapper.classList.add('is-animating');
+
+      const currentSlot = slots[currentIndex];
+      const targetSlot = slots[targetIndex];
+      const targetSpace = spaces[targetIndex];
+
+      // Notify atmosphere to lighten vignettes for artwork reveal
+      window.dispatchEvent(
+        new CustomEvent('dj:space-transitioning', { detail: { active: true } })
+      );
+
+      // Phase 1 (0ms): Central card AND active background dissolve simultaneously into deep canvas
+      if (currentSlot) {
+        currentSlot.classList.remove('is-active');
+        currentSlot.classList.add('is-fading-out');
+      }
+
+      window.dispatchEvent(
+        new CustomEvent('dj:space-bg-fadeout', {
+          detail: { oldIndex: currentIndex, newIndex: targetIndex },
+        })
+      );
+
+      // Phase 2 (480ms): Old background dissolved at 280ms, card finishes at 480ms.
+      // Reveal new vibe background & aura glow + Update URL & Telemetry
+      setTimeout(() => {
+          if (currentSlot) {
+            currentSlot.classList.remove('is-fading-out');
+          }
+
+          // Update URL in browser without full reload
+          if (updateUrl && window.history && window.history.replaceState) {
+            window.history.replaceState(null, '', `/vibes/${targetSpace.slug}`);
+          }
+
+          // Update page title
+          document.title = `DJ Dima Minka — ${targetSpace.title.en} (Vibe Space)`;
+
+          // Update pagination dots
+          dots.forEach((dot, idx) => {
+            const isActive = idx === targetIndex;
+            dot.classList.toggle('is-active', isActive);
+            dot.setAttribute('aria-selected', isActive ? 'true' : 'false');
+          });
+
+          // Notify components of active space
+          emitSpaceChange(targetIndex);
+
+          // Phase 4 (1750ms total - ~900ms pause on pure artwork background):
+          // Gentle manifestation of new card AND pagination together
+          setTimeout(() => {
+            // Signal atmosphere to bring back subtle vignette synchronized with the card
+            window.dispatchEvent(
+              new CustomEvent('dj:space-transitioning', { detail: { active: false } })
+            );
+
+            wrapper.classList.add('is-revealing-card');
+
+            if (targetSlot) {
+              targetSlot.classList.add('is-active');
+            }
+
+            // Phase 5 (2800ms): Complete transition & unlock gestures
+            setTimeout(() => {
+              currentIndex = targetIndex;
+              isLocked = false;
+              wrapper.classList.remove('is-animating', 'is-revealing-card');
+            }, 1050);
+          }, 900);
+        }, 480);
+      }
+
+    function nextSlide() {
+      goToIndex(currentIndex + 1);
+    }
+
+    function prevSlide() {
+      goToIndex(currentIndex - 1);
+    }
+
+    // Dot navigation
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const idx = Number((dot as HTMLElement).dataset.dotIndex);
+        if (!isNaN(idx)) goToIndex(idx);
+      });
+    });
+
+    // Arrow navigation
+    prevBtn?.addEventListener('click', isRtl ? nextSlide : prevSlide);
+    nextBtn?.addEventListener('click', isRtl ? prevSlide : nextSlide);
+
+    // Keyboard navigation
+    window.addEventListener('keydown', (e) => {
+      if (isLocked) return;
+      if (e.key === 'ArrowRight') {
+        isRtl ? prevSlide() : nextSlide();
+      } else if (e.key === 'ArrowLeft') {
+        isRtl ? nextSlide() : prevSlide();
+      }
+    });
+
+    // Browser popstate support (Back / Forward navigation)
+    window.addEventListener('popstate', () => {
+      const match = window.location.pathname.match(/\/vibes\/([a-z0-9_-]+)/);
+      if (match) {
+        const slug = match[1];
+        const foundIdx = spaces.findIndex((s) => s.slug === slug);
+        if (foundIdx !== -1 && foundIdx !== currentIndex) {
+          goToIndex(foundIdx, false);
+        }
+      }
+    });
+
+    // Swipe Intent Detection (Strict trigger, no physical card dragging!)
+    let startX = 0;
+    let startY = 0;
+    let isTracking = false;
+
+    function onTouchStart(clientX: number, clientY: number) {
+      if (isLocked) return;
+      startX = clientX;
+      startY = clientY;
+      isTracking = true;
+    }
+
+    function onTouchEnd(clientX: number, clientY: number) {
+      if (!isTracking || isLocked) return;
+      isTracking = false;
+      const deltaX = clientX - startX;
+      const deltaY = clientY - startY;
+
+      // Check if primarily horizontal swipe with threshold of 35px
+      if (Math.abs(deltaX) > 35 && Math.abs(deltaX) > Math.abs(deltaY)) {
+        if (deltaX < 0) {
+          isRtl ? prevSlide() : nextSlide();
+        } else {
+          isRtl ? nextSlide() : prevSlide();
+        }
+      }
+    }
+
+    // Pointer Events
+    stage.addEventListener('pointerdown', (e: PointerEvent) => {
+      if ((e.target as HTMLElement).closest('button, a')) return;
+      onTouchStart(e.clientX, e.clientY);
+    });
+
+    stage.addEventListener('pointerup', (e: PointerEvent) => {
+      onTouchEnd(e.clientX, e.clientY);
+    });
+
+    stage.addEventListener('pointercancel', () => {
+      isTracking = false;
+    });
+
+    // Touch fallback for mobile Safari
+    stage.addEventListener('touchstart', (e: TouchEvent) => {
+      if ((e.target as HTMLElement).closest('button, a')) return;
+      if (e.touches.length === 1) {
+        onTouchStart(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: true });
+
+    stage.addEventListener('touchend', (e: TouchEvent) => {
+      if (e.changedTouches.length === 1) {
+        onTouchEnd(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
+      }
+    }, { passive: true });
+
+    // Initial event emission for initialIndex
+    emitSpaceChange(currentIndex);
+  }
+
+  initSpacesCarousel();
+</script>
+
+<style>
+  .carousel-wrapper {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-block: auto;
+    box-sizing: border-box;
+    padding-inline: 1rem;
+  }
+
+  /* Strict interaction lock during transitions */
+  .carousel-wrapper.is-animating {
+    pointer-events: none;
+  }
+
+  .carousel-stage {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    width: 100%;
+    max-width: 360px;
+    margin-inline: auto;
+    align-items: center;
+    justify-items: center;
+    touch-action: pan-y;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .carousel-card-slot {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .carousel-card-slot.is-active {
+    pointer-events: auto;
+    visibility: visible;
+  }
+
+  .carousel-card-slot.is-fading-out {
+    opacity: 0;
+    pointer-events: none;
+    visibility: visible;
+    transition: opacity 0.48s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  /* Desktop Navigation Arrows */
+  .nav-arrow {
+    position: absolute;
+    top: 45%;
+    transform: translateY(-50%);
+    z-index: 20;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--radius-full);
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transition: var(--transition-theme), transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  @media (min-width: 768px) {
+    .nav-arrow {
+      display: flex;
+    }
+  }
+
+  .nav-arrow-prev {
+    inset-inline-start: 1rem;
+  }
+
+  .nav-arrow-next {
+    inset-inline-end: 1rem;
+  }
+
+  .nav-arrow:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-50%) scale(1.08);
+  }
+
+  /* Desktop Navigation Arrows transition */
+  .nav-arrow {
+    transition: var(--transition-theme), transform 0.2s ease, border-color 0.2s ease, opacity 0.3s ease;
+  }
+
+  .carousel-wrapper.is-animating .nav-arrow {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .carousel-wrapper.is-revealing-card .nav-arrow {
+    opacity: 1;
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.4s;
+  }
+
+  /* Pagination & Hints: Disappears immediately on swipe, returns with card text */
+  .carousel-pagination {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    margin-block-start: 0.75rem;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+
+  .carousel-wrapper.is-animating .carousel-pagination {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease-out;
+  }
+
+  .carousel-wrapper.is-revealing-card .carousel-pagination {
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.42s;
+  }
+
+  .dots-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .pagination-dot {
+    position: relative;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .dot-core {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-full);
+    background: var(--color-text-subtle);
+    opacity: 0.35;
+    transition: all 0.35s cubic-bezier(0.2, 0.8, 0.4, 1);
+  }
+
+  .pagination-dot.is-active .dot-core {
+    width: 1.5rem;
+    background: var(--dot-color);
+    opacity: 1;
+    box-shadow: 0 0 10px var(--dot-color);
+  }
+
+  .swipe-hint-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.5rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-text-subtle);
+    opacity: 0.6;
+  }
+
+  @media (min-width: 768px) {
+    .swipe-hint-pill {
+      display: none;
+    }
+  }
+
+  .swipe-icon {
+    font-size: 0.8125rem;
+    color: var(--color-primary);
+  }
+</style>

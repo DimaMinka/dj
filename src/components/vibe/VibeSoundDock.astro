@@ -1,0 +1,384 @@
+---
+import { defaultLang, type SupportedLang, useTranslations } from '../../i18n/ui';
+import { spaces } from '../../data/spaces';
+
+interface Props {
+  initialIndex?: number;
+  lang?: SupportedLang;
+}
+
+const { initialIndex = 0, lang = defaultLang } = Astro.props;
+const t = useTranslations(lang);
+const initialSpace = spaces[initialIndex] || spaces[0];
+---
+
+<div class="sound-dock-wrapper" id="soundDockContainer" data-initial-slug={initialSpace.slug}>
+  <!-- Minimalist Live Audio Stream Bar from Stitch -->
+  <div class="audio-stream-card">
+    <div class="stream-telemetry">
+      <button
+        id="dockAudioToggle"
+        class="play-circle-btn"
+        type="button"
+        aria-label="Play or pause atmospheric stream"
+      >
+        <span class="material-symbols-outlined play-icon" id="dockPlayIcon" aria-hidden="true">play_arrow</span>
+      </button>
+
+      <div class="stream-info">
+        <span id="dockTrackTitle" class="stream-title">
+          {initialSpace.trackTitle}
+        </span>
+        <span id="dockTrackSubtitle" class="stream-sub">
+          {initialSpace.trackSubtitle}
+        </span>
+      </div>
+    </div>
+
+    <!-- 6-bar Colorful Audio Visualizer -->
+    <div class="sound-equalizer" id="dockEqualizer" aria-hidden="true">
+      <span class="wave-bar bar-1"></span>
+      <span class="wave-bar bar-2"></span>
+      <span class="wave-bar bar-3"></span>
+      <span class="wave-bar bar-4"></span>
+      <span class="wave-bar bar-5"></span>
+      <span class="wave-bar bar-6"></span>
+    </div>
+  </div>
+
+  <!-- Primary Art-Book Action Link: Navigate to Sets / Booking Experience -->
+  <a
+    id="dockMainCtaBtn"
+    class="cta-location-btn"
+    href="/sets"
+    aria-label="Experience this soundscape in your private location"
+  >
+    <span class="cta-dot" aria-hidden="true"></span>
+    <span class="cta-text">{t('listenVibeBtn')}</span>
+    <span class="material-symbols-outlined cta-arrow" aria-hidden="true">arrow_forward</span>
+  </a>
+</div>
+
+<script>
+  import { spaces } from '../../data/spaces';
+
+  function initSoundDock() {
+    const titleEl = document.getElementById('dockTrackTitle');
+    const subtitleEl = document.getElementById('dockTrackSubtitle');
+    const playBtn = document.getElementById('dockAudioToggle');
+    const playIcon = document.getElementById('dockPlayIcon');
+    const ctaBtn = document.getElementById('dockMainCtaBtn');
+    const eqBars = document.querySelectorAll('.wave-bar');
+
+    const container = document.getElementById('soundDockContainer');
+    let currentSlug = container?.dataset?.initialSlug || 'sunset';
+    let isHarmonicActive = false;
+    let audioCtx: AudioContext | null = null;
+    let osc: OscillatorNode | null = null;
+    let gainNode: GainNode | null = null;
+
+    // Space change updates
+    window.addEventListener('dj:space-change', ((e: CustomEvent) => {
+      const { index, slug } = e.detail || {};
+      if (typeof index === 'number' && spaces[index]) {
+        const space = spaces[index];
+        currentSlug = space.slug;
+        if (titleEl) titleEl.textContent = space.trackTitle;
+        if (subtitleEl) subtitleEl.textContent = space.trackSubtitle;
+      }
+    }) as EventListener);
+
+    // Web Audio Harmonic Ambient Synthesizer
+    function toggleAmbientSound() {
+      try {
+        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+        if (!audioCtx) {
+          audioCtx = new AudioContextClass();
+        }
+
+        if (isHarmonicActive) {
+          if (gainNode && audioCtx) {
+            gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.4);
+            setTimeout(() => {
+              osc?.stop();
+              osc?.disconnect();
+              osc = null;
+            }, 400);
+          }
+          isHarmonicActive = false;
+          if (playIcon) playIcon.textContent = 'play_arrow';
+        } else {
+          if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+          }
+
+          osc = audioCtx.createOscillator();
+          gainNode = audioCtx.createGain();
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(432, audioCtx.currentTime);
+
+          gainNode.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.06, audioCtx.currentTime + 0.6);
+
+          osc.connect(gainNode);
+          gainNode.connect(audioCtx.destination);
+
+          osc.start();
+          isHarmonicActive = true;
+          if (playIcon) playIcon.textContent = 'pause';
+        }
+      } catch (e) {
+        console.warn('Dock sound error:', e);
+      }
+    }
+
+    playBtn?.addEventListener('click', toggleAmbientSound);
+
+    // Dynamic wave animation
+    setInterval(() => {
+      eqBars.forEach((bar) => {
+        const h = Math.floor(Math.random() * 16) + 4;
+        (bar as HTMLElement).style.height = `${h}px`;
+      });
+    }, 240);
+  }
+
+  initSoundDock();
+</script>
+
+<style>
+  .sound-dock-wrapper {
+    position: relative;
+    z-index: 20;
+    width: 100%;
+    max-width: 420px;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+    padding-block-end: 0.5rem;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    flex-shrink: 0;
+  }
+
+  .audio-stream-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    border-radius: var(--radius-xl);
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(141, 75, 0, 0.16);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+    box-sizing: border-box;
+    transition: var(--transition-theme);
+  }
+
+  :global(html[data-theme="night"]) .audio-stream-card,
+  :global(html.dark) .audio-stream-card {
+    background: rgba(32, 26, 23, 0.9);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+  }
+
+  .stream-telemetry {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .play-circle-btn {
+    width: 2.65rem;
+    height: 2.65rem;
+    flex-shrink: 0;
+    border-radius: var(--radius-full);
+    background: var(--color-primary);
+    border: none;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(217, 119, 6, 0.35);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+  }
+
+  .play-circle-btn:hover {
+    transform: scale(1.05);
+    background: #c96c05;
+  }
+
+  .play-circle-btn:active {
+    transform: scale(0.94);
+  }
+
+  .play-icon {
+    font-size: 1.4rem;
+    margin-inline-start: 2px;
+    font-variation-settings: 'FILL' 1;
+  }
+
+  .stream-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .stream-title {
+    font-family: var(--font-display);
+    font-size: 0.8125rem; /* ~13px */
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #2a221d;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  :global(html[data-theme="night"]) .stream-title,
+  :global(html.dark) .stream-title {
+    color: #f8f5f2;
+  }
+
+  .stream-sub {
+    font-family: var(--font-body);
+    font-size: 0.65625rem; /* ~10.5px */
+    color: #7d6c62;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-block-start: 0.1rem;
+  }
+
+  :global(html[data-theme="night"]) .stream-sub,
+  :global(html.dark) .stream-sub {
+    color: #b4a499;
+  }
+
+  .sound-equalizer {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 1.35rem;
+    padding-inline: 0.35rem;
+    flex-shrink: 0;
+  }
+
+  .wave-bar {
+    width: 2.5px;
+    height: 6px;
+    border-radius: var(--radius-full);
+    background: var(--color-primary);
+    transition: height 0.24s ease;
+  }
+
+  .bar-2, .bar-4 {
+    background: #f59e0b;
+  }
+
+  .bar-6 {
+    background: #d97706;
+  }
+
+  /* Elegant Art-Book CTA Button Link */
+  .cta-location-btn {
+    width: 100%;
+    padding-block: 0.75rem;
+    padding-inline: 1.25rem;
+    border-radius: var(--radius-full);
+    background: rgba(245, 237, 227, 0.92);
+    border: 1px solid rgba(217, 119, 6, 0.35);
+    color: #3b2c22;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(180, 130, 90, 0.12), 0 0 20px rgba(217, 119, 6, 0.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    box-sizing: border-box;
+    transition: var(--transition-theme), transform 0.2s ease, border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+  }
+
+  :global(html[data-theme="night"]) .cta-location-btn,
+  :global(html.dark) .cta-location-btn {
+    background: rgba(36, 29, 25, 0.88);
+    border-color: rgba(255, 198, 101, 0.3);
+    color: #f7eee4;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 25px rgba(229, 169, 60, 0.12);
+  }
+
+  .cta-location-btn:hover {
+    background: #faefe1;
+    border-color: var(--color-primary);
+    box-shadow: 0 8px 24px rgba(217, 119, 6, 0.22), 0 0 24px rgba(217, 119, 6, 0.18);
+    transform: translateY(-1px);
+  }
+
+  :global(html[data-theme="night"]) .cta-location-btn:hover,
+  :global(html.dark) .cta-location-btn:hover {
+    background: rgba(48, 38, 33, 0.95);
+    border-color: var(--color-primary);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5), 0 0 30px rgba(229, 169, 60, 0.22);
+  }
+
+  .cta-location-btn:active {
+    transform: scale(0.98);
+  }
+
+  .cta-dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: var(--radius-full);
+    background: var(--color-primary);
+    box-shadow: 0 0 8px var(--color-primary);
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  .cta-location-btn:hover .cta-dot {
+    transform: scale(1.25);
+  }
+
+  .cta-text {
+    font-family: var(--font-serif-art);
+    font-size: 1.0625rem; /* ~17px */
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    white-space: nowrap;
+    transition: color 0.2s ease;
+  }
+
+  .cta-arrow {
+    font-size: 1rem;
+    color: var(--color-primary);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  :global([dir="rtl"]) .cta-arrow {
+    transform: rotate(180deg);
+  }
+
+  .cta-location-btn:hover .cta-arrow {
+    transform: translateX(3px);
+  }
+
+  :global([dir="rtl"]) .cta-location-btn:hover .cta-arrow {
+    transform: translateX(-3px) rotate(180deg);
+  }
+</style>

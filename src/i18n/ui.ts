@@ -30,6 +30,22 @@ export const ui = {
     gatewayHoldInstruction: 'Hold to Explore Sets, Light Rig & Booking',
     gatewayHint: 'Headphones recommended • Live audio preview & visual portfolio inside',
     footerMeta: 'SOUND CURATION • BESPOKE 12+ LIGHT RIG • PRIVATE RETREATS & BOUTIQUE EVENTS',
+
+    // Vibe Space / Spaces Carousel
+    vibeTitle: 'SOUND WORLDS',
+    vibeSubtitle: 'Immersive Sonic Spaces',
+    vibeBackToIntro: 'Gateway',
+    swipeHint: 'Swipe to journey through spaces',
+    experienceSetupBtn: 'View Stage & Light Setup',
+    listenVibeBtn: 'Feel the Resonance',
+    setupDrawerTitle: 'Atmospheric Architecture & Rig',
+    setupDrawerSubtitle: 'Site-specific acoustics and wireless light choreography',
+    setupLights: 'Lighting Rig',
+    setupSound: 'Acoustic Curation',
+    setupAudience: 'Ideal Setting & Scale',
+    setupCloseBtn: 'Close Specification',
+    dockPlaying: 'Resonating Live',
+    dockBpm: 'BPM',
   },
   ru: {
     artistName: 'DJ DIMA MINKA',
@@ -49,6 +65,22 @@ export const ui = {
     gatewayHoldInstruction: 'Удерживайте для перехода к сетам, свету и букингу',
     gatewayHint: 'Рекомендуется в наушниках • Внутри аудио-превью и портфолио сетапов',
     footerMeta: 'КУРАТОРСТВО ЗВУКА • 12+ СВЕТОВЫХ ПРИБОРОВ • ЗАКРЫТЫЕ МЕРОПРИЯТИЯ И ВИЛЛЫ',
+
+    // Vibe Space / Spaces Carousel
+    vibeTitle: 'МИРЫ ЗВУКА',
+    vibeSubtitle: 'Иммерсивные пространства вайба',
+    vibeBackToIntro: 'К Вратам',
+    swipeHint: 'Свайпайте для перехода между мирами',
+    experienceSetupBtn: 'Сетап и световая инсталляция',
+    listenVibeBtn: 'Ощутить резонанс',
+    setupDrawerTitle: 'Архитектура света и звука',
+    setupDrawerSubtitle: 'Сайт-специфичная акустика и беспроводная хореография света',
+    setupLights: 'Световой сетап',
+    setupSound: 'Кураторство звука',
+    setupAudience: 'Локация и масштаб',
+    setupCloseBtn: 'Закрыть спецификацию',
+    dockPlaying: 'В эфире пространства',
+    dockBpm: 'BPM',
   },
   he: {
     artistName: 'DJ DIMA MINKA',
@@ -68,6 +100,22 @@ export const ui = {
     gatewayHoldInstruction: 'החזק כדי לגלות סטים, תאורה והזמנות',
     gatewayHint: 'מומלץ באוזניות • בפנים הדגמות סאונד ותיק עבודות',
     footerMeta: 'אוצרות סאונד • מערך 12+ גופי תאורה • אירועי יוקרה ונופש פרטי',
+
+    // Vibe Space / Spaces Carousel
+    vibeTitle: 'עולמות סאונד',
+    vibeSubtitle: 'מרחבי תהודה אימרסיביים',
+    vibeBackToIntro: 'לשער',
+    swipeHint: 'החלק למעבר בין מרחבים',
+    experienceSetupBtn: 'מערך במה ותאורה',
+    listenVibeBtn: 'להרגיש את התהודה',
+    setupDrawerTitle: 'אדריכלות סאונד ותאורה',
+    setupDrawerSubtitle: 'אקוסטיקה מותאמת אישית וכוריאוגרפיית אור אלחוטית',
+    setupLights: 'מערך תאורה',
+    setupSound: 'אוצרות סאונד',
+    setupAudience: 'סביבה וקנה מידה',
+    setupCloseBtn: 'סגור מפרט',
+    dockPlaying: 'מתנגן במרחב',
+    dockBpm: 'BPM',
   },
 } as const;
 

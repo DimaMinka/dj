@@ -29,19 +29,29 @@
 dj/
 ├── src/
 │   ├── components/
-│   │   └── intro/
-│   │       ├── AtmosphereBackground.astro   # Crossfading Day/Night canvas & ambient dust
-│   │       ├── IntroHeader.astro            # Vector DM logo, telemetry, theme toggle
-│   │       ├── SonicPortal.astro            # 432 Hz pulsating portal & ambient wave
-│   │       └── GatewayTrigger.astro         # 800ms tactile hold-to-enter ritual + audio unlock
+│   │   ├── intro/
+│   │   │   ├── AtmosphereBackground.astro   # Crossfading Day/Night canvas & ambient dust
+│   │   │   ├── IntroHeader.astro            # Vector DM logo, telemetry, theme toggle
+│   │   │   ├── SonicPortal.astro            # 432 Hz pulsating portal & ambient wave
+│   │   │   └── GatewayTrigger.astro         # 800ms tactile hold-to-enter ritual + transition to /vibe
+│   │   └── vibe/
+│   │       ├── VibeAtmosphere.astro         # Dynamic chromatic glow & watercolor crossfade
+│   │       ├── VibeHeader.astro             # Return navigation, monogram & 01/05 counter
+│   │       ├── SpacesCarousel.astro         # 60fps swipe-able carousel (pointer & touch gestures)
+│   │       ├── SpaceCard.astro              # Art-book card layout with poetry and specs
+│   │       ├── VibeSoundDock.astro          # Floating micro-player with 432 Hz Solfeggio synth
+│   │       └── VibeSetupDrawer.astro        # Bottom-sheet modal rider for light & acoustics
+│   ├── data/
+│   │   └── spaces.ts                        # Data model & riders for 5 Sound Worlds
 │   ├── i18n/
 │   │   └── ui.ts                            # UI dictionaries (en, ru, he) & helper
 │   ├── layouts/
 │   │   └── Layout.astro                     # Base HTML, fonts (Syne/Manrope/Mono/Heebo), Zero-FOUC
 │   ├── styles/
-│   │   └── tokens.css                       # Design tokens, themes & animations
+│   │   └── tokens.css                       # Design tokens, themes & page transitions
 │   └── pages/
-│       └── index.astro                      # Intro Gateway page entrypoint
+│       ├── index.astro                      # Intro Gateway page entrypoint
+│       └── vibe.astro                       # Sound Worlds (Vibe Space) entrypoint
 ├── astro.config.mjs                         # Cloudflare adapter & site config
 ├── wrangler.jsonc                           # Cloudflare Workers configuration
 └── AGENTS.md                                # Local agent development workflow rules
@@ -69,8 +79,8 @@ Follow guidelines from [AGENTS.md](./AGENTS.md):
 ---
 
 ## 🗺️ Next Steps Roadmap
-1. [x] **Phase 1: Intro Gateway Screen** (`feature/intro-screen`) — Complete with Day/Night resonance, 432 Hz ritual and mobile adaptations.
-2. [ ] **Phase 2: Showcase & Tape Player Screen** — Expanded hero with live mix audio player, waveform scrubbing, tracklist metadata.
-3. [ ] **Phase 3: Curatorial Spaces & Locations** — Villa Sunset, Botanical Garden, Desert Dunes, Nordic Peaks.
-4. [ ] **Phase 4: Setups & Technical Rider** — Grand Immersive, Standard Botanical, Chamber Sound setups & custom 12+ wireless light rig.
-5. [ ] **Phase 5: Booking & Contact Ritual** — Direct booking inquiry for private retreats and boutique events.
+1. [x] **Phase 1: Intro Gateway Screen** (`feature/intro-screen` -> `main`) — Complete with Day/Night resonance, 432 Hz ritual, and mobile adaptations.
+2. [x] **Phase 2: Sound Worlds / Vibe Space** (`feature/vibe-space`) — Complete 5-space horizontal swipe carousel (Sunset Villa, Garden Sanctuary, Twilight Vineyard, Desert Nomad, Nordic Peaks), dynamic glow transitions, Web Audio ambient synth dock, and slide-up lighting/audio setup rider.
+3. [ ] **Phase 3: Curatorial Tape & Mix Showcase** — Full mix streaming audio player, waveform scrubbing, tracklist cues, and tape aesthetics.
+4. [ ] **Phase 4: Lighting & Equipment Atelier** — Interactive 3D/photographic gallery of 12+ wireless light fixtures (2200K blinders, moving heads, fire pods).
+5. [ ] **Phase 5: Booking & Inquiry Portal** — Direct booking experience for private retreats, boutique festivals, and villa residencies.
