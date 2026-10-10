@@ -163,7 +163,7 @@ const initialSpace = spaces[0];
   }
 
   .theme-toggle {
-    display: inline-flex;
+    display: none;
     align-items: center;
     gap: 0.4rem;
     padding-inline: 0.75rem;
@@ -177,6 +177,12 @@ const initialSpace = spaces[0];
     color: var(--color-text-main);
     cursor: pointer;
     transition: var(--transition-theme), transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  @media (min-width: 640px) {
+    .theme-toggle {
+      display: inline-flex;
+    }
   }
 
   .theme-toggle:hover {
