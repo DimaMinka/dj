@@ -29,7 +29,7 @@ export interface Space {
 }
 
 export const spaces: Space[] = [
-  // 1. Botanical Sound Atelier (Aegean Terraces) - First in list!
+  // 1. Botanical Sound Atelier (Aegean Terraces) - Olive / Aegean Bronze
   {
     id: 1,
     slug: 'aegean',
@@ -65,8 +65,8 @@ export const spaces: Space[] = [
     bpm: 120,
     frequency: 432,
     keySignature: 'G major',
-    glowColor: '#eab308',
-    glowRgb: '234, 179, 8',
+    glowColor: '#65a30d',
+    glowRgb: '101, 163, 13',
     bgWatercolor: '/assets/spaces/aegean-bg.jpg',
     setup: {
       id: 'setup-aegean',
@@ -90,7 +90,7 @@ export const spaces: Space[] = [
     },
   },
 
-  // 2. Twilight Vineyard (Истинный эталон)
+  // 2. Twilight Vineyard (Истинный эталон) - Mystic Violet Twilight
   {
     id: 2,
     slug: 'twilight',
@@ -126,8 +126,8 @@ export const spaces: Space[] = [
     bpm: 123,
     frequency: 432,
     keySignature: 'D minor',
-    glowColor: '#9333ea',
-    glowRgb: '147, 51, 234',
+    glowColor: '#7c3aed',
+    glowRgb: '124, 58, 237',
     bgWatercolor: '/assets/spaces/twilight-bg.jpg',
     setup: {
       id: 'setup-twilight',
@@ -151,7 +151,7 @@ export const spaces: Space[] = [
     },
   },
 
-  // 3. Sunset Villa (Исправленный)
+  // 3. Sunset Villa - Radiant Pure Gold (Золотистый закат)
   {
     id: 3,
     slug: 'sunset',
@@ -187,15 +187,15 @@ export const spaces: Space[] = [
     bpm: 120,
     frequency: 432,
     keySignature: 'A minor',
-    glowColor: '#d97706',
-    glowRgb: '217, 119, 6',
+    glowColor: '#f59e0b',
+    glowRgb: '245, 158, 11',
     bgWatercolor: '/assets/spaces/sunset-bg.jpg',
     setup: {
       id: 'setup-sunset',
       name: {
         en: 'Chamber Sunset Rig',
         ru: 'Теплый аналоговый свет & Сетап',
-        he: 'מערך תאורת רטרו וסאונד אינטימי',
+        he: 'מערך תאורת רטרו וסאונд אינטימי',
       },
       lightsCount: '2200K • WARM RETRO BLINDERS',
       soundType: {
@@ -212,7 +212,7 @@ export const spaces: Space[] = [
     },
   },
 
-  // 4. Sunset Beach Lounge
+  // 4. Sunset Beach Lounge - Aqua Marine / Морская волна
   {
     id: 4,
     slug: 'beach',
@@ -248,8 +248,8 @@ export const spaces: Space[] = [
     bpm: 118,
     frequency: 432,
     keySignature: 'C major',
-    glowColor: '#f97316',
-    glowRgb: '249, 115, 22',
+    glowColor: '#0d9488',
+    glowRgb: '13, 148, 136',
     bgWatercolor: '/assets/spaces/beach-bg.jpg',
     setup: {
       id: 'setup-beach',
@@ -273,7 +273,7 @@ export const spaces: Space[] = [
     },
   },
 
-  // 5. Garden Sanctuary
+  // 5. Garden Sanctuary - Lush Emerald Green
   {
     id: 5,
     slug: 'garden',
@@ -309,8 +309,8 @@ export const spaces: Space[] = [
     bpm: 122,
     frequency: 432,
     keySignature: 'F# minor',
-    glowColor: '#16a34a',
-    glowRgb: '22, 163, 74',
+    glowColor: '#10b981',
+    glowRgb: '16, 185, 129',
     bgWatercolor: '/assets/spaces/garden-bg.jpg',
     setup: {
       id: 'setup-garden',
@@ -334,7 +334,7 @@ export const spaces: Space[] = [
     },
   },
 
-  // 6. Villa Estate (Torches & Soirée)
+  // 6. Villa Estate - Rose Violet Soirée / Розово-фиолетовый
   {
     id: 6,
     slug: 'estate',
@@ -370,8 +370,8 @@ export const spaces: Space[] = [
     bpm: 122,
     frequency: 432,
     keySignature: 'F minor',
-    glowColor: '#b45309',
-    glowRgb: '180, 83, 9',
+    glowColor: '#c026d3',
+    glowRgb: '192, 38, 211',
     bgWatercolor: '/assets/spaces/estate-bg.jpg',
     setup: {
       id: 'setup-estate',
@@ -395,7 +395,7 @@ export const spaces: Space[] = [
     },
   },
 
-  // 7. Desert Nomad
+  // 7. Desert Nomad - Starlight Indigo Blue & Dune Amber / Сине-оранжевое ночное небо
   {
     id: 7,
     slug: 'desert',
@@ -431,8 +431,8 @@ export const spaces: Space[] = [
     bpm: 121,
     frequency: 432,
     keySignature: 'E minor',
-    glowColor: '#ea580c',
-    glowRgb: '234, 88, 12',
+    glowColor: '#0284c7',
+    glowRgb: '2, 132, 199',
     bgWatercolor: '/assets/spaces/desert-bg.jpg',
     setup: {
       id: 'setup-desert',
@@ -456,7 +456,7 @@ export const spaces: Space[] = [
     },
   },
 
-  // 8. Nordic Peaks
+  // 8. Nordic Peaks - Deep Moody Glacier Navy / Темно-синий
   {
     id: 8,
     slug: 'nordic',
@@ -492,8 +492,8 @@ export const spaces: Space[] = [
     bpm: 124,
     frequency: 432,
     keySignature: 'B minor',
-    glowColor: '#0284c7',
-    glowRgb: '2, 132, 199',
+    glowColor: '#1d4ed8',
+    glowRgb: '29, 78, 216',
     bgWatercolor: '/assets/spaces/nordic-bg.jpg',
     setup: {
       id: 'setup-nordic',
