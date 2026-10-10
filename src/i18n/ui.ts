@@ -12,7 +12,7 @@ export const ui = {
   en: {
     // Header
     artistName: 'DJ DIMA MINKA',
-    coordinates: "46°29'N 09°50'E",
+    coordinates: "33°05'N 35°30'E",
     nightResonance: 'Night Resonance',
     dayResonance: 'Day Resonance',
     dayModeBtn: 'Day',
@@ -33,7 +33,7 @@ export const ui = {
   },
   ru: {
     artistName: 'DJ DIMA MINKA',
-    coordinates: "46°29'N 09°50'E",
+    coordinates: "33°05'N 35°30'E",
     nightResonance: 'Ночной резонанс',
     dayResonance: 'Дневной резонанс',
     dayModeBtn: 'День',
@@ -52,7 +52,7 @@ export const ui = {
   },
   he: {
     artistName: 'DJ DIMA MINKA',
-    coordinates: "46°29'N 09°50'E",
+    coordinates: "33°05'N 35°30'E",
     nightResonance: 'תהודת לילה',
     dayResonance: 'תהודת יום',
     dayModeBtn: 'יום',
