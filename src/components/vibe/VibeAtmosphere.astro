@@ -23,12 +23,9 @@ const initialSpace = spaces[initialIndex] || spaces[0];
       data-space-index={idx}
       data-glow-rgb={space.glowRgb}
       data-glow-color={space.glowColor}
-      style={`--layer-glow: ${space.glowColor};`}
+      style={`--layer-glow: ${space.glowColor}; --bg-mobile: url('${space.bgWatercolor}'); --bg-desktop: url('${space.bgWatercolorDesktop || space.bgWatercolor}');`}
     >
-      <div
-        class="space-bg-img"
-        style={`background-image: url('${space.bgWatercolor}');`}
-      ></div>
+      <div class="space-bg-img"></div>
       <div class="space-vignette-night"></div>
       <div class="space-vignette-day"></div>
     </div>
@@ -162,10 +159,18 @@ const initialSpace = spaces[initialIndex] || spaces[0];
   .space-bg-img {
     position: absolute;
     inset: 0;
+    background-image: var(--bg-mobile);
     background-size: cover;
     background-position: center 30%;
     filter: brightness(0.72) contrast(1.1) saturate(0.9);
     transition: filter 1s ease, opacity 1s ease;
+  }
+
+  @media (min-width: 1024px) {
+    .space-bg-img {
+      background-image: var(--bg-desktop);
+      background-position: center 40%;
+    }
   }
 
   :global(html[data-theme="day"]:not(.dark)) .space-bg-img {

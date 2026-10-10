@@ -236,6 +236,25 @@ const t = useTranslations(lang);
       }
     });
 
+    // Desktop Mouse Wheel Horizontal Navigation (Debounced)
+    let lastWheelTime = 0;
+    stage.addEventListener('wheel', (e: WheelEvent) => {
+      if (isLocked) return;
+      // Only respond to dominant horizontal wheel or alt+wheel on desktop
+      const isHorizontalDelta = Math.abs(e.deltaX) > Math.abs(e.deltaY);
+      const now = Date.now();
+      if (now - lastWheelTime < 700) return;
+
+      if (isHorizontalDelta && Math.abs(e.deltaX) > 30) {
+        lastWheelTime = now;
+        if (e.deltaX > 0) {
+          isRtl ? prevSlide() : nextSlide();
+        } else {
+          isRtl ? nextSlide() : prevSlide();
+        }
+      }
+    }, { passive: true });
+
     // Swipe Intent Detection (Strict trigger, no physical card dragging!)
     let startX = 0;
     let startY = 0;
@@ -333,6 +352,18 @@ const t = useTranslations(lang);
     -webkit-user-select: none;
   }
 
+  @media (min-width: 1024px) {
+    .carousel-stage {
+      max-width: 900px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .carousel-stage {
+      max-width: 960px;
+    }
+  }
+
   .carousel-card-slot {
     grid-column: 1 / 2;
     grid-row: 1 / 2;
@@ -359,7 +390,7 @@ const t = useTranslations(lang);
   /* Desktop Navigation Arrows */
   .nav-arrow {
     position: absolute;
-    top: 45%;
+    top: 50%;
     transform: translateY(-50%);
     z-index: 20;
     width: 2.75rem;
@@ -390,6 +421,24 @@ const t = useTranslations(lang);
 
   .nav-arrow-next {
     inset-inline-end: 1rem;
+  }
+
+  @media (min-width: 1120px) {
+    .nav-arrow-prev {
+      inset-inline-start: calc(50% - 490px);
+    }
+    .nav-arrow-next {
+      inset-inline-end: calc(50% - 490px);
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .nav-arrow-prev {
+      inset-inline-start: calc(50% - 530px);
+    }
+    .nav-arrow-next {
+      inset-inline-end: calc(50% - 530px);
+    }
   }
 
   .nav-arrow:hover {

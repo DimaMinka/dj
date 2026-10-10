@@ -27,6 +27,7 @@ export interface Space {
   glowColorDark: string; // Night / Dark mode luminous accent
   glowRgbDark: string;
   bgWatercolor: string;
+  bgWatercolorDesktop?: string;
   setup: SpaceSetup;
 }
 
@@ -72,6 +73,7 @@ export const spaces: Space[] = [
     glowColorDark: '#84cc16',
     glowRgbDark: '132, 204, 22',
     bgWatercolor: '/assets/spaces/aegean-bg.jpg',
+    bgWatercolorDesktop: '/assets/spaces/aegean-bg-desktop.jpg',
     setup: {
       id: 'setup-aegean',
       name: {
@@ -135,6 +137,7 @@ export const spaces: Space[] = [
     glowColorDark: '#a855f7',
     glowRgbDark: '168, 85, 247',
     bgWatercolor: '/assets/spaces/twilight-bg.jpg',
+    bgWatercolorDesktop: '/assets/spaces/twilight-bg-desktop.jpg',
     setup: {
       id: 'setup-twilight',
       name: {
@@ -198,6 +201,7 @@ export const spaces: Space[] = [
     glowColorDark: '#f59e0b',
     glowRgbDark: '245, 158, 11',
     bgWatercolor: '/assets/spaces/sunset-bg.jpg',
+    bgWatercolorDesktop: '/assets/spaces/sunset-bg-desktop.jpg',
     setup: {
       id: 'setup-sunset',
       name: {
@@ -261,6 +265,7 @@ export const spaces: Space[] = [
     glowColorDark: '#14b8a6',
     glowRgbDark: '20, 184, 166',
     bgWatercolor: '/assets/spaces/beach-bg.jpg',
+    bgWatercolorDesktop: '/assets/spaces/beach-bg-desktop.jpg',
     setup: {
       id: 'setup-beach',
       name: {
@@ -324,6 +329,7 @@ export const spaces: Space[] = [
     glowColorDark: '#10b981',
     glowRgbDark: '16, 185, 129',
     bgWatercolor: '/assets/spaces/garden-bg.jpg',
+    bgWatercolorDesktop: '/assets/spaces/garden-bg-desktop.jpg',
     setup: {
       id: 'setup-garden',
       name: {
@@ -387,6 +393,7 @@ export const spaces: Space[] = [
     glowColorDark: '#e879f9',
     glowRgbDark: '232, 121, 249',
     bgWatercolor: '/assets/spaces/estate-bg.jpg',
+    bgWatercolorDesktop: '/assets/spaces/estate-bg-desktop.jpg',
     setup: {
       id: 'setup-estate',
       name: {
@@ -450,6 +457,7 @@ export const spaces: Space[] = [
     glowColorDark: '#fb923c',
     glowRgbDark: '251, 146, 60',
     bgWatercolor: '/assets/spaces/desert-bg.jpg',
+    bgWatercolorDesktop: '/assets/spaces/desert-bg-desktop.jpg',
     setup: {
       id: 'setup-desert',
       name: {
@@ -513,6 +521,7 @@ export const spaces: Space[] = [
     glowColorDark: '#22d3ee',
     glowRgbDark: '34, 211, 238',
     bgWatercolor: '/assets/spaces/nordic-bg.jpg',
+    bgWatercolorDesktop: '/assets/spaces/nordic-bg-desktop.jpg',
     setup: {
       id: 'setup-nordic',
       name: {

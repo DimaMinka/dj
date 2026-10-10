@@ -120,6 +120,7 @@ const initialSpace = spaces[initialIndex] || spaces[0];
           }
           isHarmonicActive = false;
           if (playIcon) playIcon.textContent = 'play_arrow';
+          window.dispatchEvent(new CustomEvent('dj:audio-state-change', { detail: { isPlaying: false } }));
         } else {
           if (audioCtx.state === 'suspended') {
             audioCtx.resume();
@@ -140,6 +141,7 @@ const initialSpace = spaces[initialIndex] || spaces[0];
           osc.start();
           isHarmonicActive = true;
           if (playIcon) playIcon.textContent = 'pause';
+          window.dispatchEvent(new CustomEvent('dj:audio-state-change', { detail: { isPlaying: true } }));
         }
       } catch (e) {
         console.warn('Dock sound error:', e);
@@ -147,6 +149,11 @@ const initialSpace = spaces[initialIndex] || spaces[0];
     }
 
     playBtn?.addEventListener('click', toggleAmbientSound);
+
+    // Global audio toggle event from card player
+    window.addEventListener('dj:toggle-audio', (() => {
+      toggleAmbientSound();
+    }) as EventListener);
 
     // Dynamic wave animation
     setInterval(() => {
@@ -178,6 +185,38 @@ const initialSpace = spaces[initialIndex] || spaces[0];
     flex-shrink: 0;
   }
 
+  @media (min-width: 1024px) {
+    .sound-dock-wrapper {
+      max-width: 480px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-block-end: 0.85rem;
+    }
+
+    /* On desktop (>=1024px), audio stream is now integrated directly inside the card */
+    .audio-stream-card {
+      display: none;
+    }
+
+    .cta-location-btn {
+      width: 100%;
+      max-width: 420px;
+      padding-block: 0.85rem;
+      padding-inline: 1.85rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .sound-dock-wrapper {
+      max-width: 520px;
+    }
+
+    .cta-location-btn {
+      max-width: 440px;
+    }
+  }
+
   :global(html[data-theme="night"]) .sound-dock-wrapper,
   :global(html.dark) .sound-dock-wrapper {
     --player-color: var(--player-color-dark);
@@ -200,6 +239,12 @@ const initialSpace = spaces[initialIndex] || spaces[0];
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
     box-sizing: border-box;
     transition: var(--transition-theme);
+  }
+
+  @media (min-width: 1024px) {
+    .audio-stream-card {
+      display: none !important;
+    }
   }
 
   :global(html[data-theme="night"]) .audio-stream-card,
