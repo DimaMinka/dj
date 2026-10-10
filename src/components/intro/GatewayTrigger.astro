@@ -137,11 +137,19 @@ const t = useTranslations(lang);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.875rem;
+    gap: 0.5rem;
     padding-inline: 1.25rem;
-    padding-block-end: 0.5rem;
+    padding-block-end: 0.25rem;
     width: 100%;
     box-sizing: border-box;
+    flex-shrink: 0;
+  }
+
+  @media (min-height: 750px) {
+    .gateway-container {
+      gap: 0.75rem;
+      padding-block-end: 0.5rem;
+    }
   }
 
   .ritual-button-wrap {
@@ -156,8 +164,8 @@ const t = useTranslations(lang);
   .gateway-btn {
     position: relative;
     width: 100%;
-    padding-block: 1rem;
-    padding-inline: 1.5rem;
+    padding-block: 0.75rem;
+    padding-inline: 1.25rem;
     border-radius: var(--radius-full);
     background: var(--color-surface-glass);
     border: 1px solid var(--color-glass-border);
@@ -173,6 +181,13 @@ const t = useTranslations(lang);
     -webkit-user-select: none;
     touch-action: manipulation;
     transition: var(--transition-theme), transform 0.2s ease, box-shadow 0.4s ease;
+  }
+
+  @media (min-height: 750px) {
+    .gateway-btn {
+      padding-block: 0.95rem;
+      padding-inline: 1.5rem;
+    }
   }
 
   .gateway-btn:hover {
