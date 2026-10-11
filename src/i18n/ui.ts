@@ -12,7 +12,9 @@ export const ui = {
   en: {
     // Header
     artistName: 'DJ DIMA MINKA',
+    artistDescriptor: 'Galilee • Sound & Light Architecture',
     coordinates: "33°05'N 35°30'E",
+    navAbout: 'About',
     nightResonance: 'Night Resonance',
     dayResonance: 'Day Resonance',
     dayModeBtn: 'Day',
@@ -49,7 +51,9 @@ export const ui = {
   },
   ru: {
     artistName: 'DJ DIMA MINKA',
+    artistDescriptor: 'Галилея • Архитектура звука и света',
     coordinates: "33°05'N 35°30'E",
+    navAbout: 'Обо мне',
     nightResonance: 'Ночной резонанс',
     dayResonance: 'Дневной резонанс',
     dayModeBtn: 'День',
@@ -84,7 +88,9 @@ export const ui = {
   },
   he: {
     artistName: 'DJ DIMA MINKA',
+    artistDescriptor: 'הגליל • אדריכלות סאונד ותאורה',
     coordinates: "33°05'N 35°30'E",
+    navAbout: 'אודות',
     nightResonance: 'תהודת לילה',
     dayResonance: 'תהודת יום',
     dayModeBtn: 'יום',
