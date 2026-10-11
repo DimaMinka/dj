@@ -51,17 +51,51 @@ const initialSpace = spaces[initialIndex] || spaces[0];
     </div>
   </div>
 
-  <!-- Primary Art-Book Action Link: Navigate to Sets / Booking Experience -->
-  <a
-    id="dockMainCtaBtn"
-    class="cta-location-btn"
-    href="/sets"
-    aria-label="Experience this soundscape in your private location"
-  >
-    <span class="cta-dot" aria-hidden="true"></span>
-    <span class="cta-text">{t('listenVibeBtn')}</span>
-    <span class="material-symbols-outlined cta-arrow" aria-hidden="true">arrow_forward</span>
-  </a>
+  <!-- Primary Art-Book Action: Stay in the Vibe Inline Form -->
+  <div class="vibe-subscribe-dock" id="vibeSubscribeDock">
+    <!-- Popover email input row (emerges above or within dock) -->
+    <div class="vibe-input-bubble" id="vibeInputBubble" aria-hidden="true">
+      <input
+        type="email"
+        id="vibeEmailInput"
+        class="vibe-email-field"
+        placeholder={t('vibeEmailPlaceholder')}
+        autocomplete="email"
+        inputmode="email"
+        aria-label="Email for staying in the vibe"
+      />
+      <button
+        type="button"
+        id="vibeCloseInputBtn"
+        class="vibe-cancel-btn"
+        aria-label="Close input"
+      >
+        <span class="material-symbols-outlined" aria-hidden="true">close</span>
+      </button>
+    </div>
+
+    <!-- Honeypot trap: hidden via dedicated CSS class, looks like normal form field to bots -->
+    <textarea
+      name="comments"
+      id="vibeFormComments"
+      class="form-field-comments"
+      tabindex="-1"
+      autocomplete="off"
+      aria-hidden="true"
+    ></textarea>
+
+    <!-- Main action button -->
+    <button
+      id="dockMainCtaBtn"
+      class="cta-location-btn"
+      type="button"
+      aria-label={t('stayInVibe')}
+    >
+      <span class="cta-dot" aria-hidden="true"></span>
+      <span class="cta-text" id="dockCtaLabel">{t('stayInVibe')}</span>
+      <span class="material-symbols-outlined cta-arrow" id="dockCtaIcon" aria-hidden="true">arrow_forward</span>
+    </button>
+  </div>
 </div>
 
 <script>
@@ -162,6 +196,128 @@ const initialSpace = spaces[initialIndex] || spaces[0];
         (bar as HTMLElement).style.height = `${h}px`;
       });
     }, 240);
+
+    // --- Inline Stay in the Vibe Form Logic ---
+    const subscribeDock = document.getElementById('vibeSubscribeDock');
+    const inputBubble = document.getElementById('vibeInputBubble');
+    const emailInput = document.getElementById('vibeEmailInput') as HTMLInputElement | null;
+    const commentsInput = document.getElementById('vibeFormComments') as HTMLTextAreaElement | null;
+    const closeInputBtn = document.getElementById('vibeCloseInputBtn');
+    const ctaLabel = document.getElementById('dockCtaLabel');
+    const ctaIcon = document.getElementById('dockCtaIcon');
+
+    let isFormOpen = false;
+    let isSubmitting = false;
+
+    const defaultLabelText = ctaLabel?.textContent || 'Stay in the Vibe';
+
+    function openForm() {
+      if (isFormOpen || isSubmitting) return;
+      isFormOpen = true;
+      subscribeDock?.classList.add('is-open');
+      inputBubble?.setAttribute('aria-hidden', 'false');
+      if (ctaLabel) ctaLabel.textContent = 'Send';
+      if (ctaIcon) ctaIcon.textContent = 'send';
+      ctaBtn?.setAttribute('aria-label', 'Submit email');
+      setTimeout(() => emailInput?.focus(), 120);
+    }
+
+    function closeForm() {
+      if (isSubmitting) return;
+      isFormOpen = false;
+      subscribeDock?.classList.remove('is-open');
+      inputBubble?.setAttribute('aria-hidden', 'true');
+      if (ctaLabel) ctaLabel.textContent = defaultLabelText;
+      if (ctaIcon) ctaIcon.textContent = 'arrow_forward';
+      ctaBtn?.setAttribute('aria-label', defaultLabelText);
+      ctaBtn?.removeAttribute('disabled');
+      if (emailInput) {
+        emailInput.value = '';
+        emailInput.classList.remove('has-error');
+      }
+    }
+
+    async function handleSubscribe() {
+      // Double-click lock guard
+      if (isSubmitting) return;
+
+      if (!isFormOpen) {
+        openForm();
+        return;
+      }
+
+      const rawEmail = emailInput?.value?.trim() || '';
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!rawEmail || !emailRegex.test(rawEmail)) {
+        emailInput?.classList.add('has-error');
+        emailInput?.focus();
+        return;
+      }
+
+      emailInput?.classList.remove('has-error');
+
+      // Lock button to prevent double-click
+      isSubmitting = true;
+      ctaBtn?.setAttribute('disabled', 'true');
+      ctaBtn?.classList.add('is-loading');
+      if (ctaLabel) ctaLabel.textContent = 'Connecting...';
+      if (ctaIcon) ctaIcon.textContent = 'hourglass_top';
+
+      try {
+        // Dynamic import of astro:actions
+        const { actions } = await import('astro:actions');
+        
+        // Pass honeypot comments value
+        const botTrap = commentsInput?.value || '';
+
+        await actions.subscribe({
+          email: rawEmail,
+          source: `vibe-${currentSlug}`,
+          comments: botTrap,
+        });
+
+        // Success state
+        if (ctaLabel) ctaLabel.textContent = 'In the vibe ✨';
+        if (ctaIcon) ctaIcon.textContent = 'done';
+        subscribeDock?.classList.add('is-success');
+
+        // Clean up and close after 2.4s
+        setTimeout(() => {
+          isSubmitting = false;
+          subscribeDock?.classList.remove('is-success', 'is-loading');
+          closeForm();
+        }, 2400);
+
+      } catch (err) {
+        console.error('Subscription error:', err);
+        if (ctaLabel) ctaLabel.textContent = 'Try again';
+        if (ctaIcon) ctaIcon.textContent = 'refresh';
+        isSubmitting = false;
+        ctaBtn?.removeAttribute('disabled');
+        ctaBtn?.classList.remove('is-loading');
+      }
+    }
+
+    ctaBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      handleSubscribe();
+    });
+
+    closeInputBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeForm();
+    });
+
+    emailInput?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleSubscribe();
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        closeForm();
+      }
+    });
   }
 
   initSoundDock();
@@ -356,6 +512,115 @@ const initialSpace = spaces[initialIndex] || spaces[0];
     opacity: 0.9;
   }
 
+  /* Honeypot field - normal-looking class, clipped out of sight, no inline styles */
+  .form-field-comments {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+    opacity: 0;
+    pointer-events: none;
+    z-index: -10;
+  }
+
+  /* Inline Vibe Subscribe Dock */
+  .vibe-subscribe-dock {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Popover Bubble above CTA button */
+  .vibe-input-bubble {
+    position: absolute;
+    bottom: calc(100% + 0.5rem);
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.5rem 0.35rem 0.85rem;
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(var(--player-rgb, 217, 119, 6), 0.35);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 0 20px rgba(var(--player-rgb, 217, 119, 6), 0.15);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px) scale(0.96);
+    transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 10;
+  }
+
+  :global(html[data-theme="night"]) .vibe-input-bubble,
+  :global(html.dark) .vibe-input-bubble {
+    background: rgba(28, 22, 19, 0.94);
+    border-color: rgba(var(--player-rgb, 255, 198, 101), 0.35);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5), 0 0 25px rgba(var(--player-rgb, 229, 169, 60), 0.2);
+  }
+
+  .vibe-subscribe-dock.is-open .vibe-input-bubble {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+  }
+
+  .vibe-email-field {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--color-text-main);
+    padding-block: 0.25rem;
+  }
+
+  .vibe-email-field::placeholder {
+    color: var(--color-text-muted);
+    opacity: 0.7;
+  }
+
+  .vibe-email-field.has-error {
+    color: #ef4444;
+  }
+
+  .vibe-cancel-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: var(--radius-full);
+    border: none;
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+  }
+
+  :global(html[data-theme="night"]) .vibe-cancel-btn,
+  :global(html.dark) .vibe-cancel-btn {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .vibe-cancel-btn:hover {
+    color: var(--color-text-main);
+    background: rgba(0, 0, 0, 0.1);
+  }
+
+  .vibe-cancel-btn span {
+    font-size: 1rem;
+  }
+
   /* Elegant Art-Book CTA Button Link */
   .cta-location-btn {
     width: 100%;
@@ -378,6 +643,13 @@ const initialSpace = spaces[initialIndex] || spaces[0];
     -webkit-user-select: none;
     box-sizing: border-box;
     transition: var(--transition-theme), transform 0.2s ease, border-color 0.4s ease, box-shadow 0.4s ease, background-color 0.25s ease;
+  }
+
+  .cta-location-btn:disabled,
+  .cta-location-btn.is-loading {
+    opacity: 0.75;
+    cursor: not-allowed;
+    pointer-events: none;
   }
 
   :global(html[data-theme="night"]) .cta-location-btn,
