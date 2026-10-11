@@ -274,11 +274,22 @@ const initialSpace = spaces[initialIndex] || spaces[0];
         // Pass honeypot comments value
         const botTrap = commentsInput?.value || '';
 
-        await actions.subscribe({
+        const { data, error } = await actions.subscribe({
           email: rawEmail,
           source: `vibe-${currentSlug}`,
           comments: botTrap,
         });
+
+        if (error) {
+          console.error('Subscription action error:', error);
+          if (ctaLabel) ctaLabel.textContent = 'Try again';
+          if (ctaIcon) ctaIcon.textContent = 'refresh';
+          emailInput?.classList.add('has-error');
+          isSubmitting = false;
+          ctaBtn?.removeAttribute('disabled');
+          ctaBtn?.classList.remove('is-loading');
+          return;
+        }
 
         // Success state
         if (ctaLabel) ctaLabel.textContent = 'In the vibe ✨';
