@@ -1,6 +1,6 @@
 import { defineAction, ActionError } from 'astro:actions';
 import { z } from 'astro:schema';
-import { createMimeMessage } from 'mimetext';
+import { env } from 'cloudflare:workers';
 
 export const server = {
   subscribe: defineAction({
@@ -10,7 +10,7 @@ export const server = {
       // Honeypot field: invisible to humans, filled by bots
       comments: z.string().optional(),
     }),
-    handler: async (input, context) => {
+    handler: async (input) => {
       // Bot protection: if honeypot is filled, silently return success without sending email
       if (input.comments && input.comments.trim().length > 0) {
         console.warn('[subscribe action] Honeypot triggered, silently ignoring bot submission');
@@ -20,8 +20,8 @@ export const server = {
         };
       }
 
-      const runtime = (context.locals as any)?.runtime;
-      const resendApiKey = runtime?.env?.RESEND_API_KEY || (import.meta as any).env?.RESEND_API_KEY || process.env.RESEND_API_KEY;
+      // In Cloudflare Workers modern runtime, env comes from 'cloudflare:workers'
+      const resendApiKey = (env as any)?.RESEND_API_KEY || (process as any)?.env?.RESEND_API_KEY;
 
       const targetRecipient = 'dj@dimaminka.com';
       const senderAddress = 'DJ Dima Minka Site <notifications@dj.dimaminka.com>';
