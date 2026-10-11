@@ -542,7 +542,7 @@ const initialSpace = spaces[initialIndex] || spaces[0];
   /* Frosted Glass Backdrop Plate: emerges around the form to highlight active mode */
   .dock-active-backdrop {
     position: absolute;
-    inset: -0.65rem -0.75rem -0.5rem -0.75rem;
+    inset: -0.5rem -0.65rem -0.5rem -0.65rem;
     border-radius: 26px;
     background: rgba(255, 255, 255, 0.45);
     border: 1px solid rgba(255, 255, 255, 0.65);
@@ -556,29 +556,33 @@ const initialSpace = spaces[initialIndex] || spaces[0];
     transform: scale(0.96);
     transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
                 transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                box-shadow 0.4s ease,
-                border-color 0.4s ease;
+                inset 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                border-radius 0.35s ease,
+                box-shadow 0.4s ease;
     z-index: 1;
   }
 
   :global(html[data-theme="night"]) .dock-active-backdrop,
   :global(html.dark) .dock-active-backdrop {
-    background: rgba(24, 18, 15, 0.65);
+    background: rgba(24, 18, 15, 0.68);
     border-color: rgba(var(--player-rgb, 255, 198, 101), 0.35);
-    box-shadow: 0 14px 40px -4px rgba(0, 0, 0, 0.65),
-                0 0 34px rgba(var(--player-rgb, 229, 169, 60), 0.28),
+    box-shadow: 0 16px 44px -4px rgba(0, 0, 0, 0.65),
+                0 0 36px rgba(var(--player-rgb, 229, 169, 60), 0.28),
                 inset 0 1px 1px rgba(255, 255, 255, 0.12);
   }
 
+  /* When open, extend the backdrop upwards to encapsulate the input field inside the same frosted glass window */
   .vibe-subscribe-dock.is-open .dock-active-backdrop {
     opacity: 1;
     transform: scale(1);
+    inset: -3.6rem -0.75rem -0.5rem -0.75rem;
+    border-radius: 28px;
   }
 
-  /* Popover Bubble above CTA button */
+  /* Popover Bubble above CTA button: integrated inside the frosted glass window */
   .vibe-input-bubble {
     position: absolute;
-    bottom: calc(100% + 0.5rem);
+    bottom: calc(100% + 0.45rem);
     left: 0;
     right: 0;
     display: flex;
@@ -586,23 +590,21 @@ const initialSpace = spaces[initialIndex] || spaces[0];
     gap: 0.4rem;
     padding: 0.35rem 0.5rem 0.35rem 0.85rem;
     border-radius: var(--radius-full);
-    background: rgba(255, 255, 255, 0.94);
-    border: 1px solid rgba(var(--player-rgb, 217, 119, 6), 0.35);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 0 20px rgba(var(--player-rgb, 217, 119, 6), 0.15);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(var(--player-rgb, 217, 119, 6), 0.3);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
     opacity: 0;
     pointer-events: none;
-    transform: translateY(8px) scale(0.96);
+    transform: translateY(6px) scale(0.97);
     transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    z-index: 10;
+    z-index: 5;
   }
 
   :global(html[data-theme="night"]) .vibe-input-bubble,
   :global(html.dark) .vibe-input-bubble {
-    background: rgba(28, 22, 19, 0.94);
+    background: rgba(38, 29, 24, 0.88);
     border-color: rgba(var(--player-rgb, 255, 198, 101), 0.35);
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5), 0 0 25px rgba(var(--player-rgb, 229, 169, 60), 0.2);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
   }
 
   .vibe-subscribe-dock.is-open .vibe-input-bubble {
