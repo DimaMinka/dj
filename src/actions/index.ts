@@ -21,53 +21,51 @@ export const server = {
       }
 
       const runtime = (context.locals as any)?.runtime;
-      const sendEmailBinding = runtime?.env?.SEND_EMAIL;
+      const resendApiKey = runtime?.env?.RESEND_API_KEY || (import.meta as any).env?.RESEND_API_KEY || process.env.RESEND_API_KEY;
 
       const targetRecipient = 'dj@dimaminka.com';
-      const senderAddress = 'notifications@dimaminka.com';
-
-      // If running locally without Cloudflare bindings, mock successfully
-      if (!sendEmailBinding) {
-        console.warn('[subscribe action] SEND_EMAIL binding not available (local dev or missing binding). Mocking notification for:', input.email);
-        return {
-          success: true,
-          mocked: true,
-        };
-      }
+      const senderAddress = 'DJ Dima Minka Site <notifications@dj.dimaminka.com>';
 
       try {
-        const msg = createMimeMessage();
-        msg.setSender({ name: 'DJ Dima Minka Site', addr: senderAddress });
-        msg.setRecipient(targetRecipient);
-        msg.setSubject(`🎧 Новая подписка на сайте: ${input.email}`);
-        msg.addMessage({
-          contentType: 'text/plain',
-          data: `Новый подписчик на сайте dj.dimaminka.com\n\nEmail: ${input.email}\nИсточник: ${input.source}\nДата: ${new Date().toISOString()}`,
-        });
-        msg.addMessage({
-          contentType: 'text/html',
-          data: `
-            <div style="font-family: sans-serif; padding: 20px; line-height: 1.5; color: #111;">
-              <h2 style="color: #b78a48;">🎧 Новая подписка на сайте</h2>
-              <p><strong>Email:</strong> <a href="mailto:${input.email}">${input.email}</a></p>
-              <p><strong>Источник:</strong> ${input.source}</p>
-              <p><strong>Время:</strong> ${new Date().toLocaleString()}</p>
-            </div>
-          `,
-        });
-
-        // Cloudflare send_email requires a raw message object with to, from, and raw stream/string
-        await sendEmailBinding.send({
-          from: senderAddress,
-          to: targetRecipient,
-          raw: msg.asRaw(),
+        const response = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${resendApiKey}`,
+            'Content-Type': 'application/json',
+            'User-Agent': 'curl/8.7.1',
+          },
+          body: JSON.stringify({
+            from: senderAddress,
+            to: [targetRecipient],
+            subject: `🎧 Новая подписка на сайте: ${input.email}`,
+            text: `Новый подписчик на сайте dj.dimaminka.com\n\nEmail: ${input.email}\nИсточник: ${input.source}\nДата: ${new Date().toISOString()}`,
+            html: `
+              <div style="font-family: sans-serif; padding: 24px; max-width: 520px; line-height: 1.6; color: #222; background: #faf8f5; border: 1px solid #ebd8c1; border-radius: 12px;">
+                <h2 style="color: #b78a48; margin-top: 0;">🎧 Новая подписка на сайте</h2>
+                <p style="font-size: 16px;"><strong>Email подписчика:</strong> <a href="mailto:${input.email}" style="color: #b78a48; font-weight: 600;">${input.email}</a></p>
+                <p><strong>Источник / Вайб:</strong> ${input.source}</p>
+                <p style="color: #777; font-size: 13px;">Время: ${new Date().toLocaleString()}</p>
+              </div>
+            `,
+          }),
         });
 
+        if (!response.ok) {
+          const errBody = await response.text();
+          console.error('[subscribe action] Resend API error response:', response.status, errBody);
+          throw new ActionError({
+            code: 'INTERNAL_SERVER_ERROR',
+            message: 'Failed to send notification via Resend.',
+          });
+        }
+
+        const data = await response.json();
         return {
           success: true,
+          id: (data as any)?.id,
         };
       } catch (err: any) {
-        console.error('[subscribe action] Error sending email via Cloudflare Send Email:', err);
+        console.error('[subscribe action] Error sending email via Resend:', err);
         throw new ActionError({
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Failed to send notification email. Please try again later.',
