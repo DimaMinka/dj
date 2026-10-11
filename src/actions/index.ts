@@ -37,14 +37,14 @@ export const server = {
           body: JSON.stringify({
             from: senderAddress,
             to: [targetRecipient],
-            subject: `🎧 New Subscriber on dj.dimaminka.com: ${input.email}`,
-            text: `Новый подписчик на сайте dj.dimaminka.com\n\nEmail: ${input.email}\nИсточник: ${input.source}\nДата: ${new Date().toISOString()}`,
+            subject: `New subscriber on dj.dimaminka.com: ${input.email}`,
+            text: `A new visitor subscribed to stay in the vibe on dj.dimaminka.com\n\nEmail: ${input.email}\nSpace: ${input.source}\nTime: ${new Date().toUTCString()}`,
             html: `
               <div style="font-family: sans-serif; padding: 24px; max-width: 520px; line-height: 1.6; color: #222; background: #faf8f5; border: 1px solid #ebd8c1; border-radius: 12px;">
-                <h2 style="color: #b78a48; margin-top: 0;">🎧 New Subscriber in the Vibe</h2>
-                <p style="font-size: 16px;"><strong>Email:</strong> <a href="mailto:${input.email}" style="color: #b78a48; font-weight: 600;">${input.email}</a></p>
+                <h2 style="color: #b78a48; margin-top: 0;">New Subscriber in the Vibe</h2>
+                <p style="font-size: 16px;"><strong>Email:</strong> ${input.email}</p>
                 <p><strong>Space / Vibe:</strong> ${input.source}</p>
-                <p style="color: #777; font-size: 13px;">Time: ${new Date().toLocaleString()}</p>
+                <p style="color: #777; font-size: 13px;">Time: ${new Date().toUTCString()}</p>
               </div>
             `,
           }),
