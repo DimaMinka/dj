@@ -23,7 +23,7 @@ export const server = {
       // In Cloudflare Workers modern runtime, env comes from 'cloudflare:workers'
       const resendApiKey = (env as any)?.RESEND_API_KEY || (process as any)?.env?.RESEND_API_KEY;
 
-      const targetRecipient = 'dj@dimaminka.com';
+      const targetRecipient = 'dima@minka.mk';
       const senderAddress = 'DJ Dima Minka Site <notifications@dj.dimaminka.com>';
 
       try {
@@ -37,12 +37,13 @@ export const server = {
           body: JSON.stringify({
             from: senderAddress,
             to: [targetRecipient],
-            subject: `New subscriber on dj.dimaminka.com: ${input.email}`,
-            text: `A new visitor subscribed to stay in the vibe on dj.dimaminka.com\n\nEmail: ${input.email}\nSpace: ${input.source}\nTime: ${new Date().toUTCString()}`,
+            reply_to: input.email,
+            subject: `New Subscriber in the Vibe: ${input.email}`,
+            text: `A new visitor subscribed on dj.dimaminka.com\n\nEmail: ${input.email}\nSpace: ${input.source}\nTime: ${new Date().toUTCString()}`,
             html: `
               <div style="font-family: sans-serif; padding: 24px; max-width: 520px; line-height: 1.6; color: #222; background: #faf8f5; border: 1px solid #ebd8c1; border-radius: 12px;">
-                <h2 style="color: #b78a48; margin-top: 0;">New Subscriber in the Vibe</h2>
-                <p style="font-size: 16px;"><strong>Email:</strong> ${input.email}</p>
+                <h2 style="color: #b78a48; margin-top: 0;">🎧 New Subscriber in the Vibe</h2>
+                <p style="font-size: 16px;"><strong>Email:</strong> <a href="mailto:${input.email}" style="color: #b78a48; font-weight: 600;">${input.email}</a></p>
                 <p><strong>Space / Vibe:</strong> ${input.source}</p>
                 <p style="color: #777; font-size: 13px;">Time: ${new Date().toUTCString()}</p>
               </div>
