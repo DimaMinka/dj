@@ -37,15 +37,14 @@ export const server = {
           body: JSON.stringify({
             from: senderAddress,
             to: [targetRecipient],
-            reply_to: input.email,
-            subject: `New Subscriber on dj.dimaminka.com: ${input.email}`,
-            text: `A new visitor subscribed to stay in the vibe on dj.dimaminka.com\n\nSubscriber Email: ${input.email}\nVibe Space: ${input.source}\nTimestamp: ${new Date().toUTCString()}`,
+            subject: `🎧 New Subscriber on dj.dimaminka.com: ${input.email}`,
+            text: `Новый подписчик на сайте dj.dimaminka.com\n\nEmail: ${input.email}\nИсточник: ${input.source}\nДата: ${new Date().toISOString()}`,
             html: `
-              <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 24px; max-width: 520px; color: #222; background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px;">
-                <h2 style="font-size: 18px; font-weight: 600; color: #111; margin-top: 0; margin-bottom: 16px;">New Website Subscriber</h2>
-                <p style="font-size: 15px; margin-bottom: 8px;"><strong>Subscriber:</strong> <a href="mailto:${input.email}" style="color: #2563eb; text-decoration: none;">${input.email}</a></p>
-                <p style="font-size: 15px; margin-bottom: 8px;"><strong>Space / Source:</strong> ${input.source}</p>
-                <p style="font-size: 13px; color: #6b7280; margin-top: 16px; margin-bottom: 0;">Received at: ${new Date().toUTCString()}</p>
+              <div style="font-family: sans-serif; padding: 24px; max-width: 520px; line-height: 1.6; color: #222; background: #faf8f5; border: 1px solid #ebd8c1; border-radius: 12px;">
+                <h2 style="color: #b78a48; margin-top: 0;">🎧 New Subscriber in the Vibe</h2>
+                <p style="font-size: 16px;"><strong>Email:</strong> <a href="mailto:${input.email}" style="color: #b78a48; font-weight: 600;">${input.email}</a></p>
+                <p><strong>Space / Vibe:</strong> ${input.source}</p>
+                <p style="color: #777; font-size: 13px;">Time: ${new Date().toLocaleString()}</p>
               </div>
             `,
           }),
