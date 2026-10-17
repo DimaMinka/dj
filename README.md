@@ -97,13 +97,13 @@ Follow guidelines from [AGENTS.md](./AGENTS.md):
 1. [x] **Phase 1: Intro Gateway Screen** (`feature/intro-screen` -> `main`) — Complete with Day/Night resonance, 432 Hz ritual, and mobile adaptations.
 2. [x] **Phase 2: Sound Worlds / Vibe Space** (`feature/vibe-space`) — Complete 8-space interactive exhibition (Aegean, Twilight, Sunset, Beach, Garden, Estate, Desert, Nordic) with deep links and Solfeggio synth dock.
 3. [x] **Phase 3: About Page & Booking Engine** (`feature/about-page`) — Complete artist manifesto and conversion experience:
-   * **Semantic Manifesto & Sound Philosophy:** 432 Hz natural frequency curation in Upper Galilee & Golan Heights.
-   * **Accurate Wired Sound & Light Specifications:** 12+ IP65 architectural fixtures, discreet perimeter cable routing outside guest paths, 220V power & silent inverter generator sync + collapsible hardware rider.
-   * **Acoustic & Media Proof:** 432 Hz interactive audio card with live equalizer, Web Audio API synthesizer fallback + Ken-Burns setup photo reel.
-   * **Curated Scope Packages:** Sunset & Wine (up to 50), Private Villa & Retreat (up to 100), Custom Production (mountain & remote nature).
+   * **Semantic Manifesto & Sound Philosophy:** Melodic & Organic House curation adapted for Upper Galilee & Golan Heights stone courtyards, terraces, and vineyards.
+   * **Clean Spatial Aesthetics & Hidden Rigging:** 12+ architectural warm fixtures, concealed perimeter cable management outside guest paths, 220V power & silent inverter generator sync + collapsible hardware rider.
+   * **Acoustic & Media Proof:** Live sunset preview card with equalizer + Ken-Burns signature rig photo reel with touch swipe and top-right pagination.
+   * **Curated Event Scopes & Packages:** Sunset & Wine (up to 50), Private Villa & Retreat (up to 100, Guest Favorite), Wild Nature Open-Air (mountain slopes & off-grid).
    * **Visible FAQ Block + Schema.org `@graph`:** Microdata for `EntertainmentBusiness`, `Service`, and `FAQPage`.
-   * **Direct Channels & Express Brief Engine:** WhatsApp deep-link with localized pre-fills, Telegram, Instagram + Astro Action `inquire` brief form sending leads to `dima@minka.mk` via Resend API with multi-layer bot traps (honeypot + submission timing).
-   * **Responsive Floating Action Bar:** Sticky bottom dock with 432 Hz toggle and one-click WhatsApp inquiry.
+   * **Direct Channels & Express Brief Engine:** WhatsApp deep-link with localized pre-fills, Telegram (`@dimaminka`), Instagram (`@dimaminka`) + Astro Action `inquire` brief form sending leads to `dj@dimaminka.com` via Resend API with multi-layer bot traps (honeypot + submission timing).
+   * **Responsive Floating Action Bar:** Sticky bottom dock with live audio preview toggle and one-click WhatsApp inquiry.
 
 ---
 
