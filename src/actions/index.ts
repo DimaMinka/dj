@@ -23,7 +23,7 @@ export const server = {
       // In Cloudflare Workers modern runtime, env comes from 'cloudflare:workers'
       const resendApiKey = (env as any)?.RESEND_API_KEY || (process as any)?.env?.RESEND_API_KEY;
 
-      const targetRecipient = 'dima@minka.mk';
+      const targetRecipient = 'dj@dimaminka.com';
       const senderAddress = 'DJ Dima Minka Site <notifications@dj.dimaminka.com>';
 
       try {
@@ -108,7 +108,7 @@ export const server = {
       }
 
       const resendApiKey = (env as any)?.RESEND_API_KEY || (process as any)?.env?.RESEND_API_KEY;
-      const targetRecipient = 'dima@minka.mk';
+      const targetRecipient = 'dj@dimaminka.com';
       const senderAddress = 'DJ Dima Minka Site <notifications@dj.dimaminka.com>';
 
       const subject = `🎼 New Event Brief: ${input.name} (${input.locationType || 'Private Event'})`;
