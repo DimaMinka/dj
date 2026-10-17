@@ -1,13 +1,13 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import IntroHeader from '../../components/intro/IntroHeader.astro';
-import AtmosphereBackground from '../../components/intro/AtmosphereBackground.astro';
-import AudioPreview from './AudioPreview.astro';
-import VideoReel from './VideoReel.astro';
-import BookingBriefForm from './BookingBriefForm.astro';
-import StickyActionBar from './StickyActionBar.astro';
-import type { SupportedLang } from '../../i18n/ui';
-import { useTranslations, getWhatsAppLink, SITE_CONTACTS } from '../../i18n/ui';
+import Layout from "../../layouts/Layout.astro";
+import IntroHeader from "../../components/intro/IntroHeader.astro";
+import AtmosphereBackground from "../../components/intro/AtmosphereBackground.astro";
+import AudioPreview from "./AudioPreview.astro";
+import VideoReel from "./VideoReel.astro";
+import BookingBriefForm from "./BookingBriefForm.astro";
+import StickyActionBar from "./StickyActionBar.astro";
+import type { SupportedLang } from "../../i18n/ui";
+import { useTranslations, getWhatsAppLink, SITE_CONTACTS } from "../../i18n/ui";
 
 interface Props {
   lang: SupportedLang;
@@ -18,8 +18,9 @@ const t = useTranslations(lang);
 const waLink = getWhatsAppLink(lang);
 
 // SEO Canonical & Hreflang Path calculation
-const canonicalPath = lang === 'en' ? '/about' : `/${lang}/about`;
-const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://dj.dimaminka.com';
+const canonicalPath = lang === "en" ? "/about" : `/${lang}/about`;
+const siteUrl =
+  Astro.site?.toString().replace(/\/$/, "") || "https://dj.dimaminka.com";
 const fullCanonicalUrl = `${siteUrl}${canonicalPath}`;
 
 // Structured Data (Schema.org JSON-LD Graph: EntertainmentBusiness + Service + FAQPage)
@@ -29,82 +30,85 @@ const structuredData = {
     {
       "@type": "EntertainmentBusiness",
       "@id": "https://dj.dimaminka.com/#business",
-      "name": "DJ Dima Minka — Bespoke Sound & Autonomous Light",
-      "url": "https://dj.dimaminka.com",
-      "sameAs": [
+      name: "DJ Dima Minka — Bespoke Sound & Autonomous Light",
+      url: "https://dj.dimaminka.com",
+      sameAs: [
         "https://minka.mk",
         "https://t.me/minkamk",
-        "https://instagram.com/dima.minka"
+        "https://instagram.com/dima.minka",
       ],
-      "email": SITE_CONTACTS.email,
-      "telephone": SITE_CONTACTS.phone,
-      "areaServed": [
-        { "@type": "AdministrativeArea", "name": "Galilee" },
-        { "@type": "AdministrativeArea", "name": "Upper Galilee" },
-        { "@type": "AdministrativeArea", "name": "Golan Heights" },
-        { "@type": "AdministrativeArea", "name": "Northern District, Israel" }
+      email: SITE_CONTACTS.email,
+      telephone: SITE_CONTACTS.phone,
+      areaServed: [
+        { "@type": "AdministrativeArea", name: "Galilee" },
+        { "@type": "AdministrativeArea", name: "Upper Galilee" },
+        { "@type": "AdministrativeArea", name: "Golan Heights" },
+        { "@type": "AdministrativeArea", name: "Northern District, Israel" },
       ],
-      "knowsAbout": [
+      knowsAbout: [
         "Organic House",
         "Melodic Techno",
         "432 Hz Harmonic Master Sound",
         "IP65 Architectural Lighting Rig",
         "Boutique Winery Events",
         "Private Villa Parties",
-        "Sunset Soundscapes"
-      ]
+        "Sunset Soundscapes",
+      ],
     },
     {
       "@type": "Service",
       "@id": "https://dj.dimaminka.com/#service-sound-light",
-      "name": "Bespoke Event Sound & Site-Specific Lighting Installation",
-      "provider": { "@id": "https://dj.dimaminka.com/#business" },
-      "serviceType": "Site-Specific Event Production & DJ Performance",
-      "description": "Turnkey 432 Hz acoustic curation and 12+ architectural IP65 ambient lighting with discreet cable routing for private gatherings, boutique retreats, and winery sessions in Northern Israel."
+      name: "Bespoke Event Sound & Site-Specific Lighting Installation",
+      provider: { "@id": "https://dj.dimaminka.com/#business" },
+      serviceType: "Site-Specific Event Production & DJ Performance",
+      description:
+        "Turnkey 432 Hz acoustic curation and 12+ architectural IP65 ambient lighting with discreet cable routing for private gatherings, boutique retreats, and winery sessions in Northern Israel.",
     },
     {
       "@type": "FAQPage",
       "@id": `${fullCanonicalUrl}#faq`,
-      "mainEntity": [
+      mainEntity: [
         {
           "@type": "Question",
-          "name": t('faq1Q'),
-          "acceptedAnswer": {
+          name: t("faq1Q"),
+          acceptedAnswer: {
             "@type": "Answer",
-            "text": t('faq1A')
-          }
+            text: t("faq1A"),
+          },
         },
         {
           "@type": "Question",
-          "name": t('faq2Q'),
-          "acceptedAnswer": {
+          name: t("faq2Q"),
+          acceptedAnswer: {
             "@type": "Answer",
-            "text": t('faq2A')
-          }
+            text: t("faq2A"),
+          },
         },
         {
           "@type": "Question",
-          "name": t('faq3Q'),
-          "acceptedAnswer": {
+          name: t("faq3Q"),
+          acceptedAnswer: {
             "@type": "Answer",
-            "text": t('faq3A')
-          }
+            text: t("faq3A"),
+          },
         },
         {
           "@type": "Question",
-          "name": t('faq4Q'),
-          "acceptedAnswer": {
+          name: t("faq4Q"),
+          acceptedAnswer: {
             "@type": "Answer",
-            "text": t('faq4A')
-          }
-        }
-      ]
-    }
-  ]
+            text: t("faq4A"),
+          },
+        },
+      ],
+    },
+  ],
 };
 
-const pageTitle = `${t('aboutPageTitle') || 'The Architecture of Frequency'} — DJ Dima Minka`;
-const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific Light Installations for Private Events, Boutique Wineries & Retreats in Galilee & Golan Heights.';
+const pageTitle = `${t("aboutPageTitle") || "The Architecture of Frequency"} — DJ Dima Minka`;
+const pageDescription =
+  t("aboutHeroSubtitle") ||
+  "Bespoke Sound & Site-Specific Light Installations for Private Events, Boutique Wineries & Retreats in Galilee & Golan Heights.";
 ---
 
 <Layout
@@ -113,7 +117,11 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
   lang={lang}
   canonicalPath={canonicalPath}
 >
-  <script type="application/ld+json" set:html={JSON.stringify(structuredData)} slot="head" />
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(structuredData)}
+    slot="head"
+  />
 
   <main class="about-viewport pt-safe pb-safe">
     <AtmosphereBackground />
@@ -125,12 +133,16 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
         <div class="hero-badge-row">
           <span class="geo-badge">
             <span class="pulse-dot" aria-hidden="true"></span>
-            <span>{t('aboutHeroBadgeGeo') || 'GALILEE & GOLAN HEIGHTS'}</span>
+            <span>{t("aboutHeroBadgeGeo") || "GALILEE & GOLAN HEIGHTS"}</span>
           </span>
-          <span class="freq-badge">{t('aboutHeroBadgeFreq') || '432 Hz RESONANCE'}</span>
+          <span class="freq-badge"
+            >{t("aboutHeroBadgeFreq") || "432 Hz RESONANCE"}</span
+          >
         </div>
 
-        <h1 class="about-title">{t('aboutPageTitle') || 'The Architecture of Frequency'}</h1>
+        <h1 class="about-title">
+          {t("aboutPageTitle") || "The Architecture of Frequency"}
+        </h1>
         <p class="about-subtitle">{pageDescription}</p>
 
         <div class="hero-cta-group">
@@ -142,18 +154,24 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
             data-analytics="conversion_whatsapp_click"
             data-placement="hero_cta"
           >
-            <span class="material-symbols-outlined cta-icon" aria-hidden="true">chat</span>
-            <span>{t('aboutCtaWhatsApp') || 'WhatsApp Inquiry'}</span>
+            <span class="material-symbols-outlined cta-icon" aria-hidden="true"
+              >chat</span
+            >
+            <span>{t("aboutCtaWhatsApp") || "WhatsApp Inquiry"}</span>
           </a>
 
           <a href="#specifications" class="cta-btn secondary-cta">
-            <span class="material-symbols-outlined cta-icon" aria-hidden="true">tune</span>
-            <span>{t('aboutCtaSpecs') || 'Sound & Light Rig'}</span>
+            <span class="material-symbols-outlined cta-icon" aria-hidden="true"
+              >tune</span
+            >
+            <span>{t("aboutCtaSpecs") || "Sound & Light Rig"}</span>
           </a>
 
           <a href="#booking-brief" class="cta-btn text-cta">
-            <span class="material-symbols-outlined cta-icon" aria-hidden="true">calendar_today</span>
-            <span>{t('aboutCtaBrief') || 'Send Event Brief'}</span>
+            <span class="material-symbols-outlined cta-icon" aria-hidden="true"
+              >calendar_today</span
+            >
+            <span>{t("aboutCtaBrief") || "Send Event Brief"}</span>
           </a>
         </div>
       </div>
@@ -163,14 +181,18 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
     <section class="about-section manifesto-section" id="philosophy">
       <div class="section-container">
         <div class="section-header">
-          <span class="section-badge">{t('manifestoBadge') || 'PHILOSOPHY & ACOUSTIC VISION'}</span>
-          <h2 class="section-title">{t('manifestoTitle') || 'Sound as Invisible Architecture'}</h2>
+          <span class="section-badge"
+            >{t("manifestoBadge") || "PHILOSOPHY & ACOUSTIC VISION"}</span
+          >
+          <h2 class="section-title">
+            {t("manifestoTitle") || "Sound as Invisible Architecture"}
+          </h2>
         </div>
 
         <div class="manifesto-card">
-          <p class="manifesto-lead">{t('manifestoP1')}</p>
+          <p class="manifesto-lead">{t("manifestoP1")}</p>
           <div class="manifesto-divider" aria-hidden="true"></div>
-          <p class="manifesto-secondary">{t('manifestoP2')}</p>
+          <p class="manifesto-secondary">{t("manifestoP2")}</p>
         </div>
       </div>
     </section>
@@ -181,16 +203,16 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
         <div class="media-proof-grid">
           <div class="proof-col">
             <div class="col-header">
-              <span class="col-tag">ACOUSTIC FREQUENCY</span>
-              <h3 class="col-title">432 Hz Harmonic Immersion</h3>
+              <span class="col-tag">{t("audioPreviewTag") || "CURATED SOUNDSCAPE"}</span>
+              <h2 class="col-title">{t("audioPreviewTitle") || "Sunset Sessions & Melodic Drift"}</h2>
             </div>
             <AudioPreview lang={lang} />
           </div>
 
           <div class="proof-col">
             <div class="col-header">
-              <span class="col-tag">VISUAL ARCHITECTURE</span>
-              <h3 class="col-title">Site-Specific Lighting</h3>
+              <span class="col-tag">{t("visualArchitectureTag") || "VISUAL ARCHITECTURE"}</span>
+              <h2 class="col-title">{t("visualArchitectureTitle") || "Site-Specific Lighting"}</h2>
             </div>
             <VideoReel lang={lang} />
           </div>
@@ -202,9 +224,13 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
     <section class="about-section specs-section" id="specifications">
       <div class="section-container">
         <div class="section-header">
-          <span class="section-badge">{t('specsBadge') || 'TECHNICAL SPECIFICATIONS'}</span>
-          <h2 class="section-title">{t('specsTitle') || 'Engineered Precision & Seamless Aesthetics'}</h2>
-          <p class="section-subtitle">{t('specsSubtitle')}</p>
+          <span class="section-badge"
+            >{t("specsBadge") || "TECHNICAL SPECIFICATIONS"}</span
+          >
+          <h2 class="section-title">
+            {t("specsTitle") || "Engineered Precision & Seamless Aesthetics"}
+          </h2>
+          <p class="section-subtitle">{t("specsSubtitle")}</p>
         </div>
 
         <div class="specs-grid">
@@ -213,20 +239,29 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
             <div class="spec-card-icon" aria-hidden="true">
               <span class="material-symbols-outlined">graphic_eq</span>
             </div>
-            <h3 class="spec-card-title">{t('specSoundTitle')}</h3>
-            <p class="spec-card-desc">{t('specSoundDesc')}</p>
+            <h3 class="spec-card-title">{t("specSoundTitle")}</h3>
+            <p class="spec-card-desc">{t("specSoundDesc")}</p>
             <ul class="spec-card-list">
               <li>
-                <span class="material-symbols-outlined check-icon" aria-hidden="true">check</span>
-                <span>{t('specSoundItem1')}</span>
+                <span
+                  class="material-symbols-outlined check-icon"
+                  aria-hidden="true">check</span
+                >
+                <span>{t("specSoundItem1")}</span>
               </li>
               <li>
-                <span class="material-symbols-outlined check-icon" aria-hidden="true">check</span>
-                <span>{t('specSoundItem2')}</span>
+                <span
+                  class="material-symbols-outlined check-icon"
+                  aria-hidden="true">check</span
+                >
+                <span>{t("specSoundItem2")}</span>
               </li>
               <li>
-                <span class="material-symbols-outlined check-icon" aria-hidden="true">check</span>
-                <span>{t('specSoundItem3')}</span>
+                <span
+                  class="material-symbols-outlined check-icon"
+                  aria-hidden="true">check</span
+                >
+                <span>{t("specSoundItem3")}</span>
               </li>
             </ul>
           </div>
@@ -236,20 +271,29 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
             <div class="spec-card-icon" aria-hidden="true">
               <span class="material-symbols-outlined">wb_incandescent</span>
             </div>
-            <h3 class="spec-card-title">{t('specLightTitle')}</h3>
-            <p class="spec-card-desc">{t('specLightDesc')}</p>
+            <h3 class="spec-card-title">{t("specLightTitle")}</h3>
+            <p class="spec-card-desc">{t("specLightDesc")}</p>
             <ul class="spec-card-list">
               <li>
-                <span class="material-symbols-outlined check-icon" aria-hidden="true">check</span>
-                <span>{t('specLightItem1')}</span>
+                <span
+                  class="material-symbols-outlined check-icon"
+                  aria-hidden="true">check</span
+                >
+                <span>{t("specLightItem1")}</span>
               </li>
               <li>
-                <span class="material-symbols-outlined check-icon" aria-hidden="true">check</span>
-                <span>{t('specLightItem2')}</span>
+                <span
+                  class="material-symbols-outlined check-icon"
+                  aria-hidden="true">check</span
+                >
+                <span>{t("specLightItem2")}</span>
               </li>
               <li>
-                <span class="material-symbols-outlined check-icon" aria-hidden="true">check</span>
-                <span>{t('specLightItem3')}</span>
+                <span
+                  class="material-symbols-outlined check-icon"
+                  aria-hidden="true">check</span
+                >
+                <span>{t("specLightItem3")}</span>
               </li>
             </ul>
           </div>
@@ -258,25 +302,32 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
         <!-- Collapsible Detailed Rider for Producers & Sound Techs -->
         <details class="specs-rider-details">
           <summary class="rider-summary">
-            <span class="rider-summary-text">{t('specsRiderToggle') || 'View Complete Hardware & DJ Rider'}</span>
-            <span class="material-symbols-outlined rider-arrow" aria-hidden="true">expand_more</span>
+            <span class="rider-summary-text"
+              >{
+                t("specsRiderToggle") || "View Complete Hardware & DJ Rider"
+              }</span
+            >
+            <span
+              class="material-symbols-outlined rider-arrow"
+              aria-hidden="true">expand_more</span
+            >
           </summary>
           <div class="rider-content">
             <div class="rider-item">
-              <span class="rider-label">{t('specsRiderConsole')}</span>
-              <span class="rider-val">{t('specsRiderConsoleVal')}</span>
+              <span class="rider-label">{t("specsRiderConsole")}</span>
+              <span class="rider-val">{t("specsRiderConsoleVal")}</span>
             </div>
             <div class="rider-item">
-              <span class="rider-label">{t('specsRiderDmx')}</span>
-              <span class="rider-val">{t('specsRiderDmxVal')}</span>
+              <span class="rider-label">{t("specsRiderDmx")}</span>
+              <span class="rider-val">{t("specsRiderDmxVal")}</span>
             </div>
             <div class="rider-item">
-              <span class="rider-label">{t('specsRiderMoving')}</span>
-              <span class="rider-val">{t('specsRiderMovingVal')}</span>
+              <span class="rider-label">{t("specsRiderMoving")}</span>
+              <span class="rider-val">{t("specsRiderMovingVal")}</span>
             </div>
             <div class="rider-item">
-              <span class="rider-label">{t('specsRiderWash')}</span>
-              <span class="rider-val">{t('specsRiderWashVal')}</span>
+              <span class="rider-label">{t("specsRiderWash")}</span>
+              <span class="rider-val">{t("specsRiderWashVal")}</span>
             </div>
           </div>
         </details>
@@ -287,37 +338,57 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
     <section class="about-section packages-section" id="packages">
       <div class="section-container">
         <div class="section-header">
-          <span class="section-badge">{t('packagesBadge') || 'CURATED FORMATS'}</span>
-          <h2 class="section-title">{t('packagesTitle') || 'Tailored Event Scopes'}</h2>
-          <p class="section-subtitle">{t('packagesSubtitle')}</p>
+          <span class="section-badge"
+            >{t("packagesBadge") || "CURATED FORMATS"}</span
+          >
+          <h2 class="section-title">
+            {t("packagesTitle") || "Tailored Event Scopes"}
+          </h2>
+          <p class="section-subtitle">{t("packagesSubtitle")}</p>
         </div>
 
         <div class="packages-grid">
           <!-- Package 1: Sunset & Wine -->
           <div class="package-card">
             <div class="pkg-top">
-              <span class="pkg-scale">{t('pkg1Scale')}</span>
-              <h3 class="pkg-title">{t('pkg1Title')}</h3>
-              <p class="pkg-desc">{t('pkg1Desc')}</p>
+              <span class="pkg-scale">{t("pkg1Scale")}</span>
+              <h3 class="pkg-title">{t("pkg1Title")}</h3>
+              <p class="pkg-desc">{t("pkg1Desc")}</p>
             </div>
             <ul class="pkg-features">
               <li>
-                <span class="material-symbols-outlined check-icon" aria-hidden="true">done</span>
-                <span>{t('pkg1Feat1')}</span>
+                <span
+                  class="material-symbols-outlined check-icon"
+                  aria-hidden="true">done</span
+                >
+                <span>{t("pkg1Feat1")}</span>
               </li>
               <li>
-                <span class="material-symbols-outlined check-icon" aria-hidden="true">done</span>
-                <span>{t('pkg1Feat2')}</span>
+                <span
+                  class="material-symbols-outlined check-icon"
+                  aria-hidden="true">done</span
+                >
+                <span>{t("pkg1Feat2")}</span>
               </li>
               <li>
-                <span class="material-symbols-outlined check-icon" aria-hidden="true">done</span>
-                <span>{t('pkg1Feat3')}</span>
+                <span
+                  class="material-symbols-outlined check-icon"
+                  aria-hidden="true">done</span
+                >
+                <span>{t("pkg1Feat3")}</span>
               </li>
             </ul>
             <div class="pkg-action">
-              <a href={waLink} class="pkg-btn" target="_blank" rel="noopener noreferrer">
+              <a
+                href={waLink}
+                class="pkg-btn"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <span>Inquire Format</span>
-                <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+                <span class="material-symbols-outlined" aria-hidden="true"
+                  >arrow_forward</span
+                >
               </a>
             </div>
           </div>
@@ -326,28 +397,44 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
           <div class="package-card featured-pkg">
             <div class="pkg-badge-featured">RECOMMENDED PRODUCTION</div>
             <div class="pkg-top">
-              <span class="pkg-scale">{t('pkg2Scale')}</span>
-              <h3 class="pkg-title">{t('pkg2Title')}</h3>
-              <p class="pkg-desc">{t('pkg2Desc')}</p>
+              <span class="pkg-scale">{t("pkg2Scale")}</span>
+              <h3 class="pkg-title">{t("pkg2Title")}</h3>
+              <p class="pkg-desc">{t("pkg2Desc")}</p>
             </div>
             <ul class="pkg-features">
               <li>
-                <span class="material-symbols-outlined check-icon" aria-hidden="true">done</span>
-                <span>{t('pkg2Feat1')}</span>
+                <span
+                  class="material-symbols-outlined check-icon"
+                  aria-hidden="true">done</span
+                >
+                <span>{t("pkg2Feat1")}</span>
               </li>
               <li>
-                <span class="material-symbols-outlined check-icon" aria-hidden="true">done</span>
-                <span>{t('pkg2Feat2')}</span>
+                <span
+                  class="material-symbols-outlined check-icon"
+                  aria-hidden="true">done</span
+                >
+                <span>{t("pkg2Feat2")}</span>
               </li>
               <li>
-                <span class="material-symbols-outlined check-icon" aria-hidden="true">done</span>
-                <span>{t('pkg2Feat3')}</span>
+                <span
+                  class="material-symbols-outlined check-icon"
+                  aria-hidden="true">done</span
+                >
+                <span>{t("pkg2Feat3")}</span>
               </li>
             </ul>
             <div class="pkg-action">
-              <a href={waLink} class="pkg-btn featured-btn" target="_blank" rel="noopener noreferrer">
+              <a
+                href={waLink}
+                class="pkg-btn featured-btn"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <span>Inquire Format</span>
-                <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+                <span class="material-symbols-outlined" aria-hidden="true"
+                  >arrow_forward</span
+                >
               </a>
             </div>
           </div>
@@ -355,28 +442,44 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
           <!-- Package 3: Custom Production -->
           <div class="package-card">
             <div class="pkg-top">
-              <span class="pkg-scale">{t('pkg3Scale')}</span>
-              <h3 class="pkg-title">{t('pkg3Title')}</h3>
-              <p class="pkg-desc">{t('pkg3Desc')}</p>
+              <span class="pkg-scale">{t("pkg3Scale")}</span>
+              <h3 class="pkg-title">{t("pkg3Title")}</h3>
+              <p class="pkg-desc">{t("pkg3Desc")}</p>
             </div>
             <ul class="pkg-features">
               <li>
-                <span class="material-symbols-outlined check-icon" aria-hidden="true">done</span>
-                <span>{t('pkg3Feat1')}</span>
+                <span
+                  class="material-symbols-outlined check-icon"
+                  aria-hidden="true">done</span
+                >
+                <span>{t("pkg3Feat1")}</span>
               </li>
               <li>
-                <span class="material-symbols-outlined check-icon" aria-hidden="true">done</span>
-                <span>{t('pkg3Feat2')}</span>
+                <span
+                  class="material-symbols-outlined check-icon"
+                  aria-hidden="true">done</span
+                >
+                <span>{t("pkg3Feat2")}</span>
               </li>
               <li>
-                <span class="material-symbols-outlined check-icon" aria-hidden="true">done</span>
-                <span>{t('pkg3Feat3')}</span>
+                <span
+                  class="material-symbols-outlined check-icon"
+                  aria-hidden="true">done</span
+                >
+                <span>{t("pkg3Feat3")}</span>
               </li>
             </ul>
             <div class="pkg-action">
-              <a href={waLink} class="pkg-btn" target="_blank" rel="noopener noreferrer">
+              <a
+                href={waLink}
+                class="pkg-btn"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <span>Inquire Format</span>
-                <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+                <span class="material-symbols-outlined" aria-hidden="true"
+                  >arrow_forward</span
+                >
               </a>
             </div>
           </div>
@@ -388,49 +491,65 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
     <section class="about-section faq-section" id="faq">
       <div class="section-container">
         <div class="section-header">
-          <span class="section-badge">{t('faqBadge') || 'PRACTICAL CLARITY'}</span>
-          <h2 class="section-title">{t('faqTitle') || 'Frequently Asked Questions'}</h2>
-          <p class="section-subtitle">{t('faqSubtitle')}</p>
+          <span class="section-badge"
+            >{t("faqBadge") || "PRACTICAL CLARITY"}</span
+          >
+          <h2 class="section-title">
+            {t("faqTitle") || "Frequently Asked Questions"}
+          </h2>
+          <p class="section-subtitle">{t("faqSubtitle")}</p>
         </div>
 
         <div class="faq-list">
           <details class="faq-item" open>
             <summary class="faq-question">
-              <span class="faq-q-text">{t('faq1Q')}</span>
-              <span class="material-symbols-outlined faq-arrow" aria-hidden="true">expand_more</span>
+              <span class="faq-q-text">{t("faq1Q")}</span>
+              <span
+                class="material-symbols-outlined faq-arrow"
+                aria-hidden="true">expand_more</span
+              >
             </summary>
             <div class="faq-answer">
-              <p>{t('faq1A')}</p>
+              <p>{t("faq1A")}</p>
             </div>
           </details>
 
           <details class="faq-item">
             <summary class="faq-question">
-              <span class="faq-q-text">{t('faq2Q')}</span>
-              <span class="material-symbols-outlined faq-arrow" aria-hidden="true">expand_more</span>
+              <span class="faq-q-text">{t("faq2Q")}</span>
+              <span
+                class="material-symbols-outlined faq-arrow"
+                aria-hidden="true">expand_more</span
+              >
             </summary>
             <div class="faq-answer">
-              <p>{t('faq2A')}</p>
+              <p>{t("faq2A")}</p>
             </div>
           </details>
 
           <details class="faq-item">
             <summary class="faq-question">
-              <span class="faq-q-text">{t('faq3Q')}</span>
-              <span class="material-symbols-outlined faq-arrow" aria-hidden="true">expand_more</span>
+              <span class="faq-q-text">{t("faq3Q")}</span>
+              <span
+                class="material-symbols-outlined faq-arrow"
+                aria-hidden="true">expand_more</span
+              >
             </summary>
             <div class="faq-answer">
-              <p>{t('faq3A')}</p>
+              <p>{t("faq3A")}</p>
             </div>
           </details>
 
           <details class="faq-item">
             <summary class="faq-question">
-              <span class="faq-q-text">{t('faq4Q')}</span>
-              <span class="material-symbols-outlined faq-arrow" aria-hidden="true">expand_more</span>
+              <span class="faq-q-text">{t("faq4Q")}</span>
+              <span
+                class="material-symbols-outlined faq-arrow"
+                aria-hidden="true">expand_more</span
+              >
             </summary>
             <div class="faq-answer">
-              <p>{t('faq4A')}</p>
+              <p>{t("faq4A")}</p>
             </div>
           </details>
         </div>
@@ -441,15 +560,21 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
     <section class="about-section booking-section" id="booking-brief">
       <div class="section-container">
         <div class="section-header">
-          <span class="section-badge">{t('bookingBadge') || 'CONNECT & INQUIRE'}</span>
-          <h2 class="section-title">{t('bookingTitle') || 'Reserve a Date or Inquire'}</h2>
-          <p class="section-subtitle">{t('bookingSubtitle')}</p>
+          <span class="section-badge"
+            >{t("bookingBadge") || "CONNECT & INQUIRE"}</span
+          >
+          <h2 class="section-title">
+            {t("bookingTitle") || "Reserve a Date or Inquire"}
+          </h2>
+          <p class="section-subtitle">{t("bookingSubtitle")}</p>
         </div>
 
         <div class="booking-grid">
           <!-- Direct Channels & Social Column -->
           <div class="direct-channels-card">
-            <h3 class="channels-title">{t('contactDirectHeading') || 'Direct Artist Channels'}</h3>
+            <h3 class="channels-title">
+              {t("contactDirectHeading") || "Direct Artist Channels"}
+            </h3>
 
             <div class="channels-list">
               <a
@@ -458,9 +583,13 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
                 rel="noopener noreferrer"
                 class="channel-link whatsapp-channel"
               >
-                <span class="material-symbols-outlined channel-icon" aria-hidden="true">chat</span>
+                <span
+                  class="material-symbols-outlined channel-icon"
+                  aria-hidden="true">chat</span
+                >
                 <div class="channel-info">
-                  <span class="channel-label">{t('contactDirectWhatsApp')}</span>
+                  <span class="channel-label">{t("contactDirectWhatsApp")}</span
+                  >
                   <span class="channel-val">{SITE_CONTACTS.phone}</span>
                 </div>
               </a>
@@ -469,9 +598,12 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
                 href={`mailto:${SITE_CONTACTS.email}`}
                 class="channel-link email-channel"
               >
-                <span class="material-symbols-outlined channel-icon" aria-hidden="true">mail</span>
+                <span
+                  class="material-symbols-outlined channel-icon"
+                  aria-hidden="true">mail</span
+                >
                 <div class="channel-info">
-                  <span class="channel-label">{t('contactDirectEmail')}</span>
+                  <span class="channel-label">{t("contactDirectEmail")}</span>
                   <span class="channel-val">{SITE_CONTACTS.email}</span>
                 </div>
               </a>
@@ -482,9 +614,13 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
                 rel="noopener noreferrer"
                 class="channel-link telegram-channel"
               >
-                <span class="material-symbols-outlined channel-icon" aria-hidden="true">send</span>
+                <span
+                  class="material-symbols-outlined channel-icon"
+                  aria-hidden="true">send</span
+                >
                 <div class="channel-info">
-                  <span class="channel-label">{t('contactDirectTelegram')}</span>
+                  <span class="channel-label">{t("contactDirectTelegram")}</span
+                  >
                   <span class="channel-val">@{SITE_CONTACTS.telegramUser}</span>
                 </div>
               </a>
@@ -495,10 +631,16 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
                 rel="noopener noreferrer"
                 class="channel-link instagram-channel"
               >
-                <span class="material-symbols-outlined channel-icon" aria-hidden="true">photo_camera</span>
+                <span
+                  class="material-symbols-outlined channel-icon"
+                  aria-hidden="true">photo_camera</span
+                >
                 <div class="channel-info">
-                  <span class="channel-label">{t('contactDirectInstagram')}</span>
-                  <span class="channel-val">@{SITE_CONTACTS.instagramUser}</span>
+                  <span class="channel-label"
+                    >{t("contactDirectInstagram")}</span
+                  >
+                  <span class="channel-val">@{SITE_CONTACTS.instagramUser}</span
+                  >
                 </div>
               </a>
             </div>
@@ -599,7 +741,7 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
     font-family: var(--font-display);
     font-size: clamp(1.8rem, 5.5vw, 3.8rem);
     font-weight: 700;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
     color: var(--color-text-main);
     line-height: 1.15;
@@ -641,7 +783,10 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
     padding-inline: 1.5rem;
     padding-block: 0.875rem;
     border-radius: var(--radius-full);
-    transition: var(--transition-theme), transform 0.2s ease, box-shadow 0.2s ease;
+    transition:
+      var(--transition-theme),
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
   }
 
   .primary-cta {
@@ -995,7 +1140,9 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
     justify-content: space-between;
     gap: 1.5rem;
     position: relative;
-    transition: transform 0.3s ease, border-color 0.3s ease;
+    transition:
+      transform 0.3s ease,
+      border-color 0.3s ease;
   }
 
   .package-card:hover {
@@ -1089,7 +1236,10 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
     background: var(--color-surface-glass);
     color: var(--color-text-main);
     border: 1px solid var(--color-glass-border);
-    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      transform 0.2s ease;
   }
 
   .pkg-btn:hover {
@@ -1227,7 +1377,10 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
     background: rgba(var(--color-surface-rgb, 20, 20, 20), 0.4);
     border: 1px solid var(--color-glass-border);
     text-decoration: none;
-    transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+    transition:
+      border-color 0.2s ease,
+      transform 0.2s ease,
+      background 0.2s ease;
   }
 
   .channel-link:hover {
@@ -1281,7 +1434,7 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
   :global([dir="rtl"]) .faq-q-text,
   :global([dir="rtl"]) .channels-title,
   :global([dir="rtl"]) .col-title {
-    font-family: 'Heebo', sans-serif;
+    font-family: "Heebo", sans-serif;
     letter-spacing: 0.02em;
   }
 
@@ -1290,12 +1443,12 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
   :global([dir="rtl"]) .spec-card-desc,
   :global([dir="rtl"]) .pkg-desc,
   :global([dir="rtl"]) .faq-answer {
-    font-family: 'Heebo', sans-serif;
+    font-family: "Heebo", sans-serif;
   }
 
   :global([dir="rtl"]) .cta-btn,
   :global([dir="rtl"]) .pkg-btn {
-    font-family: 'Heebo', sans-serif;
+    font-family: "Heebo", sans-serif;
     letter-spacing: 0.04em;
   }
 </style>

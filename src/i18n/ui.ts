@@ -42,14 +42,14 @@ export const ui = {
     dayResonance: 'Day Resonance',
     dayModeBtn: 'Day',
     nightModeBtn: 'Night',
-    
+
     // Sonic Portal / Hero
     preludeTag: 'Official Artist Experience • Intro',
     heroTitlePrefix: 'ATMOSPHERIC',
     heroTitleAccent: 'SOUND & LIGHT ARCHITECTURE',
     heroManifesto: 'Welcome to the official sanctuary of DJ Dima Minka. Explore bespoke melodic house sets, 12+ custom wireless light installations, and site-specific soundscapes crafted for private villas, vineyards, and mountain retreats.',
     frequencyBadge: '432 Hz',
-    
+
     // Gateway Button
     gatewayTouch: 'ENTER THE EXPERIENCE',
     gatewayHoldInstruction: 'Hold to Explore Sets, Light Rig & Booking',
@@ -79,26 +79,38 @@ export const ui = {
     dockBpm: 'BPM',
 
     // --- About Page Translations ---
-    aboutPageTitle: 'The Architecture of Frequency',
+    aboutPageTitle: 'Sound. Light. Atmosphere.',
     aboutHeroBadgeGeo: 'Galilee & Golan Heights',
     aboutHeroBadgeFreq: '432 Hz Resonance',
-    aboutHeroSubtitle: 'Bespoke Sound & Site-Specific Light Installations for Private Events, Boutique Wineries & Retreats in Galilee & Golan Heights.',
+    aboutHeroSubtitle: 'Curated soundscapes and warm architectural lighting for private evenings, boutique wineries & retreats in Galilee & Golan Heights.',
     aboutCtaWhatsApp: 'WhatsApp Inquiry',
     aboutCtaSpecs: 'Sound & Light Rig',
-    aboutCtaAudio: 'Sample Frequency',
+    aboutCtaAudio: 'Listen to Set',
     aboutCtaBrief: 'Send Event Brief',
+
+    // Media & Soundscape Preview
+    audioPreviewTag: 'LIVE DJ SET',
+    audioPreviewTitle: 'Sunset Sessions & Melodic Drift',
+    audioBadgeTag: 'SUNSET SESSION',
+    audioBadgeBpm: '122 BPM MELODIC',
+    audioTrackTitle: 'Galilee Sunset Resonance',
+    audioTrackSubtitle: 'Organic House • Live recorded for hillside terraces & wine evenings',
+    audioPlayAria: 'Play Sunset & Organic House soundscape preview',
+    visualArchitectureTag: 'LIGHT ARCHITECTURE',
+    visualArchitectureTitle: 'Light Woven into Space',
+    videoReelLiveTag: 'STAGE SETUP',
 
     // Philosophy / Manifesto
     manifestoBadge: 'PHILOSOPHY & ACOUSTIC VISION',
     manifestoTitle: 'Sound as Invisible Architecture',
-    manifestoP1: 'True sound does not overwhelm space — it reveals it. In the open landscapes of Upper Galilee, stone courtyards, and sunset vineyard terraces, acoustics must breathe with nature. My curations are calibrated to 432 Hz natural resonance, crafting an effortless emotional field free of acoustic fatigue.',
-    manifestoP2: 'Together with a carefully choreographed 12+ architectural lighting rig and discreet cable management outside guest pathways, every session transforms into a living, site-specific art installation that transitions organically from daylight warmth into deep night magic.',
+    manifestoP1: 'True sound does not overpower an evening — it becomes part of it. Music for boutique wineries, intimate villas, and northern retreats requires deep sensitivity to context. My approach blends bespoke organic electronic selections, finely tuned acoustics, and warm lighting that merge with the sunset to create an immersive atmosphere where you simply want to stay.',
+    manifestoP2: 'A fleet of more than 10 architectural and dynamic lighting fixtures integrates seamlessly into the natural landscape. No messy cables underfoot — only pure visual magic from golden hour into deep night.',
 
     // Specifications & Rig
     specsBadge: 'TECHNICAL SPECIFICATIONS',
     specsTitle: 'Engineered Precision & Seamless Aesthetics',
     specsSubtitle: 'Designed for immaculate aesthetic beauty with clean, discreet cable management outside guest pathways.',
-    
+
     specSoundTitle: 'Sound Architecture',
     specSoundDesc: '432 Hz harmonic tuning, acoustic pressure modeled for stone halls and open hillsides without harsh frequencies.',
     specSoundItem1: 'Harmonic 432 Hz master calibration',
@@ -209,13 +221,13 @@ export const ui = {
     dayResonance: 'Дневной резонанс',
     dayModeBtn: 'День',
     nightModeBtn: 'Ночь',
-    
+
     preludeTag: 'Официальный сайт артиста • Интро',
     heroTitlePrefix: 'АРХИТЕКТУРА',
     heroTitleAccent: 'ЗВУКА И СВЕТА',
     heroManifesto: 'Добро пожаловать в официальное пространство DJ Dima Minka. Авторские сеты Melodic House & Techno, комплект из 12+ беспроводных световых приборов и сайт-специфичный звук для частных вилл, виноградников и уединённых ретритов.',
     frequencyBadge: '432 Гц',
-    
+
     gatewayTouch: 'ВОЙТИ В ПРОСТРАНСТВО',
     gatewayHoldInstruction: 'Удерживайте для перехода к сетам, свету и букингу',
     gatewayHint: 'Рекомендуется в наушниках • Внутри аудио-превью и портфолио сетапов',
@@ -244,20 +256,32 @@ export const ui = {
     dockBpm: 'BPM',
 
     // --- About Page Translations ---
-    aboutPageTitle: 'Архитектура частоты',
+    aboutPageTitle: 'Звук. Свет. Атмосфера.',
     aboutHeroBadgeGeo: 'Галилея и Голанские высоты',
     aboutHeroBadgeFreq: 'Резонанс 432 Гц',
-    aboutHeroSubtitle: 'Инженерный звук и сайт-специфичный свет для частных событий, виноделен и ретритов в Галилее и на Голанах.',
+    aboutHeroSubtitle: 'Выверенный звук и теплое световое оформление для приватных вечеров, виноделен и ретритов в Галилее и на Голанах.',
     aboutCtaWhatsApp: 'Запрос в WhatsApp',
     aboutCtaSpecs: 'Сетап звука и света',
-    aboutCtaAudio: 'Слушать 432 Гц',
+    aboutCtaAudio: 'Слушать сет',
     aboutCtaBrief: 'Отправить бриф',
+
+    // Media & Soundscape Preview
+    audioPreviewTag: 'ЖИВОЙ DJ-СЕТ',
+    audioPreviewTitle: 'Музыкальная селекция под закат и ландшафт',
+    audioBadgeTag: 'SUNSET SESSION',
+    audioBadgeBpm: '122 BPM MELODIC',
+    audioTrackTitle: 'Galilee Sunset Resonance',
+    audioTrackSubtitle: 'Organic House • Записано вживую для террас и винных вечеров севера',
+    audioPlayAria: 'Слушать превью сета: Sunset & Organic House',
+    visualArchitectureTag: 'АРХИТЕКТУРА СВЕТА',
+    visualArchitectureTitle: 'Свет, вписанный в пространство',
+    videoReelLiveTag: 'СЦЕНИЧЕСКИЙ СЕТАП',
 
     // Philosophy / Manifesto
     manifestoBadge: 'ФИЛОСОФИЯ И АКУСТИЧЕСКОЕ ВИДЕНИЕ',
     manifestoTitle: 'Звук как невидимая архитектура',
-    manifestoP1: 'Настоящий звук не подавляет пространство — он его раскрывает. На холмах Верхней Галилеи, в старинных каменных двориках и на террасах виноделен акустика обязана дышать в гармонии с природой. Мои сеты калибруются в природный строй 432 Гц, создавая глубокое эмоциональное поле без слуховой усталости.',
-    manifestoP2: 'В сочетании с продуманным комплексом из 12+ архитектурных световых приборов и скрытой кабельной коммутацией вне зоны гостей каждое выступление превращается в живую световую инсталляцию, органично переходящую от золотого заката к ночной магии.',
+    manifestoP1: 'Настоящий звук не заглушает вечер, а становится его частью. Музыка для виноделен, камерных вилл и ретритов севера требует чуткости к контексту. Мой подход — это авторская селекция органичной электроники, выверенная акустика и теплый свет, которые соединяются с закатом и создают глубокую атмосферу, в которой хочется раствориться.',
+    manifestoP2: 'Парк из более чем 10 приборов архитектурного и динамического света полностью интегрируется в ландшафт. Никаких проводов под ногами — только чистая визуальная магия от заката до глубокой ночи.',
 
     // Specifications & Rig
     specsBadge: 'ТЕХНИЧЕСКИЕ СПЕЦИФИКАЦИИ',
@@ -374,13 +398,13 @@ export const ui = {
     dayResonance: 'תהודת יום',
     dayModeBtn: 'יום',
     nightModeBtn: 'לילה',
-    
+
     preludeTag: 'האתר הרשמי של האמן • פתיח',
     heroTitlePrefix: 'אדריכלות של',
     heroTitleAccent: 'סאונד ותאורה',
     heroManifesto: 'ברוכים הבאים למרחב הרשמי של דיג׳יי דימה מינקה. סטים ייחודיים של מלודיק האוס, מערך של 12+ גופי תאורה ארכיטקטוניים והתאמה אקוסטית לווילות פרטיות, כרמים ואירועי בוטיק.',
     frequencyBadge: '432 Hz',
-    
+
     gatewayTouch: 'כניסה למרחב',
     gatewayHoldInstruction: 'החזק כדי לגלות סטים, תאורה והזמנות',
     gatewayHint: 'מומלץ באוזניות • בפנים הדגמות סאונד ותיק עבודות',
@@ -409,20 +433,32 @@ export const ui = {
     dockBpm: 'BPM',
 
     // --- About Page Translations ---
-    aboutPageTitle: 'אדריכלות התדר',
+    aboutPageTitle: 'סאונד. תאורה. אווירה.',
     aboutHeroBadgeGeo: 'הגליל ורמת הגולן',
     aboutHeroBadgeFreq: 'תהודה 432 הרץ',
-    aboutHeroSubtitle: 'הגברה ותאורה מותאמת אישית לאירועי בוטיק, יקבים ווילות בגליל וברמת הגולן.',
+    aboutHeroSubtitle: 'סאונד מדויק ותאורה חמה המותאמים אישית לערבים פרטיים, יקבי בוטיק וריטריטים בגליל וברמת הגולן.',
     aboutCtaWhatsApp: 'בירור ב-WhatsApp',
     aboutCtaSpecs: 'מפרט סאונד ותאורה',
-    aboutCtaAudio: 'שמיעת תדר 432',
+    aboutCtaAudio: 'שמיעת סט',
     aboutCtaBrief: 'שליחת בריף',
+
+    // Media & Soundscape Preview
+    audioPreviewTag: 'סט DJ חי',
+    audioPreviewTitle: 'מוזיקה מותאמת לשקיעה ולנוף',
+    audioBadgeTag: 'SUNSET SESSION',
+    audioBadgeBpm: '122 BPM MELODIC',
+    audioTrackTitle: 'Galilee Sunset Resonance',
+    audioTrackSubtitle: 'Organic House • הוקלט חי לטרסות שקיעה וערבי יין בצפון',
+    audioPlayAria: 'שמיעת קטע סאונד: Sunset & Organic House',
+    visualArchitectureTag: 'ארכיטקטורת תאורה',
+    visualArchitectureTitle: 'תאורה שמשתלבת במרחב',
+    videoReelLiveTag: 'הקמת במה',
 
     // Philosophy / Manifesto
     manifestoBadge: 'פילוסופיה וחזון אקוסטי',
     manifestoTitle: 'סאונד כאדריכלות בלתי נראית',
-    manifestoP1: 'סאונד איכותי אינו משתלט על המרחב — הוא חושף אותו. במרחבים הפתוחים של הגליל העליון, בחצרות אבן עתיקות ובטרסות יקבים בשקיעה, האקוסטיקה חייבת לנשום עם הטבע. המוזיקה מכוילת לתדר 432 הרץ ויוצרת שדה רגשי נעים ללא עייפות שמיעה.',
-    manifestoP2: 'בשילוב עם מערך מקצועי של 12+ גופי תאורה ארכיטקטוניים וניתוב כבלים מוסתר ובטיחותי מחוץ למעברי האורחים, כל אירוע הופך למיצב חי המשתנה בטבעיות מאור יום חם אל עומק הלילה.',
+    manifestoP1: 'סאונד איכותי אינו משתלט על הערב — הוא הופך לחלק ממנו. מוזיקה ליקבי בוטיק, וילות אינטימיות וריטריטים בצפון דורשת רגישות עמוקה לקונטקסט. הגישה שלי משלבת בחירה מוזיקלית ייחודית של אלקטרוניקה אורגנית, אקוסטיקה מדויקת ותאורה חמה שמתמזגות עם השקיעה ויוצרות אווירה עמוקה וסוחפת.',
+    manifestoP2: 'מערך של מעל 10 גופי תאורה ארכיטקטוניים ודינמיים משתלב בצורה חלקה בתוואי הנוף הטבעי. ללא כבלים מיותרים במעברי האורחים — רק קסם ויזואלי טהור משעת הזהב ועד עומק הלילה.',
 
     // Specifications & Rig
     specsBadge: 'מפרט טכני והנדסי',

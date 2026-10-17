@@ -11,19 +11,34 @@ const t = useTranslations(lang);
 
 const reelFrames = [
   {
-    src: '/assets/spaces/twilight-setup.jpg',
-    title: lang === 'ru' ? 'Сумеречная архитектура света' : lang === 'he' ? 'ארכיטקטורת תאורה בשעת בין ערביים' : 'Twilight Architectural Rig',
-    caption: lang === 'ru' ? '12+ IP65 приборов • Проводной контур безопасности' : lang === 'he' ? 'מערך 12+ גופי IP65 • ניתוב כבלים היקפי מוסתר' : '12+ IP65 fixtures • Safe perimeter cable routing',
-  },
-  {
-    src: '/assets/spaces/estate-setup.jpg',
-    title: lang === 'ru' ? 'Горное поместье и терраса' : lang === 'he' ? 'אחוזת הרים וטרסה פתוחה' : 'Mountain Estate & Open Terrace',
-    caption: lang === 'ru' ? 'Акустическое моделирование для открытого рельефа' : lang === 'he' ? 'כיול סאונד ייעודי לשטחים פתוחים' : 'Site-specific acoustic modeling for open landscape',
-  },
-  {
     src: '/assets/spaces/sunset-setup.jpg',
-    title: lang === 'ru' ? 'Закат на виноградниках' : lang === 'he' ? 'שקיעה בכרמי הגליל' : 'Vineyard Sunset Session',
-    caption: lang === 'ru' ? 'Плавный световой переход от заката к ночи' : lang === 'he' ? 'מעבר תאורה אורגני משקיעה ללילה' : 'Organic light transition from golden hour to deep night',
+    title: lang === 'ru' ? 'Сумерки на вилле' : lang === 'he' ? 'שעת בין ערביים בווילה' : 'Villa Twilight Ambience',
+    caption: lang === 'ru' ? 'Плавный переход от закатного чилла к ночному настроению' : lang === 'he' ? 'מעבר הדרגתי מרוגע שקיעה לאנרגיית לילה' : 'Seamless progression from sunset chill to late-night energy',
+  },
+  {
+    src: '/assets/spaces/signature-rig-setup.jpg',
+    title: lang === 'ru' ? 'Авторский сетап' : lang === 'he' ? 'עמדת DJ ייחודית' : 'Signature Stage Rig',
+    caption: lang === 'ru' ? 'Тёплое янтарное свечение ретро-сот и чистая геометрия' : lang === 'he' ? 'תאורת חלת דבש ענברית חמה וגאומטריה נקייה' : 'Warm amber vintage honeycomb glow & clean geometry',
+  },
+  {
+    src: '/assets/spaces/day-session-nature.jpg',
+    title: lang === 'ru' ? 'Эстетика дневных сессий' : lang === 'he' ? 'אסתטיקה של סטים ביום' : 'Daylight Sessions Aesthetics',
+    caption: lang === 'ru' ? 'Глубокий Organic House в естественном природном окружении' : lang === 'he' ? 'אורגניק האוס עמוק בחיבור מושלם לטבע' : 'Deep Organic House set against raw natural landscapes',
+  },
+  {
+    src: '/assets/spaces/twilight-setup.jpg',
+    title: lang === 'ru' ? 'Афро-грув на винодельне' : lang === 'he' ? 'אפרו-גרוב ביקב בוטיק' : 'Winery Afro-Groove Session',
+    caption: lang === 'ru' ? 'Плотный закатный ритм и тёплое мерцание свечей' : lang === 'he' ? 'מקצב שקיעה עשיר ואור נרות חם' : 'Rich sunset rhythm & warm flickering candlelight',
+  },
+  {
+    src: '/assets/spaces/winery-courtyard-setup.jpg',
+    title: lang === 'ru' ? 'Акустика открытой террасы' : lang === 'he' ? 'אקוסטיקה בטרסה פתוחה' : 'Open Terrace Acoustics',
+    caption: lang === 'ru' ? 'Чистый звук, аккуратно вписанный в каменный дворик винодельни' : lang === 'he' ? 'סאונד צלול המשתלב ברגישות בחצר האבן של היקב' : 'Pristine sound blended into a stone winery courtyard',
+  },
+  {
+    src: '/assets/spaces/picnic-open-air-setup.jpg',
+    title: lang === 'ru' ? 'Летний дневной опен-эйр' : lang === 'he' ? 'אופן-אייר קייצי ביום' : 'Summer Daytime Open-Air',
+    caption: lang === 'ru' ? 'Лёгкий грув под кронами для пикников и загородных праздников' : lang === 'he' ? 'גרוב קליל תחת צמרות העצים לפיקניקים ולאירועי טבע' : 'Breezy daytime groove beneath canopies for picnics & gatherings',
   },
 ];
 ---
@@ -44,7 +59,7 @@ const reelFrames = [
         <div class="reel-overlay">
           <div class="reel-live-tag">
             <span class="pulse-beacon" aria-hidden="true"></span>
-            <span>LIVE SETUP ATELIER</span>
+            <span>{t("videoReelLiveTag") || "LIVE SETUP ATELIER"}</span>
           </div>
           <div class="reel-captions">
             <h4 class="reel-title">{frame.title}</h4>
@@ -54,24 +69,51 @@ const reelFrames = [
       </div>
     ))}
 
-    <!-- Navigation dots -->
-    <div class="reel-indicators" aria-hidden="true">
-      {reelFrames.map((_, index) => (
-        <button
-          type="button"
-          class={`indicator-dot ${index === 0 ? 'is-active' : ''}`}
-          data-target-index={index}
-          aria-label={`Go to slide ${index + 1}`}
-        ></button>
-      ))}
+    <!-- Navigation arrows -->
+    <button
+      type="button"
+      class="reel-nav-btn prev-btn"
+      id="aboutReelPrev"
+      aria-label="Previous vibe"
+    >
+      <span class="material-symbols-outlined" aria-hidden="true">chevron_left</span>
+    </button>
+    <button
+      type="button"
+      class="reel-nav-btn next-btn"
+      id="aboutReelNext"
+      aria-label="Next vibe"
+    >
+      <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+    </button>
+
+    <!-- Navigation controls: scrollable dots & counter on opposite side -->
+    <div class="reel-controls" aria-label="Carousel navigation">
+      <div class="reel-indicators" aria-hidden="true">
+        {reelFrames.map((_, index) => (
+          <button
+            type="button"
+            class={`indicator-dot ${index === 0 ? 'is-active' : ''}`}
+            data-target-index={index}
+            aria-label={`Go to slide ${index + 1}`}
+          ></button>
+        ))}
+      </div>
+      <span class="reel-counter" id="aboutReelCounter">
+        <span class="counter-curr">1</span>/<span class="counter-total">{reelFrames.length}</span>
+      </span>
     </div>
   </div>
 </div>
 
 <script>
   (function initReel() {
+    const reelContainer = document.getElementById('aboutVideoReel');
     const slides = document.querySelectorAll<HTMLElement>('#aboutVideoReel .reel-slide');
     const dots = document.querySelectorAll<HTMLButtonElement>('#aboutVideoReel .indicator-dot');
+    const prevBtn = document.getElementById('aboutReelPrev');
+    const nextBtn = document.getElementById('aboutReelNext');
+    const currCounter = document.querySelector<HTMLElement>('#aboutReelCounter .counter-curr');
     if (slides.length <= 1) return;
 
     let currentIndex = 0;
@@ -85,6 +127,10 @@ const reelFrames = [
 
       slides[currentIndex]?.classList.add('is-active');
       dots[currentIndex]?.classList.add('is-active');
+
+      if (currCounter) {
+        currCounter.textContent = String(currentIndex + 1);
+      }
     }
 
     function startAutoCycle() {
@@ -92,6 +138,13 @@ const reelFrames = [
       timer = setInterval(() => {
         goTo(currentIndex + 1);
       }, 5000);
+    }
+
+    function stopAutoCycle() {
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+      }
     }
 
     dots.forEach((dot) => {
@@ -103,6 +156,39 @@ const reelFrames = [
         }
       });
     });
+
+    prevBtn?.addEventListener('click', () => {
+      goTo(currentIndex - 1);
+      startAutoCycle();
+    });
+
+    nextBtn?.addEventListener('click', () => {
+      goTo(currentIndex + 1);
+      startAutoCycle();
+    });
+
+    // Pause on hover
+    reelContainer?.addEventListener('mouseenter', stopAutoCycle);
+    reelContainer?.addEventListener('mouseleave', startAutoCycle);
+
+    // Touch swipe support
+    let touchStartX = 0;
+    reelContainer?.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].clientX;
+    }, { passive: true });
+
+    reelContainer?.addEventListener('touchend', (e) => {
+      const touchEndX = e.changedTouches[0].clientX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 40) {
+        if (diff > 0) {
+          goTo(currentIndex + 1);
+        } else {
+          goTo(currentIndex - 1);
+        }
+        startAutoCycle();
+      }
+    }, { passive: true });
 
     startAutoCycle();
   })();
@@ -229,34 +315,130 @@ const reelFrames = [
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
   }
 
-  .reel-indicators {
+  .reel-nav-btn {
     position: absolute;
-    bottom: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 12;
+    transition: background 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+    opacity: 0;
+  }
+
+  .video-reel-container:hover .reel-nav-btn {
+    opacity: 1;
+  }
+
+  @media (max-width: 768px) {
+    .reel-nav-btn {
+      opacity: 0.85;
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  .prev-btn {
+    left: 0.75rem;
+  }
+
+  .next-btn {
+    right: 0.75rem;
+  }
+
+  :global([dir="rtl"]) .prev-btn {
+    left: auto;
+    right: 0.75rem;
+  }
+
+  :global([dir="rtl"]) .next-btn {
+    right: auto;
+    left: 0.75rem;
+  }
+
+  .reel-nav-btn:hover {
+    background: var(--color-primary, #e2a03f);
+    color: var(--color-on-primary, #000);
+    transform: translateY(-50%) scale(1.08);
+  }
+
+  .reel-nav-btn:active {
+    transform: translateY(-50%) scale(0.95);
+  }
+
+  .reel-controls {
+    position: absolute;
+    top: 1.15rem;
     right: 1.25rem;
     display: flex;
-    gap: 0.4rem;
+    align-items: center;
+    gap: 0.55rem;
     z-index: 10;
   }
 
-  :global([dir="rtl"]) .reel-indicators {
+  :global([dir="rtl"]) .reel-controls {
     right: auto;
     left: 1.25rem;
   }
 
+  .reel-counter {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.85);
+    background: rgba(0, 0, 0, 0.55);
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-full);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    line-height: 1;
+  }
+
+  .reel-counter .counter-curr {
+    color: var(--color-primary, #e2a03f);
+    font-weight: 600;
+  }
+
+  .reel-indicators {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    max-width: 160px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .reel-indicators::-webkit-scrollbar {
+    display: none;
+  }
+
   .indicator-dot {
-    width: 20px;
+    width: 14px;
     height: 3px;
     border-radius: 2px;
     background: rgba(255, 255, 255, 0.35);
     border: none;
     padding: 0;
     cursor: pointer;
+    flex-shrink: 0;
     transition: background 0.3s ease, width 0.3s ease;
   }
 
   .indicator-dot.is-active {
     background: var(--color-primary, #e2a03f);
-    width: 32px;
+    width: 22px;
   }
 
   :global([dir="rtl"]) .reel-title,
