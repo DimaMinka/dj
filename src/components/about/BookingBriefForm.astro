@@ -570,11 +570,19 @@ const t = useTranslations(lang);
     to { opacity: 1; transform: translateY(0); }
   }
 
+  /* Russian Typographic Support: Unbounded */
+  :global([lang="ru"]) .form-title,
+  :global([lang="ru"]) .submit-brief-btn,
+  :global([lang="ru"]) .success-title {
+    font-family: 'Unbounded', 'Syne', sans-serif;
+    letter-spacing: 0.02em;
+  }
+
   /* RTL Support */
   :global([dir="rtl"]) .form-title,
   :global([dir="rtl"]) .submit-brief-btn,
   :global([dir="rtl"]) .success-title {
-    font-family: 'Heebo', sans-serif;
+    font-family: 'Rubik', 'Heebo', sans-serif;
     letter-spacing: 0.02em;
   }
 </style>

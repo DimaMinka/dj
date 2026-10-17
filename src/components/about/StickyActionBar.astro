@@ -199,9 +199,15 @@ const waLink = getWhatsAppLink(lang);
     }
   }
 
+  :global([lang="ru"]) .dock-audio-btn,
+  :global([lang="ru"]) .dock-whatsapp-btn {
+    font-family: 'Unbounded', 'Syne', sans-serif;
+    letter-spacing: 0.04em;
+  }
+
   :global([dir="rtl"]) .dock-audio-btn,
   :global([dir="rtl"]) .dock-whatsapp-btn {
-    font-family: 'Heebo', sans-serif;
+    font-family: 'Rubik', 'Heebo', sans-serif;
     letter-spacing: 0.02em;
   }
 </style>

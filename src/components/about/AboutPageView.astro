@@ -122,6 +122,22 @@ const pageDescription =
     slot="head"
   />
 
+  <!-- Dedicated Typography for RU (Unbounded) & HE (Rubik) on About Page -->
+  {lang === "ru" && (
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700;800&display=swap"
+      slot="head"
+    />
+  )}
+  {lang === "he" && (
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;600;700;800&display=swap"
+      slot="head"
+    />
+  )}
+
   <main class="about-viewport pt-safe pb-safe">
     <AtmosphereBackground />
     <IntroHeader lang={lang} currentSection="about" />
@@ -1423,31 +1439,63 @@ const pageDescription =
     text-overflow: ellipsis;
   }
 
-  /* RTL Specific Overrides */
+  /* Cyrillic (Russian) Specific Typographic Enhancements: Unbounded */
+  :global([lang="ru"]) .about-title,
+  :global([lang="ru"]) .section-title,
+  :global([lang="ru"]) .manifesto-lead,
+  :global([lang="ru"]) .spec-card-title,
+  :global([lang="ru"]) .pkg-title,
+  :global([lang="ru"]) .faq-q-text,
+  :global([lang="ru"]) .channels-title,
+  :global([lang="ru"]) .col-title {
+    font-family: 'Unbounded', 'Syne', sans-serif;
+    letter-spacing: 0.02em;
+  }
+
+  :global([lang="ru"]) .about-title {
+    letter-spacing: 0.03em;
+  }
+
+  :global([lang="ru"]) .cta-btn,
+  :global([lang="ru"]) .pkg-btn,
+  :global([lang="ru"]) .pkg-scale,
+  :global([lang="ru"]) .pkg-badge-featured,
+  :global([lang="ru"]) .section-badge,
+  :global([lang="ru"]) .col-tag {
+    font-family: 'Unbounded', 'Syne', sans-serif;
+    letter-spacing: 0.04em;
+  }
+
+  /* RTL / Hebrew Specific Typographic Enhancements: Rubik & Heebo */
   :global([dir="rtl"]) .about-title,
   :global([dir="rtl"]) .section-title,
   :global([dir="rtl"]) .manifesto-lead,
-  :global([dir="rtl"]) .manifesto-secondary,
   :global([dir="rtl"]) .spec-card-title,
   :global([dir="rtl"]) .pkg-title,
   :global([dir="rtl"]) .faq-q-text,
   :global([dir="rtl"]) .channels-title,
   :global([dir="rtl"]) .col-title {
-    font-family: "Heebo", sans-serif;
-    letter-spacing: 0.02em;
+    font-family: 'Rubik', 'Heebo', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.01em;
   }
 
   :global([dir="rtl"]) .about-subtitle,
   :global([dir="rtl"]) .section-subtitle,
+  :global([dir="rtl"]) .manifesto-secondary,
   :global([dir="rtl"]) .spec-card-desc,
   :global([dir="rtl"]) .pkg-desc,
   :global([dir="rtl"]) .faq-answer {
-    font-family: "Heebo", sans-serif;
+    font-family: 'Heebo', sans-serif;
   }
 
   :global([dir="rtl"]) .cta-btn,
-  :global([dir="rtl"]) .pkg-btn {
-    font-family: "Heebo", sans-serif;
-    letter-spacing: 0.04em;
+  :global([dir="rtl"]) .pkg-btn,
+  :global([dir="rtl"]) .pkg-scale,
+  :global([dir="rtl"]) .pkg-badge-featured,
+  :global([dir="rtl"]) .section-badge,
+  :global([dir="rtl"]) .col-tag {
+    font-family: 'Rubik', 'Heebo', sans-serif;
+    letter-spacing: 0.02em;
   }
 </style>

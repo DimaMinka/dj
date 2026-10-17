@@ -441,7 +441,16 @@ const reelFrames = [
     width: 22px;
   }
 
-  :global([dir="rtl"]) .reel-title,
+  :global([lang="ru"]) .reel-title {
+    font-family: 'Unbounded', 'Syne', sans-serif;
+    letter-spacing: 0.02em;
+  }
+
+  :global([dir="rtl"]) .reel-title {
+    font-family: 'Rubik', 'Heebo', sans-serif;
+    letter-spacing: 0.01em;
+  }
+
   :global([dir="rtl"]) .reel-subtitle {
     font-family: 'Heebo', sans-serif;
   }
