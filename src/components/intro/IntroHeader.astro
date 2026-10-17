@@ -35,23 +35,22 @@ const aboutHref = lang === 'en' ? '/about' : `/${lang}/about`;
       </div>
       <div class="brand-text">
         <span class="artist-title">{t('artistName')}</span>
-        <span class="artist-descriptor">{t('artistDescriptor')}</span>
+        {isAbout ? (
+          <nav class="lang-switch-inline" aria-label="Language selection">
+            <a href={enHref} class={`lang-btn ${lang === 'en' ? 'is-active' : ''}`} hreflang="en" aria-current={lang === 'en' ? 'true' : undefined}>EN</a>
+            <span class="lang-divider" aria-hidden="true">/</span>
+            <a href={ruHref} class={`lang-btn ${lang === 'ru' ? 'is-active' : ''}`} hreflang="ru" aria-current={lang === 'ru' ? 'true' : undefined}>RU</a>
+            <span class="lang-divider" aria-hidden="true">/</span>
+            <a href={heHref} class={`lang-btn ${lang === 'he' ? 'is-active' : ''}`} hreflang="he" aria-current={lang === 'he' ? 'true' : undefined}>עב</a>
+          </nav>
+        ) : (
+          <span class="artist-descriptor">{t('artistDescriptor')}</span>
+        )}
       </div>
     </a>
   </div>
 
   <div class="actions-group">
-    <!-- Language Switcher Pill (displayed on /about pages) -->
-    {isAbout && (
-      <nav class="lang-switch-box" aria-label="Language selection">
-        <a href={enHref} class={`lang-btn ${lang === 'en' ? 'is-active' : ''}`} hreflang="en" aria-current={lang === 'en' ? 'true' : undefined}>EN</a>
-        <span class="lang-divider" aria-hidden="true">/</span>
-        <a href={ruHref} class={`lang-btn ${lang === 'ru' ? 'is-active' : ''}`} hreflang="ru" aria-current={lang === 'ru' ? 'true' : undefined}>RU</a>
-        <span class="lang-divider" aria-hidden="true">/</span>
-        <a href={heHref} class={`lang-btn ${lang === 'he' ? 'is-active' : ''}`} hreflang="he" aria-current={lang === 'he' ? 'true' : undefined}>עב</a>
-      </nav>
-    )}
-
     <!-- Contextual Nav Link: Vibes or About -->
     {isAbout ? (
       <a href={vibesHref} class="nav-about-link">
@@ -199,6 +198,42 @@ const aboutHref = lang === 'en' ? '/about' : `/${lang}/about`;
     margin-block-start: 0.25rem;
   }
 
+  .lang-switch-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    margin-block-start: 0.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    letter-spacing: 0.12em;
+    line-height: 1;
+  }
+
+  .lang-switch-inline .lang-btn {
+    text-decoration: none;
+    color: var(--color-text-subtle);
+    padding-inline: 0.15rem;
+    padding-block: 0.05rem;
+    border-radius: var(--radius-sm);
+    transition: color 0.2s ease;
+  }
+
+  .lang-switch-inline .lang-btn:hover {
+    color: var(--color-text-main);
+  }
+
+  .lang-switch-inline .lang-btn.is-active {
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+
+  .lang-switch-inline .lang-divider {
+    color: var(--color-text-subtle);
+    opacity: 0.4;
+    user-select: none;
+    font-size: 0.5rem;
+  }
+
   .actions-group {
     display: flex;
     align-items: center;
@@ -209,31 +244,6 @@ const aboutHref = lang === 'en' ? '/about' : `/${lang}/about`;
     .actions-group {
       gap: 0.75rem;
     }
-  }
-
-  .lang-switch-box {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding-inline: 0.5rem;
-    padding-block: 0.3rem;
-    border-radius: var(--radius-full);
-    background: var(--color-surface-glass);
-    border: 1px solid var(--color-glass-border);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    font-family: var(--font-mono);
-    font-size: 0.625rem;
-    letter-spacing: 0.08em;
-  }
-
-  .lang-btn {
-    text-decoration: none;
-    color: var(--color-text-subtle);
-    padding-inline: 0.25rem;
-    padding-block: 0.1rem;
-    border-radius: var(--radius-sm);
-    transition: color 0.2s ease, background 0.2s ease;
   }
 
   .lang-btn:hover {
