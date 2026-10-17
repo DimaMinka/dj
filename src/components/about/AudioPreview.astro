@@ -1,0 +1,368 @@
+---
+import type { SupportedLang } from '../../i18n/ui';
+import { useTranslations } from '../../i18n/ui';
+
+interface Props {
+  lang?: SupportedLang;
+}
+
+const { lang = 'en' } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<div class="audio-preview-card" id="aboutAudioPreview">
+  <div class="audio-glow" aria-hidden="true"></div>
+
+  <div class="audio-content">
+    <div class="audio-header">
+      <div class="audio-badge-group">
+        <span class="freq-pill">
+          <span class="live-dot" aria-hidden="true"></span>
+          <span>432 Hz Master Harmonic</span>
+        </span>
+        <span class="bpm-pill">122 BPM • Organic Melodic</span>
+      </div>
+
+      <div class="eq-bars" id="aboutEqBars" aria-hidden="true">
+        <span class="bar bar-1"></span>
+        <span class="bar bar-2"></span>
+        <span class="bar bar-3"></span>
+        <span class="bar bar-4"></span>
+        <span class="bar bar-5"></span>
+        <span class="bar bar-6"></span>
+      </div>
+    </div>
+
+    <div class="track-row">
+      <button
+        type="button"
+        class="play-btn"
+        id="aboutPlayBtn"
+        aria-label="Play 432 Hz frequency soundscape"
+      >
+        <span class="material-symbols-outlined play-icon" id="aboutPlayIcon" aria-hidden="true">play_arrow</span>
+      </button>
+
+      <div class="track-meta">
+        <span class="track-title">Galilee Sunset Resonance</span>
+        <span class="track-subtitle">Organic House • Tuned to Natural 432 Hz Frequency</span>
+      </div>
+    </div>
+
+    <!-- Hidden audio element for future real MP3 / stream drop-in -->
+    <audio id="aboutAudioElement" preload="none" aria-hidden="true"></audio>
+  </div>
+</div>
+
+<script>
+  (function initAboutAudioPlayer() {
+    let audioCtx: AudioContext | null = null;
+    let osc1: OscillatorNode | null = null;
+    let osc2: OscillatorNode | null = null;
+    let gainNode: GainNode | null = null;
+    let isPlaying = false;
+    let eqInterval: ReturnType<typeof setInterval> | null = null;
+
+    const playBtn = document.getElementById('aboutPlayBtn');
+    const playIcon = document.getElementById('aboutPlayIcon');
+    const eqBars = document.querySelectorAll('#aboutEqBars .bar');
+    const previewContainer = document.getElementById('aboutAudioPreview');
+
+    function updateUiState(playing: boolean) {
+      isPlaying = playing;
+      if (playIcon) {
+        playIcon.textContent = playing ? 'pause' : 'play_arrow';
+      }
+      if (previewContainer) {
+        previewContainer.classList.toggle('is-playing', playing);
+      }
+
+      // Notify global listeners (e.g., sticky action bar)
+      window.dispatchEvent(
+        new CustomEvent('dj:about-audio-change', {
+          detail: { isPlaying: playing }
+        })
+      );
+
+      if (playing) {
+        if (!eqInterval) {
+          eqInterval = setInterval(() => {
+            eqBars.forEach((bar) => {
+              const h = Math.floor(Math.random() * 18) + 4;
+              (bar as HTMLElement).style.height = `${h}px`;
+            });
+          }, 180);
+        }
+      } else {
+        if (eqInterval) {
+          clearInterval(eqInterval);
+          eqInterval = null;
+        }
+        eqBars.forEach((bar) => {
+          (bar as HTMLElement).style.height = '4px';
+        });
+      }
+    }
+
+    function stopSynth() {
+      if (gainNode && audioCtx) {
+        try {
+          const ct = audioCtx.currentTime;
+          gainNode.gain.cancelScheduledValues(ct);
+          gainNode.gain.setValueAtTime(gainNode.gain.value, ct);
+          gainNode.gain.exponentialRampToValueAtTime(0.0001, ct + 0.4);
+          setTimeout(() => {
+            if (osc1) {
+              osc1.stop();
+              osc1.disconnect();
+              osc1 = null;
+            }
+            if (osc2) {
+              osc2.stop();
+              osc2.disconnect();
+              osc2 = null;
+            }
+            if (gainNode) {
+              gainNode.disconnect();
+              gainNode = null;
+            }
+          }, 450);
+        } catch (e) {
+          console.warn('Error stopping synth:', e);
+        }
+      }
+      updateUiState(false);
+    }
+
+    function startSynth() {
+      try {
+        const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+        if (!audioCtx) {
+          audioCtx = new AudioContextClass();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+
+        const ct = audioCtx.currentTime;
+
+        gainNode = audioCtx.createGain();
+        gainNode.gain.setValueAtTime(0.0001, ct);
+        gainNode.gain.exponentialRampToValueAtTime(0.05, ct + 0.5);
+
+        // Primary 432 Hz sine oscillator (pure restorative resonance)
+        osc1 = audioCtx.createOscillator();
+        osc1.type = 'sine';
+        osc1.frequency.setValueAtTime(432, ct);
+
+        // Sub harmonic oscillator (216 Hz warm sub pad)
+        osc2 = audioCtx.createOscillator();
+        osc2.type = 'triangle';
+        osc2.frequency.setValueAtTime(216, ct);
+
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(800, ct);
+
+        osc1.connect(gainNode);
+        osc2.connect(filter);
+        filter.connect(gainNode);
+
+        gainNode.connect(audioCtx.destination);
+
+        osc1.start(ct);
+        osc2.start(ct);
+
+        updateUiState(true);
+      } catch (err) {
+        console.warn('Web Audio playback failed:', err);
+      }
+    }
+
+    function toggleAudio() {
+      if (isPlaying) {
+        stopSynth();
+      } else {
+        startSynth();
+      }
+    }
+
+    playBtn?.addEventListener('click', toggleAudio);
+
+    // Sync with external triggers (Sticky bar or other controls)
+    window.addEventListener('dj:toggle-about-audio', (() => {
+      toggleAudio();
+    }) as EventListener);
+  })();
+</script>
+
+<style>
+  .audio-preview-card {
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+    margin-inline: auto;
+    border-radius: var(--radius-lg);
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 1.25rem 1.5rem;
+    box-sizing: border-box;
+    overflow: hidden;
+    transition: var(--transition-theme), border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .audio-preview-card.is-playing {
+    border-color: var(--color-primary);
+    box-shadow: 0 8px 32px var(--color-primary-glow);
+  }
+
+  .audio-glow {
+    position: absolute;
+    inset: -20%;
+    background: radial-gradient(circle at 30% 50%, var(--color-primary-glow) 0%, transparent 70%);
+    opacity: 0.15;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
+
+  .audio-preview-card.is-playing .audio-glow {
+    opacity: 0.35;
+  }
+
+  .audio-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .audio-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .audio-badge-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .freq-pill,
+  .bpm-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.625rem;
+    border-radius: var(--radius-full);
+    background: rgba(var(--color-surface-rgb, 20, 20, 20), 0.5);
+    border: 1px solid var(--color-glass-border);
+    color: var(--color-primary);
+  }
+
+  .bpm-pill {
+    color: var(--color-text-muted);
+  }
+
+  .live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    background: var(--color-primary);
+    box-shadow: 0 0 6px var(--color-primary-glow);
+  }
+
+  .eq-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  .bar {
+    width: 3px;
+    height: 4px;
+    background: var(--color-primary);
+    border-radius: 2px;
+    transition: height 0.18s ease;
+    opacity: 0.85;
+  }
+
+  .track-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .play-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 16px var(--color-primary-glow);
+  }
+
+  .play-btn:hover {
+    transform: scale(1.06);
+    box-shadow: 0 6px 20px var(--color-primary-glow);
+  }
+
+  .play-btn:active {
+    transform: scale(0.96);
+  }
+
+  .play-icon {
+    font-size: 26px;
+  }
+
+  .track-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+  }
+
+  .track-title {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--color-text-main);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .track-subtitle {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  :global([dir="rtl"]) .track-title,
+  :global([dir="rtl"]) .track-subtitle {
+    font-family: 'Heebo', sans-serif;
+  }
+</style>

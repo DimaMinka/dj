@@ -1,0 +1,266 @@
+---
+import type { SupportedLang } from '../../i18n/ui';
+import { useTranslations } from '../../i18n/ui';
+
+interface Props {
+  lang?: SupportedLang;
+}
+
+const { lang = 'en' } = Astro.props;
+const t = useTranslations(lang);
+
+const reelFrames = [
+  {
+    src: '/assets/spaces/twilight-setup.jpg',
+    title: lang === 'ru' ? 'Сумеречная архитектура света' : lang === 'he' ? 'ארכיטקטורת תאורה בשעת בין ערביים' : 'Twilight Architectural Rig',
+    caption: lang === 'ru' ? '12+ IP65 приборов • Проводной контур безопасности' : lang === 'he' ? 'מערך 12+ גופי IP65 • ניתוב כבלים היקפי מוסתר' : '12+ IP65 fixtures • Safe perimeter cable routing',
+  },
+  {
+    src: '/assets/spaces/estate-setup.jpg',
+    title: lang === 'ru' ? 'Горное поместье и терраса' : lang === 'he' ? 'אחוזת הרים וטרסה פתוחה' : 'Mountain Estate & Open Terrace',
+    caption: lang === 'ru' ? 'Акустическое моделирование для открытого рельефа' : lang === 'he' ? 'כיול סאונד ייעודי לשטחים פתוחים' : 'Site-specific acoustic modeling for open landscape',
+  },
+  {
+    src: '/assets/spaces/sunset-setup.jpg',
+    title: lang === 'ru' ? 'Закат на виноградниках' : lang === 'he' ? 'שקיעה בכרמי הגליל' : 'Vineyard Sunset Session',
+    caption: lang === 'ru' ? 'Плавный световой переход от заката к ночи' : lang === 'he' ? 'מעבר תאורה אורגני משקיעה ללילה' : 'Organic light transition from golden hour to deep night',
+  },
+];
+---
+
+<div class="video-reel-container" id="aboutVideoReel">
+  <div class="reel-frame-wrapper">
+    {reelFrames.map((frame, index) => (
+      <div
+        class={`reel-slide ${index === 0 ? 'is-active' : ''}`}
+        data-slide-index={index}
+      >
+        <img
+          src={frame.src}
+          alt={frame.title}
+          class="reel-image"
+          loading={index === 0 ? 'eager' : 'lazy'}
+        />
+        <div class="reel-overlay">
+          <div class="reel-live-tag">
+            <span class="pulse-beacon" aria-hidden="true"></span>
+            <span>LIVE SETUP ATELIER</span>
+          </div>
+          <div class="reel-captions">
+            <h4 class="reel-title">{frame.title}</h4>
+            <p class="reel-subtitle">{frame.caption}</p>
+          </div>
+        </div>
+      </div>
+    ))}
+
+    <!-- Navigation dots -->
+    <div class="reel-indicators" aria-hidden="true">
+      {reelFrames.map((_, index) => (
+        <button
+          type="button"
+          class={`indicator-dot ${index === 0 ? 'is-active' : ''}`}
+          data-target-index={index}
+          aria-label={`Go to slide ${index + 1}`}
+        ></button>
+      ))}
+    </div>
+  </div>
+</div>
+
+<script>
+  (function initReel() {
+    const slides = document.querySelectorAll<HTMLElement>('#aboutVideoReel .reel-slide');
+    const dots = document.querySelectorAll<HTMLButtonElement>('#aboutVideoReel .indicator-dot');
+    if (slides.length <= 1) return;
+
+    let currentIndex = 0;
+    let timer: ReturnType<typeof setInterval> | null = null;
+
+    function goTo(index: number) {
+      slides[currentIndex]?.classList.remove('is-active');
+      dots[currentIndex]?.classList.remove('is-active');
+
+      currentIndex = (index + slides.length) % slides.length;
+
+      slides[currentIndex]?.classList.add('is-active');
+      dots[currentIndex]?.classList.add('is-active');
+    }
+
+    function startAutoCycle() {
+      if (timer) clearInterval(timer);
+      timer = setInterval(() => {
+        goTo(currentIndex + 1);
+      }, 5000);
+    }
+
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const target = Number(dot.dataset.targetIndex);
+        if (!isNaN(target)) {
+          goTo(target);
+          startAutoCycle();
+        }
+      });
+    });
+
+    startAutoCycle();
+  })();
+</script>
+
+<style>
+  .video-reel-container {
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+    margin-inline: auto;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
+  }
+
+  .reel-frame-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+  }
+
+  @media (max-width: 640px) {
+    .reel-frame-wrapper {
+      aspect-ratio: 4 / 3;
+    }
+  }
+
+  .reel-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+
+  .reel-slide.is-active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .reel-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.02);
+    transition: transform 6s ease-out;
+  }
+
+  .reel-slide.is-active .reel-image {
+    transform: scale(1.08);
+  }
+
+  .reel-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.85) 0%,
+      rgba(0, 0, 0, 0.3) 45%,
+      rgba(0, 0, 0, 0.1) 100%
+    );
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    box-sizing: border-box;
+    color: #ffffff;
+  }
+
+  .reel-live-tag {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-full);
+    background: rgba(0, 0, 0, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .pulse-beacon {
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    background: #e2a03f;
+    box-shadow: 0 0 8px #e2a03f;
+    animation: pulse 2s infinite;
+  }
+
+  .reel-captions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .reel-title {
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    margin: 0;
+    color: #ffffff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  }
+
+  .reel-subtitle {
+    font-family: var(--font-mono);
+    font-size: clamp(0.6875rem, 1.8vw, 0.8125rem);
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+    line-height: 1.4;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  }
+
+  .reel-indicators {
+    position: absolute;
+    bottom: 0.75rem;
+    right: 1.25rem;
+    display: flex;
+    gap: 0.4rem;
+    z-index: 10;
+  }
+
+  :global([dir="rtl"]) .reel-indicators {
+    right: auto;
+    left: 1.25rem;
+  }
+
+  .indicator-dot {
+    width: 20px;
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.35);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: background 0.3s ease, width 0.3s ease;
+  }
+
+  .indicator-dot.is-active {
+    background: var(--color-primary, #e2a03f);
+    width: 32px;
+  }
+
+  :global([dir="rtl"]) .reel-title,
+  :global([dir="rtl"]) .reel-subtitle {
+    font-family: 'Heebo', sans-serif;
+  }
+</style>
