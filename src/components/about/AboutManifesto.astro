@@ -1,0 +1,153 @@
+---
+import type { SupportedLang } from "../../i18n/ui";
+import { useTranslations } from "../../i18n/ui";
+
+interface Props {
+  lang: SupportedLang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="about-section manifesto-section" id="philosophy">
+  <div class="section-container">
+    <div class="section-header">
+      <span class="section-badge"
+        >{t("manifestoBadge") || "PHILOSOPHY & ACOUSTIC VISION"}</span
+      >
+      <h2 class="section-title">
+        {t("manifestoTitle") || "Sound as Invisible Architecture"}
+      </h2>
+    </div>
+
+    <div class="manifesto-card">
+      <p class="manifesto-lead">{t("manifestoP1")}</p>
+      <div class="manifesto-divider" aria-hidden="true"></div>
+      <p class="manifesto-secondary">{t("manifestoP2")}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-section {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    padding-inline: 1.25rem;
+    padding-block: 4rem;
+    box-sizing: border-box;
+  }
+
+  .section-container {
+    max-width: 1080px;
+    width: 100%;
+    margin-inline: auto;
+    box-sizing: border-box;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-block-end: 2.5rem;
+  }
+
+  .section-badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin-block-end: 0.85rem;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3.8vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-main);
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .manifesto-card {
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.5rem, 4vw, 3rem);
+    max-width: 840px;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .manifesto-lead {
+    font-family: var(--font-display);
+    font-size: clamp(1.125rem, 2.5vw, 1.45rem);
+    line-height: 1.6;
+    color: var(--color-text-main);
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .manifesto-divider {
+    width: 48px;
+    height: 2px;
+    background: var(--color-primary);
+    margin-inline: auto;
+    margin-block: 1.75rem;
+    opacity: 0.8;
+  }
+
+  .manifesto-secondary {
+    font-family: var(--font-body);
+    font-size: clamp(0.9375rem, 2vw, 1.125rem);
+    line-height: 1.65;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  /* Russian Support: Unbounded */
+  :global([lang="ru"]) .section-title {
+    font-family: 'Unbounded', 'Syne', sans-serif;
+    font-weight: 400;
+    font-size: clamp(1.25rem, 2.8vw, 1.85rem);
+    letter-spacing: 0.02em;
+  }
+
+  :global([lang="ru"]) .manifesto-lead {
+    font-family: 'Unbounded', 'Syne', sans-serif;
+    font-weight: 400;
+    font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+    letter-spacing: 0.02em;
+  }
+
+  :global([lang="ru"]) .section-badge {
+    font-family: 'Unbounded', 'Syne', sans-serif;
+    font-weight: 500;
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+  }
+
+  /* RTL Support: Rubik & Heebo */
+  :global([dir="rtl"]) .section-title,
+  :global([dir="rtl"]) .manifesto-lead {
+    font-family: 'Rubik', 'Heebo', sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  :global([dir="rtl"]) .manifesto-secondary {
+    font-family: 'Heebo', sans-serif;
+  }
+
+  :global([dir="rtl"]) .section-badge {
+    font-family: 'Heebo', sans-serif;
+    font-weight: 500;
+    font-size: 0.875rem;
+    letter-spacing: 0.08em;
+  }
+</style>

@@ -382,15 +382,22 @@ const t = useTranslations(lang);
 
   :global([lang="ru"]) .track-title {
     font-family: 'Unbounded', 'Syne', sans-serif;
-    letter-spacing: 0.02em;
+    font-weight: 400;
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
   }
 
   :global([dir="rtl"]) .track-title {
     font-family: 'Rubik', 'Heebo', sans-serif;
+    font-weight: 500;
     letter-spacing: 0.01em;
   }
 
   :global([dir="rtl"]) .track-subtitle {
     font-family: 'Heebo', sans-serif;
+  }
+
+  :global([dir="rtl"]) .play-icon {
+    transform: scaleX(-1);
   }
 </style>

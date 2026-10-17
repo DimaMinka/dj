@@ -366,6 +366,10 @@ const reelFrames = [
     left: 0.75rem;
   }
 
+  :global([dir="rtl"]) .reel-nav-btn .material-symbols-outlined {
+    transform: scaleX(-1);
+  }
+
   .reel-nav-btn:hover {
     background: var(--color-primary, #e2a03f);
     color: var(--color-on-primary, #000);
@@ -443,11 +447,14 @@ const reelFrames = [
 
   :global([lang="ru"]) .reel-title {
     font-family: 'Unbounded', 'Syne', sans-serif;
-    letter-spacing: 0.02em;
+    font-weight: 400;
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
   }
 
   :global([dir="rtl"]) .reel-title {
     font-family: 'Rubik', 'Heebo', sans-serif;
+    font-weight: 500;
     letter-spacing: 0.01em;
   }
 

@@ -1,0 +1,456 @@
+---
+import type { SupportedLang } from "../../i18n/ui";
+import { useTranslations, getWhatsAppLink } from "../../i18n/ui";
+
+interface Props {
+  lang: SupportedLang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const waLink = getWhatsAppLink(lang);
+---
+
+<section class="about-section packages-section" id="packages">
+  <div class="section-container">
+    <div class="section-header">
+      <span class="section-badge"
+        >{t("packagesBadge") || "CURATED FORMATS"}</span
+      >
+      <h2 class="section-title">
+        {t("packagesTitle") || "Tailored Event Scopes"}
+      </h2>
+      <p class="section-subtitle">{t("packagesSubtitle")}</p>
+    </div>
+
+    <div class="packages-grid">
+      <!-- Package 1: Sunset & Wine -->
+      <div class="package-card">
+        <div class="pkg-top">
+          <span class="pkg-scale">{t("pkg1Scale")}</span>
+          <h3 class="pkg-title">{t("pkg1Title")}</h3>
+          <p class="pkg-desc">{t("pkg1Desc")}</p>
+        </div>
+        <ul class="pkg-features">
+          <li>
+            <span
+              class="material-symbols-outlined check-icon"
+              aria-hidden="true">done</span
+            >
+            <span>{t("pkg1Feat1")}</span>
+          </li>
+          <li>
+            <span
+              class="material-symbols-outlined check-icon"
+              aria-hidden="true">done</span
+            >
+            <span>{t("pkg1Feat2")}</span>
+          </li>
+          <li>
+            <span
+              class="material-symbols-outlined check-icon"
+              aria-hidden="true">done</span
+            >
+            <span>{t("pkg1Feat3")}</span>
+          </li>
+        </ul>
+        <div class="pkg-action">
+          <a
+            href={waLink}
+            class="pkg-btn"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>{t("pkgBtnSelect") || "Inquire Format"}</span>
+            <span class="material-symbols-outlined" aria-hidden="true"
+              >arrow_forward</span
+            >
+          </a>
+        </div>
+      </div>
+
+      <!-- Package 2: Private Villa & Retreat (Featured) -->
+      <div class="package-card featured-pkg">
+        <div class="pkg-badge-featured">{t("pkgBadgeRecommended") || "RECOMMENDED"}</div>
+        <div class="pkg-top">
+          <span class="pkg-scale">{t("pkg2Scale")}</span>
+          <h3 class="pkg-title">{t("pkg2Title")}</h3>
+          <p class="pkg-desc">{t("pkg2Desc")}</p>
+        </div>
+        <ul class="pkg-features">
+          <li>
+            <span
+              class="material-symbols-outlined check-icon"
+              aria-hidden="true">done</span
+            >
+            <span>{t("pkg2Feat1")}</span>
+          </li>
+          <li>
+            <span
+              class="material-symbols-outlined check-icon"
+              aria-hidden="true">done</span
+            >
+            <span>{t("pkg2Feat2")}</span>
+          </li>
+          <li>
+            <span
+              class="material-symbols-outlined check-icon"
+              aria-hidden="true">done</span
+            >
+            <span>{t("pkg2Feat3")}</span>
+          </li>
+        </ul>
+        <div class="pkg-action">
+          <a
+            href={waLink}
+            class="pkg-btn featured-btn"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>{t("pkgBtnSelect") || "Inquire Format"}</span>
+            <span class="material-symbols-outlined" aria-hidden="true"
+              >arrow_forward</span
+            >
+          </a>
+        </div>
+      </div>
+
+      <!-- Package 3: Custom Production -->
+      <div class="package-card">
+        <div class="pkg-top">
+          <span class="pkg-scale">{t("pkg3Scale")}</span>
+          <h3 class="pkg-title">{t("pkg3Title")}</h3>
+          <p class="pkg-desc">{t("pkg3Desc")}</p>
+        </div>
+        <ul class="pkg-features">
+          <li>
+            <span
+              class="material-symbols-outlined check-icon"
+              aria-hidden="true">done</span
+            >
+            <span>{t("pkg3Feat1")}</span>
+          </li>
+          <li>
+            <span
+              class="material-symbols-outlined check-icon"
+              aria-hidden="true">done</span
+            >
+            <span>{t("pkg3Feat2")}</span>
+          </li>
+          <li>
+            <span
+              class="material-symbols-outlined check-icon"
+              aria-hidden="true">done</span
+            >
+            <span>{t("pkg3Feat3")}</span>
+          </li>
+        </ul>
+        <div class="pkg-action">
+          <a
+            href={waLink}
+            class="pkg-btn"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>{t("pkgBtnInquire") || "Inquire Format"}</span>
+            <span class="material-symbols-outlined" aria-hidden="true"
+              >arrow_forward</span
+            >
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-section {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    padding-inline: 1.25rem;
+    padding-block: 4rem;
+    box-sizing: border-box;
+  }
+
+  .section-container {
+    max-width: 1080px;
+    width: 100%;
+    margin-inline: auto;
+    box-sizing: border-box;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-block-end: 2.5rem;
+  }
+
+  .section-badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin-block-end: 0.85rem;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3.8vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-main);
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .section-subtitle {
+    font-family: var(--font-body);
+    font-size: clamp(0.9375rem, 2vw, 1.125rem);
+    color: var(--color-text-muted);
+    max-width: 640px;
+    margin-inline: auto;
+    margin-block-start: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .packages-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  @media (min-width: 960px) {
+    .packages-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .package-card {
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.5rem;
+    position: relative;
+    transition:
+      transform 0.3s ease,
+      border-color 0.3s ease;
+  }
+
+  .package-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-primary);
+  }
+
+  .package-card.featured-pkg {
+    border-color: var(--color-primary);
+    box-shadow: 0 12px 36px var(--color-primary-glow);
+  }
+
+  .pkg-badge-featured {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0.4rem 1.05rem;
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+  }
+
+  .pkg-scale {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    display: block;
+    margin-block-end: 0.5rem;
+  }
+
+  .pkg-title {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--color-text-main);
+    margin: 0;
+  }
+
+  .pkg-desc {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    margin-block-start: 0.5rem;
+    margin-block-end: 0;
+  }
+
+  .pkg-features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  .pkg-features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    color: var(--color-text-main);
+    line-height: 1.4;
+  }
+
+  .check-icon {
+    color: var(--color-primary);
+    font-size: 1.125rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .pkg-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+    padding-block: 0.75rem;
+    border-radius: var(--radius-full);
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--color-surface-glass);
+    color: var(--color-text-main);
+    border: 1px solid var(--color-glass-border);
+    transition:
+      background 0.2s ease,
+      border-color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .pkg-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .featured-btn {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    border: none;
+    box-shadow: 0 4px 16px var(--color-primary-glow);
+  }
+
+  .featured-btn:hover {
+    color: var(--color-on-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 22px var(--color-primary-glow);
+  }
+
+  /* Russian Support: Unbounded */
+  :global([lang="ru"]) .section-title {
+    font-family: 'Unbounded', 'Syne', sans-serif;
+    font-weight: 400;
+    font-size: clamp(1.25rem, 2.8vw, 1.85rem);
+    letter-spacing: 0.02em;
+  }
+
+  :global([lang="ru"]) .pkg-title {
+    font-family: 'Unbounded', 'Syne', sans-serif;
+    font-weight: 400;
+    font-size: 1.2rem;
+    letter-spacing: 0.01em;
+  }
+
+  :global([lang="ru"]) .pkg-btn {
+    font-family: 'Unbounded', 'Syne', sans-serif;
+    font-weight: 500;
+    font-size: 0.75rem;
+    letter-spacing: 0.03em;
+  }
+
+  :global([lang="ru"]) .pkg-scale {
+    font-family: 'Unbounded', 'Syne', sans-serif;
+    font-weight: 500;
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+  }
+
+  :global([lang="ru"]) .pkg-badge-featured {
+    font-family: 'Unbounded', 'Syne', sans-serif;
+    font-weight: 500;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+  }
+
+  :global([lang="ru"]) .section-badge {
+    font-family: 'Unbounded', 'Syne', sans-serif;
+    font-weight: 500;
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+  }
+
+  /* RTL Support */
+  :global([dir="rtl"]) .section-title,
+  :global([dir="rtl"]) .pkg-title {
+    font-family: 'Rubik', 'Heebo', sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  :global([dir="rtl"]) .section-subtitle,
+  :global([dir="rtl"]) .pkg-desc {
+    font-family: 'Heebo', sans-serif;
+  }
+
+  :global([dir="rtl"]) .pkg-btn {
+    font-family: 'Rubik', 'Heebo', sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  :global([dir="rtl"]) .pkg-btn .material-symbols-outlined {
+    transform: scaleX(-1);
+  }
+
+  :global([dir="rtl"]) .pkg-scale {
+    font-family: 'Heebo', sans-serif;
+    font-weight: 500;
+    font-size: 0.875rem;
+    letter-spacing: 0.08em;
+  }
+
+  :global([dir="rtl"]) .pkg-badge-featured {
+    font-family: 'Heebo', sans-serif;
+    font-weight: 500;
+    font-size: 0.8125rem;
+    letter-spacing: 0.08em;
+  }
+
+  :global([dir="rtl"]) .section-badge {
+    font-family: 'Heebo', sans-serif;
+    font-weight: 500;
+    font-size: 0.875rem;
+    letter-spacing: 0.08em;
+  }
+</style>

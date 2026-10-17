@@ -136,7 +136,7 @@ const t = useTranslations(lang);
     <h4 class="success-title">{t('formSuccessTitle')}</h4>
     <p class="success-desc">{t('formSuccessDesc')}</p>
     <button type="button" id="resetFormBtn" class="reset-form-btn">
-      <span>Submit Another Inquiry</span>
+      <span>{t('formResetBtn') || 'Submit Another Inquiry'}</span>
     </button>
   </div>
 </div>
@@ -291,12 +291,12 @@ const t = useTranslations(lang);
     align-items: center;
     gap: 0.375rem;
     font-family: var(--font-mono);
-    font-size: 0.625rem;
-    letter-spacing: 0.18em;
+    font-size: 0.8125rem;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--color-primary);
-    padding-inline: 0.625rem;
-    padding-block: 0.25rem;
+    padding-inline: 0.85rem;
+    padding-block: 0.4rem;
     border-radius: var(--radius-full);
     background: var(--color-surface);
     border: 1px solid var(--color-glass-border);
@@ -575,7 +575,23 @@ const t = useTranslations(lang);
   :global([lang="ru"]) .submit-brief-btn,
   :global([lang="ru"]) .success-title {
     font-family: 'Unbounded', 'Syne', sans-serif;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.01em;
+  }
+
+  :global([lang="ru"]) .form-title {
+    font-weight: 400;
+    font-size: 1.125rem;
+  }
+
+  :global([lang="ru"]) .submit-brief-btn {
+    font-weight: 500;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+  }
+
+  :global([lang="ru"]) .success-title {
+    font-weight: 400;
+    font-size: 1.15rem;
   }
 
   /* RTL Support */
@@ -583,6 +599,18 @@ const t = useTranslations(lang);
   :global([dir="rtl"]) .submit-brief-btn,
   :global([dir="rtl"]) .success-title {
     font-family: 'Rubik', 'Heebo', sans-serif;
+    font-weight: 500;
     letter-spacing: 0.02em;
+  }
+
+  :global([dir="rtl"]) .form-badge {
+    font-family: 'Heebo', sans-serif;
+    font-weight: 500;
+    font-size: 0.8125rem;
+    letter-spacing: 0.08em;
+  }
+
+  :global([dir="rtl"]) .submit-brief-btn .btn-icon {
+    transform: scaleX(-1);
   }
 </style>

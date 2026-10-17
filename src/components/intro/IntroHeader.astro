@@ -1,9 +1,13 @@
 ---
-import { defaultLang, type SupportedLang, useTranslations } from '../../i18n/ui';
+import {
+  defaultLang,
+  type SupportedLang,
+  useTranslations,
+} from "../../i18n/ui";
 
 interface Props {
   lang?: SupportedLang;
-  currentSection?: 'intro' | 'about' | 'vibes';
+  currentSection?: "intro" | "about" | "vibes";
 }
 
 const { lang = defaultLang, currentSection } = Astro.props;
@@ -11,56 +15,91 @@ const t = useTranslations(lang);
 
 // Multilingual route resolution
 const currentPath = Astro.url.pathname;
-const cleanPath = currentPath.replace(/^\/(ru|he)(\/|$)/, '$2') || '/';
-const normalizedSubPath = cleanPath.startsWith('/') ? cleanPath : `/${cleanPath}`;
+const cleanPath = currentPath.replace(/^\/(ru|he)(\/|$)/, "$2") || "/";
+const normalizedSubPath = cleanPath.startsWith("/")
+  ? cleanPath
+  : `/${cleanPath}`;
 
 const enHref = normalizedSubPath;
-const ruHref = `/ru${normalizedSubPath === '/' ? '' : normalizedSubPath}`;
-const heHref = `/he${normalizedSubPath === '/' ? '' : normalizedSubPath}`;
+const ruHref = `/ru${normalizedSubPath === "/" ? "" : normalizedSubPath}`;
+const heHref = `/he${normalizedSubPath === "/" ? "" : normalizedSubPath}`;
 
-const isAbout = currentSection === 'about' || cleanPath.startsWith('/about');
-const homeHref = '/';
-const vibesHref = '/vibes';
-const aboutHref = lang === 'en' ? '/about' : `/${lang}/about`;
+const isAbout = currentSection === "about" || cleanPath.startsWith("/about");
+const homeHref = "/";
+const vibesHref = "/vibes/aegean";
+const aboutHref = lang === "en" ? "/about" : `/${lang}/about`;
 ---
 
 <header class="intro-header">
   <div class="brand-group">
     <a href={homeHref} class="logo-box" aria-label="Return to Intro Portal">
       <svg class="logo-svg" viewBox="0 0 576.59 678.28" fill="currentColor">
-        <path d="m199.66 44.95v518.06l-199.65 115.27c0-222.21 0-444.42-.01-666.63 35.16 20.39 70.32 40.78 105.48 61.18-.11 28.59-.22 57.18-.33 85.77-9.46-5.46-18.92-10.92-28.37-16.38.09 135.02.19 270.04.28 405.06 14.98-8.59 29.95-17.18 44.93-25.78v-521.5c25.89 14.98 51.78 29.97 77.67 44.95z"></path>
-        <path d="m576.59 345.02c-7.56 4.49-15.13 8.98-22.69 13.47l-153 88.34v-85.85c4.26-2.34 8.57-4.77 12.92-7.29 4.93-2.85 9.74-5.7 14.43-8.55-13.8-8.06-27.6-16.12-41.41-24.18.02 44.65.04 89.29.06 133.95l-78 45.03c-.02-74.58-.03-149.16-.05-223.73-4.65-2.77-9.3-5.54-13.95-8.31.02 80.03.03 160.06.05 240.09.01 22.36.01 44.72.02 67.08v10.49c-25.52 14.72-51.03 29.45-76.54 44.17l-3.56 2.05v-10.47c-.01-22.36-.02-44.71-.02-67.07-.04-139.38-.08-278.76-.12-418.14 120.62 69.64 241.24 139.28 361.86 208.92z"></path>
+        <path
+          d="m199.66 44.95v518.06l-199.65 115.27c0-222.21 0-444.42-.01-666.63 35.16 20.39 70.32 40.78 105.48 61.18-.11 28.59-.22 57.18-.33 85.77-9.46-5.46-18.92-10.92-28.37-16.38.09 135.02.19 270.04.28 405.06 14.98-8.59 29.95-17.18 44.93-25.78v-521.5c25.89 14.98 51.78 29.97 77.67 44.95z"
+        ></path>
+        <path
+          d="m576.59 345.02c-7.56 4.49-15.13 8.98-22.69 13.47l-153 88.34v-85.85c4.26-2.34 8.57-4.77 12.92-7.29 4.93-2.85 9.74-5.7 14.43-8.55-13.8-8.06-27.6-16.12-41.41-24.18.02 44.65.04 89.29.06 133.95l-78 45.03c-.02-74.58-.03-149.16-.05-223.73-4.65-2.77-9.3-5.54-13.95-8.31.02 80.03.03 160.06.05 240.09.01 22.36.01 44.72.02 67.08v10.49c-25.52 14.72-51.03 29.45-76.54 44.17l-3.56 2.05v-10.47c-.01-22.36-.02-44.71-.02-67.07-.04-139.38-.08-278.76-.12-418.14 120.62 69.64 241.24 139.28 361.86 208.92z"
+        ></path>
       </svg>
     </a>
     <div class="brand-text">
       <a href={homeHref} class="brand-title-link">
-        <span class="artist-title">{t('artistName')}</span>
+        <span class="artist-title">{t("artistName")}</span>
       </a>
-      {isAbout ? (
-        <nav class="lang-switch-inline" aria-label="Language selection">
-          <a href={enHref} class={`lang-btn ${lang === 'en' ? 'is-active' : ''}`} hreflang="en" aria-current={lang === 'en' ? 'true' : undefined}>EN</a>
-          <span class="lang-divider" aria-hidden="true">•</span>
-          <a href={ruHref} class={`lang-btn ${lang === 'ru' ? 'is-active' : ''}`} hreflang="ru" aria-current={lang === 'ru' ? 'true' : undefined}>RU</a>
-          <span class="lang-divider" aria-hidden="true">•</span>
-          <a href={heHref} class={`lang-btn ${lang === 'he' ? 'is-active' : ''}`} hreflang="he" aria-current={lang === 'he' ? 'true' : undefined}>עב</a>
-        </nav>
-      ) : (
-        <span class="artist-descriptor">{t('artistDescriptor')}</span>
-      )}
+      {
+        isAbout ? (
+          <nav class="lang-switch-inline" aria-label="Language selection">
+            <a
+              href={enHref}
+              class={`lang-btn ${lang === "en" ? "is-active" : ""}`}
+              hreflang="en"
+              aria-current={lang === "en" ? "true" : undefined}
+            >
+              EN
+            </a>
+            <span class="lang-divider" aria-hidden="true">
+              •
+            </span>
+            <a
+              href={ruHref}
+              class={`lang-btn ${lang === "ru" ? "is-active" : ""}`}
+              hreflang="ru"
+              aria-current={lang === "ru" ? "true" : undefined}
+            >
+              RU
+            </a>
+            <span class="lang-divider" aria-hidden="true">
+              •
+            </span>
+            <a
+              href={heHref}
+              class={`lang-btn ${lang === "he" ? "is-active" : ""}`}
+              hreflang="he"
+              aria-current={lang === "he" ? "true" : undefined}
+            >
+              עב
+            </a>
+          </nav>
+        ) : (
+          <span class="artist-descriptor">{t("artistDescriptor")}</span>
+        )
+      }
     </div>
   </div>
 
   <div class="actions-group">
     <!-- Contextual Nav Link: Vibes or About -->
-    {isAbout ? (
-      <a href={vibesHref} class="nav-about-link">
-        <span>{t('navVibes') || 'Vibes'}</span>
-      </a>
-    ) : (
-      <a href={aboutHref} class="nav-about-link">
-        <span>{t('navAbout')}</span>
-      </a>
-    )}
+    {
+      isAbout ? (
+        <a href={vibesHref} class="nav-about-link">
+          <span>{t("navVibes") || "Vibes"}</span>
+        </a>
+      ) : (
+        <a href={aboutHref} class="nav-about-link">
+          <span>{t("navAbout")}</span>
+        </a>
+      )
+    }
 
     <!-- Theme Resonance Toggle Pill with Localized Attributes -->
     <button
@@ -68,48 +107,55 @@ const aboutHref = lang === 'en' ? '/about' : `/${lang}/about`;
       class="theme-toggle"
       type="button"
       aria-label="Toggle theme resonance"
-      data-night-label={t('nightResonance')}
-      data-day-label={t('dayResonance')}
+      data-night-label={t("nightResonance")}
+      data-day-label={t("dayResonance")}
     >
       <div class="equalizer-bars" aria-hidden="true">
         <span class="bar bar-1"></span>
         <span class="bar bar-2"></span>
         <span class="bar bar-3"></span>
       </div>
-      <span id="themeToggleLabel" class="theme-label">{t('nightResonance')}</span>
+      <span id="themeToggleLabel" class="theme-label"
+        >{t("nightResonance")}</span
+      >
     </button>
   </div>
 </header>
 
 <script>
   function initThemeToggle() {
-    const btn = document.getElementById('themeToggleBtn');
-    const label = document.getElementById('themeToggleLabel');
+    const btn = document.getElementById("themeToggleBtn");
+    const label = document.getElementById("themeToggleLabel");
 
-    const nightLabel = btn?.getAttribute('data-night-label') || 'Night Resonance';
-    const dayLabel = btn?.getAttribute('data-day-label') || 'Day Resonance';
+    const nightLabel =
+      btn?.getAttribute("data-night-label") || "Night Resonance";
+    const dayLabel = btn?.getAttribute("data-day-label") || "Day Resonance";
 
     function updateLabel(theme: string) {
       if (!label) return;
-      label.textContent = theme === 'night' ? nightLabel : dayLabel;
+      label.textContent = theme === "night" ? nightLabel : dayLabel;
     }
 
-    const currentTheme = document.documentElement.getAttribute('data-theme') || 'night';
+    const currentTheme =
+      document.documentElement.getAttribute("data-theme") || "night";
     updateLabel(currentTheme);
 
-    btn?.addEventListener('click', () => {
-      const active = document.documentElement.getAttribute('data-theme') || 'night';
-      const next = active === 'night' ? 'day' : 'night';
+    btn?.addEventListener("click", () => {
+      const active =
+        document.documentElement.getAttribute("data-theme") || "night";
+      const next = active === "night" ? "day" : "night";
 
-      document.documentElement.setAttribute('data-theme', next);
-      document.documentElement.classList.toggle('dark', next === 'night');
-      localStorage.setItem('dj-theme-resonance', next);
+      document.documentElement.setAttribute("data-theme", next);
+      document.documentElement.classList.toggle("dark", next === "night");
+      localStorage.setItem("dj-theme-resonance", next);
       updateLabel(next);
 
-      window.dispatchEvent(new CustomEvent('dj:theme-change', { detail: { theme: next } }));
+      window.dispatchEvent(
+        new CustomEvent("dj:theme-change", { detail: { theme: next } }),
+      );
     });
 
-    window.addEventListener('dj:theme-change', ((e: CustomEvent) => {
+    window.addEventListener("dj:theme-change", ((e: CustomEvent) => {
       if (e.detail?.theme) updateLabel(e.detail.theme);
     }) as EventListener);
   }
@@ -149,7 +195,9 @@ const aboutHref = lang === 'en' ? '/about' : `/${lang}/about`;
     box-shadow: 0 0 15px var(--color-primary-glow);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    transition: var(--transition-theme), transform 0.2s ease;
+    transition:
+      var(--transition-theme),
+      transform 0.2s ease;
     text-decoration: none;
     flex-shrink: 0;
   }
@@ -204,19 +252,20 @@ const aboutHref = lang === 'en' ? '/about' : `/${lang}/about`;
   .lang-switch-inline {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
-    margin-block-start: 0.25rem;
+    gap: 0.35rem;
+    margin-block-start: 0.35rem;
     line-height: 1;
   }
 
   .lang-switch-inline .lang-btn {
-    font-family: var(--font-mono);
-    font-size: 0.5625rem;
-    letter-spacing: 0.14em;
+    font-family: var(--font-ui-lang);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     text-decoration: none;
     color: var(--color-text-subtle);
-    padding: 0;
+    padding: 0.15rem 0.2rem;
     line-height: 1;
     transition: color 0.2s ease;
   }
@@ -232,10 +281,10 @@ const aboutHref = lang === 'en' ? '/about' : `/${lang}/about`;
   }
 
   .lang-switch-inline .lang-divider {
-    font-family: var(--font-mono);
-    font-size: 0.4375rem;
+    font-family: var(--font-ui-lang);
+    font-size: 0.5rem;
     color: var(--color-primary);
-    opacity: 0.5;
+    opacity: 0.45;
     user-select: none;
     line-height: 1;
   }
@@ -276,7 +325,11 @@ const aboutHref = lang === 'en' ? '/about' : `/${lang}/about`;
     border: 1px solid var(--color-glass-border);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    transition: var(--transition-theme), color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    transition:
+      var(--transition-theme),
+      color 0.2s ease,
+      border-color 0.2s ease,
+      transform 0.2s ease;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -286,9 +339,14 @@ const aboutHref = lang === 'en' ? '/about' : `/${lang}/about`;
   }
 
   :global([dir="rtl"]) .nav-about-link {
-    font-family: 'Heebo', sans-serif;
+    font-family: "Heebo", sans-serif;
     letter-spacing: 0.04em;
-    font-weight: 600;
+    font-weight: 500;
+  }
+
+  :global([dir="rtl"]) .artist-descriptor {
+    font-family: "Heebo", sans-serif;
+    letter-spacing: 0.06em;
   }
 
   .nav-about-link:hover {
@@ -316,7 +374,9 @@ const aboutHref = lang === 'en' ? '/about' : `/${lang}/about`;
     -webkit-backdrop-filter: blur(16px);
     color: var(--color-text-main);
     cursor: pointer;
-    transition: var(--transition-theme), transform 0.2s ease;
+    transition:
+      var(--transition-theme),
+      transform 0.2s ease;
   }
 
   @media (min-width: 640px) {
@@ -375,7 +435,14 @@ const aboutHref = lang === 'en' ? '/about' : `/${lang}/about`;
   }
 
   @keyframes pulse {
-    0%, 100% { opacity: 0.4; height: 3px; }
-    50% { opacity: 1; height: 11px; }
+    0%,
+    100% {
+      opacity: 0.4;
+      height: 3px;
+    }
+    50% {
+      opacity: 1;
+      height: 11px;
+    }
   }
 </style>

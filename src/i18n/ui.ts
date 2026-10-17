@@ -207,6 +207,7 @@ export const ui = {
     formSubmitting: 'Transmitting Brief...',
     formSuccessTitle: 'Brief Received ✨',
     formSuccessDesc: 'Thank you. Dima will review your event details and respond via your preferred contact channel within 24 hours.',
+    formResetBtn: 'Submit Another Inquiry',
     formError: 'Transmission issue. Please connect directly via WhatsApp or email.',
 
     // Sticky Action Bar
@@ -383,10 +384,11 @@ export const ui = {
     formGuestsPlaceholder: 'Например, 40–50 гостей',
     formNotesLabel: 'Пожелания и атмосфера',
     formNotesPlaceholder: 'Расскажите о тайминге, площадке и пожеланиях к звуку...',
-    formSubmitBtn: 'Отправить бриф события',
+    formSubmitBtn: 'Отправить бриф',
     formSubmitting: 'Отправка брифа...',
     formSuccessTitle: 'Бриф успешно получен ✨',
     formSuccessDesc: 'Спасибо! Дима изучит детали вашего события и свяжется с вами в течение 24 часов удобным для вас способом.',
+    formResetBtn: 'Отправить ещё один запрос',
     formError: 'Ошибка отправки. Пожалуйста, напишите напрямую в WhatsApp или на почту.',
 
     // Sticky Action Bar
@@ -567,6 +569,7 @@ export const ui = {
     formSubmitting: 'שולח פרטים...',
     formSuccessTitle: 'הבריף התקבל בהצלחה ✨',
     formSuccessDesc: 'תודה רבה. דימה יעבור על פרטי האירוע ויחזור אליכם תוך 24 שעות בערוץ המועדף עליכם.',
+    formResetBtn: 'שליחת פנייה נוספת',
     formError: 'חלה שגיאה בשליחה. ניתן ליצור קשר ישירות ב-WhatsApp או באימייל.',
 
     // Sticky Action Bar

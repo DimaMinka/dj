@@ -202,12 +202,18 @@ const waLink = getWhatsAppLink(lang);
   :global([lang="ru"]) .dock-audio-btn,
   :global([lang="ru"]) .dock-whatsapp-btn {
     font-family: 'Unbounded', 'Syne', sans-serif;
-    letter-spacing: 0.04em;
+    font-weight: 500;
+    font-size: 0.72rem;
+    letter-spacing: 0.03em;
   }
 
   :global([dir="rtl"]) .dock-audio-btn,
   :global([dir="rtl"]) .dock-whatsapp-btn {
     font-family: 'Rubik', 'Heebo', sans-serif;
     letter-spacing: 0.02em;
+  }
+
+  :global([dir="rtl"]) #stickyPlayIcon {
+    transform: scaleX(-1);
   }
 </style>

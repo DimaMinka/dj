@@ -1,0 +1,273 @@
+---
+import type { SupportedLang } from "../../i18n/ui";
+import { useTranslations, getWhatsAppLink } from "../../i18n/ui";
+
+interface Props {
+  lang: SupportedLang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const waLink = getWhatsAppLink(lang);
+const pageDescription =
+  t("aboutHeroSubtitle") ||
+  "Bespoke Sound & Site-Specific Light Installations for Private Events, Boutique Wineries & Retreats in Galilee & Golan Heights.";
+---
+
+<section class="about-hero" id="overview">
+  <div class="hero-content">
+    <div class="hero-badge-row">
+      <span class="geo-badge">
+        <span class="pulse-dot" aria-hidden="true"></span>
+        <span>{t("aboutHeroBadgeGeo") || "GALILEE & GOLAN HEIGHTS"}</span>
+      </span>
+      <span class="freq-badge"
+        >{t("aboutHeroBadgeFreq") || "432 Hz RESONANCE"}</span
+      >
+    </div>
+
+    <h1 class="about-title">
+      {t("aboutPageTitle") || "The Architecture of Frequency"}
+    </h1>
+    <p class="about-subtitle">{pageDescription}</p>
+
+    <div class="hero-cta-group">
+      <a
+        href={waLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="cta-btn primary-cta"
+        data-analytics="conversion_whatsapp_click"
+        data-placement="hero_cta"
+      >
+        <span class="material-symbols-outlined cta-icon" aria-hidden="true"
+          >chat</span
+        >
+        <span>{t("aboutCtaWhatsApp") || "WhatsApp Inquiry"}</span>
+      </a>
+
+      <a href="#specifications" class="cta-btn secondary-cta">
+        <span class="material-symbols-outlined cta-icon" aria-hidden="true"
+          >tune</span
+        >
+        <span>{t("aboutCtaSpecs") || "Sound & Light Rig"}</span>
+      </a>
+
+      <a href="#booking-brief" class="cta-btn text-cta">
+        <span class="material-symbols-outlined cta-icon" aria-hidden="true"
+          >calendar_today</span
+        >
+        <span>{t("aboutCtaBrief") || "Send Event Brief"}</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-hero {
+    position: relative;
+    z-index: 10;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-inline: 1.25rem;
+    padding-block: 3rem 4rem;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    max-width: 900px;
+    width: 100%;
+    margin-inline: auto;
+    box-sizing: border-box;
+  }
+
+  .hero-badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-block-end: 1.25rem;
+    max-width: 100%;
+  }
+
+  .geo-badge,
+  .freq-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: var(--font-mono);
+    font-size: clamp(0.8125rem, 2.5vw, 0.9375rem);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding-inline: 0.95rem;
+    padding-block: 0.5rem;
+    border-radius: var(--radius-full);
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    color: var(--color-primary);
+    white-space: nowrap;
+  }
+
+  .pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    background: var(--color-primary);
+    box-shadow: 0 0 8px var(--color-primary-glow);
+    animation: pulse 1.8s infinite;
+    flex-shrink: 0;
+  }
+
+  .about-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 5.5vw, 3.8rem);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-text-main);
+    line-height: 1.15;
+    max-width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  .about-subtitle {
+    font-family: var(--font-body);
+    font-size: clamp(1rem, 2.2vw, 1.25rem);
+    line-height: 1.55;
+    color: var(--color-text-muted);
+    max-width: 720px;
+    margin-block-start: 1.25rem;
+    margin-block-end: 2rem;
+    font-weight: 400;
+  }
+
+  .hero-cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.875rem;
+  }
+
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding-inline: 1.5rem;
+    padding-block: 0.875rem;
+    border-radius: var(--radius-full);
+    transition:
+      var(--transition-theme),
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .primary-cta {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    box-shadow: 0 4px 20px var(--color-primary-glow);
+  }
+
+  .primary-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 26px var(--color-primary-glow);
+  }
+
+  .secondary-cta {
+    background: var(--color-surface-glass);
+    color: var(--color-text-main);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .secondary-cta:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+  }
+
+  .text-cta {
+    background: transparent;
+    color: var(--color-text-muted);
+    border: 1px dashed var(--color-glass-border);
+  }
+
+  .text-cta:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  .cta-icon {
+    font-size: 1.125rem;
+  }
+
+  @keyframes pulse {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.4;
+      transform: scale(0.85);
+    }
+  }
+
+  /* Cyrillic (Russian) Specific Typographic Enhancements: Unbounded */
+  :global([lang="ru"]) .about-title {
+    font-family: "Unbounded", "Syne", sans-serif;
+    font-weight: 400;
+    font-size: clamp(1.6rem, 4.8vw, 3.3rem);
+    letter-spacing: 0.05em;
+  }
+
+  :global([lang="ru"]) .cta-btn {
+    font-family: "Unbounded", "Syne", sans-serif;
+    font-weight: 500;
+    font-size: 0.75rem;
+    letter-spacing: 0.03em;
+  }
+
+  /* RTL / Hebrew Specific Typographic Enhancements: Rubik & Heebo */
+  :global([dir="rtl"]) .about-title {
+    font-family: "Rubik", "Heebo", sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  :global([dir="rtl"]) .about-subtitle {
+    font-family: "Heebo", sans-serif;
+  }
+
+  :global([dir="rtl"]) .cta-btn {
+    font-family: "Rubik", "Heebo", sans-serif;
+    letter-spacing: 0.02em;
+  }
+
+  :global([dir="rtl"]) .geo-badge,
+  :global([dir="rtl"]) .freq-badge {
+    font-family: 'Heebo', sans-serif;
+    font-weight: 500;
+    font-size: 0.875rem;
+    letter-spacing: 0.06em;
+  }
+</style>

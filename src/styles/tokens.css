@@ -6,8 +6,15 @@
   --font-grotesk: 'Space Grotesk', sans-serif;
   --font-body: 'Manrope', 'Heebo', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
-  
-  --radius-sm: 0.25rem;
+  --font-ui-lang: 'Heebo', sans-serif;
+}
+
+:root[dir="rtl"],
+html[dir="rtl"] {
+  --font-mono: 'Heebo', sans-serif;
+}
+
+:root {
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;

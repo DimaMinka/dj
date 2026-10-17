@@ -1,0 +1,242 @@
+---
+import type { SupportedLang } from "../../i18n/ui";
+import { useTranslations } from "../../i18n/ui";
+
+interface Props {
+  lang: SupportedLang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="about-section faq-section" id="faq">
+  <div class="section-container">
+    <div class="section-header">
+      <span class="section-badge"
+        >{t("faqBadge") || "PRACTICAL CLARITY"}</span
+      >
+      <h2 class="section-title">
+        {t("faqTitle") || "Frequently Asked Questions"}
+      </h2>
+      <p class="section-subtitle">{t("faqSubtitle")}</p>
+    </div>
+
+    <div class="faq-list">
+      <details class="faq-item" open>
+        <summary class="faq-question">
+          <span class="faq-q-text">{t("faq1Q")}</span>
+          <span
+            class="material-symbols-outlined faq-arrow"
+            aria-hidden="true">expand_more</span
+          >
+        </summary>
+        <div class="faq-answer">
+          <p>{t("faq1A")}</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-question">
+          <span class="faq-q-text">{t("faq2Q")}</span>
+          <span
+            class="material-symbols-outlined faq-arrow"
+            aria-hidden="true">expand_more</span
+          >
+        </summary>
+        <div class="faq-answer">
+          <p>{t("faq2A")}</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-question">
+          <span class="faq-q-text">{t("faq3Q")}</span>
+          <span
+            class="material-symbols-outlined faq-arrow"
+            aria-hidden="true">expand_more</span
+          >
+        </summary>
+        <div class="faq-answer">
+          <p>{t("faq3A")}</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-question">
+          <span class="faq-q-text">{t("faq4Q")}</span>
+          <span
+            class="material-symbols-outlined faq-arrow"
+            aria-hidden="true">expand_more</span
+          >
+        </summary>
+        <div class="faq-answer">
+          <p>{t("faq4A")}</p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-section {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    padding-inline: 1.25rem;
+    padding-block: 4rem;
+    box-sizing: border-box;
+  }
+
+  .section-container {
+    max-width: 1080px;
+    width: 100%;
+    margin-inline: auto;
+    box-sizing: border-box;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-block-end: 2.5rem;
+  }
+
+  .section-badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin-block-end: 0.85rem;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3.8vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-main);
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .section-subtitle {
+    font-family: var(--font-body);
+    font-size: clamp(0.9375rem, 2vw, 1.125rem);
+    color: var(--color-text-muted);
+    max-width: 640px;
+    margin-inline: auto;
+    margin-block-start: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .faq-list {
+    max-width: 840px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .faq-item {
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+  }
+
+  .faq-item[open] {
+    border-color: var(--color-primary);
+  }
+
+  .faq-question {
+    padding: 1.25rem 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    list-style: none;
+    user-select: none;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-q-text {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--color-text-main);
+    line-height: 1.4;
+  }
+
+  .faq-arrow {
+    color: var(--color-primary);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .faq-item[open] .faq-arrow {
+    transform: rotate(180deg);
+  }
+
+  .faq-answer {
+    padding: 0 1.5rem 1.25rem 1.5rem;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+  }
+
+  .faq-answer p {
+    margin: 0;
+  }
+
+  /* Russian Support: Unbounded */
+  :global([lang="ru"]) .section-title {
+    font-family: 'Unbounded', 'Syne', sans-serif;
+    font-weight: 400;
+    font-size: clamp(1.25rem, 2.8vw, 1.85rem);
+    letter-spacing: 0.02em;
+  }
+
+  :global([lang="ru"]) .faq-q-text {
+    font-family: 'Unbounded', 'Syne', sans-serif;
+    font-weight: 400;
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
+  }
+
+  :global([lang="ru"]) .section-badge {
+    font-family: 'Unbounded', 'Syne', sans-serif;
+    font-weight: 500;
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+  }
+
+  /* RTL Support */
+  :global([dir="rtl"]) .section-title,
+  :global([dir="rtl"]) .faq-q-text {
+    font-family: 'Rubik', 'Heebo', sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  :global([dir="rtl"]) .section-subtitle,
+  :global([dir="rtl"]) .faq-answer {
+    font-family: 'Heebo', sans-serif;
+  }
+
+  :global([dir="rtl"]) .section-badge {
+    font-family: 'Heebo', sans-serif;
+    font-weight: 500;
+    font-size: 0.875rem;
+    letter-spacing: 0.08em;
+  }
+</style>

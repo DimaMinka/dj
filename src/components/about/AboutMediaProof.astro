@@ -1,0 +1,129 @@
+---
+import AudioPreview from "./AudioPreview.astro";
+import VideoReel from "./VideoReel.astro";
+import type { SupportedLang } from "../../i18n/ui";
+import { useTranslations } from "../../i18n/ui";
+
+interface Props {
+  lang: SupportedLang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="about-section media-proof-section" id="media-proof">
+  <div class="section-container">
+    <div class="media-proof-grid">
+      <div class="proof-col">
+        <div class="col-header">
+          <span class="col-tag">{t("audioPreviewTag") || "CURATED SOUNDSCAPE"}</span>
+          <h2 class="col-title">{t("audioPreviewTitle") || "Sunset Sessions & Melodic Drift"}</h2>
+        </div>
+        <AudioPreview lang={lang} />
+      </div>
+
+      <div class="proof-col">
+        <div class="col-header">
+          <span class="col-tag">{t("visualArchitectureTag") || "VISUAL ARCHITECTURE"}</span>
+          <h2 class="col-title">{t("visualArchitectureTitle") || "Site-Specific Lighting"}</h2>
+        </div>
+        <VideoReel lang={lang} />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-section {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    padding-inline: 1.25rem;
+    padding-block: 4rem;
+    box-sizing: border-box;
+  }
+
+  .section-container {
+    max-width: 1080px;
+    width: 100%;
+    margin-inline: auto;
+    box-sizing: border-box;
+  }
+
+  .media-proof-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 840px) {
+    .media-proof-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .proof-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .col-header {
+    text-align: center;
+  }
+
+  .col-tag {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    display: block;
+    margin-block-end: 0.35rem;
+  }
+
+  .col-title {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--color-text-main);
+    margin: 0;
+  }
+
+  /* Russian Support: Unbounded */
+  :global([lang="ru"]) .col-title {
+    font-family: 'Unbounded', 'Syne', sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    letter-spacing: 0.01em;
+  }
+
+  :global([lang="ru"]) .col-tag {
+    font-family: 'Unbounded', 'Syne', sans-serif;
+    font-weight: 500;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+  }
+
+  /* RTL Support */
+  :global([dir="rtl"]) .col-title {
+    font-family: 'Rubik', 'Heebo', sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  :global([dir="rtl"]) .col-tag {
+    font-family: 'Heebo', sans-serif;
+    font-weight: 500;
+    font-size: 0.8125rem;
+    letter-spacing: 0.08em;
+  }
+</style>
