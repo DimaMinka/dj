@@ -3,14 +3,50 @@ import type { SupportedLang } from '../../i18n/ui';
 import { useTranslations } from '../../i18n/ui';
 
 interface Props {
+  id?: string;
+  trackId?: string;
   lang?: SupportedLang;
+  badgeTag?: string;
+  badgeBpm?: string;
+  trackTitle?: string;
+  trackSubtitle?: string;
+  ariaLabel?: string;
+  audioSrc?: string;
+  baseFreq?: number;
+  subFreq?: number;
 }
 
-const { lang = 'en' } = Astro.props;
+const {
+  id = 'aboutAudioPreview',
+  trackId = 'default',
+  lang = 'en',
+  badgeTag,
+  badgeBpm,
+  trackTitle,
+  trackSubtitle,
+  ariaLabel,
+  audioSrc,
+  baseFreq = 432,
+  subFreq = 216,
+} = Astro.props;
+
 const t = useTranslations(lang);
+const displayTag = badgeTag || t("audioBadgeTag") || "SUNSET SESSION";
+const displayBpm = badgeBpm || t("audioBadgeBpm") || "122 BPM MELODIC";
+const displayTitle = trackTitle || t("audioTrackTitle") || "Galilee Sunset Resonance";
+const displaySubtitle = trackSubtitle || t("audioTrackSubtitle") || "Organic House • Live recorded for hillside terraces & wine evenings";
+const displayAria = ariaLabel || t("audioPlayAria") || "Play Sunset & Organic House soundscape preview";
 ---
 
-<div class="audio-preview-card" id="aboutAudioPreview">
+<div
+  class="audio-preview-card"
+  id={id}
+  data-audio-card
+  data-track-id={trackId}
+  data-audio-src={audioSrc || ""}
+  data-base-freq={baseFreq}
+  data-sub-freq={subFreq}
+>
   <div class="audio-glow" aria-hidden="true"></div>
 
   <div class="audio-content">
@@ -18,12 +54,12 @@ const t = useTranslations(lang);
       <div class="audio-badge-group">
         <span class="freq-pill">
           <span class="live-dot" aria-hidden="true"></span>
-          <span>{t("audioBadgeTag") || "SUNSET SESSION"}</span>
+          <span>{displayTag}</span>
         </span>
-        <span class="bpm-pill">{t("audioBadgeBpm") || "122 BPM MELODIC"}</span>
+        <span class="bpm-pill">{displayBpm}</span>
       </div>
 
-      <div class="eq-bars" id="aboutEqBars" aria-hidden="true">
+      <div class="eq-bars" data-eq-bars aria-hidden="true">
         <span class="bar bar-1"></span>
         <span class="bar bar-2"></span>
         <span class="bar bar-3"></span>
@@ -37,104 +73,139 @@ const t = useTranslations(lang);
       <button
         type="button"
         class="play-btn"
-        id="aboutPlayBtn"
-        aria-label={t("audioPlayAria") || "Play Sunset & Organic House soundscape preview"}
+        data-play-btn
+        aria-label={displayAria}
       >
-        <span class="material-symbols-outlined play-icon" id="aboutPlayIcon" aria-hidden="true">play_arrow</span>
+        <span class="material-symbols-outlined play-icon" data-play-icon aria-hidden="true">play_arrow</span>
       </button>
 
       <div class="track-meta">
-        <span class="track-title">{t("audioTrackTitle") || "Galilee Sunset Resonance"}</span>
-        <span class="track-subtitle">{t("audioTrackSubtitle") || "Organic House • Live recorded for hillside terraces & wine evenings"}</span>
+        <span class="track-title">{displayTitle}</span>
+        <span class="track-subtitle">{displaySubtitle}</span>
       </div>
     </div>
 
-    <!-- Hidden audio element for future real MP3 / stream drop-in -->
-    <audio id="aboutAudioElement" preload="none" aria-hidden="true"></audio>
+    <!-- Audio element for MP3 playback -->
+    <audio data-audio-element src={audioSrc || undefined} preload="metadata" aria-hidden="true"></audio>
   </div>
 </div>
 
 <script>
-  (function initAboutAudioPlayer() {
+  (function initAudioCards() {
+    // Shared audio context and registry so multiple cards coordinate smoothly
     let audioCtx: AudioContext | null = null;
     let osc1: OscillatorNode | null = null;
     let osc2: OscillatorNode | null = null;
     let gainNode: GainNode | null = null;
-    let isPlaying = false;
+    let activeCard: HTMLElement | null = null;
     let eqInterval: ReturnType<typeof setInterval> | null = null;
 
-    const playBtn = document.getElementById('aboutPlayBtn');
-    const playIcon = document.getElementById('aboutPlayIcon');
-    const eqBars = document.querySelectorAll('#aboutEqBars .bar');
-    const previewContainer = document.getElementById('aboutAudioPreview');
+    const cards = document.querySelectorAll<HTMLElement>('[data-audio-card]');
+    if (!cards.length) return;
 
-    function updateUiState(playing: boolean) {
-      isPlaying = playing;
-      if (playIcon) {
-        playIcon.textContent = playing ? 'pause' : 'play_arrow';
+    let currentAudioEl: HTMLAudioElement | null = null;
+
+    function stopPlayback() {
+      if (currentAudioEl) {
+        try {
+          currentAudioEl.pause();
+          currentAudioEl.currentTime = 0;
+        } catch (e) {}
+        currentAudioEl = null;
       }
-      if (previewContainer) {
-        previewContainer.classList.toggle('is-playing', playing);
-      }
 
-      // Notify global listeners (e.g., sticky action bar)
-      window.dispatchEvent(
-        new CustomEvent('dj:about-audio-change', {
-          detail: { isPlaying: playing }
-        })
-      );
-
-      if (playing) {
-        if (!eqInterval) {
-          eqInterval = setInterval(() => {
-            eqBars.forEach((bar) => {
-              const h = Math.floor(Math.random() * 18) + 4;
-              (bar as HTMLElement).style.height = `${h}px`;
-            });
-          }, 180);
-        }
-      } else {
-        if (eqInterval) {
-          clearInterval(eqInterval);
-          eqInterval = null;
-        }
-        eqBars.forEach((bar) => {
-          (bar as HTMLElement).style.height = '4px';
-        });
-      }
-    }
-
-    function stopSynth() {
       if (gainNode && audioCtx) {
         try {
           const ct = audioCtx.currentTime;
           gainNode.gain.cancelScheduledValues(ct);
           gainNode.gain.setValueAtTime(gainNode.gain.value, ct);
-          gainNode.gain.exponentialRampToValueAtTime(0.0001, ct + 0.4);
+          gainNode.gain.exponentialRampToValueAtTime(0.0001, ct + 0.35);
           setTimeout(() => {
             if (osc1) {
-              osc1.stop();
-              osc1.disconnect();
+              try { osc1.stop(); osc1.disconnect(); } catch (e) {}
               osc1 = null;
             }
             if (osc2) {
-              osc2.stop();
-              osc2.disconnect();
+              try { osc2.stop(); osc2.disconnect(); } catch (e) {}
               osc2 = null;
             }
             if (gainNode) {
-              gainNode.disconnect();
+              try { gainNode.disconnect(); } catch (e) {}
               gainNode = null;
             }
-          }, 450);
+          }, 400);
         } catch (e) {
           console.warn('Error stopping synth:', e);
         }
       }
-      updateUiState(false);
+
+      if (eqInterval) {
+        clearInterval(eqInterval);
+        eqInterval = null;
+      }
+
+      cards.forEach((card) => {
+        card.classList.remove('is-playing');
+        const icon = card.querySelector('[data-play-icon]');
+        if (icon) icon.textContent = 'play_arrow';
+        const bars = card.querySelectorAll<HTMLElement>('[data-eq-bars] .bar');
+        bars.forEach((b) => (b.style.height = '4px'));
+      });
+
+      activeCard = null;
+
+      window.dispatchEvent(
+        new CustomEvent('dj:about-audio-change', {
+          detail: { isPlaying: false, activeTrackId: null }
+        })
+      );
     }
 
-    function startSynth() {
+    function startPlayback(card: HTMLElement) {
+      if (activeCard && activeCard !== card) {
+        stopPlayback();
+      }
+
+      const audioSrc = card.dataset.audioSrc;
+      const audioEl = card.querySelector<HTMLAudioElement>('audio[data-audio-element]');
+
+      activeCard = card;
+      card.classList.add('is-playing');
+      const icon = card.querySelector('[data-play-icon]');
+      if (icon) icon.textContent = 'pause';
+
+      const bars = card.querySelectorAll<HTMLElement>('[data-eq-bars] .bar');
+      if (!eqInterval) {
+        eqInterval = setInterval(() => {
+          bars.forEach((bar) => {
+            const h = Math.floor(Math.random() * 18) + 4;
+            bar.style.height = `${h}px`;
+          });
+        }, 180);
+      }
+
+      if (audioSrc && audioEl) {
+        currentAudioEl = audioEl;
+        audioEl.play().catch((err) => {
+          console.warn('HTML5 audio play error, falling back to synth:', err);
+          playSynth(card);
+        });
+
+        audioEl.onended = () => {
+          stopPlayback();
+        };
+      } else {
+        playSynth(card);
+      }
+
+      window.dispatchEvent(
+        new CustomEvent('dj:about-audio-change', {
+          detail: { isPlaying: true, activeTrackId: card.dataset.trackId || null }
+        })
+      );
+    }
+
+    function playSynth(card: HTMLElement) {
       try {
         const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
         if (!audioCtx) {
@@ -144,54 +215,57 @@ const t = useTranslations(lang);
           audioCtx.resume();
         }
 
-        const ct = audioCtx.currentTime;
+        const baseF = Number(card.dataset.baseFreq) || 432;
+        const subF = Number(card.dataset.subFreq) || 216;
 
+        const ct = audioCtx.currentTime;
         gainNode = audioCtx.createGain();
         gainNode.gain.setValueAtTime(0.0001, ct);
-        gainNode.gain.exponentialRampToValueAtTime(0.05, ct + 0.5);
+        gainNode.gain.exponentialRampToValueAtTime(0.05, ct + 0.45);
 
-        // Primary 432 Hz sine oscillator (pure restorative resonance)
         osc1 = audioCtx.createOscillator();
         osc1.type = 'sine';
-        osc1.frequency.setValueAtTime(432, ct);
+        osc1.frequency.setValueAtTime(baseF, ct);
 
-        // Sub harmonic oscillator (216 Hz warm sub pad)
         osc2 = audioCtx.createOscillator();
         osc2.type = 'triangle';
-        osc2.frequency.setValueAtTime(216, ct);
+        osc2.frequency.setValueAtTime(subF, ct);
 
         const filter = audioCtx.createBiquadFilter();
         filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(800, ct);
+        filter.frequency.setValueAtTime(780, ct);
 
         osc1.connect(gainNode);
         osc2.connect(filter);
         filter.connect(gainNode);
-
         gainNode.connect(audioCtx.destination);
 
         osc1.start(ct);
         osc2.start(ct);
-
-        updateUiState(true);
       } catch (err) {
         console.warn('Web Audio playback failed:', err);
       }
     }
 
-    function toggleAudio() {
-      if (isPlaying) {
-        stopSynth();
-      } else {
-        startSynth();
-      }
-    }
+    cards.forEach((card) => {
+      const btn = card.querySelector('[data-play-btn]');
+      btn?.addEventListener('click', () => {
+        if (activeCard === card) {
+          stopPlayback();
+        } else {
+          startPlayback(card);
+        }
+      });
+    });
 
-    playBtn?.addEventListener('click', toggleAudio);
-
-    // Sync with external triggers (Sticky bar or other controls)
+    // Sync with external triggers (e.g. sticky action bar toggles primary card)
     window.addEventListener('dj:toggle-about-audio', (() => {
-      toggleAudio();
+      if (activeCard) {
+        stopPlayback();
+      } else {
+        const firstCard = cards[0];
+        if (firstCard) startPlayback(firstCard);
+      }
     }) as EventListener);
   })();
 </script>
@@ -207,11 +281,21 @@ const t = useTranslations(lang);
     border: 1px solid var(--color-glass-border);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    padding: clamp(1rem, 3.5vw, 1.5rem);
+    padding: clamp(1rem, 3.5vw, 1.35rem);
     box-sizing: border-box;
     overflow: hidden;
     min-width: 0;
     transition: var(--transition-theme), border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  @media (min-width: 840px) {
+    .audio-preview-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      flex: 1;
+      height: 100%;
+    }
   }
 
   .audio-preview-card.is-playing {
