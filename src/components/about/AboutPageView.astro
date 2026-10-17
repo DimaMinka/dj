@@ -780,6 +780,9 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
     display: grid;
     grid-template-columns: 1fr;
     gap: 2rem;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   @media (min-width: 840px) {
@@ -792,6 +795,9 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .col-header {
@@ -1273,7 +1279,8 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific
   :global([dir="rtl"]) .spec-card-title,
   :global([dir="rtl"]) .pkg-title,
   :global([dir="rtl"]) .faq-q-text,
-  :global([dir="rtl"]) .channels-title {
+  :global([dir="rtl"]) .channels-title,
+  :global([dir="rtl"]) .col-title {
     font-family: 'Heebo', sans-serif;
     letter-spacing: 0.02em;
   }
