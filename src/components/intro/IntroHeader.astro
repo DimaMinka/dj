@@ -41,14 +41,16 @@ const aboutHref = lang === 'en' ? '/about' : `/${lang}/about`;
   </div>
 
   <div class="actions-group">
-    <!-- Language Switcher Pill -->
-    <nav class="lang-switch-box" aria-label="Language selection">
-      <a href={enHref} class={`lang-btn ${lang === 'en' ? 'is-active' : ''}`} hreflang="en" aria-current={lang === 'en' ? 'true' : undefined}>EN</a>
-      <span class="lang-divider" aria-hidden="true">/</span>
-      <a href={ruHref} class={`lang-btn ${lang === 'ru' ? 'is-active' : ''}`} hreflang="ru" aria-current={lang === 'ru' ? 'true' : undefined}>RU</a>
-      <span class="lang-divider" aria-hidden="true">/</span>
-      <a href={heHref} class={`lang-btn ${lang === 'he' ? 'is-active' : ''}`} hreflang="he" aria-current={lang === 'he' ? 'true' : undefined}>עב</a>
-    </nav>
+    <!-- Language Switcher Pill (displayed on /about pages) -->
+    {isAbout && (
+      <nav class="lang-switch-box" aria-label="Language selection">
+        <a href={enHref} class={`lang-btn ${lang === 'en' ? 'is-active' : ''}`} hreflang="en" aria-current={lang === 'en' ? 'true' : undefined}>EN</a>
+        <span class="lang-divider" aria-hidden="true">/</span>
+        <a href={ruHref} class={`lang-btn ${lang === 'ru' ? 'is-active' : ''}`} hreflang="ru" aria-current={lang === 'ru' ? 'true' : undefined}>RU</a>
+        <span class="lang-divider" aria-hidden="true">/</span>
+        <a href={heHref} class={`lang-btn ${lang === 'he' ? 'is-active' : ''}`} hreflang="he" aria-current={lang === 'he' ? 'true' : undefined}>עב</a>
+      </nav>
+    )}
 
     <!-- Contextual Nav Link: Vibes or About -->
     {isAbout ? (
