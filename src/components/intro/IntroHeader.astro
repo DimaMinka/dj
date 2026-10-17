@@ -265,7 +265,7 @@ const aboutHref = lang === 'en' ? '/about' : `/${lang}/about`;
     font-family: var(--font-display);
     font-size: 0.75rem;
     font-weight: 500;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--color-text-muted);
     text-decoration: none;
@@ -280,6 +280,15 @@ const aboutHref = lang === 'en' ? '/about' : `/${lang}/about`;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    white-space: nowrap;
+    flex-shrink: 0;
+    line-height: 1.2;
+  }
+
+  :global([dir="rtl"]) .nav-about-link {
+    font-family: 'Heebo', sans-serif;
+    letter-spacing: 0.04em;
+    font-weight: 600;
   }
 
   .nav-about-link:hover {
