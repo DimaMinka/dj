@@ -33,9 +33,8 @@ const structuredData = {
       name: "DJ Dima Minka — Bespoke Sound & Autonomous Light",
       url: "https://dj.dimaminka.com",
       sameAs: [
-        "https://minka.mk",
-        "https://t.me/minkamk",
-        "https://instagram.com/dima.minka",
+        SITE_CONTACTS.telegramUrl,
+        SITE_CONTACTS.instagramUrl,
       ],
       email: SITE_CONTACTS.email,
       telephone: SITE_CONTACTS.phone,
@@ -385,7 +384,7 @@ const pageDescription =
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <span>Inquire Format</span>
+                <span>{t("pkgBtnSelect") || "Inquire Format"}</span>
                 <span class="material-symbols-outlined" aria-hidden="true"
                   >arrow_forward</span
                 >
@@ -395,7 +394,7 @@ const pageDescription =
 
           <!-- Package 2: Private Villa & Retreat (Featured) -->
           <div class="package-card featured-pkg">
-            <div class="pkg-badge-featured">RECOMMENDED PRODUCTION</div>
+            <div class="pkg-badge-featured">{t("pkgBadgeRecommended") || "RECOMMENDED"}</div>
             <div class="pkg-top">
               <span class="pkg-scale">{t("pkg2Scale")}</span>
               <h3 class="pkg-title">{t("pkg2Title")}</h3>
@@ -431,7 +430,7 @@ const pageDescription =
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <span>Inquire Format</span>
+                <span>{t("pkgBtnSelect") || "Inquire Format"}</span>
                 <span class="material-symbols-outlined" aria-hidden="true"
                   >arrow_forward</span
                 >
@@ -476,7 +475,7 @@ const pageDescription =
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <span>Inquire Format</span>
+                <span>{t("pkgBtnInquire") || "Inquire Format"}</span>
                 <span class="material-symbols-outlined" aria-hidden="true"
                   >arrow_forward</span
                 >
