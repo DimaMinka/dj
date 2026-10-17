@@ -195,9 +195,9 @@ export const ui = {
     formError: 'Transmission issue. Please connect directly via WhatsApp or email.',
 
     // Sticky Action Bar
-    stickyPlayPreview: 'Sample 432 Hz',
-    stickyPausePreview: 'Pause Sample',
-    stickyWhatsApp: 'WhatsApp Booking',
+    stickyPlayPreview: '432 Hz Sample',
+    stickyPausePreview: 'Pause',
+    stickyWhatsApp: 'WhatsApp',
   },
   ru: {
     artistName: 'DJ DIMA MINKA',
@@ -360,9 +360,9 @@ export const ui = {
     formError: 'Ошибка отправки. Пожалуйста, напишите напрямую в WhatsApp или на почту.',
 
     // Sticky Action Bar
-    stickyPlayPreview: 'Слушать 432 Гц',
+    stickyPlayPreview: '432 Гц Семпл',
     stickyPausePreview: 'Пауза',
-    stickyWhatsApp: 'Букинг в WhatsApp',
+    stickyWhatsApp: 'WhatsApp',
   },
   he: {
     artistName: 'DJ DIMA MINKA',
@@ -525,9 +525,9 @@ export const ui = {
     formError: 'חלה שגיאה בשליחה. ניתן ליצור קשר ישירות ב-WhatsApp או באימייל.',
 
     // Sticky Action Bar
-    stickyPlayPreview: 'דגימת 432 הרץ',
-    stickyPausePreview: 'השהיית דגימה',
-    stickyWhatsApp: 'סגירת תאריך ב-WhatsApp',
+    stickyPlayPreview: '432 הרץ',
+    stickyPausePreview: 'השהייה',
+    stickyWhatsApp: 'WhatsApp',
   },
 } as const;
 
