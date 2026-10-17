@@ -1,0 +1,580 @@
+---
+import type { SupportedLang } from '../../i18n/ui';
+import { useTranslations } from '../../i18n/ui';
+
+interface Props {
+  lang: SupportedLang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<div class="booking-form-card" id="bookingFormContainer">
+  <div class="form-header">
+    <div class="form-badge">
+      <span class="badge-dot" aria-hidden="true"></span>
+      <span>{t('bookingBadge')}</span>
+    </div>
+    <h3 class="form-title">{t('formHeading')}</h3>
+    <p class="form-subtitle">{t('bookingSubtitle')}</p>
+  </div>
+
+  <form id="aboutBookingForm" class="booking-form" novalidate>
+    <!-- Hidden Honeypot Field for Bot Trapping -->
+    <div class="hp-field" aria-hidden="true">
+      <label for="form_comments">Leave this empty</label>
+      <input type="text" name="comments" id="form_comments" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <!-- Hidden Timestamp Field for Bot Submission Velocity -->
+    <input type="hidden" name="formLoadedAt" id="formLoadedAt" value="" />
+    <input type="hidden" name="locale" value={lang} />
+
+    <div class="form-grid">
+      <!-- Name Field -->
+      <div class="form-group">
+        <label for="bookName" class="form-label">{t('formNameLabel')} <span class="required-star">*</span></label>
+        <input
+          type="text"
+          id="bookName"
+          name="name"
+          class="form-input"
+          placeholder={t('formNamePlaceholder')}
+          required
+          minlength="2"
+          maxlength="120"
+          autocomplete="name"
+        />
+        <span class="field-error" id="nameError"></span>
+      </div>
+
+      <!-- Contact Field -->
+      <div class="form-group">
+        <label for="bookContact" class="form-label">{t('formContactLabel')} <span class="required-star">*</span></label>
+        <input
+          type="text"
+          id="bookContact"
+          name="contact"
+          class="form-input"
+          placeholder={t('formContactPlaceholder')}
+          required
+          minlength="5"
+          maxlength="150"
+          autocomplete="email tel"
+        />
+        <span class="field-error" id="contactError"></span>
+      </div>
+
+      <!-- Target Date Field -->
+      <div class="form-group">
+        <label for="bookDate" class="form-label">{t('formDateLabel')}</label>
+        <input
+          type="text"
+          id="bookDate"
+          name="eventDate"
+          class="form-input"
+          placeholder={t('formDatePlaceholder')}
+        />
+      </div>
+
+      <!-- Location / Format Field -->
+      <div class="form-group">
+        <label for="bookLocation" class="form-label">{t('formLocationLabel')}</label>
+        <input
+          type="text"
+          id="bookLocation"
+          name="locationType"
+          class="form-input"
+          placeholder={t('formLocationPlaceholder')}
+        />
+      </div>
+
+      <!-- Guest Count Field -->
+      <div class="form-group full-width">
+        <label for="bookGuests" class="form-label">{t('formGuestsLabel')}</label>
+        <input
+          type="text"
+          id="bookGuests"
+          name="guestCount"
+          class="form-input"
+          placeholder={t('formGuestsPlaceholder')}
+        />
+      </div>
+
+      <!-- Notes Field -->
+      <div class="form-group full-width">
+        <label for="bookNotes" class="form-label">{t('formNotesLabel')}</label>
+        <textarea
+          id="bookNotes"
+          name="notes"
+          class="form-textarea"
+          rows="3"
+          placeholder={t('formNotesPlaceholder')}
+        ></textarea>
+      </div>
+    </div>
+
+    <!-- Feedback Message Box -->
+    <div id="formFeedback" class="form-feedback" aria-live="polite"></div>
+
+    <!-- Submit Button Row -->
+    <div class="form-submit-row">
+      <button type="submit" id="submitBriefBtn" class="submit-brief-btn">
+        <span class="btn-spinner" aria-hidden="true"></span>
+        <span class="material-symbols-outlined btn-icon" aria-hidden="true">send</span>
+        <span class="btn-text" id="submitBtnText">{t('formSubmitBtn')}</span>
+      </button>
+    </div>
+  </form>
+
+  <!-- Success Confirmation Slate (Hidden Initially) -->
+  <div id="bookingSuccessSlate" class="success-slate" aria-hidden="true">
+    <div class="success-icon-box">
+      <span class="material-symbols-outlined success-icon" aria-hidden="true">check_circle</span>
+    </div>
+    <h4 class="success-title">{t('formSuccessTitle')}</h4>
+    <p class="success-desc">{t('formSuccessDesc')}</p>
+    <button type="button" id="resetFormBtn" class="reset-form-btn">
+      <span>Submit Another Inquiry</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  import { actions } from 'astro:actions';
+
+  function initBookingForm() {
+    const form = document.getElementById('aboutBookingForm') as HTMLFormElement | null;
+    const loadedAtInput = document.getElementById('formLoadedAt') as HTMLInputElement | null;
+    const submitBtn = document.getElementById('submitBriefBtn') as HTMLButtonElement | null;
+    const submitBtnText = document.getElementById('submitBtnText');
+    const feedback = document.getElementById('formFeedback');
+    const successSlate = document.getElementById('bookingSuccessSlate');
+    const resetBtn = document.getElementById('resetFormBtn');
+
+    if (!form || !submitBtn) return;
+
+    // Set form load timestamp for velocity-based bot defense
+    if (loadedAtInput) {
+      loadedAtInput.value = Date.now().toString();
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const nameInput = document.getElementById('bookName') as HTMLInputElement | null;
+      const contactInput = document.getElementById('bookContact') as HTMLInputElement | null;
+      const nameError = document.getElementById('nameError');
+      const contactError = document.getElementById('contactError');
+
+      // Clear previous validation errors
+      if (nameError) nameError.textContent = '';
+      if (contactError) contactError.textContent = '';
+      if (feedback) feedback.textContent = '';
+      nameInput?.classList.remove('has-error');
+      contactInput?.classList.remove('has-error');
+
+      // Client-side quick checks
+      let hasError = false;
+      if (!nameInput || nameInput.value.trim().length < 2) {
+        if (nameError) nameError.textContent = 'Please enter your name (min 2 characters)';
+        nameInput?.classList.add('has-error');
+        hasError = true;
+      }
+
+      if (!contactInput || contactInput.value.trim().length < 5) {
+        if (contactError) contactError.textContent = 'Please provide a valid phone, WhatsApp or email';
+        contactInput?.classList.add('has-error');
+        hasError = true;
+      }
+
+      if (hasError) return;
+
+      // Loading state
+      submitBtn.disabled = true;
+      submitBtn.classList.add('is-loading');
+      const originalText = submitBtnText?.textContent || '';
+      if (submitBtnText) submitBtnText.textContent = 'Transmitting Brief...';
+
+      const formData = new FormData(form);
+      const payload = {
+        name: formData.get('name') as string,
+        contact: formData.get('contact') as string,
+        eventDate: (formData.get('eventDate') as string) || '',
+        locationType: (formData.get('locationType') as string) || '',
+        guestCount: (formData.get('guestCount') as string) || '',
+        notes: (formData.get('notes') as string) || '',
+        locale: (formData.get('locale') as 'en' | 'ru' | 'he') || 'en',
+        comments: (formData.get('comments') as string) || '',
+        formLoadedAt: loadedAtInput ? Number(loadedAtInput.value) : Date.now(),
+      };
+
+      try {
+        const { data, error } = await actions.inquire(payload);
+
+        if (error) {
+          throw new Error(error.message || 'Transmission failed');
+        }
+
+        if (data?.success) {
+          // Analytics dispatch
+          window.dispatchEvent(new CustomEvent('dj:lead-submitted', { detail: { locale: payload.locale } }));
+          try {
+            (window as any).dataLayer = (window as any).dataLayer || [];
+            (window as any).dataLayer.push({ event: 'lead_form_submitted', locale: payload.locale });
+          } catch (e) {}
+
+          // Switch to success view
+          form.style.display = 'none';
+          if (successSlate) {
+            successSlate.classList.add('is-visible');
+            successSlate.setAttribute('aria-hidden', 'false');
+          }
+        }
+      } catch (err: any) {
+        console.error('Error submitting brief:', err);
+        if (feedback) {
+          feedback.textContent = 'Unable to send brief at this moment. Please reach out directly via WhatsApp.';
+          feedback.classList.add('is-error');
+        }
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('is-loading');
+        if (submitBtnText) submitBtnText.textContent = originalText;
+      }
+    });
+
+    resetBtn?.addEventListener('click', () => {
+      form.reset();
+      if (loadedAtInput) loadedAtInput.value = Date.now().toString();
+      form.style.display = 'block';
+      if (successSlate) {
+        successSlate.classList.remove('is-visible');
+        successSlate.setAttribute('aria-hidden', 'true');
+      }
+    });
+  }
+
+  initBookingForm();
+</script>
+
+<style>
+  .booking-form-card {
+    position: relative;
+    width: 100%;
+    max-width: 680px;
+    margin-inline: auto;
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-glass-border);
+    border-radius: var(--radius-xl);
+    padding: 2rem 1.5rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .booking-form-card {
+      padding: 2.5rem 2.25rem;
+    }
+  }
+
+  .form-header {
+    text-align: center;
+    margin-block-end: 2rem;
+  }
+
+  .form-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    padding-inline: 0.625rem;
+    padding-block: 0.25rem;
+    border-radius: var(--radius-full);
+    background: var(--color-surface);
+    border: 1px solid var(--color-glass-border);
+    margin-block-end: 0.75rem;
+  }
+
+  .badge-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 9999px;
+    background: var(--color-primary);
+    box-shadow: 0 0 6px var(--color-primary-glow);
+  }
+
+  .form-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 3.5vw, 1.75rem);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-main);
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .form-subtitle {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin-block-start: 0.5rem;
+    margin-block-end: 0;
+    line-height: 1.4;
+  }
+
+  .hp-field {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.125rem;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .form-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .full-width {
+      grid-column: span 2;
+    }
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+    box-sizing: border-box;
+  }
+
+  .form-label {
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-text-main);
+    margin-block-end: 0.375rem;
+  }
+
+  .required-star {
+    color: var(--color-primary);
+  }
+
+  /* 16px min font-size to prevent iOS Safari auto-zoom */
+  .form-input,
+  .form-textarea {
+    width: 100%;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.4;
+    padding: 0.75rem 0.875rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-glass-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text-main);
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .form-input:focus,
+  .form-textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-glow);
+  }
+
+  .form-input.has-error,
+  .form-textarea.has-error {
+    border-color: #ef4444;
+  }
+
+  .form-textarea {
+    resize: vertical;
+    min-height: 5rem;
+  }
+
+  .field-error {
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    color: #ef4444;
+    margin-block-start: 0.25rem;
+    min-height: 0.875rem;
+  }
+
+  .form-feedback {
+    margin-block-start: 0.5rem;
+    font-size: 0.8125rem;
+    text-align: center;
+  }
+
+  .form-feedback.is-error {
+    color: #ef4444;
+  }
+
+  .form-submit-row {
+    margin-block-start: 1.25rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .submit-brief-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 320px;
+    font-family: var(--font-display);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding-inline: 1.5rem;
+    padding-block: 0.875rem;
+    border-radius: var(--radius-full);
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 18px var(--color-primary-glow);
+    transition: var(--transition-theme), transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  }
+
+  .submit-brief-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px var(--color-primary-glow);
+  }
+
+  .submit-brief-btn:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  .submit-brief-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+
+  .btn-icon {
+    font-size: 1.125rem;
+  }
+
+  .btn-spinner {
+    display: none;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-top-color: currentColor;
+    border-radius: 9999px;
+    animation: spin 0.8s linear infinite;
+  }
+
+  .submit-brief-btn.is-loading .btn-spinner {
+    display: inline-block;
+  }
+
+  .submit-brief-btn.is-loading .btn-icon {
+    display: none;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Success Confirmation State */
+  .success-slate {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2.5rem 1.5rem;
+  }
+
+  .success-slate.is-visible {
+    display: flex;
+    animation: fadeIn 0.4s ease forwards;
+  }
+
+  .success-icon-box {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 9999px;
+    background: rgba(229, 169, 60, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-block-end: 1rem;
+    color: var(--color-primary);
+  }
+
+  .success-icon {
+    font-size: 2.25rem;
+  }
+
+  .success-title {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--color-text-main);
+    margin: 0;
+  }
+
+  .success-desc {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--color-text-muted);
+    max-width: 420px;
+    margin-block-start: 0.5rem;
+    margin-block-end: 1.5rem;
+  }
+
+  .reset-form-btn {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    background: transparent;
+    border: 1px solid var(--color-primary);
+    padding: 0.5rem 1.25rem;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .reset-form-btn:hover {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* RTL Support */
+  :global([dir="rtl"]) .form-title,
+  :global([dir="rtl"]) .submit-brief-btn,
+  :global([dir="rtl"]) .success-title {
+    font-family: 'Heebo', sans-serif;
+    letter-spacing: 0.02em;
+  }
+</style>

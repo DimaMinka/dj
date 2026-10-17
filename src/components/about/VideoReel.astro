@@ -1,0 +1,448 @@
+---
+import type { SupportedLang } from '../../i18n/ui';
+import { useTranslations } from '../../i18n/ui';
+
+interface Props {
+  lang?: SupportedLang;
+}
+
+const { lang = 'en' } = Astro.props;
+const t = useTranslations(lang);
+
+const reelFrames = [
+  {
+    src: '/assets/spaces/sunset-setup.jpg',
+    title: lang === 'ru' ? 'Сумерки на вилле' : lang === 'he' ? 'שעת בין ערביים בווילה' : 'Villa Twilight Ambience',
+    caption: lang === 'ru' ? 'Плавный переход от закатного чилла к ночному настроению' : lang === 'he' ? 'מעבר הדרגתי מרוגע שקיעה לאנרגיית לילה' : 'Seamless progression from sunset chill to late-night energy',
+  },
+  {
+    src: '/assets/spaces/signature-rig-setup.jpg',
+    title: lang === 'ru' ? 'Авторский сетап' : lang === 'he' ? 'עמדת DJ ייחודית' : 'Signature Stage Rig',
+    caption: lang === 'ru' ? 'Тёплое янтарное свечение ретро-сот и чистая геометрия' : lang === 'he' ? 'תאורת חלת דבש ענברית חמה וגאומטריה נקייה' : 'Warm amber vintage honeycomb glow & clean geometry',
+  },
+  {
+    src: '/assets/spaces/day-session-nature.jpg',
+    title: lang === 'ru' ? 'Эстетика дневных сессий' : lang === 'he' ? 'אסתטיקה של סטים ביום' : 'Daylight Sessions Aesthetics',
+    caption: lang === 'ru' ? 'Глубокий Organic House в естественном природном окружении' : lang === 'he' ? 'אורגניק האוס עמוק בחיבור מושלם לטבע' : 'Deep Organic House set against raw natural landscapes',
+  },
+  {
+    src: '/assets/spaces/twilight-setup.jpg',
+    title: lang === 'ru' ? 'Афро-грув на винодельне' : lang === 'he' ? 'אפרו-גרוב ביקב בוטיק' : 'Winery Afro-Groove Session',
+    caption: lang === 'ru' ? 'Плотный закатный ритм и тёплое мерцание свечей' : lang === 'he' ? 'מקצב שקיעה עשיר ואור נרות חם' : 'Rich sunset rhythm & warm flickering candlelight',
+  },
+  {
+    src: '/assets/spaces/winery-courtyard-setup.jpg',
+    title: lang === 'ru' ? 'Акустика открытой террасы' : lang === 'he' ? 'אקוסטיקה בטרסה פתוחה' : 'Open Terrace Acoustics',
+    caption: lang === 'ru' ? 'Чистый звук, аккуратно вписанный в каменный дворик винодельни' : lang === 'he' ? 'סאונד צלול המשתלב ברגישות בחצר האבן של היקב' : 'Pristine sound blended into a stone winery courtyard',
+  },
+  {
+    src: '/assets/spaces/picnic-open-air-setup.jpg',
+    title: lang === 'ru' ? 'Летний дневной опен-эйр' : lang === 'he' ? 'אופן-אייר קייצי ביום' : 'Summer Daytime Open-Air',
+    caption: lang === 'ru' ? 'Лёгкий грув под кронами для пикников и загородных праздников' : lang === 'he' ? 'גרוב קליל תחת צמרות העצים לפיקניקים ולאירועי טבע' : 'Breezy daytime groove beneath canopies for picnics & gatherings',
+  },
+];
+---
+
+<div class="video-reel-container" id="aboutVideoReel">
+  <div class="reel-frame-wrapper">
+    {reelFrames.map((frame, index) => (
+      <div
+        class={`reel-slide ${index === 0 ? 'is-active' : ''}`}
+        data-slide-index={index}
+      >
+        <img
+          src={frame.src}
+          alt={frame.title}
+          class="reel-image"
+          loading={index === 0 ? 'eager' : 'lazy'}
+        />
+        <div class="reel-overlay">
+          <div class="reel-live-tag">
+            <span class="pulse-beacon" aria-hidden="true"></span>
+            <span>{t("videoReelLiveTag") || "LIVE SETUP ATELIER"}</span>
+          </div>
+          <div class="reel-captions">
+            <h4 class="reel-title">{frame.title}</h4>
+            <p class="reel-subtitle">{frame.caption}</p>
+          </div>
+        </div>
+      </div>
+    ))}
+
+    <!-- Navigation arrows -->
+    <button
+      type="button"
+      class="reel-nav-btn prev-btn"
+      id="aboutReelPrev"
+      aria-label="Previous vibe"
+    >
+      <span class="material-symbols-outlined" aria-hidden="true">chevron_left</span>
+    </button>
+    <button
+      type="button"
+      class="reel-nav-btn next-btn"
+      id="aboutReelNext"
+      aria-label="Next vibe"
+    >
+      <span class="material-symbols-outlined" aria-hidden="true">chevron_right</span>
+    </button>
+
+    <!-- Navigation controls: scrollable dots & counter on opposite side -->
+    <div class="reel-controls" aria-label="Carousel navigation">
+      <div class="reel-indicators" aria-hidden="true">
+        {reelFrames.map((_, index) => (
+          <button
+            type="button"
+            class={`indicator-dot ${index === 0 ? 'is-active' : ''}`}
+            data-target-index={index}
+            aria-label={`Go to slide ${index + 1}`}
+          ></button>
+        ))}
+      </div>
+      <span class="reel-counter" id="aboutReelCounter">
+        <span class="counter-curr">1</span>/<span class="counter-total">{reelFrames.length}</span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function initReel() {
+    const reelContainer = document.getElementById('aboutVideoReel');
+    const slides = document.querySelectorAll<HTMLElement>('#aboutVideoReel .reel-slide');
+    const dots = document.querySelectorAll<HTMLButtonElement>('#aboutVideoReel .indicator-dot');
+    const prevBtn = document.getElementById('aboutReelPrev');
+    const nextBtn = document.getElementById('aboutReelNext');
+    const currCounter = document.querySelector<HTMLElement>('#aboutReelCounter .counter-curr');
+    if (slides.length <= 1) return;
+
+    let currentIndex = 0;
+    let timer: ReturnType<typeof setInterval> | null = null;
+
+    function goTo(index: number) {
+      slides[currentIndex]?.classList.remove('is-active');
+      dots[currentIndex]?.classList.remove('is-active');
+
+      currentIndex = (index + slides.length) % slides.length;
+
+      slides[currentIndex]?.classList.add('is-active');
+      dots[currentIndex]?.classList.add('is-active');
+
+      if (currCounter) {
+        currCounter.textContent = String(currentIndex + 1);
+      }
+    }
+
+    function startAutoCycle() {
+      if (timer) clearInterval(timer);
+      timer = setInterval(() => {
+        goTo(currentIndex + 1);
+      }, 5000);
+    }
+
+    function stopAutoCycle() {
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+      }
+    }
+
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const target = Number(dot.dataset.targetIndex);
+        if (!isNaN(target)) {
+          goTo(target);
+          startAutoCycle();
+        }
+      });
+    });
+
+    prevBtn?.addEventListener('click', () => {
+      goTo(currentIndex - 1);
+      startAutoCycle();
+    });
+
+    nextBtn?.addEventListener('click', () => {
+      goTo(currentIndex + 1);
+      startAutoCycle();
+    });
+
+    // Pause on hover
+    reelContainer?.addEventListener('mouseenter', stopAutoCycle);
+    reelContainer?.addEventListener('mouseleave', startAutoCycle);
+
+    // Touch swipe support
+    let touchStartX = 0;
+    reelContainer?.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].clientX;
+    }, { passive: true });
+
+    reelContainer?.addEventListener('touchend', (e) => {
+      const touchEndX = e.changedTouches[0].clientX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 40) {
+        if (diff > 0) {
+          goTo(currentIndex + 1);
+        } else {
+          goTo(currentIndex - 1);
+        }
+        startAutoCycle();
+      }
+    }, { passive: true });
+
+    startAutoCycle();
+  })();
+</script>
+
+<style>
+  .video-reel-container {
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+    margin-inline: auto;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
+  }
+
+  .reel-frame-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+  }
+
+  @media (max-width: 640px) {
+    .reel-frame-wrapper {
+      aspect-ratio: 4 / 3;
+    }
+  }
+
+  .reel-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+
+  .reel-slide.is-active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .reel-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.02);
+    transition: transform 6s ease-out;
+  }
+
+  .reel-slide.is-active .reel-image {
+    transform: scale(1.08);
+  }
+
+  .reel-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.85) 0%,
+      rgba(0, 0, 0, 0.3) 45%,
+      rgba(0, 0, 0, 0.1) 100%
+    );
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    box-sizing: border-box;
+    color: #ffffff;
+  }
+
+  .reel-live-tag {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-full);
+    background: rgba(0, 0, 0, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .pulse-beacon {
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    background: #e2a03f;
+    box-shadow: 0 0 8px #e2a03f;
+    animation: pulse 2s infinite;
+  }
+
+  .reel-captions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .reel-title {
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    margin: 0;
+    color: #ffffff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  }
+
+  .reel-subtitle {
+    font-family: var(--font-mono);
+    font-size: clamp(0.6875rem, 1.8vw, 0.8125rem);
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+    line-height: 1.4;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  }
+
+  .reel-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 12;
+    transition: background 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+    opacity: 0;
+  }
+
+  .video-reel-container:hover .reel-nav-btn {
+    opacity: 1;
+  }
+
+  @media (max-width: 768px) {
+    .reel-nav-btn {
+      opacity: 0.85;
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  .prev-btn {
+    left: 0.75rem;
+  }
+
+  .next-btn {
+    right: 0.75rem;
+  }
+
+  :global([dir="rtl"]) .prev-btn {
+    left: auto;
+    right: 0.75rem;
+  }
+
+  :global([dir="rtl"]) .next-btn {
+    right: auto;
+    left: 0.75rem;
+  }
+
+  .reel-nav-btn:hover {
+    background: var(--color-primary, #e2a03f);
+    color: var(--color-on-primary, #000);
+    transform: translateY(-50%) scale(1.08);
+  }
+
+  .reel-nav-btn:active {
+    transform: translateY(-50%) scale(0.95);
+  }
+
+  .reel-controls {
+    position: absolute;
+    top: 1.15rem;
+    right: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    z-index: 10;
+  }
+
+  :global([dir="rtl"]) .reel-controls {
+    right: auto;
+    left: 1.25rem;
+  }
+
+  .reel-counter {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.85);
+    background: rgba(0, 0, 0, 0.55);
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-full);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    line-height: 1;
+  }
+
+  .reel-counter .counter-curr {
+    color: var(--color-primary, #e2a03f);
+    font-weight: 600;
+  }
+
+  .reel-indicators {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    max-width: 160px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .reel-indicators::-webkit-scrollbar {
+    display: none;
+  }
+
+  .indicator-dot {
+    width: 14px;
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.35);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.3s ease, width 0.3s ease;
+  }
+
+  .indicator-dot.is-active {
+    background: var(--color-primary, #e2a03f);
+    width: 22px;
+  }
+
+  :global([dir="rtl"]) .reel-title,
+  :global([dir="rtl"]) .reel-subtitle {
+    font-family: 'Heebo', sans-serif;
+  }
+</style>
