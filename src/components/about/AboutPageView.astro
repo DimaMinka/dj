@@ -2,8 +2,12 @@
 import Layout from '../../layouts/Layout.astro';
 import IntroHeader from '../../components/intro/IntroHeader.astro';
 import AtmosphereBackground from '../../components/intro/AtmosphereBackground.astro';
+import AudioPreview from './AudioPreview.astro';
+import VideoReel from './VideoReel.astro';
+import BookingBriefForm from './BookingBriefForm.astro';
+import StickyActionBar from './StickyActionBar.astro';
 import type { SupportedLang } from '../../i18n/ui';
-import { useTranslations } from '../../i18n/ui';
+import { useTranslations, getWhatsAppLink, SITE_CONTACTS } from '../../i18n/ui';
 
 interface Props {
   lang: SupportedLang;
@@ -11,6 +15,7 @@ interface Props {
 
 const { lang } = Astro.props;
 const t = useTranslations(lang);
+const waLink = getWhatsAppLink(lang);
 
 // SEO Canonical & Hreflang Path calculation
 const canonicalPath = lang === 'en' ? '/about' : `/${lang}/about`;
@@ -31,8 +36,8 @@ const structuredData = {
         "https://t.me/minkamk",
         "https://instagram.com/dima.minka"
       ],
-      "email": "dima@minka.mk",
-      "telephone": "+972500000000",
+      "email": SITE_CONTACTS.email,
+      "telephone": SITE_CONTACTS.phone,
       "areaServed": [
         { "@type": "AdministrativeArea", "name": "Galilee" },
         { "@type": "AdministrativeArea", "name": "Upper Galilee" },
@@ -43,7 +48,7 @@ const structuredData = {
         "Organic House",
         "Melodic Techno",
         "432 Hz Harmonic Master Sound",
-        "Wireless DMX Lighting Rig",
+        "IP65 Architectural Lighting Rig",
         "Boutique Winery Events",
         "Private Villa Parties",
         "Sunset Soundscapes"
@@ -63,66 +68,34 @@ const structuredData = {
       "mainEntity": [
         {
           "@type": "Question",
-          "name": lang === 'ru'
-            ? "Требуется ли подключение к электросети на открытой локации?"
-            : lang === 'he'
-            ? "האם נדרש חיבור לרשת החשמל במיקום פתוח בטבע?"
-            : "Is grid power required for outdoor remote locations?",
+          "name": t('faq1Q'),
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": lang === 'ru'
-              ? "Да, звуковой комплекс и комплект из 12+ световых приборов питаются от стандартной сети 220V. На удаленных природных локациях без стационарной сети мы организуем подключение через компактный тихий инверторный генератор."
-              : lang === 'he'
-              ? "כן, מערכת הסאונד ומערך 12+ גופי התאורה פועלים בחיבור רגיל לרשת 220V. במיקומים פתוחים בטבע ללא נקודת חשמל, אנו משתלבים באופן מושלם עם גנרטור מושתק נייד בעל אספקת כוח נקייה."
-              : "Yes, the sound system and 12+ lighting rig run on standard 220V power. On remote outdoor locations without grid access, we seamlessly integrate with a compact silent inverter generator with clean power distribution."
+            "text": t('faq1A')
           }
         },
         {
           "@type": "Question",
-          "name": lang === 'ru'
-            ? "Сколько времени занимает монтаж и акустическая настройка?"
-            : lang === 'he'
-            ? "כמה זמן אורך שלב ההקמה והכיול האקוסטי?"
-            : "How long does installation and acoustic tuning take?",
+          "name": t('faq2Q'),
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": lang === 'ru'
-              ? "Монтаж, скрытая прокладка кабелей по периметру и частотная калибровка занимают 45–60 минут, гарантируя полное отсутствие кабельных трасс под ногами гостей."
-              : lang === 'he'
-              ? "שלב הפריקה, ניתוב הכבלים המוסתר לאורך קירות וצמחייה והכיול האקוסטי אורכים כ-45–60 דקות בלבד, תוך הקפדה על אפס מעברי כבלים בשבילי האורחים."
-              : "Complete load-in, discreet cable routing along perimeter walls/hedges, and acoustic frequency sweeps take approximately 45–60 minutes, ensuring zero messy cable crossings in guest areas."
+            "text": t('faq2A')
           }
         },
         {
           "@type": "Question",
-          "name": lang === 'ru'
-            ? "В каких регионах доступно бронирование?"
-            : lang === 'he'
-            ? "באילו אזורים זמינה הזמנת הופעות?"
-            : "Which geographical areas are covered for bookings?",
+          "name": t('faq3Q'),
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": lang === 'ru'
-              ? "Основной фокус — Север Израиля: Верхняя Галилея, Голанские высоты, долина Хула, а также выездные частные ретриты по всей стране."
-              : lang === 'he'
-              ? "המוקד העיקרי הוא צפון הארץ: הגליל העליון, רמת הגולן, עמק החולה, ואירועי בוטיק וריטריטים ייעודיים בכל רחבי הארץ."
-              : "Our primary region covers Northern Israel: Upper Galilee, Golan Heights, Sea of Galilee, as well as selected boutique retreats nationwide."
+            "text": t('faq3A')
           }
         },
         {
           "@type": "Question",
-          "name": lang === 'ru'
-            ? "Как формируется музыкальная селекция под формат события?"
-            : lang === 'he'
-            ? "כיצד נבחרת המוזיקה בהתאם לאופי האירוע?"
-            : "How is the musical curation shaped for each event?",
+          "name": t('faq4Q'),
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": lang === 'ru'
-              ? "Каждый сет создается индивидуально: переход от теплого медитативного Organic House во время заката к глубокому ритмичному Melodic House & Techno в ночные часы, всегда в гармоническом строе 432 Гц."
-              : lang === 'he'
-              ? "כל סט מותאם אישית לחלוטין: תנועה מאורגניק האוס עדין ומדיטטיבי בשקיעה למלודיק האוס וטכנו סוחף אל תוך הלילה, תמיד בתדר הרמוני 432 הרץ."
-              : "Every set is bespoke: moving from warm meditative Organic House during sunset to dynamic Melodic House into the night, tuned in natural 432 Hz resonance."
+            "text": t('faq4A')
           }
         }
       ]
@@ -131,7 +104,7 @@ const structuredData = {
 };
 
 const pageTitle = `${t('aboutPageTitle') || 'The Architecture of Frequency'} — DJ Dima Minka`;
-const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Autonomous Light Installations for Private Events, Boutique Wineries & Retreats in Galilee & Golan Heights.';
+const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Site-Specific Light Installations for Private Events, Boutique Wineries & Retreats in Galilee & Golan Heights.';
 ---
 
 <Layout
@@ -146,22 +119,23 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Autonomous Li
     <AtmosphereBackground />
     <IntroHeader lang={lang} currentSection="about" />
 
+    <!-- 1. Hero Section -->
     <section class="about-hero" id="overview">
       <div class="hero-content">
         <div class="hero-badge-row">
           <span class="geo-badge">
             <span class="pulse-dot" aria-hidden="true"></span>
-            <span>GALILEE & GOLAN HEIGHTS</span>
+            <span>{t('aboutHeroBadgeGeo') || 'GALILEE & GOLAN HEIGHTS'}</span>
           </span>
-          <span class="freq-badge">432 Hz RESONANCE</span>
+          <span class="freq-badge">{t('aboutHeroBadgeFreq') || '432 Hz RESONANCE'}</span>
         </div>
 
-        <h1 class="about-title">The Architecture of Frequency</h1>
+        <h1 class="about-title">{t('aboutPageTitle') || 'The Architecture of Frequency'}</h1>
         <p class="about-subtitle">{pageDescription}</p>
 
         <div class="hero-cta-group">
           <a
-            href="https://wa.me/972500000000?text=Hi%2C%20I%20would%20like%20to%20inquire%20about%20booking%20a%20date%20for%20an%20event"
+            href={waLink}
             target="_blank"
             rel="noopener noreferrer"
             class="cta-btn primary-cta"
@@ -169,16 +143,377 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Autonomous Li
             data-placement="hero_cta"
           >
             <span class="material-symbols-outlined cta-icon" aria-hidden="true">chat</span>
-            <span>WhatsApp Inquiry</span>
+            <span>{t('aboutCtaWhatsApp') || 'WhatsApp Inquiry'}</span>
           </a>
 
           <a href="#specifications" class="cta-btn secondary-cta">
             <span class="material-symbols-outlined cta-icon" aria-hidden="true">tune</span>
-            <span>Sound & Light Rig</span>
+            <span>{t('aboutCtaSpecs') || 'Sound & Light Rig'}</span>
+          </a>
+
+          <a href="#booking-brief" class="cta-btn text-cta">
+            <span class="material-symbols-outlined cta-icon" aria-hidden="true">calendar_today</span>
+            <span>{t('aboutCtaBrief') || 'Send Event Brief'}</span>
           </a>
         </div>
       </div>
     </section>
+
+    <!-- 2. Manifesto / Acoustic Philosophy Section -->
+    <section class="about-section manifesto-section" id="philosophy">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-badge">{t('manifestoBadge') || 'PHILOSOPHY & ACOUSTIC VISION'}</span>
+          <h2 class="section-title">{t('manifestoTitle') || 'Sound as Invisible Architecture'}</h2>
+        </div>
+
+        <div class="manifesto-card">
+          <p class="manifesto-lead">{t('manifestoP1')}</p>
+          <div class="manifesto-divider" aria-hidden="true"></div>
+          <p class="manifesto-secondary">{t('manifestoP2')}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Media & Acoustic Proof (Audio Preview & Visual Reel) -->
+    <section class="about-section media-proof-section" id="media-proof">
+      <div class="section-container">
+        <div class="media-proof-grid">
+          <div class="proof-col">
+            <div class="col-header">
+              <span class="col-tag">ACOUSTIC FREQUENCY</span>
+              <h3 class="col-title">432 Hz Harmonic Immersion</h3>
+            </div>
+            <AudioPreview lang={lang} />
+          </div>
+
+          <div class="proof-col">
+            <div class="col-header">
+              <span class="col-tag">VISUAL ARCHITECTURE</span>
+              <h3 class="col-title">Site-Specific Lighting</h3>
+            </div>
+            <VideoReel lang={lang} />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Specifications & Wired Hardware Rider Section -->
+    <section class="about-section specs-section" id="specifications">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-badge">{t('specsBadge') || 'TECHNICAL SPECIFICATIONS'}</span>
+          <h2 class="section-title">{t('specsTitle') || 'Engineered Precision & Seamless Aesthetics'}</h2>
+          <p class="section-subtitle">{t('specsSubtitle')}</p>
+        </div>
+
+        <div class="specs-grid">
+          <!-- Sound Rig Card -->
+          <div class="spec-card">
+            <div class="spec-card-icon" aria-hidden="true">
+              <span class="material-symbols-outlined">graphic_eq</span>
+            </div>
+            <h3 class="spec-card-title">{t('specSoundTitle')}</h3>
+            <p class="spec-card-desc">{t('specSoundDesc')}</p>
+            <ul class="spec-card-list">
+              <li>
+                <span class="material-symbols-outlined check-icon" aria-hidden="true">check</span>
+                <span>{t('specSoundItem1')}</span>
+              </li>
+              <li>
+                <span class="material-symbols-outlined check-icon" aria-hidden="true">check</span>
+                <span>{t('specSoundItem2')}</span>
+              </li>
+              <li>
+                <span class="material-symbols-outlined check-icon" aria-hidden="true">check</span>
+                <span>{t('specSoundItem3')}</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Light Rig Card -->
+          <div class="spec-card">
+            <div class="spec-card-icon" aria-hidden="true">
+              <span class="material-symbols-outlined">wb_incandescent</span>
+            </div>
+            <h3 class="spec-card-title">{t('specLightTitle')}</h3>
+            <p class="spec-card-desc">{t('specLightDesc')}</p>
+            <ul class="spec-card-list">
+              <li>
+                <span class="material-symbols-outlined check-icon" aria-hidden="true">check</span>
+                <span>{t('specLightItem1')}</span>
+              </li>
+              <li>
+                <span class="material-symbols-outlined check-icon" aria-hidden="true">check</span>
+                <span>{t('specLightItem2')}</span>
+              </li>
+              <li>
+                <span class="material-symbols-outlined check-icon" aria-hidden="true">check</span>
+                <span>{t('specLightItem3')}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Collapsible Detailed Rider for Producers & Sound Techs -->
+        <details class="specs-rider-details">
+          <summary class="rider-summary">
+            <span class="rider-summary-text">{t('specsRiderToggle') || 'View Complete Hardware & DJ Rider'}</span>
+            <span class="material-symbols-outlined rider-arrow" aria-hidden="true">expand_more</span>
+          </summary>
+          <div class="rider-content">
+            <div class="rider-item">
+              <span class="rider-label">{t('specsRiderConsole')}</span>
+              <span class="rider-val">{t('specsRiderConsoleVal')}</span>
+            </div>
+            <div class="rider-item">
+              <span class="rider-label">{t('specsRiderDmx')}</span>
+              <span class="rider-val">{t('specsRiderDmxVal')}</span>
+            </div>
+            <div class="rider-item">
+              <span class="rider-label">{t('specsRiderMoving')}</span>
+              <span class="rider-val">{t('specsRiderMovingVal')}</span>
+            </div>
+            <div class="rider-item">
+              <span class="rider-label">{t('specsRiderWash')}</span>
+              <span class="rider-val">{t('specsRiderWashVal')}</span>
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- 5. Formats & Scope Packages Section -->
+    <section class="about-section packages-section" id="packages">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-badge">{t('packagesBadge') || 'CURATED FORMATS'}</span>
+          <h2 class="section-title">{t('packagesTitle') || 'Tailored Event Scopes'}</h2>
+          <p class="section-subtitle">{t('packagesSubtitle')}</p>
+        </div>
+
+        <div class="packages-grid">
+          <!-- Package 1: Sunset & Wine -->
+          <div class="package-card">
+            <div class="pkg-top">
+              <span class="pkg-scale">{t('pkg1Scale')}</span>
+              <h3 class="pkg-title">{t('pkg1Title')}</h3>
+              <p class="pkg-desc">{t('pkg1Desc')}</p>
+            </div>
+            <ul class="pkg-features">
+              <li>
+                <span class="material-symbols-outlined check-icon" aria-hidden="true">done</span>
+                <span>{t('pkg1Feat1')}</span>
+              </li>
+              <li>
+                <span class="material-symbols-outlined check-icon" aria-hidden="true">done</span>
+                <span>{t('pkg1Feat2')}</span>
+              </li>
+              <li>
+                <span class="material-symbols-outlined check-icon" aria-hidden="true">done</span>
+                <span>{t('pkg1Feat3')}</span>
+              </li>
+            </ul>
+            <div class="pkg-action">
+              <a href={waLink} class="pkg-btn" target="_blank" rel="noopener noreferrer">
+                <span>Inquire Format</span>
+                <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Package 2: Private Villa & Retreat (Featured) -->
+          <div class="package-card featured-pkg">
+            <div class="pkg-badge-featured">RECOMMENDED PRODUCTION</div>
+            <div class="pkg-top">
+              <span class="pkg-scale">{t('pkg2Scale')}</span>
+              <h3 class="pkg-title">{t('pkg2Title')}</h3>
+              <p class="pkg-desc">{t('pkg2Desc')}</p>
+            </div>
+            <ul class="pkg-features">
+              <li>
+                <span class="material-symbols-outlined check-icon" aria-hidden="true">done</span>
+                <span>{t('pkg2Feat1')}</span>
+              </li>
+              <li>
+                <span class="material-symbols-outlined check-icon" aria-hidden="true">done</span>
+                <span>{t('pkg2Feat2')}</span>
+              </li>
+              <li>
+                <span class="material-symbols-outlined check-icon" aria-hidden="true">done</span>
+                <span>{t('pkg2Feat3')}</span>
+              </li>
+            </ul>
+            <div class="pkg-action">
+              <a href={waLink} class="pkg-btn featured-btn" target="_blank" rel="noopener noreferrer">
+                <span>Inquire Format</span>
+                <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Package 3: Custom Production -->
+          <div class="package-card">
+            <div class="pkg-top">
+              <span class="pkg-scale">{t('pkg3Scale')}</span>
+              <h3 class="pkg-title">{t('pkg3Title')}</h3>
+              <p class="pkg-desc">{t('pkg3Desc')}</p>
+            </div>
+            <ul class="pkg-features">
+              <li>
+                <span class="material-symbols-outlined check-icon" aria-hidden="true">done</span>
+                <span>{t('pkg3Feat1')}</span>
+              </li>
+              <li>
+                <span class="material-symbols-outlined check-icon" aria-hidden="true">done</span>
+                <span>{t('pkg3Feat2')}</span>
+              </li>
+              <li>
+                <span class="material-symbols-outlined check-icon" aria-hidden="true">done</span>
+                <span>{t('pkg3Feat3')}</span>
+              </li>
+            </ul>
+            <div class="pkg-action">
+              <a href={waLink} class="pkg-btn" target="_blank" rel="noopener noreferrer">
+                <span>Inquire Format</span>
+                <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Visible FAQ Block (Clients & Search Engine / AI Crawlers) -->
+    <section class="about-section faq-section" id="faq">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-badge">{t('faqBadge') || 'PRACTICAL CLARITY'}</span>
+          <h2 class="section-title">{t('faqTitle') || 'Frequently Asked Questions'}</h2>
+          <p class="section-subtitle">{t('faqSubtitle')}</p>
+        </div>
+
+        <div class="faq-list">
+          <details class="faq-item" open>
+            <summary class="faq-question">
+              <span class="faq-q-text">{t('faq1Q')}</span>
+              <span class="material-symbols-outlined faq-arrow" aria-hidden="true">expand_more</span>
+            </summary>
+            <div class="faq-answer">
+              <p>{t('faq1A')}</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span class="faq-q-text">{t('faq2Q')}</span>
+              <span class="material-symbols-outlined faq-arrow" aria-hidden="true">expand_more</span>
+            </summary>
+            <div class="faq-answer">
+              <p>{t('faq2A')}</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span class="faq-q-text">{t('faq3Q')}</span>
+              <span class="material-symbols-outlined faq-arrow" aria-hidden="true">expand_more</span>
+            </summary>
+            <div class="faq-answer">
+              <p>{t('faq3A')}</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">
+              <span class="faq-q-text">{t('faq4Q')}</span>
+              <span class="material-symbols-outlined faq-arrow" aria-hidden="true">expand_more</span>
+            </summary>
+            <div class="faq-answer">
+              <p>{t('faq4A')}</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Direct Booking Engine & Express Event Brief Section -->
+    <section class="about-section booking-section" id="booking-brief">
+      <div class="section-container">
+        <div class="section-header">
+          <span class="section-badge">{t('bookingBadge') || 'CONNECT & INQUIRE'}</span>
+          <h2 class="section-title">{t('bookingTitle') || 'Reserve a Date or Inquire'}</h2>
+          <p class="section-subtitle">{t('bookingSubtitle')}</p>
+        </div>
+
+        <div class="booking-grid">
+          <!-- Direct Channels & Social Column -->
+          <div class="direct-channels-card">
+            <h3 class="channels-title">{t('contactDirectHeading') || 'Direct Artist Channels'}</h3>
+
+            <div class="channels-list">
+              <a
+                href={waLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="channel-link whatsapp-channel"
+              >
+                <span class="material-symbols-outlined channel-icon" aria-hidden="true">chat</span>
+                <div class="channel-info">
+                  <span class="channel-label">{t('contactDirectWhatsApp')}</span>
+                  <span class="channel-val">{SITE_CONTACTS.phone}</span>
+                </div>
+              </a>
+
+              <a
+                href={`mailto:${SITE_CONTACTS.email}`}
+                class="channel-link email-channel"
+              >
+                <span class="material-symbols-outlined channel-icon" aria-hidden="true">mail</span>
+                <div class="channel-info">
+                  <span class="channel-label">{t('contactDirectEmail')}</span>
+                  <span class="channel-val">{SITE_CONTACTS.email}</span>
+                </div>
+              </a>
+
+              <a
+                href={SITE_CONTACTS.telegramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="channel-link telegram-channel"
+              >
+                <span class="material-symbols-outlined channel-icon" aria-hidden="true">send</span>
+                <div class="channel-info">
+                  <span class="channel-label">{t('contactDirectTelegram')}</span>
+                  <span class="channel-val">@{SITE_CONTACTS.telegramUser}</span>
+                </div>
+              </a>
+
+              <a
+                href={SITE_CONTACTS.instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="channel-link instagram-channel"
+              >
+                <span class="material-symbols-outlined channel-icon" aria-hidden="true">photo_camera</span>
+                <div class="channel-info">
+                  <span class="channel-label">{t('contactDirectInstagram')}</span>
+                  <span class="channel-val">@{SITE_CONTACTS.instagramUser}</span>
+                </div>
+              </a>
+            </div>
+          </div>
+
+          <!-- Express Brief Form Column -->
+          <div class="brief-form-column">
+            <BookingBriefForm lang={lang} />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sticky Action Dock (Appears when scrolling past hero) -->
+    <StickyActionBar lang={lang} />
   </main>
 </Layout>
 
@@ -194,6 +529,7 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Autonomous Li
     overflow-x: hidden;
   }
 
+  /* 1. Hero Section */
   .about-hero {
     position: relative;
     z-index: 10;
@@ -202,7 +538,7 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Autonomous Li
     align-items: center;
     justify-content: center;
     padding-inline: 1.25rem;
-    padding-block: 2rem;
+    padding-block: 3rem 4rem;
     box-sizing: border-box;
     width: 100%;
   }
@@ -332,19 +668,626 @@ const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Autonomous Li
     transform: translateY(-2px);
   }
 
+  .text-cta {
+    background: transparent;
+    color: var(--color-text-muted);
+    border: 1px dashed var(--color-glass-border);
+  }
+
+  .text-cta:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
   .cta-icon {
     font-size: 1.125rem;
   }
 
-  /* RTL overrides */
-  :global([dir="rtl"]) .about-title {
+  /* Universal Section Styles */
+  .about-section {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    padding-inline: 1.25rem;
+    padding-block: 4rem;
+    box-sizing: border-box;
+  }
+
+  .section-container {
+    max-width: 1080px;
+    width: 100%;
+    margin-inline: auto;
+    box-sizing: border-box;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-block-end: 2.5rem;
+  }
+
+  .section-badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin-block-end: 0.75rem;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3.8vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-main);
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .section-subtitle {
+    font-family: var(--font-body);
+    font-size: clamp(0.9375rem, 2vw, 1.125rem);
+    color: var(--color-text-muted);
+    max-width: 640px;
+    margin-inline: auto;
+    margin-block-start: 0.75rem;
+    line-height: 1.5;
+  }
+
+  /* 2. Manifesto Section */
+  .manifesto-card {
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--radius-lg);
+    padding: clamp(1.5rem, 4vw, 3rem);
+    max-width: 840px;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .manifesto-lead {
+    font-family: var(--font-display);
+    font-size: clamp(1.125rem, 2.5vw, 1.45rem);
+    line-height: 1.6;
+    color: var(--color-text-main);
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .manifesto-divider {
+    width: 48px;
+    height: 2px;
+    background: var(--color-primary);
+    margin-inline: auto;
+    margin-block: 1.75rem;
+    opacity: 0.8;
+  }
+
+  .manifesto-secondary {
+    font-family: var(--font-body);
+    font-size: clamp(0.9375rem, 2vw, 1.125rem);
+    line-height: 1.65;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  /* 3. Media Proof Section */
+  .media-proof-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  @media (min-width: 840px) {
+    .media-proof-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .proof-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .col-header {
+    text-align: center;
+  }
+
+  .col-tag {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    display: block;
+    margin-block-end: 0.25rem;
+  }
+
+  .col-title {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--color-text-main);
+    margin: 0;
+  }
+
+  /* 4. Specifications Section */
+  .specs-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .specs-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .spec-card {
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .spec-card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: rgba(var(--color-primary-rgb, 226, 160, 63), 0.12);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .spec-card-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text-main);
+    margin: 0;
+  }
+
+  .spec-card-desc {
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .spec-card-list {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .spec-card-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--color-text-main);
+    line-height: 1.4;
+  }
+
+  .check-icon {
+    color: var(--color-primary);
+    font-size: 1.125rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .specs-rider-details {
+    margin-block-start: 1.75rem;
+    background: var(--color-surface-glass);
+    border: 1px dashed var(--color-glass-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .rider-summary {
+    padding: 1rem 1.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    list-style: none;
+    user-select: none;
+  }
+
+  .rider-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .rider-arrow {
+    transition: transform 0.2s ease;
+  }
+
+  .specs-rider-details[open] .rider-arrow {
+    transform: rotate(180deg);
+  }
+
+  .rider-content {
+    padding: 1.25rem;
+    border-top: 1px solid var(--color-glass-border);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .rider-content {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .rider-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .rider-label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .rider-val {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--color-text-main);
+  }
+
+  /* 5. Packages Section */
+  .packages-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  @media (min-width: 960px) {
+    .packages-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .package-card {
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.5rem;
+    position: relative;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+  }
+
+  .package-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-primary);
+  }
+
+  .package-card.featured-pkg {
+    border-color: var(--color-primary);
+    box-shadow: 0 12px 36px var(--color-primary-glow);
+  }
+
+  .pkg-badge-featured {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+  }
+
+  .pkg-scale {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    display: block;
+    margin-block-end: 0.5rem;
+  }
+
+  .pkg-title {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--color-text-main);
+    margin: 0;
+  }
+
+  .pkg-desc {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    margin-block-start: 0.5rem;
+    margin-block-end: 0;
+  }
+
+  .pkg-features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  .pkg-features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    color: var(--color-text-main);
+    line-height: 1.4;
+  }
+
+  .pkg-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    box-sizing: border-box;
+    padding-block: 0.75rem;
+    border-radius: var(--radius-full);
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--color-surface-glass);
+    color: var(--color-text-main);
+    border: 1px solid var(--color-glass-border);
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .pkg-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .featured-btn {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    border: none;
+    box-shadow: 0 4px 16px var(--color-primary-glow);
+  }
+
+  .featured-btn:hover {
+    color: var(--color-on-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 22px var(--color-primary-glow);
+  }
+
+  /* 6. FAQ Section */
+  .faq-list {
+    max-width: 840px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .faq-item {
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+  }
+
+  .faq-item[open] {
+    border-color: var(--color-primary);
+  }
+
+  .faq-question {
+    padding: 1.25rem 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    list-style: none;
+    user-select: none;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-q-text {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--color-text-main);
+    line-height: 1.4;
+  }
+
+  .faq-arrow {
+    color: var(--color-primary);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .faq-item[open] .faq-arrow {
+    transform: rotate(180deg);
+  }
+
+  .faq-answer {
+    padding: 0 1.5rem 1.25rem 1.5rem;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+  }
+
+  .faq-answer p {
+    margin: 0;
+  }
+
+  /* 7. Booking & Brief Section */
+  .booking-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  @media (min-width: 860px) {
+    .booking-grid {
+      grid-template-columns: 340px 1fr;
+    }
+  }
+
+  .direct-channels-card {
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    height: fit-content;
+  }
+
+  .channels-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text-main);
+    margin: 0;
+  }
+
+  .channels-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+
+  .channel-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.875rem 1rem;
+    border-radius: var(--radius-md);
+    background: rgba(var(--color-surface-rgb, 20, 20, 20), 0.4);
+    border: 1px solid var(--color-glass-border);
+    text-decoration: none;
+    transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+  }
+
+  .channel-link:hover {
+    border-color: var(--color-primary);
+    background: rgba(var(--color-surface-rgb, 20, 20, 20), 0.7);
+    transform: translateX(4px);
+  }
+
+  :global([dir="rtl"]) .channel-link:hover {
+    transform: translateX(-4px);
+  }
+
+  .channel-icon {
+    font-size: 1.5rem;
+    color: var(--color-primary);
+    flex-shrink: 0;
+  }
+
+  .channel-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+  }
+
+  .channel-label {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .channel-val {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--color-text-main);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* RTL Specific Overrides */
+  :global([dir="rtl"]) .about-title,
+  :global([dir="rtl"]) .section-title,
+  :global([dir="rtl"]) .manifesto-lead,
+  :global([dir="rtl"]) .manifesto-secondary,
+  :global([dir="rtl"]) .spec-card-title,
+  :global([dir="rtl"]) .pkg-title,
+  :global([dir="rtl"]) .faq-q-text,
+  :global([dir="rtl"]) .channels-title {
     font-family: 'Heebo', sans-serif;
     letter-spacing: 0.02em;
   }
-  :global([dir="rtl"]) .about-subtitle {
+
+  :global([dir="rtl"]) .about-subtitle,
+  :global([dir="rtl"]) .section-subtitle,
+  :global([dir="rtl"]) .spec-card-desc,
+  :global([dir="rtl"]) .pkg-desc,
+  :global([dir="rtl"]) .faq-answer {
     font-family: 'Heebo', sans-serif;
   }
-  :global([dir="rtl"]) .cta-btn {
+
+  :global([dir="rtl"]) .cta-btn,
+  :global([dir="rtl"]) .pkg-btn {
     font-family: 'Heebo', sans-serif;
     letter-spacing: 0.04em;
   }
