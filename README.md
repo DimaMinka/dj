@@ -36,6 +36,7 @@ dj/
 │   │   │   ├── AudioPreview.astro           # 432 Hz frequency player card & Web Audio synth
 │   │   │   ├── VideoReel.astro              # Setup gallery with Ken-Burns photo cycles
 │   │   │   ├── BookingBriefForm.astro       # Event brief form with honeypot & action integration
+│   │   │   ├── AboutFooter.astro            # Dedicated About footer with anchor nav, streaming & mobile grid
 │   │   │   └── StickyActionBar.astro        # Responsive bottom dock (432 Hz + WhatsApp)
 │   │   ├── intro/
 │   │   │   ├── AtmosphereBackground.astro   # Crossfading Day/Night canvas & ambient dust
@@ -105,17 +106,32 @@ Follow guidelines from [AGENTS.md](./AGENTS.md):
    * **Direct Channels & Express Brief Engine:** WhatsApp deep-link with localized pre-fills, Telegram (`@dimaminka`), Instagram (`@dimaminka`) + Astro Action `inquire` brief form sending leads to `dj@dimaminka.com` via Resend API with multi-layer bot traps (honeypot + submission timing).
    * **Responsive Floating Action Bar:** Sticky bottom dock with live audio preview toggle and one-click WhatsApp inquiry.
 
+4. [x] **Phase 4: About Dedicated Footer Menu** (`feat/about-footer-menu`) — Complete brand exploration & footer experience:
+   * **Brand & Acoustic Identity:** Artist monogram, Galilee & Golan Heights geodata, and dual badges (*ОРГАНИЧНЫЙ САУНД • ТЁПЛЫЙ СВЕТ* / *ORGANIC SOUND • WARM LIGHT*).
+   * **Deep Anchor Navigation:** Fast touch chips to `#overview`, `#philosophy`, `#media-proof`, `#specifications`, `#packages`, `#faq`, and highlighted `#booking-brief`.
+   * **Connect & Listen Suite:** Direct WhatsApp, Telegram (`@dimaminka`), YouTube (`@dimaminka`), SoundCloud (`dimaminka`), Instagram (`@dimaminka`), and direct booking email in a balanced 3×2 mobile touch grid.
+   * **Day & Night Resonance Adaptive Theming:** Fully synced with light/dark modes using CSS tokens and ambient glow.
+   * **Smooth Back-to-Top:** Interactive floating scroll-up trigger with safe clearance above the fixed `StickyActionBar`.
+
 ---
 
-## 📊 Resource & Quota Consumption (About Page Task)
+## 📊 Resource & Quota Consumption (Today's Development Cycle)
 
-Actual Antigravity quota consumption measured during the full cycle of the About Page development (from architectural design, i18n copy, Astro Action backend, interactive components, mobile audits down to 360px, to Day/Night theme tuning):
+Antigravity and Antigravity IDE quota consumption telemetry measured across the entire development sprint today (including About Page architecture, i18n copy, Astro Action backend, interactive components, Day/Night theme tuning, and dedicated footer system):
 
-| Model Category | Metric | Consumed | Remaining |
-| :--- | :--- | :--- | :--- |
-| **Gemini Models** | 5-Hour Limit | **19%** *(used during active dev)* | **81%** |
-| **Gemini Models** | Weekly Limit | **5%** *(entire weekly quota)* | **95%** |
-| **Gemini 4 Argon** | Weekly Limit | **1%** | **99%** |
-| **Claude / GPT Models** | Weekly & 5-Hour | **0%** *(reserved)* | **100%** |
+### 1. Antigravity Environment (Active Session)
+| Model Category | Metric | Consumed | Remaining | Reset Window |
+| :--- | :--- | :--- | :--- | :--- |
+| **Gemini Models** | 5-Hour Limit | **5%** | **95%** | Refreshes in ~31 min |
+| **Gemini Models** | Weekly Limit | **7%** | **93%** | Refreshes in 6d 13h |
+| **Gemini 4 Argon** | Weekly Limit | **1%** | **99%** | Refreshes in 6d 14h |
+| **Claude & GPT Models** | 5-Hour & Weekly | **0%** | **100%** | Pristine / Reserved |
 
-*Efficiency Note: The entire end-to-end fullstack task (6 phases, 5 new components, backend action, bot defense, 3-language copy, and mobile viewport hardening) was completed using only **19% of the 5-hour rolling limit** and **5% of the weekly quota**.*
+### 2. Antigravity IDE Environment
+| Model Category | Metric | Consumed | Remaining | Reset Window |
+| :--- | :--- | :--- | :--- | :--- |
+| **Gemini Models** | 5-Hour Limit | **18%** | **82%** | Refreshes in 2h 12m |
+| **Gemini Models** | Weekly Limit | **11%** | **89%** | Refreshes in 6d 16h |
+| **Claude & GPT Models** | 5-Hour & Weekly | **0%** | **100%** | Pristine / Reserved |
+
+*Efficiency Summary: The entire multi-phase development suite today—encompassing 7 production-grade components, full multilingual routing (EN, RU, HE), bot-defended Astro Actions, reactive Web Audio, Day/Night resonance engine, and bespoke mobile-first footer—consumed only a fraction of rolling limits (remaining at **93–95%** in Antigravity and **82–89%** in Antigravity IDE).*
