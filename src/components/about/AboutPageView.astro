@@ -1,0 +1,343 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import IntroHeader from '../../components/intro/IntroHeader.astro';
+import AtmosphereBackground from '../../components/intro/AtmosphereBackground.astro';
+import type { SupportedLang } from '../../i18n/ui';
+import { useTranslations } from '../../i18n/ui';
+
+interface Props {
+  lang: SupportedLang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+// SEO Canonical & Hreflang Path calculation
+const canonicalPath = lang === 'en' ? '/about' : `/${lang}/about`;
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://dj.dimaminka.com';
+const fullCanonicalUrl = `${siteUrl}${canonicalPath}`;
+
+// Structured Data (Schema.org JSON-LD Graph: EntertainmentBusiness + Service + FAQPage)
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "EntertainmentBusiness",
+      "@id": "https://dj.dimaminka.com/#business",
+      "name": "DJ Dima Minka — Bespoke Sound & Autonomous Light",
+      "url": "https://dj.dimaminka.com",
+      "sameAs": [
+        "https://minka.mk",
+        "https://t.me/minkamk",
+        "https://instagram.com/dima.minka"
+      ],
+      "email": "dima@minka.mk",
+      "telephone": "+972500000000",
+      "areaServed": [
+        { "@type": "AdministrativeArea", "name": "Galilee" },
+        { "@type": "AdministrativeArea", "name": "Upper Galilee" },
+        { "@type": "AdministrativeArea", "name": "Golan Heights" },
+        { "@type": "AdministrativeArea", "name": "Northern District, Israel" }
+      ],
+      "knowsAbout": [
+        "Organic House",
+        "Melodic Techno",
+        "432 Hz Harmonic Master Sound",
+        "Wireless DMX Lighting Rig",
+        "Boutique Winery Events",
+        "Private Villa Parties",
+        "Sunset Soundscapes"
+      ]
+    },
+    {
+      "@type": "Service",
+      "@id": "https://dj.dimaminka.com/#service-sound-light",
+      "name": "Bespoke Event Sound & Autonomous Lighting Installation",
+      "provider": { "@id": "https://dj.dimaminka.com/#business" },
+      "serviceType": "Site-Specific Event Production & DJ Performance",
+      "description": "Turnkey 432 Hz acoustic curation and 12+ wireless IP65 battery-powered ambient lighting for private gatherings, boutique retreats, and winery sessions in Northern Israel."
+    },
+    {
+      "@type": "FAQPage",
+      "@id": `${fullCanonicalUrl}#faq`,
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": lang === 'ru'
+            ? "Требуется ли подключение к электросети на открытой локации?"
+            : lang === 'he'
+            ? "האם נדרש חיבור לרשת החשמל במיקום פתוח בטבע?"
+            : "Is grid power required for outdoor remote locations?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": lang === 'ru'
+              ? "Световой сетап из 12+ приборов полностью автономен на батареях (8–12 часов работы без проводов). Для звукового комплекса требуется стандартная розетка 220V либо мобильный тихий инверторный генератор."
+              : lang === 'he'
+              ? "מערך התאורה (12+ גופים) פועל באופן אלחוטי מלא על סוללות למשך 8–12 שעות ללא כבלים. עבור מערכת הסאונד נדרש שקע רגיל או גנרטור מושתק נייד."
+              : "The 12+ lighting rig is 100% wireless and battery-powered (8–12 hours runtime, zero cables in guest zones). Sound requires a single standard circuit or a compact silent inverter generator."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": lang === 'ru'
+            ? "Сколько времени занимает монтаж и акустическая настройка?"
+            : lang === 'he'
+            ? "כמה זמן אורך שלב ההקמה והכיול האקוסטי?"
+            : "How long does installation and acoustic tuning take?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": lang === 'ru'
+              ? "Благодаря беспроводной DMX-архитектуре монтаж занимает всего 45–60 минут без прокладки кабельных трасс под ногами гостей."
+              : lang === 'he'
+              ? "בזכות ארכיטקטורת DMX אלחוטית מלאה, ההקמה והכיול אורכים כ-45–60 דקות בלבד ללא פריסת כבלים באזור האורחים."
+              : "Thanks to our wireless DMX architecture, full installation and acoustic calibration takes just 45–60 minutes without cable trenching across guest areas."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": lang === 'ru'
+            ? "В каких регионах доступно бронирование?"
+            : lang === 'he'
+            ? "באילו אזורים זמינה הזמנת הופעות?"
+            : "Which geographical areas are covered for bookings?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": lang === 'ru'
+              ? "Основной фокус — Север Израиля: Верхняя Галилея, Голанские высоты, долина Хула, а также выездные частные ретриты по всей стране."
+              : lang === 'he'
+              ? "המוקד העיקרי הוא צפון הארץ: הגליל העליון, רמת הגולן, עמק החולה, ואירועי בוטיק וריטריטים ייעודיים בכל רחבי הארץ."
+              : "Our primary region covers Northern Israel: Upper Galilee, Golan Heights, Sea of Galilee, as well as selected boutique retreats nationwide."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": lang === 'ru'
+            ? "Как формируется музыкальная селекция под формат события?"
+            : lang === 'he'
+            ? "כיצד נבחרת המוזיקה בהתאם לאופי האירוע?"
+            : "How is the musical curation shaped for each event?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": lang === 'ru'
+              ? "Каждый сет создается индивидуально: переход от теплого медитативного Organic House во время заката к глубокому ритмичному Melodic House & Techno в ночные часы, всегда в гармоническом строе 432 Гц."
+              : lang === 'he'
+              ? "כל סט מותאם אישית לחלוטין: תנועה מאורגניק האוס עדין ומדיטטיבי בשקיעה למלודיק האוס וטכנו סוחף אל תוך הלילה, תמיד בתדר הרמוני 432 הרץ."
+              : "Every set is bespoke: moving from warm meditative Organic House during sunset to dynamic Melodic House into the night, tuned in natural 432 Hz resonance."
+          }
+        }
+      ]
+    }
+  ]
+};
+
+const pageTitle = `${t('aboutPageTitle') || 'The Architecture of Frequency'} — DJ Dima Minka`;
+const pageDescription = t('aboutHeroSubtitle') || 'Bespoke Sound & Autonomous Light Installations for Private Events, Boutique Wineries & Retreats in Galilee & Golan Heights.';
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  lang={lang}
+  canonicalPath={canonicalPath}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(structuredData)} slot="head" />
+
+  <main class="about-viewport pt-safe">
+    <AtmosphereBackground />
+    <IntroHeader lang={lang} currentSection="about" />
+
+    <div class="about-container">
+      <!-- Above the Fold / Hero Section -->
+      <section class="about-hero" id="overview">
+        <div class="hero-badge-row">
+          <span class="geo-badge">
+            <span class="pulse-dot" aria-hidden="true"></span>
+            <span>GALILEE & GOLAN HEIGHTS</span>
+          </span>
+          <span class="freq-badge">432 Hz RESONANCE</span>
+        </div>
+
+        <h1 class="about-title">The Architecture of Frequency</h1>
+        <p class="about-subtitle">{pageDescription}</p>
+
+        <div class="hero-cta-group">
+          <a
+            href="https://wa.me/972500000000?text=Hi%2C%20I%20would%20like%20to%20inquire%20about%20booking%20a%20date%20for%20an%20event"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="cta-btn primary-cta"
+            data-analytics="conversion_whatsapp_click"
+            data-placement="hero_cta"
+          >
+            <span class="material-symbols-outlined cta-icon" aria-hidden="true">chat</span>
+            <span>WhatsApp Inquiry</span>
+          </a>
+
+          <a href="#specifications" class="cta-btn secondary-cta">
+            <span class="material-symbols-outlined cta-icon" aria-hidden="true">tune</span>
+            <span>Sound & Light Rig</span>
+          </a>
+        </div>
+      </section>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .about-viewport {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+
+  .about-container {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 1100px;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+    padding-block-end: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .about-hero {
+    min-height: 82svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-block: 2.5rem 2rem;
+  }
+
+  .hero-badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    margin-block-end: 1.5rem;
+  }
+
+  .geo-badge,
+  .freq-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding-inline: 0.75rem;
+    padding-block: 0.3rem;
+    border-radius: var(--radius-full);
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    color: var(--color-primary);
+  }
+
+  .pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    background: var(--color-primary);
+    box-shadow: 0 0 8px var(--color-primary-glow);
+    animation: pulse 1.8s infinite;
+  }
+
+  .about-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 6vw, 4.2rem);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-main);
+    line-height: 1.08;
+    max-width: 900px;
+    margin: 0;
+  }
+
+  .about-subtitle {
+    font-family: var(--font-body);
+    font-size: clamp(1rem, 2.2vw, 1.25rem);
+    line-height: 1.55;
+    color: var(--color-text-muted);
+    max-width: 720px;
+    margin-block-start: 1.25rem;
+    margin-block-end: 2rem;
+    font-weight: 400;
+  }
+
+  .hero-cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.875rem;
+  }
+
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding-inline: 1.5rem;
+    padding-block: 0.875rem;
+    border-radius: var(--radius-full);
+    transition: var(--transition-theme), transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .primary-cta {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    box-shadow: 0 4px 20px var(--color-primary-glow);
+  }
+
+  .primary-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 26px var(--color-primary-glow);
+  }
+
+  .secondary-cta {
+    background: var(--color-surface-glass);
+    color: var(--color-text-main);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .secondary-cta:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+  }
+
+  .cta-icon {
+    font-size: 1.125rem;
+  }
+
+  /* RTL overrides */
+  :global([dir="rtl"]) .about-title {
+    font-family: 'Heebo', sans-serif;
+    letter-spacing: 0.02em;
+  }
+  :global([dir="rtl"]) .about-subtitle {
+    font-family: 'Heebo', sans-serif;
+  }
+  :global([dir="rtl"]) .cta-btn {
+    font-family: 'Heebo', sans-serif;
+    letter-spacing: 0.04em;
+  }
+</style>

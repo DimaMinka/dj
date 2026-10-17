@@ -6,27 +6,60 @@ interface Props {
   title?: string;
   description?: string;
   lang?: SupportedLang;
+  canonicalPath?: string;
 }
 
 const {
   title = "DJ Dima Minka — Site-Specific Sound & Light Architecture",
   description = "Melodic House & Techno curations tailored strictly to unique natural and architectural wonders.",
   lang = defaultLang,
+  canonicalPath,
 } = Astro.props;
 
 const dir = languages[lang]?.dir || 'ltr';
+
+// Canonical and hreflang resolution
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') || 'https://dj.dimaminka.com';
+const currentPath = canonicalPath || Astro.url.pathname;
+const cleanPath = currentPath.replace(/^\/(ru|he)(\/|$)/, '$2') || '/';
+const normalizedSubPath = cleanPath.startsWith('/') ? cleanPath : `/${cleanPath}`;
+
+const canonicalUrl = `${siteUrl}${currentPath}`;
+const enUrl = `${siteUrl}${normalizedSubPath}`;
+const ruUrl = `${siteUrl}/ru${normalizedSubPath === '/' ? '' : normalizedSubPath}`;
+const heUrl = `${siteUrl}/he${normalizedSubPath === '/' ? '' : normalizedSubPath}`;
 ---
 
 <!doctype html>
 <html lang={lang} dir={dir}>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+
+    <!-- Canonical & Multilingual Alternate Hreflang -->
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="alternate" hreflang="x-default" href={enUrl} />
+    <link rel="alternate" hreflang="en" href={enUrl} />
+    <link rel="alternate" hreflang="ru" href={ruUrl} />
+    <link rel="alternate" hreflang="he" href={heUrl} />
+
+    <!-- OpenGraph & Social Metadata -->
+    <meta property="og:site_name" content="DJ Dima Minka" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={lang === 'ru' ? 'ru_RU' : lang === 'he' ? 'he_IL' : 'en_US'} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <slot name="head" />
 
     <!-- Google Fonts Preconnect & Load: Cormorant Garamond, Syne, Space Grotesk, Manrope, JetBrains Mono + Heebo -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
