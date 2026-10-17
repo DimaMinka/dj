@@ -9,6 +9,7 @@ import AboutSpecs from "./AboutSpecs.astro";
 import AboutPackages from "./AboutPackages.astro";
 import AboutFAQ from "./AboutFAQ.astro";
 import AboutBookingSection from "./AboutBookingSection.astro";
+import AboutFooter from "./AboutFooter.astro";
 import StickyActionBar from "./StickyActionBar.astro";
 import type { SupportedLang } from "../../i18n/ui";
 import { useTranslations, SITE_CONTACTS } from "../../i18n/ui";
@@ -165,6 +166,9 @@ const pageDescription =
 
     <!-- 7. Direct Booking Engine & Express Event Brief Section -->
     <AboutBookingSection lang={lang} />
+
+    <!-- 8. About Dedicated Footer Menu -->
+    <AboutFooter lang={lang} />
 
     <!-- Sticky Action Dock (Appears when scrolling past hero) -->
     <StickyActionBar lang={lang} />

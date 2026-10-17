@@ -1,0 +1,647 @@
+---
+import type { SupportedLang } from '../../i18n/ui';
+import { useTranslations, getWhatsAppLink, SITE_CONTACTS } from '../../i18n/ui';
+
+interface Props {
+  lang: SupportedLang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const waLink = getWhatsAppLink(lang);
+const currentYear = new Date().getFullYear();
+
+// Path prefix for global links
+const homeHref = lang === 'en' ? '/' : `/${lang}`;
+const vibesHref = '/vibes/aegean';
+---
+
+<footer class="about-footer" id="about-footer" aria-label="About Page Footer">
+  <div class="footer-glow" aria-hidden="true"></div>
+
+  <div class="footer-container">
+    <!-- Top Grid: Brand & Navigation Columns -->
+    <div class="footer-grid">
+      <!-- Col 1: Brand & Geographic Identity -->
+      <div class="footer-brand-col">
+        <a href={homeHref} class="footer-brand-link" aria-label="DJ Dima Minka — Return to Portal">
+          <svg class="footer-logo-svg" viewBox="0 0 576.59 678.28" fill="currentColor" aria-hidden="true">
+            <path
+              d="m199.66 44.95v518.06l-199.65 115.27c0-222.21 0-444.42-.01-666.63 35.16 20.39 70.32 40.78 105.48 61.18-.11 28.59-.22 57.18-.33 85.77-9.46-5.46-18.92-10.92-28.37-16.38.09 135.02.19 270.04.28 405.06 14.98-8.59 29.95-17.18 44.93-25.78v-521.5c25.89 14.98 51.78 29.97 77.67 44.95z"
+            ></path>
+            <path
+              d="m576.59 345.02c-7.56 4.49-15.13 8.98-22.69 13.47l-153 88.34v-85.85c4.26-2.34 8.57-4.77 12.92-7.29 4.93-2.85 9.74-5.7 14.43-8.55-13.8-8.06-27.6-16.12-41.41-24.18.02 44.65.04 89.29.06 133.95l-78 45.03c-.02-74.58-.03-149.16-.05-223.73-4.65-2.77-9.3-5.54-13.95-8.31.02 80.03.03 160.06.05 240.09.01 22.36.01 44.72.02 67.08v10.49c-25.52 14.72-51.03 29.45-76.54 44.17l-3.56 2.05v-10.47c-.01-22.36-.02-44.71-.02-67.07-.04-139.38-.08-278.76-.12-418.14 120.62 69.64 241.24 139.28 361.86 208.92z"
+            ></path>
+          </svg>
+          <div class="brand-text-block">
+            <span class="brand-name">{t('artistName')}</span>
+            <span class="brand-geo">{t('aboutHeroBadgeGeo')}</span>
+          </div>
+        </a>
+        <p class="brand-desc">
+          {t('footerCrafted')}
+        </p>
+        <div class="brand-badge-row">
+          <span class="acoustic-badge">{t('footerBadgeSound') || 'ОРГАНИЧНЫЙ САУНД'}</span>
+          <span class="acoustic-badge">{t('footerBadgeLight') || 'ТЁПЛЫЙ СВЕТ'}</span>
+        </div>
+      </div>
+
+      <!-- Col 2: About Sections (Anchor Menu) -->
+      <nav class="footer-nav-col sections-nav-col" aria-label="Page Sections Navigation">
+        <h3 class="col-heading">{t('footerNavTitle')}</h3>
+        <div class="nav-links-grid">
+          <a href="#overview" class="footer-link">
+            <span class="link-bullet" aria-hidden="true">/</span>
+            <span>{t('footerOverview')}</span>
+          </a>
+          <a href="#philosophy" class="footer-link">
+            <span class="link-bullet" aria-hidden="true">/</span>
+            <span>{t('footerPhilosophy')}</span>
+          </a>
+          <a href="#media-proof" class="footer-link">
+            <span class="link-bullet" aria-hidden="true">/</span>
+            <span>{t('footerSoundscapes')}</span>
+          </a>
+          <a href="#specifications" class="footer-link">
+            <span class="link-bullet" aria-hidden="true">/</span>
+            <span>{t('footerSpecs')}</span>
+          </a>
+          <a href="#packages" class="footer-link">
+            <span class="link-bullet" aria-hidden="true">/</span>
+            <span>{t('footerPackages')}</span>
+          </a>
+          <a href="#faq" class="footer-link">
+            <span class="link-bullet" aria-hidden="true">/</span>
+            <span>{t('footerFaq')}</span>
+          </a>
+          <a href="#booking-brief" class="footer-link highlight-link">
+            <span class="link-bullet" aria-hidden="true">/</span>
+            <span>{t('footerBooking')}</span>
+          </a>
+        </div>
+      </nav>
+
+      <!-- Col 3: Global Experience Navigation -->
+      <nav class="footer-nav-col global-nav-col" aria-label="Global Experience Navigation">
+        <h3 class="col-heading">{t('footerGlobalTitle')}</h3>
+        <div class="nav-links-list">
+          <a href={homeHref} class="footer-link">
+            <span class="material-symbols-outlined link-icon" aria-hidden="true">home</span>
+            <span>{t('footerHome')}</span>
+          </a>
+          <a href={vibesHref} class="footer-link">
+            <span class="material-symbols-outlined link-icon" aria-hidden="true">graphic_eq</span>
+            <span>{t('footerVibes')}</span>
+          </a>
+        </div>
+      </nav>
+
+      <!-- Col 4: Direct Artist Channels & Socials (Including YouTube) -->
+      <div class="footer-nav-col connect-nav-col">
+        <h3 class="col-heading">{t('footerConnectTitle')}</h3>
+        <div class="connect-links-grid">
+          <a
+            href={waLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="footer-link connect-link"
+            data-analytics="footer_whatsapp_click"
+          >
+            <span class="material-symbols-outlined link-icon" aria-hidden="true">chat</span>
+            <span>WhatsApp Direct</span>
+          </a>
+          <a
+            href={SITE_CONTACTS.telegramUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="footer-link connect-link"
+            data-analytics="footer_telegram_click"
+          >
+            <span class="material-symbols-outlined link-icon" aria-hidden="true">send</span>
+            <span>Telegram</span>
+          </a>
+          <a
+            href={SITE_CONTACTS.youtubeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="footer-link connect-link"
+            data-analytics="footer_youtube_click"
+          >
+            <svg class="social-svg link-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+            </svg>
+            <span>YouTube</span>
+          </a>
+          <a
+            href={SITE_CONTACTS.soundcloudUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="footer-link connect-link"
+            data-analytics="footer_soundcloud_click"
+          >
+            <svg class="social-svg link-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M1.175 12.225c-.051 0-.094.044-.102.102L.89 15.05l.183 2.665c.008.058.051.102.102.102.059 0 .102-.044.11-.102l.221-2.665-.221-2.723c-.008-.058-.051-.102-.11-.102zm1.32-.806c-.067 0-.118.051-.127.119l-.263 3.513.263 2.682c.009.068.06.119.127.119.068 0 .119-.051.128-.119l.314-2.682-.314-3.513c-.009-.068-.06-.119-.128-.119zm1.396-.782c-.076 0-.144.06-.153.136l-.305 4.302.305 2.698c.009.077.077.136.153.136.085 0 .144-.059.153-.136l.373-2.698-.373-4.302c-.009-.076-.068-.136-.153-.136zm1.446-.178c-.093 0-.17.076-.178.17l-.28 4.471.28 2.706c.008.093.085.17.178.17.093 0 .17-.077.178-.17l.348-2.706-.348-4.472c-.008-.094-.085-.169-.178-.169zm1.487-.332c-.11 0-.195.085-.204.195l-.237 4.802.237 2.706c.009.11.094.195.204.195.102 0 .195-.085.195-.195l.306-2.706-.306-4.802c0-.11-.093-.195-.195-.195zm1.512-.136c-.119 0-.22.102-.22.221l-.178 4.938.178 2.706c0 .127.101.229.22.229.128 0 .221-.102.221-.229l.238-2.706-.238-4.938c0-.119-.093-.221-.221-.221zm1.512-.042c-.136 0-.246.11-.246.246l-.119 4.972.119 2.706c0 .136.11.246.246.246.128 0 .238-.11.246-.246l.162-2.706-.162-4.972c-.008-.136-.118-.246-.246-.246zm1.529.28c-.145 0-.272.119-.272.272l-.043 4.708.043 2.706c0 .153.127.272.272.272.144 0 .271-.119.271-.272l.077-2.706-.077-4.708c0-.153-.127-.272-.271-.272zm3.323-4.751c-.39 0-.764.085-1.104.246-.22.102-.416.237-.586.407-.11.11-.204.237-.289.373a3.46 3.46 0 0 0-.255.518c-.059.187-.093.382-.11.586l.068 5.795.144 2.706c.008.161.135.289.297.289h1.835c2.31 0 4.186-1.875 4.186-4.183 0-2.308-1.876-4.184-4.186-4.184-.042 0-.085 0-.127.008-.026 0-.051.017-.077.017-.118.009-.237.017-.356.034z"/>
+            </svg>
+            <span>SoundCloud</span>
+          </a>
+          <a
+            href={SITE_CONTACTS.instagramUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="footer-link connect-link"
+            data-analytics="footer_instagram_click"
+          >
+            <span class="material-symbols-outlined link-icon" aria-hidden="true">photo_camera</span>
+            <span>Instagram</span>
+          </a>
+          <a
+            href={`mailto:${SITE_CONTACTS.email}`}
+            class="footer-link connect-link email-link"
+            data-analytics="footer_email_click"
+          >
+            <span class="material-symbols-outlined link-icon" aria-hidden="true">mail</span>
+            <span>{SITE_CONTACTS.email}</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Line: Rights & Back to Top -->
+    <div class="footer-bottom-bar">
+      <div class="bottom-copy">
+        <span>&copy; {currentYear} {t('artistName')}. {t('footerRights')}</span>
+      </div>
+
+      <button
+        type="button"
+        class="back-to-top-btn"
+        id="aboutBackToTopBtn"
+        aria-label="Scroll back to top of the page"
+      >
+        <span>{t('footerBackToTop')}</span>
+        <span class="material-symbols-outlined arrow-icon" aria-hidden="true">north</span>
+      </button>
+    </div>
+  </div>
+</footer>
+
+<script>
+  (function initBackToTop() {
+    const btn = document.getElementById('aboutBackToTopBtn');
+    btn?.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    });
+  })();
+</script>
+
+<style>
+  .about-footer {
+    position: relative;
+    width: 100%;
+    margin-top: 4rem;
+    padding-top: 4rem;
+    padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+    background: linear-gradient(
+      180deg,
+      rgba(11, 11, 13, 0) 0%,
+      rgba(11, 11, 13, 0.75) 20%,
+      rgba(9, 9, 11, 0.98) 100%
+    );
+    border-top: 1px solid var(--color-glass-border, rgba(255, 255, 255, 0.08));
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    overflow: hidden;
+    color: var(--color-text-muted);
+    transition: var(--transition-theme, background 0.4s ease, color 0.4s ease);
+  }
+
+  /* Day Resonance (Light Theme) background adaptation */
+  :global(html[data-theme="day"]:not(.dark)) .about-footer {
+    background: linear-gradient(
+      180deg,
+      rgba(252, 248, 251, 0) 0%,
+      rgba(245, 239, 243, 0.85) 25%,
+      rgba(237, 230, 235, 0.98) 100%
+    );
+    border-top: 1px solid var(--color-glass-border, rgba(217, 119, 6, 0.15));
+  }
+
+  /* Ambient lighting arc in background */
+  .footer-glow {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 900px;
+    height: 1px;
+    background: radial-gradient(
+      ellipse at top,
+      var(--color-primary, #ffc665) 0%,
+      var(--color-primary-glow, rgba(229, 169, 60, 0.25)) 45%,
+      transparent 80%
+    );
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  :global(html[data-theme="day"]:not(.dark)) .footer-glow {
+    opacity: 0.8;
+  }
+
+  .footer-container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+  }
+
+  /* 4-Column Grid Desktop */
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1.1fr 0.9fr 1.3fr;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  /* Brand Column */
+  .footer-brand-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .footer-brand-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+    text-decoration: none;
+    color: var(--color-text-main, #ffffff);
+    transition: opacity 0.25s ease;
+  }
+
+  .footer-brand-link:hover {
+    opacity: 0.85;
+  }
+
+  .footer-logo-svg {
+    width: 2.25rem;
+    height: 2.65rem;
+    color: var(--color-text-main, #ffffff);
+    flex-shrink: 0;
+  }
+
+  .brand-text-block {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .brand-name {
+    font-family: var(--font-display, 'Syne', sans-serif);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-text-main, #ffffff);
+    line-height: 1.2;
+  }
+
+  .brand-geo {
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-primary, #e5a93c);
+    margin-top: 0.2rem;
+    font-weight: 600;
+  }
+
+  .brand-desc {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--color-text-muted);
+    margin: 0;
+    max-width: 320px;
+  }
+
+  .brand-badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .acoustic-badge {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-main);
+    background: var(--color-surface-container, rgba(255, 255, 255, 0.04));
+    border: 1px solid var(--color-glass-border, rgba(255, 255, 255, 0.08));
+    border-radius: var(--radius-full, 9999px);
+    padding: 0.35rem 0.7rem;
+    font-weight: 500;
+  }
+
+  /* Navigation Columns */
+  .footer-nav-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  .col-heading {
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-text-subtle, rgba(255, 255, 255, 0.5));
+    margin: 0;
+    font-weight: 600;
+  }
+
+  .nav-links-grid,
+  .nav-links-list,
+  .connect-links-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .footer-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+    line-height: 1.4;
+  }
+
+  .footer-link:hover {
+    color: var(--color-primary, #ffc665);
+    transform: translateX(3px);
+  }
+
+  :global([dir="rtl"]) .footer-link:hover {
+    transform: translateX(-3px);
+  }
+
+  .link-bullet {
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    font-size: 0.75rem;
+    color: var(--color-primary);
+    opacity: 0.75;
+  }
+
+  .link-icon {
+    font-size: 1.05rem;
+    width: 1.05rem;
+    height: 1.05rem;
+    color: var(--color-text-subtle);
+    transition: color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .social-svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .footer-link:hover .link-icon {
+    color: var(--color-primary);
+  }
+
+  .highlight-link {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .highlight-link:hover {
+    color: var(--color-secondary-container, var(--color-primary));
+  }
+
+  /* Bottom Bar */
+  .footer-bottom-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-glass-border, rgba(255, 255, 255, 0.05));
+    font-size: 0.78rem;
+    color: var(--color-text-subtle);
+  }
+
+  .bottom-copy {
+    font-family: var(--font-body, system-ui, sans-serif);
+    letter-spacing: 0.02em;
+  }
+
+  .back-to-top-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: var(--color-surface-container, rgba(255, 255, 255, 0.03));
+    border: 1px solid var(--color-glass-border, rgba(255, 255, 255, 0.08));
+    border-radius: var(--radius-full, 9999px);
+    padding: 0.45rem 0.95rem;
+    color: var(--color-text-main);
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .back-to-top-btn:hover {
+    background: var(--color-surface-container-high);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    transform: translateY(-2px);
+  }
+
+  .arrow-icon {
+    font-size: 0.95rem;
+    transition: transform 0.25s ease;
+    color: var(--color-primary);
+  }
+
+  .back-to-top-btn:hover .arrow-icon {
+    transform: translateY(-2px);
+  }
+
+  /* Tablet layout (max-width: 960px) */
+  @media (max-width: 960px) {
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem 2rem;
+    }
+
+    .footer-brand-col {
+      grid-column: 1 / -1;
+      max-width: 520px;
+    }
+  }
+
+  /* Mobile Experience Redesign (max-width: 640px) */
+  @media (max-width: 640px) {
+    .about-footer {
+      padding-top: 2.75rem;
+      margin-top: 2.5rem;
+      /* Generous clearance so the fixed sticky action dock never overlaps footer content */
+      padding-bottom: calc(7.5rem + env(safe-area-inset-bottom, 0px));
+    }
+
+    .footer-container {
+      padding: 0 1.25rem;
+      gap: 2.5rem;
+    }
+
+    .footer-grid {
+      grid-template-columns: 1fr;
+      gap: 2.25rem;
+    }
+
+    /* Brand block centered on mobile */
+    .footer-brand-col {
+      align-items: center;
+      text-align: center;
+      gap: 1rem;
+      padding-bottom: 0.5rem;
+    }
+
+    .footer-brand-link {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .brand-desc {
+      text-align: center;
+      font-size: 0.9rem;
+      max-width: 100%;
+      padding-inline: 0.5rem;
+    }
+
+    .brand-badge-row {
+      justify-content: center;
+    }
+
+    /* Anchor Section navigation as structured 2-column touch chips */
+    .sections-nav-col .col-heading,
+    .global-nav-col .col-heading,
+    .connect-nav-col .col-heading {
+      text-align: center;
+      font-size: 0.7rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .nav-links-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.6rem;
+    }
+
+    .nav-links-grid .footer-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0.65rem 0.5rem;
+      background: var(--color-surface-container);
+      border: 1px solid var(--color-glass-border);
+      border-radius: var(--radius-md);
+      font-size: 0.8rem;
+      min-height: 44px;
+      box-sizing: border-box;
+      gap: 0.35rem;
+    }
+
+    .nav-links-grid .link-bullet {
+      display: none;
+    }
+
+    .nav-links-grid .highlight-link {
+      grid-column: 1 / -1;
+      background: var(--color-surface-container-high);
+      border-color: var(--color-primary);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    /* Global portal navigation: 2 pills side-by-side */
+    .nav-links-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.6rem;
+    }
+
+    .nav-links-list .footer-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0.65rem 0.5rem;
+      background: var(--color-surface-container);
+      border: 1px solid var(--color-glass-border);
+      border-radius: var(--radius-md);
+      font-size: 0.8rem;
+      min-height: 44px;
+      box-sizing: border-box;
+    }
+
+    /* Direct Contact Channels: 2-column touch cards */
+    .connect-links-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.6rem;
+    }
+
+    .connect-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.65rem 0.5rem;
+      background: var(--color-surface-container);
+      border: 1px solid var(--color-glass-border);
+      border-radius: var(--radius-md);
+      font-size: 0.82rem;
+      min-height: 44px;
+      box-sizing: border-box;
+    }
+
+    .connect-links-grid .email-link {
+      font-size: 0.8rem;
+    }
+
+    /* Bottom Bar on Mobile */
+    .footer-bottom-bar {
+      flex-direction: column;
+      gap: 1.5rem;
+      align-items: center;
+      text-align: center;
+      padding-top: 1.75rem;
+    }
+
+    .back-to-top-btn {
+      width: 100%;
+      max-width: 240px;
+      justify-content: center;
+      padding: 0.75rem 1rem;
+      min-height: 44px;
+      font-size: 0.75rem;
+    }
+  }
+</style>
