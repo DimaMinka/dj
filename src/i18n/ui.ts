@@ -82,7 +82,7 @@ export const ui = {
     aboutPageTitle: 'The Architecture of Frequency',
     aboutHeroBadgeGeo: 'Galilee & Golan Heights',
     aboutHeroBadgeFreq: '432 Hz Resonance',
-    aboutHeroSubtitle: 'Bespoke Sound & Autonomous Light Installations for Private Events, Boutique Wineries & Retreats in Galilee & Golan Heights.',
+    aboutHeroSubtitle: 'Bespoke Sound & Site-Specific Light Installations for Private Events, Boutique Wineries & Retreats in Galilee & Golan Heights.',
     aboutCtaWhatsApp: 'WhatsApp Inquiry',
     aboutCtaSpecs: 'Sound & Light Rig',
     aboutCtaAudio: 'Sample Frequency',
@@ -92,12 +92,12 @@ export const ui = {
     manifestoBadge: 'PHILOSOPHY & ACOUSTIC VISION',
     manifestoTitle: 'Sound as Invisible Architecture',
     manifestoP1: 'True sound does not overwhelm space — it reveals it. In the open landscapes of Upper Galilee, stone courtyards, and sunset vineyard terraces, acoustics must breathe with nature. My curations are calibrated to 432 Hz natural resonance, crafting an effortless emotional field free of acoustic fatigue.',
-    manifestoP2: 'Together with a completely cable-free, battery-powered ambient lighting rig, every session transforms into a living, site-specific art installation that transitions organically from daylight warmth into deep night magic.',
+    manifestoP2: 'Together with a carefully choreographed 12+ architectural lighting rig and discreet cable management outside guest pathways, every session transforms into a living, site-specific art installation that transitions organically from daylight warmth into deep night magic.',
 
     // Specifications & Rig
     specsBadge: 'TECHNICAL SPECIFICATIONS',
-    specsTitle: 'Engineered Precision & Complete Autonomy',
-    specsSubtitle: 'Designed for immaculate aesthetic beauty and zero cables in guest zones.',
+    specsTitle: 'Engineered Precision & Seamless Aesthetics',
+    specsSubtitle: 'Designed for immaculate aesthetic beauty with clean, discreet cable management outside guest pathways.',
     
     specSoundTitle: 'Sound Architecture',
     specSoundDesc: '432 Hz harmonic tuning, acoustic pressure modeled for stone halls and open hillsides without harsh frequencies.',
@@ -105,21 +105,21 @@ export const ui = {
     specSoundItem2: 'Acoustic pressure modeling for open terraces',
     specSoundItem3: 'Zero ear fatigue during multi-hour sets',
 
-    specLightTitle: '12+ Autonomous Light Rig',
-    specLightDesc: 'IP65 waterproof wireless battery-powered fixtures. 8–12 hours uninterrupted runtime with zero cables on lawns.',
-    specLightItem1: '12+ wireless IP65 fixtures (8–12h battery)',
-    specLightItem2: 'Zero cables or trip hazards in guest areas',
+    specLightTitle: '12+ Architectural Light Rig',
+    specLightDesc: 'Professional IP65 waterproof fixtures with clean cable routing. Rich ambient coverage from warm sunset glow to deep night.',
+    specLightItem1: '12+ professional IP65 architectural fixtures',
+    specLightItem2: 'Discreet, safe cable routing outside guest paths',
     specLightItem3: 'Dynamic scene transitions: Sunset → Twilight → Night',
 
     specsRiderToggle: 'View Complete Hardware & DJ Rider',
     specsRiderConsole: 'Performance Console',
     specsRiderConsoleVal: 'Denon DJ Prime Standalone Engine (zero laptop reliance)',
     specsRiderDmx: 'DMX Choreography',
-    specsRiderDmxVal: 'SoundSwitch Wireless DMX synced to key & frequency harmonics',
+    specsRiderDmxVal: 'SoundSwitch DMX synced to musical key and frequency harmonics',
     specsRiderMoving: 'Moving Heads',
     specsRiderMovingVal: 'Compact 30W LED moving spot fixtures with custom organic gobos',
     specsRiderWash: 'Ambient Wash',
-    specsRiderWashVal: 'Retro warm amber wash bars and wireless floor uplights',
+    specsRiderWashVal: 'Retro warm amber wash bars and architectural uplights',
 
     // Scope Packages
     packagesBadge: 'CURATED FORMATS',
@@ -129,22 +129,22 @@ export const ui = {
     pkg1Title: 'Sunset & Wine Gathering',
     pkg1Scale: 'Up to 50 guests',
     pkg1Desc: 'Intimate boutique winery gatherings, garden dinners, and sunset tasting sessions.',
-    pkg1Feat1: '4–6 wireless ambient warm amber spots',
+    pkg1Feat1: '4–6 architectural warm amber spots',
     pkg1Feat2: 'Warm background-to-evolving Organic House',
-    pkg1Feat3: 'Zero visual cable footprint',
+    pkg1Feat3: 'Clean, discreet cable management',
 
     pkg2Title: 'Private Villa & Retreat',
     pkg2Scale: 'Up to 100 guests',
     pkg2Desc: 'Complete evening journey for private villa celebrations, wellness retreats, and terrace parties.',
-    pkg2Feat1: 'Full 12+ wireless light rig with DMX scenes',
+    pkg2Feat1: 'Full 12+ architectural light rig with DMX scenes',
     pkg2Feat2: 'Dynamic acoustic curation (Sunset → Deep Melodic)',
     pkg2Feat3: 'Full turnkey sound and light choreography',
 
     pkg3Title: 'Custom Production',
     pkg3Scale: 'Mountain estates & remote nature',
-    pkg3Desc: 'Bespoke production for remote natural locations requiring complete power autonomy.',
+    pkg3Desc: 'Bespoke production for remote natural locations with tailored sound & power solutions.',
     pkg3Feat1: 'Multi-zone acoustic and architectural light design',
-    pkg3Feat2: 'Independent clean power / silent generator sync',
+    pkg3Feat2: 'Clean power / silent generator synchronization',
     pkg3Feat3: 'Site-specific acoustic calibration for extreme terrain',
 
     // Visible FAQ
@@ -153,10 +153,10 @@ export const ui = {
     faqSubtitle: 'Essential logistics, power requirements, and musical customization.',
 
     faq1Q: 'Is electrical grid power required on remote outdoor locations?',
-    faq1A: 'The 12+ lighting rig is 100% wireless and battery-powered with 8–12 hours of runtime, requiring zero cables in guest zones. Sound equipment requires either a single standard 220V circuit or a compact silent inverter generator which can be coordinated.',
+    faq1A: 'Yes, the sound system and 12+ lighting rig run on standard 220V power. On remote outdoor locations without grid access, we seamlessly integrate with a compact silent inverter generator with clean power distribution.',
 
     faq2Q: 'How long does installation and acoustic tuning take?',
-    faq2A: 'Because our lighting setup is fully wireless DMX, complete load-in, positioning, and acoustic frequency sweep takes only 45–60 minutes, without dragging bulky cable trenches across guest pathways.',
+    faq2A: 'Complete load-in, discreet cable routing along perimeter walls/hedges, and acoustic frequency sweeps take approximately 45–60 minutes, ensuring zero messy cable crossings in guest areas.',
 
     faq3Q: 'Which geographical regions do you cover for private bookings?',
     faq3A: 'Our home base and primary focus is Northern Israel: Upper Galilee, Golan Heights, Sea of Galilee, and the Jezreel Valley. Selected destination boutique retreats and villa events nationwide are accommodated by request.',
@@ -247,7 +247,7 @@ export const ui = {
     aboutPageTitle: 'Архитектура частоты',
     aboutHeroBadgeGeo: 'Галилея и Голанские высоты',
     aboutHeroBadgeFreq: 'Резонанс 432 Гц',
-    aboutHeroSubtitle: 'Инженерный звук и автономный свет для частных событий, виноделен и ретритов в Галилее и на Голанах.',
+    aboutHeroSubtitle: 'Инженерный звук и сайт-специфичный свет для частных событий, виноделен и ретритов в Галилее и на Голанах.',
     aboutCtaWhatsApp: 'Запрос в WhatsApp',
     aboutCtaSpecs: 'Сетап звука и света',
     aboutCtaAudio: 'Слушать 432 Гц',
@@ -257,12 +257,12 @@ export const ui = {
     manifestoBadge: 'ФИЛОСОФИЯ И АКУСТИЧЕСКОЕ ВИДЕНИЕ',
     manifestoTitle: 'Звук как невидимая архитектура',
     manifestoP1: 'Настоящий звук не подавляет пространство — он его раскрывает. На холмах Верхней Галилеи, в старинных каменных двориках и на террасах виноделен акустика обязана дышать в гармонии с природой. Мои сеты калибруются в природный строй 432 Гц, создавая глубокое эмоциональное поле без слуховой усталости.',
-    manifestoP2: 'В сочетании с беспроводным световым комплексом на батареях каждое выступление превращается в живую световую инсталляцию, органично переходящую от золотого заката к ночной магии.',
+    manifestoP2: 'В сочетании с продуманным комплексом из 12+ архитектурных световых приборов и скрытой кабельной коммутацией вне зоны гостей каждое выступление превращается в живую световую инсталляцию, органично переходящую от золотого заката к ночной магии.',
 
     // Specifications & Rig
     specsBadge: 'ТЕХНИЧЕСКИЕ СПЕЦИФИКАЦИИ',
-    specsTitle: 'Инженерная точность и полная автономия',
-    specsSubtitle: 'Чистая эстетика без проводов и кабельных трасс под ногами гостей.',
+    specsTitle: 'Инженерная точность и чистая эстетика',
+    specsSubtitle: 'Чистая эстетика пространства с аккуратной и безопасной прокладкой кабелей вне гостевых зон.',
 
     specSoundTitle: 'Архитектура звука',
     specSoundDesc: 'Гармонический строй 432 Гц, расчет звукового давления под каменные залы и открытые склоны без резких частот.',
@@ -270,21 +270,21 @@ export const ui = {
     specSoundItem2: 'Расчет акустики для открытых террас и холмов',
     specSoundItem3: 'Отсутствие слуховой усталости при долгих сетах',
 
-    specLightTitle: '12+ автономных световых приборов',
-    specLightDesc: 'Влагозащищенные приборы IP65 на аккумуляторах (8–12 часов работы). Полное отсутствие проводов на газонах.',
-    specLightItem1: '12+ беспроводных приборов IP65 (8–12 ч батареи)',
-    specLightItem2: 'Ноль кабелей и препятствий в зоне гостей',
+    specLightTitle: '12+ архитектурных световых приборов',
+    specLightDesc: 'Профессиональные влагозащищенные приборы IP65 с аккуратной скрытой коммутацией. Плотное световое покрытие от заката до ночи.',
+    specLightItem1: '12+ профессиональных приборов IP65',
+    specLightItem2: 'Безопасная скрытая прокладка кабелей вне зоны гостей',
     specLightItem3: 'Плавная смена сцен: Закат → Сумерки → Ночной сет',
 
     specsRiderToggle: 'Посмотреть полный технический райдер',
     specsRiderConsole: 'Диджейская консоль',
     specsRiderConsoleVal: 'Denon DJ Prime Standalone Engine (автономность без ноутбука)',
     specsRiderDmx: 'DMX-хореография',
-    specsRiderDmxVal: 'SoundSwitch Wireless DMX с синхронизацией по тональностям и частотам',
+    specsRiderDmxVal: 'SoundSwitch DMX с синхронизацией по тональностям и частотам',
     specsRiderMoving: 'Вращающиеся головы',
     specsRiderMovingVal: 'Компактные 30W LED Spot с индивидуальными органическими гобо',
     specsRiderWash: 'Заливающий свет',
-    specsRiderWashVal: 'Ретро-панели теплого янтаря и беспроводные аплайты',
+    specsRiderWashVal: 'Ретро-панели теплого янтаря и архитектурные аплайты',
 
     // Scope Packages
     packagesBadge: 'ФОРМАТЫ МЕРОПРИЯТИЙ',
@@ -294,22 +294,22 @@ export const ui = {
     pkg1Title: 'Закат и дегустация (Sunset & Wine)',
     pkg1Scale: 'До 50 гостей',
     pkg1Desc: 'Камерные вечера на винодельнях, ужины в саду и дегустационные закатные сеты.',
-    pkg1Feat1: '4–6 беспроводных теплых янтарных приборов',
+    pkg1Feat1: '4–6 архитектурных теплых янтарных приборов',
     pkg1Feat2: 'Фоновый Organic House с плавным ростом динамики',
-    pkg1Feat3: 'Полное отсутствие проводов в поле зрения',
+    pkg1Feat3: 'Чистая скрытая кабельная коммутация',
 
     pkg2Title: 'Частная вилла и ретрит',
     pkg2Scale: 'До 100 гостей',
     pkg2Desc: 'Целостный сценарий вечера для уединенных вилл, ретритов и террасных праздников.',
-    pkg2Feat1: 'Полный комплект 12+ беспроводных приборов с DMX-сценами',
+    pkg2Feat1: 'Полный комплект 12+ архитектурных приборов с DMX-сценами',
     pkg2Feat2: 'Динамичный звук (от теплого заката до глубокого Melodic House)',
     pkg2Feat3: 'Хореография света под ключ',
 
     pkg3Title: 'Сложный природный продакшн',
     pkg3Scale: 'Горные поместья и удаленные локации',
-    pkg3Desc: 'Индивидуальное производство для труднодоступных природных мест с полной энергоавтономией.',
+    pkg3Desc: 'Индивидуальное производство для труднодоступных природных мест с надежным электропитанием.',
     pkg3Feat1: 'Многозонный акустический и световой расчет',
-    pkg3Feat2: 'Синхронизация с автономным тихим инверторным питанием',
+    pkg3Feat2: 'Подключение к сети или синхронизация с тихим инверторным питанием',
     pkg3Feat3: 'Сайт-специфичная калибровка под сложный рельеф',
 
     // Visible FAQ
@@ -318,10 +318,10 @@ export const ui = {
     faqSubtitle: 'Логистика, подключение к сети и формирование музыкальной программы.',
 
     faq1Q: 'Требуется ли подключение к электросети на открытой локации?',
-    faq1A: 'Световой сетап из 12+ приборов полностью автономен на батареях (8–12 часов работы без проводов). Для звукового комплекса требуется стандартная розетка 220V либо мобильный тихий инверторный генератор.',
+    faq1A: 'Да, звуковой комплекс и комплект из 12+ световых приборов питаются от стандартной сети 220V. На удаленных природных локациях без стационарной сети мы организуем подключение через компактный тихий инверторный генератор.',
 
     faq2Q: 'Сколько времени занимает монтаж и акустическая настройка?',
-    faq2A: 'Благодаря беспроводной DMX-архитектуре монтаж занимает всего 45–60 минут без прокладки кабельных трасс под ногами гостей.',
+    faq2A: 'Монтаж, скрытая прокладка кабелей по периметру и частотная калибровка занимают 45–60 минут, гарантируя полное отсутствие кабельных трасс под ногами гостей.',
 
     faq3Q: 'В каких регионах доступно бронирование?',
     faq3A: 'Основной фокус — Север Израиля: Верхняя Галилея, Голанские высоты, долина Хула, а также выездные частные ретриты по всей стране.',
@@ -378,7 +378,7 @@ export const ui = {
     preludeTag: 'האתר הרשמי של האמן • פתיח',
     heroTitlePrefix: 'אדריכלות של',
     heroTitleAccent: 'סאונד ותאורה',
-    heroManifesto: 'ברוכים הבאים למרחב הרשמי של דיג׳יי דימה מינקה. סטים ייחודיים של מלודיק האוס, מערך של 12+ גופי תאורה אלחוטיים והתאמה אקוסטית לווילות פרטיות, כרמים ואירועי בוטיק.',
+    heroManifesto: 'ברוכים הבאים למרחב הרשמי של דיג׳יי דימה מינקה. סטים ייחודיים של מלודיק האוס, מערך של 12+ גופי תאורה ארכיטקטוניים והתאמה אקוסטית לווילות פרטיות, כרמים ואירועי בוטיק.',
     frequencyBadge: '432 Hz',
     
     gatewayTouch: 'כניסה למרחב',
@@ -400,7 +400,7 @@ export const ui = {
     vibeEmailPlaceholder: 'your@email.com',
     vibeEmailError: 'נא להזין אימייל תקין',
     setupDrawerTitle: 'אדריכלות סאונד ותאורה',
-    setupDrawerSubtitle: 'אקוסטיקה מותאמת אישית וכוריאוגרפיית אור אלחוטית',
+    setupDrawerSubtitle: 'אקוסטיקה מותאמת אישית וכוריאוגרפיית תאורה ייעודית',
     setupLights: 'מערך תאורה',
     setupSound: 'אוצרות סאונד',
     setupAudience: 'סביבה וקנה מידה',
@@ -412,7 +412,7 @@ export const ui = {
     aboutPageTitle: 'אדריכלות התדר',
     aboutHeroBadgeGeo: 'הגליל ורמת הגולן',
     aboutHeroBadgeFreq: 'תהודה 432 הרץ',
-    aboutHeroSubtitle: 'הגברה ותאורה אלחוטית לאירועי בוטיק, יקבים ווילות בגליל וברמת הגולן.',
+    aboutHeroSubtitle: 'הגברה ותאורה מותאמת אישית לאירועי בוטיק, יקבים ווילות בגליל וברמת הגולן.',
     aboutCtaWhatsApp: 'בירור ב-WhatsApp',
     aboutCtaSpecs: 'מפרט סאונד ותאורה',
     aboutCtaAudio: 'שמיעת תדר 432',
@@ -422,12 +422,12 @@ export const ui = {
     manifestoBadge: 'פילוסופיה וחזון אקוסטי',
     manifestoTitle: 'סאונד כאדריכלות בלתי נראית',
     manifestoP1: 'סאונד איכותי אינו משתלט על המרחב — הוא חושף אותו. במרחבים הפתוחים של הגליל העליון, בחצרות אבן עתיקות ובטרסות יקבים בשקיעה, האקוסטיקה חייבת לנשום עם הטבע. המוזיקה מכוילת לתדר 432 הרץ ויוצרת שדה רגשי נעים ללא עייפות שמיעה.',
-    manifestoP2: 'בשילוב עם מערך תאורה אלחוטי הפועל על סוללות, כל אירוע הופך למיצב אמנותי המשתנה בטבעיות מאור יום חם אל עומק הלילה.',
+    manifestoP2: 'בשילוב עם מערך מקצועי של 12+ גופי תאורה ארכיטקטוניים וניתוב כבלים מוסתר ובטיחותי מחוץ למעברי האורחים, כל אירוע הופך למיצב חי המשתנה בטבעיות מאור יום חם אל עומק הלילה.',
 
     // Specifications & Rig
     specsBadge: 'מפרט טכני והנדסי',
-    specsTitle: 'דיוק הנדסי ועצמאות מלאה בשטח',
-    specsSubtitle: 'אסתטיקה נקייה ללא כבלים כלל באזור האורחים.',
+    specsTitle: 'דיוק הנדסי ואסתטיקה מוקפדת',
+    specsSubtitle: 'אסתטיקה נקייה עם פריסת כבלים מוסתרת ובטיחותית מחוץ לשבילי האורחים.',
 
     specSoundTitle: 'אדריכלות סאונד',
     specSoundDesc: 'כיול הרמוני 432 הרץ, מידול לחץ אקוסטי לחללי אבן ולמדרונות פתוחים ללא תדרים צורמים.',
@@ -435,21 +435,21 @@ export const ui = {
     specSoundItem2: 'מידול אקוסטי מותאם לטרסות פתוחות',
     specSoundItem3: 'ללא עייפות שמיעה גם באירועים ממושכים',
 
-    specLightTitle: 'מערך 12+ גופי תאורה אלחוטיים',
-    specLightDesc: 'גופים עמידי מים בתקן IP65 על סוללות (8–12 שעות עבודה). אפס כבלים על מדשאות ושבילים.',
-    specLightItem1: '12+ גופים אלחוטיים IP65 (סוללה 8–12 שעות)',
-    specLightItem2: 'ללא כבלי חשמל כלל באזור האורחים',
+    specLightTitle: 'מערך 12+ גופי תאורה ארכיטקטוניים',
+    specLightDesc: 'גופי תאורה מקצועיים ועמידי מים בתקן IP65 עם ניתוב כבלים נקי ובטוח. כיסוי אווירה עשיר משקיעה ועד לילה.',
+    specLightItem1: '12+ גופים מקצועיים בתקן IP65',
+    specLightItem2: 'ניתוב כבלים מוסתר ובטוח מחוץ לאזור האורחים',
     specLightItem3: 'מעבר תרחישים הדרגתי: שקיעה ← דמדומים ← לילה',
 
     specsRiderToggle: 'צפייה בריידר הטכני המלא',
     specsRiderConsole: 'עמדת DJ מקצועית',
-    specsRiderConsoleVal: 'Denon DJ Prime Standalone Engine (ללא תלות במחשב נייד)',
+    specsRiderConsoleVal: 'Denon DJ Prime Standalone Engine (עצמאות מלאה ללא תלות במחשב)',
     specsRiderDmx: 'כוריאוגרפיית DMX',
-    specsRiderDmxVal: 'SoundSwitch Wireless DMX מסונכרן להרמוניות הסאונד',
+    specsRiderDmxVal: 'SoundSwitch DMX מסונכרן לסולם המוזיקלי ולהרמוניות הסאונד',
     specsRiderMoving: 'ראשים נעים (Moving Heads)',
     specsRiderMovingVal: 'גופי 30W LED חכמים עם גובו אורגני מותאם אישית',
     specsRiderWash: 'תאורת שטיפה ואווירה',
-    specsRiderWashVal: 'פסי לד חמים בגוון ענבר וגופי הארה אלחוטיים לאבן ולצמחייה',
+    specsRiderWashVal: 'פסי לד חמים בגוון ענבר וגופי הארה אדריכליים לאבן ולצמחייה',
 
     // Scope Packages
     packagesBadge: 'מסגרות אירוע מותאמות',
@@ -459,9 +459,9 @@ export const ui = {
     pkg1Title: 'מפגש שקיעה ויין (Sunset & Wine)',
     pkg1Scale: 'עד 50 אורחים',
     pkg1Desc: 'אירועי בוטיק אינטימיים ביקבים, ארוחות שף בגינה ומפגשי טעימות בשקיעה.',
-    pkg1Feat1: '4–6 גופי תאורה אלחוטיים בגוון ענבר חם',
+    pkg1Feat1: '4–6 גופי תאורה בגוון ענבר חם עם ניתוב נקי',
     pkg1Feat2: 'אורגניק האוס מעודן המתפתח עם האווירה',
-    pkg1Feat3: 'מרחב נקי לחלוטין מכבלים וציוד מיותר',
+    pkg1Feat3: 'מרחב נקי ובטוח ללא כבלים חשופים בשבילים',
 
     pkg2Title: 'וילה פרטית ואירועי ריטריט',
     pkg2Scale: 'עד 100 אורחים',
@@ -472,9 +472,9 @@ export const ui = {
 
     pkg3Title: 'הפקה ייעודית בטבע',
     pkg3Scale: 'אחוזות מבודדות ושטחים פתוחים',
-    pkg3Desc: 'התאמה אישית לאתרים מרוחקים הדורשים אספקת חשמל שקטה ועצמאית.',
+    pkg3Desc: 'התאמה אישית לאתרים מרוחקים עם פתרונות כוח וסאונד עצמאיים.',
     pkg3Feat1: 'מידול אקוסטי ועיצוב תאורה מרובה אזורים',
-    pkg3Feat2: 'סנכרון מלא לגנרטור מושתק ואספקת כוח נקייה',
+    pkg3Feat2: 'חיבור לרשת או סנכרון לגנרטור מושתק ואספקת חשמל נקייה',
     pkg3Feat3: 'כיול סאונד מותאם לשטח פתוח ותוואי הררי',
 
     // Visible FAQ
@@ -483,10 +483,10 @@ export const ui = {
     faqSubtitle: 'דרישות חשמל, זמני הקמה והתאמת המוזיקה לאירוע שלכם.',
 
     faq1Q: 'האם נדרש חיבור לרשת החשמל במיקום פתוח בטבע?',
-    faq1A: 'מערך התאורה (12+ גופים) פועל באופן אלחוטי מלא על סוללות למשך 8–12 שעות ללא כבלים. עבור מערכת הסאונד נדרש שקע 220V רגיל או גנרטור מושתק נייד.',
+    faq1A: 'כן, מערכת הסאונד ומערך 12+ גופי התאורה פועלים בחיבור רגיל לרשת 220V. במיקומים פתוחים בטבע ללא נקודת חשמל, אנו משתלבים באופן מושלם עם גנרטור מושתק נייד בעל אספקת כוח נקייה.',
 
     faq2Q: 'כמה זמן אורך שלב ההקמה והכיול האקוסטי?',
-    faq2A: 'בזכות ארכיטקטורת DMX אלחוטית מלאה, ההקמה והכיול אורכים כ-45–60 דקות בלבד ללא פריסת כבלים באזור האורחים.',
+    faq2A: 'שלב הפריקה, ניתוב הכבלים המוסתר לאורך קירות וצמחייה והכיול האקוסטי אורכים כ-45–60 דקות בלבד, תוך הקפדה על אפס מעברי כבלים בשבילי האורחים.',
 
     faq3Q: 'באילו אזורים זמינה הזמנת הופעות?',
     faq3A: 'המוקד העיקרי הוא צפון הארץ: הגליל העליון, רמת הגולן, עמק החולה, ואירועי בוטיק וריטריטים ייעודיים בכל רחבי הארץ.',
