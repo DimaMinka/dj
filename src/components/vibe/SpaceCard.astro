@@ -102,9 +102,6 @@ const gallery = getSpaceGallery(space);
           </div>
         </div>
 
-        <!-- Local Northern Social Proof Ticker (Desktop Sound Column) -->
-        <LocalSocialProof lang={lang} class="desktop-only-social-proof" />
-
         <!-- Mobile Center Setup Pill Button (Hidden on Desktop >= 1024px) -->
         <div class="btn-wrap">
           <button
@@ -118,6 +115,9 @@ const gallery = getSpaceGallery(space);
             <span class="material-symbols-outlined pill-arrow" aria-hidden="true">arrow_forward</span>
           </button>
         </div>
+
+        <!-- Local Northern Social Proof Ticker (Desktop Sound Column - Absolute Bottom) -->
+        <LocalSocialProof lang={lang} class="desktop-only-social-proof" />
       </div>
 
       <!-- Desktop Right Column: Direct Hardware Rig & Lighting Specs (Visible ONLY on >= 1024px) -->
@@ -620,6 +620,9 @@ const gallery = getSpaceGallery(space);
     .art-book-card {
       padding: 2.2rem 2.4rem;
       border-radius: 32px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
     }
 
     .card-glass-layer {
@@ -633,13 +636,17 @@ const gallery = getSpaceGallery(space);
       gap: 2.5rem;
       align-items: stretch;
       text-align: start;
+      flex: 1;
+      width: 100%;
     }
 
     .card-sound-col {
+      display: flex;
+      flex-direction: column;
       align-items: flex-start;
       justify-content: flex-start;
-      height: 100%;
       min-width: 0;
+      height: 100%;
     }
 
     .supertitle-row {
