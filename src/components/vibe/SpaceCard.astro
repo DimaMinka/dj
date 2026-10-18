@@ -117,7 +117,9 @@ const gallery = getSpaceGallery(space);
         </div>
 
         <!-- Local Northern Social Proof Ticker (Desktop Sound Column - Absolute Bottom) -->
-        <LocalSocialProof lang={lang} class="desktop-only-social-proof" />
+        <div class="desktop-social-proof-wrap">
+          <LocalSocialProof lang={lang} />
+        </div>
       </div>
 
       <!-- Desktop Right Column: Direct Hardware Rig & Lighting Specs (Visible ONLY on >= 1024px) -->
@@ -596,7 +598,7 @@ const gallery = getSpaceGallery(space);
     display: none;
   }
 
-  :global(.desktop-only-social-proof) {
+  .desktop-social-proof-wrap {
     display: none;
   }
 
@@ -826,8 +828,9 @@ const gallery = getSpaceGallery(space);
       opacity: 0.95;
     }
 
-    :global(.desktop-only-social-proof) {
+    .desktop-social-proof-wrap {
       display: flex;
+      flex-direction: column;
       margin-block-start: auto;
       margin-block-end: 0;
       padding-block-start: 1rem;
