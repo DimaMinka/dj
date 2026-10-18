@@ -1,3 +1,12 @@
+export interface SpaceSetupGallery {
+  lights: string;
+  lightsTitle: { en: string; ru: string; he: string };
+  sound: string;
+  soundTitle: { en: string; ru: string; he: string };
+  location: string;
+  locationTitle: { en: string; ru: string; he: string };
+}
+
 export interface SpaceSetup {
   id: string;
   name: { en: string; ru: string; he: string };
@@ -5,6 +14,7 @@ export interface SpaceSetup {
   soundType: { en: string; ru: string; he: string };
   idealFor: { en: string; ru: string; he: string };
   image: string;
+  gallery?: SpaceSetupGallery;
 }
 
 export interface Space {
@@ -111,6 +121,26 @@ export const spaces: Space[] = [
         he: 'טרסות עם נוף לכנרת, יקבי בוטיק, מטעי זיתים וילות פרטיות בגליל — אירועים אינטימיים עד 100 אורחים.',
       },
       image: '/assets/spaces/aegean-setup.jpg',
+      gallery: {
+        lights: '/assets/spaces/signature-rig-setup.jpg',
+        lightsTitle: {
+          en: 'RETRO HONEYCOMB & CANOPY WASH',
+          ru: 'РЕТРО-СОТЫ & ПОДСВЕТКА КРОН',
+          he: 'כוורות רטרו ותאורת צמרות',
+        },
+        sound: '/assets/spaces/winery-courtyard-setup.jpg',
+        soundTitle: {
+          en: 'ACOUSTIC ARCHITECTURE & CONSOLE',
+          ru: 'АКУСТИЧЕСКАЯ АРХИТЕКТУРА & КОНСОЛЬ',
+          he: 'ארכיטקטורה אקוסטית ועמדה',
+        },
+        location: '/assets/spaces/aegean-bg-desktop.jpg',
+        locationTitle: {
+          en: 'TERRACE & GALILEE PANORAMA',
+          ru: 'ТЕРРАСЫ & ПАНОРАМА КИНЕРЕТА',
+          he: 'טרסות ופנורמת הכנרת',
+        },
+      },
     },
   },
 
@@ -562,3 +592,26 @@ export const spaces: Space[] = [
     },
   },
 ];
+
+export function getSpaceGallery(space: Space): SpaceSetupGallery {
+  if (space.setup.gallery) {
+    return space.setup.gallery;
+  }
+  return {
+    lights: space.setup.image || '/assets/spaces/signature-rig-setup.jpg',
+    lightsTitle: space.setup.name,
+    sound: '/assets/spaces/winery-courtyard-setup.jpg',
+    soundTitle: {
+      en: 'ACOUSTIC ARCHITECTURE & CONSOLE',
+      ru: 'АКУСТИЧЕСКАЯ АРХИТЕКТУРА & КОНСОЛЬ',
+      he: 'ארכיטקטורה אקוסטית ועמדה',
+    },
+    location: space.bgWatercolorDesktop || space.bgWatercolor,
+    locationTitle: {
+      en: 'ATMOSPHERE & PANORAMA',
+      ru: 'АТМОСФЕРА & ПАНОРАМА ЛОКАЦИИ',
+      he: 'אווירה ופנורמת המקום',
+    },
+  };
+}
+

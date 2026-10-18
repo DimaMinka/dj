@@ -33,6 +33,18 @@ export function getWhatsAppLink(lang: SupportedLang = defaultLang): string {
   return `https://wa.me/${SITE_CONTACTS.whatsappRaw}?text=${encodeURIComponent(text)}`;
 }
 
+export function getWhatsAppContextualLink(spaceName: string, lang: SupportedLang = defaultLang): string {
+  let text = '';
+  if (lang === 'ru') {
+    text = `Привет, Dima! Понравился сетап пространства "${spaceName}". Хочу обсудить детали и свободные даты для нашего вечера.`;
+  } else if (lang === 'he') {
+    text = `היי דימה, אהבתי מאוד את המערך של "${spaceName}". אשמח לבדוק תאריכים פנויים ופרטים לאירוע שלנו.`;
+  } else {
+    text = `Hi Dima! I really loved the "${spaceName}" setup. I'd like to check available dates and discuss details for our event.`;
+  }
+  return `https://wa.me/${SITE_CONTACTS.whatsappRaw}?text=${encodeURIComponent(text)}`;
+}
+
 export const ui = {
   en: {
     // Header
@@ -78,6 +90,16 @@ export const ui = {
     setupSound: 'Music Selection',
     setupAudience: 'Locations & Scale',
     setupCloseBtn: 'Close Specification',
+    whatsappDiscuss: 'Discuss Your Event on WhatsApp',
+    socialProofLabel: 'ICONIC NORTHERN TERROIRS & VENUES',
+    socialProofLocations: [
+      'Dalton Winery',
+      'Harei Galilee',
+      'Rosh Pina Private Villas',
+      'Golan Heights Terroir',
+      'Kinneret Lakeside Terraces',
+      'Pelter Winery Estate',
+    ],
     dockPlaying: 'Resonating Live',
     dockBpm: 'BPM',
 
@@ -283,6 +305,16 @@ export const ui = {
     setupSound: 'Музыкальная селекция',
     setupAudience: 'Локации и масштаб',
     setupCloseBtn: 'Закрыть спецификацию',
+    whatsappDiscuss: 'Обсудить ваш вечер в WhatsApp',
+    socialProofLabel: 'ЛОКАЦИИ И ВИНОДЕЛЬНИ СЕВЕРА',
+    socialProofLocations: [
+      'Винодельня Dalton',
+      'Harei Galilee',
+      'Виллы Рош-Пина',
+      'Терруар Голанских высот',
+      'Террасы Кинерета',
+      'Поместье Pelter Winery',
+    ],
     dockPlaying: 'В эфире пространства',
     dockBpm: 'BPM',
 
@@ -488,6 +520,16 @@ export const ui = {
     setupSound: 'סלקציית מוזיקה',
     setupAudience: 'מיקומים וקנה מידה',
     setupCloseBtn: 'סגור מפרט',
+    whatsappDiscuss: 'שיחה ישירה ב-WhatsApp לתיאום האירוע',
+    socialProofLabel: 'טרוארים ולוקיישנים נבחרים בצפון',
+    socialProofLocations: [
+      'יקב דלתון (Dalton Winery)',
+      'הרי גליל (Harei Galilee)',
+      'וילות יוקרה בראש פינה',
+      'טרואר רמת הגולן',
+      'טרסות פנורמיות מעל הכנרת',
+      'אחוזת יקב פלטר (Pelter)',
+    ],
     dockPlaying: 'מתנגן במרחב',
     dockBpm: 'BPM',
 
