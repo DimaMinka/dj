@@ -40,7 +40,7 @@ const t = useTranslations(lang);
           <!-- Hardware Rig Visual Photograph -->
           <div class="setup-image-wrap">
             <img
-              src={space.setup.image}
+              src={space.bgWatercolorDesktop || space.bgWatercolor}
               alt={space.setup.name[lang] || space.setup.name.en}
               class="setup-img"
               loading="lazy"
@@ -60,7 +60,7 @@ const t = useTranslations(lang);
               </div>
               <div class="spec-text-col">
                 <span class="spec-label">{t('setupLights')}</span>
-                <span class="spec-val">{space.setup.lightsCount}</span>
+                <span class="spec-val">{typeof space.setup.lightsCount === 'object' ? (space.setup.lightsCount[lang] || space.setup.lightsCount.en) : space.setup.lightsCount}</span>
               </div>
             </div>
 
@@ -344,6 +344,7 @@ const t = useTranslations(lang);
     position: absolute;
     bottom: 0.75rem;
     inset-inline-start: 0.75rem;
+    max-width: calc(100% - 1.5rem);
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
@@ -354,20 +355,25 @@ const t = useTranslations(lang);
     border: 1px solid var(--color-primary);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    box-sizing: border-box;
   }
 
   .badge-icon {
     font-size: 0.875rem;
     color: var(--color-primary);
+    flex-shrink: 0;
   }
 
   .badge-text {
     font-family: var(--font-body);
-    font-size: 0.6875rem;
+    font-size: clamp(0.6rem, 2.2vw, 0.6875rem);
     font-weight: 700;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .specs-grid {

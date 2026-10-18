@@ -16,6 +16,7 @@ const initialSpace = spaces[initialIndex] || spaces[0];
   class="sound-dock-wrapper"
   id="soundDockContainer"
   data-initial-slug={initialSpace.slug}
+  data-lang={lang}
   style={`--player-color-light: ${initialSpace.glowColor}; --player-rgb-light: ${initialSpace.glowRgb}; --player-color-dark: ${initialSpace.glowColorDark}; --player-rgb-dark: ${initialSpace.glowRgbDark};`}
 >
   <!-- Minimalist Live Audio Stream Bar from Stitch -->
@@ -32,10 +33,10 @@ const initialSpace = spaces[initialIndex] || spaces[0];
 
       <div class="stream-info">
         <span id="dockTrackTitle" class="stream-title">
-          {initialSpace.trackTitle}
+          {typeof initialSpace.trackTitle === 'object' ? (initialSpace.trackTitle[lang] || initialSpace.trackTitle.en) : initialSpace.trackTitle}
         </span>
         <span id="dockTrackSubtitle" class="stream-sub">
-          {initialSpace.trackSubtitle}
+          {typeof initialSpace.trackSubtitle === 'object' ? (initialSpace.trackSubtitle[lang] || initialSpace.trackSubtitle.en) : initialSpace.trackSubtitle}
         </span>
       </div>
     </div>
@@ -125,8 +126,11 @@ const initialSpace = spaces[initialIndex] || spaces[0];
       if (typeof index === 'number' && spaces[index]) {
         const space = spaces[index];
         currentSlug = space.slug;
-        if (titleEl) titleEl.textContent = space.trackTitle;
-        if (subtitleEl) subtitleEl.textContent = space.trackSubtitle;
+        const pageLang = (container?.dataset?.lang as 'en' | 'ru' | 'he') || 'en';
+        const trTitle = typeof space.trackTitle === 'object' ? ((space.trackTitle as any)[pageLang] || space.trackTitle.en) : space.trackTitle;
+        const trSub = typeof space.trackSubtitle === 'object' ? ((space.trackSubtitle as any)[pageLang] || space.trackSubtitle.en) : space.trackSubtitle;
+        if (titleEl) titleEl.textContent = trTitle;
+        if (subtitleEl) subtitleEl.textContent = trSub;
 
         // Dynamically tint player button, equalizer and CTA to active vibe color
         if (container) {

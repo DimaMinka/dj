@@ -35,7 +35,7 @@ const initialSpace = spaces[initialIndex] || spaces[0];
   <!-- Actions Group: About Link + Theme Resonance Toggle Pill -->
   <div class="actions-group">
     <!-- Direct About Link -->
-    <a href="/about" class="nav-about-link">
+    <a href={lang === 'en' ? '/about' : `/${lang}/about`} class="nav-about-link">
       <span>{t('navAbout')}</span>
     </a>
 
@@ -45,7 +45,12 @@ const initialSpace = spaces[initialIndex] || spaces[0];
         <span class="bar bar-2"></span>
         <span class="bar bar-3"></span>
       </div>
-      <span id="vibeThemeToggleLabel" class="theme-label">{t('nightResonance')}</span>
+      <span
+        id="vibeThemeToggleLabel"
+        class="theme-label"
+        data-label-night={t('nightResonance')}
+        data-label-day={t('dayResonance')}
+      >{t('nightResonance')}</span>
     </button>
   </div>
 </header>
@@ -64,7 +69,9 @@ const initialSpace = spaces[initialIndex] || spaces[0];
     function updateLabel(theme: string) {
       if (!label) return;
       const isNight = theme === 'night';
-      label.textContent = isNight ? 'Night Resonance' : 'Day Resonance';
+      const nightText = label.dataset.labelNight || 'Night Resonance';
+      const dayText = label.dataset.labelDay || 'Day Resonance';
+      label.textContent = isNight ? nightText : dayText;
     }
 
     function updateLogoVibe(index: number) {

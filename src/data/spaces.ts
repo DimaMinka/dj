@@ -1,7 +1,7 @@
 export interface SpaceSetup {
   id: string;
   name: { en: string; ru: string; he: string };
-  lightsCount: string;
+  lightsCount: string | { en: string; ru: string; he: string };
   soundType: { en: string; ru: string; he: string };
   idealFor: { en: string; ru: string; he: string };
   image: string;
@@ -17,8 +17,9 @@ export interface Space {
   headlinePrefix: { en: string; ru: string; he: string };
   headlineAccent: { en: string; ru: string; he: string };
   poetry: { en: string; ru: string; he: string };
-  trackTitle: string;
-  trackSubtitle: string;
+  tags?: { en: string[]; ru: string[]; he: string[] };
+  trackTitle: string | { en: string; ru: string; he: string };
+  trackSubtitle: string | { en: string; ru: string; he: string };
   bpm: number;
   frequency: number;
   keySignature: string;
@@ -40,13 +41,13 @@ export const spaces: Space[] = [
     headerBadge: 'AEGEAN TERRACES • BOTANICAL',
     title: {
       en: 'Aegean Terraces',
-      ru: 'Aegean Terraces',
+      ru: 'Террасы Кинерета',
       he: 'טרסות הים האגאי',
     },
     supertitle: {
       en: '— BOTANICAL SOUND ATELIER —',
-      ru: '— BOTANICAL SOUND ATELIER —',
-      he: '— BOTANICAL SOUND ATELIER —',
+      ru: '— ЗАКАТ • КИНЕРЕТ И ХОЛМЫ —',
+      he: '— סשני שקיעה • כנרת והגבעות —',
     },
     headlinePrefix: {
       en: 'Sound shaped by ',
@@ -59,12 +60,25 @@ export const spaces: Space[] = [
       he: 'הנוף.',
     },
     poetry: {
-      en: 'Subtle resonance of warm Mediterranean limestone, morning sea breeze, and chamber acoustics in pure organic harmony.',
-      ru: 'Тонкий резонанс теплого известняка, морского бриза и камерной акустики в естественной природной гармонии.',
-      he: 'תהודה מעודנת של אבן גיר ים-תיכונית חמה, בריזת בוקר ואקוסטיקה אינטימית בהרמוניה טבעית.',
+      en: 'Subtle balance of warm limestone, evening Kinneret breeze, and chamber acoustics in pure natural harmony.',
+      ru: 'Тонкий баланс теплого камня, вечернего бриза Кинерета и камерной акустики в естественной природной гармонии.',
+      he: 'איזון מעודן של אבן חמה, בריזת ערב מהכנרת ואקוסטיקה אינטימית בהרמוניה טבעית.',
     },
-    trackTitle: 'Aegean Terraces Sunrise',
-    trackSubtitle: 'Live Session • Mediterranean Sound Atelier',
+    tags: {
+      en: ['🌅 ORGANIC HOUSE', '⏱ 120 BPM', '🍷 SUNSET VIBE'],
+      ru: ['🌅 ОРГАНИК-ХАУС', '⏱ 120 УД/МИН', '🍷 ЗАКАТНЫЙ ВАЙБ'],
+      he: ['🌅 אורגניק האוס', '⏱ 120 פעימות/דקה', '🍷 וייב שקיעה'],
+    },
+    trackTitle: {
+      en: 'Sunset Resonance',
+      ru: 'Закатный резонанс',
+      he: 'תהודת שקיעה',
+    },
+    trackSubtitle: {
+      en: 'Live Session • Signature Sunset Mix',
+      ru: 'Живая сессия • Авторский закатный микс',
+      he: 'סשן חי • מיקס שקיעה מקורי',
+    },
     bpm: 120,
     frequency: 432,
     keySignature: 'G major',
@@ -77,20 +91,24 @@ export const spaces: Space[] = [
     setup: {
       id: 'setup-aegean',
       name: {
-        en: 'Standard Botanical Atelier',
-        ru: 'Архитектурный свет крон & Саунд-ателье',
-        he: 'תאורת צמרות אדריכלית ואטלייה בוטני',
+        en: 'RETRO HONEYCOMB & CANOPY WASH',
+        ru: 'РЕТРО-СОТЫ & ПОДСВЕТКА КРОН',
+        he: 'כוורות רטרו ותאורת צמרות',
       },
-      lightsCount: '12x IP65 WIRELESS LED CANOPY WASH',
+      lightsCount: {
+        en: 'Vintage honeycomb blinds with amber glow and concealed canopy wash in harmony with twilight.',
+        ru: 'Винтажные ретро-соты с мягким янтарным теплом и скрытая подсветка крон деревьев в гармонии с вечерними сумерками.',
+        he: 'כוורות רטרו חמות עם זוהר ענברי ותאורת צמרות נסתרת בהרמוניה מושלמת עם שעת בין השמשות.',
+      },
       soundType: {
-        en: '360° distributed acoustic field for natural dispersion without echo',
-        ru: 'Винтажные соты блайндеров с бархатным угасанием нити накала. Полная гармония с природными сумерками',
-        he: 'שטיפת צמרות אלחוטית ופיזור סאונד 360 מעלות ללא הד',
+        en: 'Live musical journey: from meditative waterfront sunset chill to deep night rhythm without listening fatigue.',
+        ru: 'Живая драматургия: от медитативного закатного чилла у воды до глубокого ночного ритма без слуховой усталости.',
+        he: 'דרמטורגיה חיה: מצ\'יל שקיעה מדיטטיבי על קו המים ועד לקצב לילה עמוק ללא עייפות שמיעתית.',
       },
       idealFor: {
-        en: 'Mediterranean terraces, olive groves, coastal estates, up to 100 guests',
-        ru: 'Средиземноморские террасы, оливковые сады, прибрежные виллы, до 100 гостей',
-        he: 'טרסות ים-תיכוניות, מטעי זיתים, אחוזות חוף, עד 100 אורחים',
+        en: 'Terraces overlooking the Sea of Galilee, boutique wineries, olive groves, and private Galilee villas — boutique events up to 100 guests.',
+        ru: 'Террасы с видом на Кинерет, винодельни, оливковые сады и частные виллы Галилеи — камерные события до 100 гостей.',
+        he: 'טרסות עם נוף לכנרת, יקבי בוטיק, מטעי זיתים וילות פרטיות בגליל — אירועים אינטימיים עד 100 אורחים.',
       },
       image: '/assets/spaces/aegean-setup.jpg',
     },
