@@ -1,6 +1,6 @@
 ---
 import { defaultLang, type SupportedLang, useTranslations } from '../../i18n/ui';
-import { spaces } from '../../data/spaces';
+import { spaces, getSpaceGallery } from '../../data/spaces';
 
 interface Props {
   lang?: SupportedLang;
@@ -35,57 +35,90 @@ const t = useTranslations(lang);
 
     <!-- Dynamic Content Loaded for Active Space Setup -->
     <div class="sheet-body" id="sheetBody">
-      {spaces.map((space) => (
-        <div class="space-setup-view" data-setup-slug={space.slug} id={`setup-${space.slug}`}>
-          <!-- Hardware Rig Visual Photograph -->
-          <div class="setup-image-wrap">
-            <img
-              src={space.bgWatercolorDesktop || space.bgWatercolor}
-              alt={space.setup.name[lang] || space.setup.name.en}
-              class="setup-img"
-              loading="lazy"
-            />
-            <div class="setup-img-overlay"></div>
-            <div class="setup-badge">
-              <span class="material-symbols-outlined badge-icon" aria-hidden="true">verified</span>
-              <span class="badge-text">{space.setup.name[lang] || space.setup.name.en}</span>
+      {spaces.map((space) => {
+        const gallery = getSpaceGallery(space);
+        return (
+          <div
+            class="space-setup-view"
+            data-setup-slug={space.slug}
+            id={`setup-${space.slug}`}
+            style={`--card-glow-color: ${space.glowColor}; --card-glow-rgb: ${space.glowRgb};`}
+          >
+            <!-- Hardware Rig Visual Photograph -->
+            <div class="setup-image-wrap">
+              <div class="setup-loader-shimmer" aria-hidden="true"></div>
+              <img
+                src={space.bgWatercolorDesktop || space.bgWatercolor}
+                alt={space.setup.name[lang] || space.setup.name.en}
+                class="setup-img"
+                loading="lazy"
+              />
+              <div class="setup-img-overlay"></div>
+              <div class="setup-badge">
+                <span class="material-symbols-outlined badge-icon" aria-hidden="true">verified</span>
+                <span class="badge-text">{space.setup.name[lang] || space.setup.name.en}</span>
+              </div>
+            </div>
+
+            <!-- Technical Specs Grid as Interactive Tabs -->
+            <div class="specs-grid" role="tablist" aria-label="Specification categories">
+              <button
+                type="button"
+                class="spec-card"
+                role="tab"
+                aria-selected="false"
+                data-spec-tab="lights"
+                data-tab-img={gallery.lights}
+                data-tab-title={gallery.lightsTitle[lang] || gallery.lightsTitle.en}
+              >
+                <div class="spec-icon-box">
+                  <span class="material-symbols-outlined spec-icon" aria-hidden="true">lightbulb</span>
+                </div>
+                <div class="spec-text-col">
+                  <span class="spec-label">{t('setupLights')}</span>
+                  <span class="spec-val">{typeof space.setup.lightsCount === 'object' ? (space.setup.lightsCount[lang] || space.setup.lightsCount.en) : space.setup.lightsCount}</span>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                class="spec-card"
+                role="tab"
+                aria-selected="false"
+                data-spec-tab="sound"
+                data-tab-img={gallery.sound}
+                data-tab-title={gallery.soundTitle[lang] || gallery.soundTitle.en}
+              >
+                <div class="spec-icon-box">
+                  <span class="material-symbols-outlined spec-icon" aria-hidden="true">speaker</span>
+                </div>
+                <div class="spec-text-col">
+                  <span class="spec-label">{t('setupSound')}</span>
+                  <span class="spec-val">{space.setup.soundType[lang] || space.setup.soundType.en}</span>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                class="spec-card is-selected"
+                role="tab"
+                aria-selected="true"
+                data-spec-tab="location"
+                data-tab-img={gallery.location}
+                data-tab-title={gallery.locationTitle[lang] || gallery.locationTitle.en}
+              >
+                <div class="spec-icon-box">
+                  <span class="material-symbols-outlined spec-icon" aria-hidden="true">groups</span>
+                </div>
+                <div class="spec-text-col">
+                  <span class="spec-label">{t('setupAudience')}</span>
+                  <span class="spec-val">{space.setup.idealFor[lang] || space.setup.idealFor.en}</span>
+                </div>
+              </button>
             </div>
           </div>
-
-          <!-- Technical Specs Grid -->
-          <div class="specs-grid">
-            <div class="spec-card">
-              <div class="spec-icon-box">
-                <span class="material-symbols-outlined spec-icon" aria-hidden="true">lightbulb</span>
-              </div>
-              <div class="spec-text-col">
-                <span class="spec-label">{t('setupLights')}</span>
-                <span class="spec-val">{typeof space.setup.lightsCount === 'object' ? (space.setup.lightsCount[lang] || space.setup.lightsCount.en) : space.setup.lightsCount}</span>
-              </div>
-            </div>
-
-            <div class="spec-card">
-              <div class="spec-icon-box">
-                <span class="material-symbols-outlined spec-icon" aria-hidden="true">speaker</span>
-              </div>
-              <div class="spec-text-col">
-                <span class="spec-label">{t('setupSound')}</span>
-                <span class="spec-val">{space.setup.soundType[lang] || space.setup.soundType.en}</span>
-              </div>
-            </div>
-
-            <div class="spec-card">
-              <div class="spec-icon-box">
-                <span class="material-symbols-outlined spec-icon" aria-hidden="true">groups</span>
-              </div>
-              <div class="spec-text-col">
-                <span class="spec-label">{t('setupAudience')}</span>
-                <span class="spec-val">{space.setup.idealFor[lang] || space.setup.idealFor.en}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
 
     <!-- Bottom Actions -->
@@ -178,6 +211,49 @@ const t = useTranslations(lang);
       if (deltaY > 90) {
         closeDrawer();
       }
+    });
+
+    // Interactive specs tabs in drawer (switch photo, badge & selected state)
+    const drawerSpecTabs = document.querySelectorAll('.space-setup-view .spec-card');
+    drawerSpecTabs.forEach((tab) => {
+      tab.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const view = tab.closest('.space-setup-view');
+        if (!view) return;
+
+        const allTabs = view.querySelectorAll('.spec-card');
+        allTabs.forEach((t) => {
+          t.classList.remove('is-selected');
+          t.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.add('is-selected');
+        tab.setAttribute('aria-selected', 'true');
+
+        const newImgSrc = (tab as HTMLElement).dataset.tabImg;
+        const newTitle = (tab as HTMLElement).dataset.tabTitle;
+        const img = view.querySelector('.setup-img') as HTMLImageElement | null;
+        const shimmer = view.querySelector('.setup-loader-shimmer');
+        const badgeText = view.querySelector('.badge-text');
+
+        if (!img || !newImgSrc) return;
+        if (img.src.includes(newImgSrc)) return;
+
+        if (shimmer) shimmer.classList.add('is-active');
+        img.classList.add('is-switching');
+
+        const tempImg = new Image();
+        tempImg.onload = () => {
+          img.src = newImgSrc;
+          if (badgeText && newTitle) badgeText.textContent = newTitle;
+          img.classList.remove('is-switching');
+          if (shimmer) shimmer.classList.remove('is-active');
+        };
+        tempImg.onerror = () => {
+          img.classList.remove('is-switching');
+          if (shimmer) shimmer.classList.remove('is-active');
+        };
+        tempImg.src = newImgSrc;
+      });
     });
   }
 
@@ -328,10 +404,41 @@ const t = useTranslations(lang);
     border: 1px solid var(--color-glass-border);
   }
 
+  .setup-loader-shimmer {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.25) 50%, transparent 100%);
+    transform: translateX(-100%);
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .setup-loader-shimmer.is-active {
+    opacity: 1;
+    animation: setupShimmerSweep 0.65s ease-in-out infinite;
+  }
+
+  @keyframes setupShimmerSweep {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
   .setup-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.6s ease, opacity 0.3s ease;
+  }
+
+  .setup-img.is-switching {
+    opacity: 0.35;
+    transform: scale(0.98);
   }
 
   .setup-img-overlay {
@@ -352,15 +459,16 @@ const t = useTranslations(lang);
     padding-block: 0.3rem;
     border-radius: var(--radius-full);
     background: rgba(0, 0, 0, 0.7);
-    border: 1px solid var(--color-primary);
+    border: 1px solid var(--card-glow-color, var(--color-primary));
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     box-sizing: border-box;
+    z-index: 3;
   }
 
   .badge-icon {
     font-size: 0.875rem;
-    color: var(--color-primary);
+    color: var(--card-glow-color, var(--color-primary));
     flex-shrink: 0;
   }
 
@@ -390,6 +498,29 @@ const t = useTranslations(lang);
     border-radius: var(--radius-md);
     background: var(--color-surface-container);
     border: 1px solid var(--color-glass-border);
+    cursor: pointer;
+    text-align: start;
+    width: 100%;
+    font: inherit;
+    color: inherit;
+    outline: none;
+    transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+  }
+
+  .spec-card:hover {
+    border-color: var(--card-glow-color, var(--color-primary));
+    background: var(--color-surface-container-high);
+  }
+
+  .spec-card.is-selected {
+    border-color: var(--card-glow-color, var(--color-primary));
+    background: rgba(var(--card-glow-rgb, 120, 120, 120), 0.12);
+    box-shadow: 0 0 16px rgba(var(--card-glow-rgb, 120, 120, 120), 0.25), inset 0 0 0 1px var(--card-glow-color, var(--color-primary));
+  }
+
+  .spec-card.is-selected .spec-label {
+    color: var(--card-glow-color, var(--color-primary));
+    font-weight: 700;
   }
 
   .spec-icon-box {

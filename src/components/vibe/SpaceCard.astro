@@ -1,6 +1,6 @@
 ---
 import { type SupportedLang, defaultLang, useTranslations } from '../../i18n/ui';
-import type { Space } from '../../data/spaces';
+import { type Space, getSpaceGallery } from '../../data/spaces';
 
 interface Props {
   space: Space;
@@ -9,6 +9,7 @@ interface Props {
 
 const { space, lang = defaultLang } = Astro.props;
 const t = useTranslations(lang);
+const gallery = getSpaceGallery(space);
 ---
 
 <article
@@ -119,6 +120,7 @@ const t = useTranslations(lang);
       <div class="card-setup-col" aria-label="Integrated stage and lighting setup">
         <!-- Hardware Setup Visual Photograph -->
         <div class="desktop-setup-image-wrap">
+          <div class="setup-loader-shimmer" aria-hidden="true"></div>
           <img
             src={space.bgWatercolorDesktop || space.bgWatercolor}
             alt={space.setup.name[lang] || space.setup.name.en}
@@ -132,9 +134,17 @@ const t = useTranslations(lang);
           </div>
         </div>
 
-        <!-- 3 Structured Specification Rows -->
-        <div class="desktop-specs-list">
-          <div class="desktop-spec-item">
+        <!-- 3 Structured Specification Interactive Tabs -->
+        <div class="desktop-specs-list" role="tablist" aria-label="Specification categories">
+          <button
+            type="button"
+            class="desktop-spec-item"
+            role="tab"
+            aria-selected="false"
+            data-spec-tab="lights"
+            data-tab-img={gallery.lights}
+            data-tab-title={gallery.lightsTitle[lang] || gallery.lightsTitle.en}
+          >
             <div class="desktop-spec-icon-box">
               <span class="material-symbols-outlined" aria-hidden="true">lightbulb</span>
             </div>
@@ -142,9 +152,17 @@ const t = useTranslations(lang);
               <span class="desktop-spec-label">{t('setupLights')}</span>
               <span class="desktop-spec-val">{typeof space.setup.lightsCount === 'object' ? (space.setup.lightsCount[lang] || space.setup.lightsCount.en) : space.setup.lightsCount}</span>
             </div>
-          </div>
+          </button>
 
-          <div class="desktop-spec-item">
+          <button
+            type="button"
+            class="desktop-spec-item"
+            role="tab"
+            aria-selected="false"
+            data-spec-tab="sound"
+            data-tab-img={gallery.sound}
+            data-tab-title={gallery.soundTitle[lang] || gallery.soundTitle.en}
+          >
             <div class="desktop-spec-icon-box">
               <span class="material-symbols-outlined" aria-hidden="true">speaker</span>
             </div>
@@ -152,9 +170,17 @@ const t = useTranslations(lang);
               <span class="desktop-spec-label">{t('setupSound')}</span>
               <span class="desktop-spec-val">{space.setup.soundType[lang] || space.setup.soundType.en}</span>
             </div>
-          </div>
+          </button>
 
-          <div class="desktop-spec-item">
+          <button
+            type="button"
+            class="desktop-spec-item is-selected"
+            role="tab"
+            aria-selected="true"
+            data-spec-tab="location"
+            data-tab-img={gallery.location}
+            data-tab-title={gallery.locationTitle[lang] || gallery.locationTitle.en}
+          >
             <div class="desktop-spec-icon-box">
               <span class="material-symbols-outlined" aria-hidden="true">groups</span>
             </div>
@@ -162,7 +188,7 @@ const t = useTranslations(lang);
               <span class="desktop-spec-label">{t('setupAudience')}</span>
               <span class="desktop-spec-val">{space.setup.idealFor[lang] || space.setup.idealFor.en}</span>
             </div>
-          </div>
+          </button>
         </div>
       </div>
     </div>
@@ -215,6 +241,48 @@ const t = useTranslations(lang);
         (bar as HTMLElement).style.height = `${h}px`;
       });
     }, 240);
+    // 4. Desktop interactive specs tabs (switching setup image and badge)
+    const specTabs = document.querySelectorAll('.desktop-spec-item');
+    specTabs.forEach((tab) => {
+      tab.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const card = tab.closest('.card-setup-col');
+        if (!card) return;
+
+        const allTabs = card.querySelectorAll('.desktop-spec-item');
+        allTabs.forEach((t) => {
+          t.classList.remove('is-selected');
+          t.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.add('is-selected');
+        tab.setAttribute('aria-selected', 'true');
+
+        const newImgSrc = (tab as HTMLElement).dataset.tabImg;
+        const newTitle = (tab as HTMLElement).dataset.tabTitle;
+        const img = card.querySelector('.desktop-setup-img') as HTMLImageElement | null;
+        const shimmer = card.querySelector('.setup-loader-shimmer');
+        const badgeText = card.querySelector('.badge-text');
+
+        if (!img || !newImgSrc) return;
+        if (img.src.includes(newImgSrc)) return;
+
+        if (shimmer) shimmer.classList.add('is-active');
+        img.classList.add('is-switching');
+
+        const tempImg = new Image();
+        tempImg.onload = () => {
+          img.src = newImgSrc;
+          if (badgeText && newTitle) badgeText.textContent = newTitle;
+          img.classList.remove('is-switching');
+          if (shimmer) shimmer.classList.remove('is-active');
+        };
+        tempImg.onerror = () => {
+          img.classList.remove('is-switching');
+          if (shimmer) shimmer.classList.remove('is-active');
+        };
+        tempImg.src = newImgSrc;
+      });
+    });
   }
 
   initCardTriggers();
@@ -765,11 +833,41 @@ const t = useTranslations(lang);
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
     }
 
+    .setup-loader-shimmer {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.25) 50%, transparent 100%);
+      transform: translateX(-100%);
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .setup-loader-shimmer.is-active {
+      opacity: 1;
+      animation: setupShimmerSweep 0.65s ease-in-out infinite;
+    }
+
+    @keyframes setupShimmerSweep {
+      0% {
+        transform: translateX(-100%);
+      }
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
     .desktop-setup-img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.6s ease;
+      transition: transform 0.6s ease, opacity 0.3s ease;
+    }
+
+    .desktop-setup-img.is-switching {
+      opacity: 0.35;
+      transform: scale(0.98);
     }
 
     .desktop-setup-image-wrap:hover .desktop-setup-img {
@@ -799,6 +897,7 @@ const t = useTranslations(lang);
       -webkit-backdrop-filter: blur(10px);
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
       box-sizing: border-box;
+      z-index: 3;
     }
 
     .badge-icon {
@@ -819,7 +918,7 @@ const t = useTranslations(lang);
       text-overflow: ellipsis;
     }
 
-    /* 3 Structured Specification Rows */
+    /* 3 Structured Specification Rows / Tabs */
     .desktop-specs-list {
       display: flex;
       flex-direction: column;
@@ -836,7 +935,13 @@ const t = useTranslations(lang);
       border: 1px solid rgba(var(--card-glow-rgb), 0.12);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      transition: background-color 0.25s ease, border-color 0.25s ease;
+      cursor: pointer;
+      text-align: start;
+      width: 100%;
+      font: inherit;
+      color: inherit;
+      outline: none;
+      transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
     }
 
     :global(html[data-theme="night"]) .desktop-spec-item,
@@ -848,6 +953,22 @@ const t = useTranslations(lang);
     .desktop-spec-item:hover {
       border-color: var(--card-glow-color);
       background: rgba(var(--card-glow-rgb), 0.06);
+      transform: translateX(2px);
+    }
+
+    :global([dir="rtl"]) .desktop-spec-item:hover {
+      transform: translateX(-2px);
+    }
+
+    .desktop-spec-item.is-selected {
+      border-color: var(--card-glow-color);
+      background: rgba(var(--card-glow-rgb), 0.12);
+      box-shadow: 0 0 16px rgba(var(--card-glow-rgb), 0.25), inset 0 0 0 1px var(--card-glow-color);
+    }
+
+    .desktop-spec-item.is-selected .desktop-spec-label {
+      color: var(--card-glow-color);
+      font-weight: 700;
     }
 
     .desktop-spec-icon-box {
