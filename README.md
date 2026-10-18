@@ -113,25 +113,24 @@ Follow guidelines from [AGENTS.md](./AGENTS.md):
    * **Day & Night Resonance Adaptive Theming:** Fully synced with light/dark modes using CSS tokens and ambient glow.
    * **Smooth Back-to-Top:** Interactive floating scroll-up trigger with safe clearance above the fixed `StickyActionBar`.
 
+5. [x] **Phase 5: Interactive Specs Tabs & Conversational Booking Engine** (`main`) — Complete interactive specs & social proof upgrade for Vibe Spaces:
+   * **Interactive Specs Tabs & Crossfade Visualizer:** Converted specs blocks in `SpaceCard.astro` and `VibeSetupDrawer.astro` into interactive tabs (`lights`, `sound`, `location`) with shimmer loader animation and instant setup photo crossfade.
+   * **Curated Northern Social Proof Ticker:** Seamless infinite marquee (`LocalSocialProof.astro`) showcasing premier terroirs and venues (Dalton Winery, Harei Galilee, Rosh Pina Private Villas, Golan Heights Terroir, Kinneret Lakeside Terraces, Pelter Winery Estate). Fully pinned to the bottom on desktop and cleanly scoped to the bottom sheet on mobile.
+   * **Contextual WhatsApp Direct Booking CTA:** Deep-linked direct inquiry button with pre-filled space interest message (`getWhatsAppContextualLink()`) and pastel glassmorphic styling aligned with the aesthetic design tokens.
+
 ---
 
 ## 📊 Resource & Quota Consumption (Today's Development Cycle)
 
-Antigravity and Antigravity IDE quota consumption telemetry measured across the entire development sprint today (including About Page architecture, i18n copy, Astro Action backend, interactive components, Day/Night theme tuning, and dedicated footer system):
+Antigravity and CLI quota consumption telemetry measured across the development sprints (including Sound Worlds interactive tabs, WhatsApp contextual booking, social proof ticker, and aesthetic glassmorphism refinements):
 
-### 1. Antigravity Environment (Active Session)
+### Antigravity Environment (Active Session `/usage`)
 | Model Category | Metric | Consumed | Remaining | Reset Window |
 | :--- | :--- | :--- | :--- | :--- |
-| **Gemini Models** | 5-Hour Limit | **5%** | **95%** | Refreshes in ~31 min |
-| **Gemini Models** | Weekly Limit | **7%** | **93%** | Refreshes in 6d 13h |
-| **Gemini 4 Argon** | Weekly Limit | **1%** | **99%** | Refreshes in 6d 14h |
-| **Claude & GPT Models** | 5-Hour & Weekly | **0%** | **100%** | Pristine / Reserved |
+| **Gemini Models** *(Flash, Pro)* | 5-Hour Limit | **24.59%** | **75.41%** | Refreshes in 2h 57m |
+| **Gemini Models** *(Flash, Pro)* | Weekly Limit | **13.60%** | **86.40%** | Refreshes in 145h 22m (~6d) |
+| **Gemini 4 Argon** | Weekly Limit | **8.84%** | **91.16%** | Refreshes in 145h 52m (~6d) |
+| **Claude & GPT Models** *(Opus, Sonnet, OSS)* | 5-Hour Limit | **0.00%** | **100.00%** | Quota available |
+| **Claude & GPT Models** *(Opus, Sonnet, OSS)* | Weekly Limit | **0.00%** | **100.00%** | Quota available |
 
-### 2. Antigravity IDE Environment
-| Model Category | Metric | Consumed | Remaining | Reset Window |
-| :--- | :--- | :--- | :--- | :--- |
-| **Gemini Models** | 5-Hour Limit | **18%** | **82%** | Refreshes in 2h 12m |
-| **Gemini Models** | Weekly Limit | **11%** | **89%** | Refreshes in 6d 16h |
-| **Claude & GPT Models** | 5-Hour & Weekly | **0%** | **100%** | Pristine / Reserved |
-
-*Efficiency Summary: The entire multi-phase development suite today—encompassing 7 production-grade components, full multilingual routing (EN, RU, HE), bot-defended Astro Actions, reactive Web Audio, Day/Night resonance engine, and bespoke mobile-first footer—consumed only a fraction of rolling limits (remaining at **93–95%** in Antigravity and **82–89%** in Antigravity IDE).*
+*Efficiency Summary: The multi-phase sprint—spanning complete interactive tabs with shimmer crossfading, localized social proof ticker marquee, scoped CSS isolation for responsive viewports, and pastel aesthetic tuning—consumed minimal quota, retaining **75.4%** on the 5-hour window, **86.4%** on the weekly Gemini limit, and **100%** pristine Claude/GPT quota.*
