@@ -625,7 +625,7 @@ const gallery = getSpaceGallery(space);
     /* Split-column Grid */
     .card-inner-content {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       gap: 2.5rem;
       align-items: stretch;
       text-align: start;
@@ -634,6 +634,7 @@ const gallery = getSpaceGallery(space);
     .card-sound-col {
       align-items: flex-start;
       justify-content: center;
+      min-width: 0;
     }
 
     .supertitle-row {
@@ -821,6 +822,9 @@ const gallery = getSpaceGallery(space);
       position: relative;
       padding-inline-start: 2rem;
       border-inline-start: 1px solid rgba(var(--card-glow-rgb), 0.18);
+      min-width: 0;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     :global([dir="rtl"]) .card-setup-col {
