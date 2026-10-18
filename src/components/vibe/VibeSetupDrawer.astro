@@ -1,6 +1,7 @@
 ---
 import { defaultLang, type SupportedLang, useTranslations } from '../../i18n/ui';
 import { spaces, getSpaceGallery } from '../../data/spaces';
+import LocalSocialProof from './LocalSocialProof.astro';
 
 interface Props {
   lang?: SupportedLang;
@@ -119,6 +120,9 @@ const t = useTranslations(lang);
           </div>
         );
       })}
+
+      <!-- Local Northern Social Proof Ticker -->
+      <LocalSocialProof lang={lang} />
     </div>
 
     <!-- Bottom Actions -->

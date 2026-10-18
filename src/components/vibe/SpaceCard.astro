@@ -1,6 +1,7 @@
 ---
 import { type SupportedLang, defaultLang, useTranslations } from '../../i18n/ui';
 import { type Space, getSpaceGallery } from '../../data/spaces';
+import LocalSocialProof from './LocalSocialProof.astro';
 
 interface Props {
   space: Space;
@@ -190,6 +191,9 @@ const gallery = getSpaceGallery(space);
             </div>
           </button>
         </div>
+
+        <!-- Local Northern Social Proof Ticker -->
+        <LocalSocialProof lang={lang} />
       </div>
     </div>
   </div>

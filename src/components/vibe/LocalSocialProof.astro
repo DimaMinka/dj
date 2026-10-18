@@ -1,0 +1,126 @@
+---
+import { defaultLang, type SupportedLang, useTranslations } from '../../i18n/ui';
+
+interface Props {
+  lang?: SupportedLang;
+  class?: string;
+}
+
+const { lang = defaultLang, class: className = '' } = Astro.props;
+const t = useTranslations(lang);
+const locations = t('socialProofLocations') as string[];
+---
+
+<div class={`local-social-proof ${className}`} aria-label={t('socialProofLabel')}>
+  <div class="proof-label">
+    <span class="material-symbols-outlined proof-icon" aria-hidden="true">explore</span>
+    <span>{t('socialProofLabel')}</span>
+  </div>
+
+  <div class="proof-ticker-track-wrap">
+    <div class="proof-ticker-track" aria-hidden="true">
+      {/* Repeated twice for infinite seamless loop */}
+      {locations.map((loc) => (
+        <span class="proof-tag">
+          <span class="proof-dot"></span>
+          <span class="proof-text">{loc}</span>
+        </span>
+      ))}
+      {locations.map((loc) => (
+        <span class="proof-tag">
+          <span class="proof-dot"></span>
+          <span class="proof-text">{loc}</span>
+        </span>
+      ))}
+    </div>
+  </div>
+</div>
+
+<style>
+  .local-social-proof {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    width: 100%;
+    margin-block-start: 0.75rem;
+  }
+
+  .proof-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-subtle);
+  }
+
+  .proof-icon {
+    font-size: 0.75rem;
+    color: var(--card-glow-color, var(--color-primary));
+  }
+
+  .proof-ticker-track-wrap {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  }
+
+  .proof-ticker-track {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    width: max-content;
+    animation: tickerSlide 26s linear infinite;
+    will-change: transform;
+  }
+
+  .proof-ticker-track-wrap:hover .proof-ticker-track {
+    animation-play-state: paused;
+  }
+
+  @keyframes tickerSlide {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  :global([dir="rtl"]) .proof-ticker-track {
+    animation-direction: reverse;
+  }
+
+  .proof-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding-inline: 0.55rem;
+    padding-block: 0.25rem;
+    border-radius: var(--radius-full);
+    background: var(--color-surface-container);
+    border: 1px solid var(--color-glass-border);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .proof-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: var(--radius-full);
+    background: var(--card-glow-color, var(--color-primary));
+    opacity: 0.75;
+  }
+
+  .proof-text {
+    font-family: var(--font-body);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--color-text-main);
+  }
+</style>
