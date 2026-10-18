@@ -102,6 +102,9 @@ const gallery = getSpaceGallery(space);
           </div>
         </div>
 
+        <!-- Local Northern Social Proof Ticker (Desktop Sound Column) -->
+        <LocalSocialProof lang={lang} class="desktop-only-social-proof" />
+
         <!-- Mobile Center Setup Pill Button (Hidden on Desktop >= 1024px) -->
         <div class="btn-wrap">
           <button
@@ -191,9 +194,6 @@ const gallery = getSpaceGallery(space);
             </div>
           </button>
         </div>
-
-        <!-- Local Northern Social Proof Ticker -->
-        <LocalSocialProof lang={lang} />
       </div>
     </div>
   </div>
@@ -596,6 +596,10 @@ const gallery = getSpaceGallery(space);
     display: none;
   }
 
+  .desktop-only-social-proof {
+    display: none;
+  }
+
   .card-setup-col {
     display: none;
   }
@@ -812,6 +816,12 @@ const gallery = getSpaceGallery(space);
 
     .card-player-equalizer.is-playing .card-wave-bar {
       opacity: 0.95;
+    }
+
+    .desktop-only-social-proof {
+      display: flex;
+      margin-block-start: 1rem;
+      width: 100%;
     }
 
     /* Desktop Setup Column (Right side) */
