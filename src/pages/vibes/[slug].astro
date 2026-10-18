@@ -6,7 +6,7 @@ import SpacesCarousel from "../../components/vibe/SpacesCarousel.astro";
 import VibeSoundDock from "../../components/vibe/VibeSoundDock.astro";
 import VibeSetupDrawer from "../../components/vibe/VibeSetupDrawer.astro";
 import { spaces, type Space } from "../../data/spaces";
-import { type SupportedLang } from "../../i18n/ui";
+import { defaultLang, type SupportedLang } from "../../i18n/ui";
 
 export function getStaticPaths() {
   return spaces.map((space, index) => ({
@@ -21,7 +21,7 @@ interface Props {
 }
 
 const { space, initialIndex } = Astro.props;
-const currentLang: SupportedLang = 'ru';
+const currentLang: SupportedLang = defaultLang;
 const currentTitle = `DJ Dima Minka — ${space.title[currentLang] || space.title.en} (Vibe Space)`;
 const currentDesc = space.poetry[currentLang] || space.poetry.en || "Explore the site-specific soundscapes of DJ Dima Minka.";
 ---
