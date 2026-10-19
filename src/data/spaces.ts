@@ -510,9 +510,9 @@ export const spaces: Space[] = [
         he: 'תאורת צמרות ואטלייה אקוסטי',
       },
       lightsCount: {
-        en: '12+ wireless IP65 canopy flood fixtures painting ancient branches in rich emerald, moss, and warm amber tones.',
-        ru: '12+ беспроводных архитектурных приборов заливают кроны вековых деревьев глубокими изумрудными и янтарными оттенками.',
-        he: '12+ גופי תאורה אלחוטיים ועמידים לשטיפת צמרות עצים עתיקים בגווני אזמרגד עשירים, אזוב וענבר חם.',
+        en: 'Architectural landscape fixtures with fully concealed cable routing, painting ancient branches in rich emerald, moss, and warm amber tones.',
+        ru: 'Архитектурные приборы со скрытой в ландшафте коммутацией заливают кроны вековых деревьев глубокими изумрудными и теплыми янтарными тонами.',
+        he: 'גופי תאורה אדריכליים עם ניתוב כבלים נסתר בטבע, המאירים צמרות עצים עתיקים בגווני אזמרגד עשירים וענבר חם.',
       },
       soundType: {
         en: 'Enveloping 360° distributed acoustic field without harsh echo — music breathes as if born from the forest itself.',
