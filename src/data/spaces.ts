@@ -177,9 +177,9 @@ export const spaces: Space[] = [
       he: 'סשן אקוסטי אינטימי תחת אלון עתיק בין גבעות הכרמים. נצנוץ נרות עדין, חביות עץ אלון ותהודת ערב עמוקה.',
     },
     tags: {
-      en: ['🍷 MELODIC HOUSE', '⏱ 123 BPM', '🕯 TERROIR VIBE'],
-      ru: ['🍷 МЕЛОДИК-ХАУС', '⏱ 123 УД/МИН', '🕯 ВИННЫЙ ТЕРРУАР'],
-      he: ['🍷 מלודיק האוס', '⏱ 123 פעימות/דקה', '🕯 וייב טרואר'],
+      en: ['🍷 MELODIC HOUSE', '⏱ 116 BPM', '🕯 TERROIR VIBE'],
+      ru: ['🍷 МЕЛОДИК-ХАУС', '⏱ 116 УД/МИН', '🕯 ВИННЫЙ ТЕРРУАР'],
+      he: ['🍷 מלודיק האוס', '⏱ 116 פעימות/דקה', '🕯 וייב טרואר'],
     },
     trackTitle: {
       en: 'Terroir Hills Resonance',
@@ -191,7 +191,7 @@ export const spaces: Space[] = [
       ru: 'Живая сессия • Мелодик-сет среди лоз',
       he: 'סשן חי • מיקס מלודי בין הגפנים',
     },
-    bpm: 123,
+    bpm: 116,
     frequency: 432,
     keySignature: 'D minor',
     audioSrc: '/assets/audio/twilight-vineyard-resonance.mp3',
