@@ -76,9 +76,9 @@ export const spaces: Space[] = [
       he: 'איזון מעודן של אבן חמה, בריזת ערב מהכנרת ואקוסטיקה אינטימית בהרמוניה טבעית.',
     },
     tags: {
-      en: ['🌅 ORGANIC HOUSE', '⏱ 120 BPM', '🍷 SUNSET VIBE'],
-      ru: ['🌅 ОРГАНИК-ХАУС', '⏱ 120 УД/МИН', '🍷 ЗАКАТНЫЙ ВАЙБ'],
-      he: ['🌅 אורגניק האוס', '⏱ 120 פעימות/דקה', '🍷 וייב שקיעה'],
+      en: ['🌅 ORGANIC HOUSE', '⏱ 119 BPM', '🍷 SUNSET VIBE'],
+      ru: ['🌅 ОРГАНИК-ХАУС', '⏱ 119 УД/МИН', '🍷 ЗАКАТНЫЙ ВАЙБ'],
+      he: ['🌅 אורגניק האוס', '⏱ 119 פעימות/דקה', '🍷 וייב שקיעה'],
     },
     trackTitle: {
       en: 'Sunset Resonance',
@@ -90,7 +90,7 @@ export const spaces: Space[] = [
       ru: 'Живая сессия • Авторский закатный микс',
       he: 'סשן חי • מיקס שקיעה מקורי',
     },
-    bpm: 120,
+    bpm: 119,
     frequency: 432,
     keySignature: 'G major',
     audioSrc: '/assets/audio/aegean-terraces-resonance.mp3',
