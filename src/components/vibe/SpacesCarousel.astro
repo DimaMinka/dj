@@ -155,7 +155,9 @@ const t = useTranslations(lang);
 
           // Update URL in browser without full reload
           if (updateUrl && window.history && window.history.replaceState) {
-            window.history.replaceState(null, '', `/vibes/${targetSpace.slug}`);
+            const pageLang = (wrapper.dataset.lang as 'en' | 'ru' | 'he') || 'en';
+            const langPrefix = pageLang === 'en' ? '' : `/${pageLang}`;
+            window.history.replaceState(null, '', `${langPrefix}/vibes/${targetSpace.slug}`);
           }
 
           // Update page title

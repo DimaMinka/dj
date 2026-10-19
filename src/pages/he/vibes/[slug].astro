@@ -1,0 +1,20 @@
+---
+import VibePageView from "../../../components/vibe/VibePageView.astro";
+import { spaces, type Space } from "../../../data/spaces";
+
+export function getStaticPaths() {
+  return spaces.map((space, index) => ({
+    params: { slug: space.slug },
+    props: { space, initialIndex: index },
+  }));
+}
+
+interface Props {
+  space: Space;
+  initialIndex: number;
+}
+
+const { space, initialIndex } = Astro.props;
+---
+
+<VibePageView space={space} initialIndex={initialIndex} lang="he" />
