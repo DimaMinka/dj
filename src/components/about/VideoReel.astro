@@ -1,6 +1,7 @@
 ---
 import type { SupportedLang } from '../../i18n/ui';
 import { useTranslations } from '../../i18n/ui';
+import { reelFrames } from '../../data/about';
 
 interface Props {
   lang?: SupportedLang;
@@ -8,39 +9,6 @@ interface Props {
 
 const { lang = 'en' } = Astro.props;
 const t = useTranslations(lang);
-
-const reelFrames = [
-  {
-    src: '/assets/spaces/sunset-setup.jpg',
-    title: lang === 'ru' ? 'Сумерки на вилле' : lang === 'he' ? 'שעת בין ערביים בווילה' : 'Villa Twilight Ambience',
-    caption: lang === 'ru' ? 'Плавный переход от закатного чилла к ночному настроению' : lang === 'he' ? 'מעבר הדרגתי מרוגע שקיעה לאנרגיית לילה' : 'Seamless progression from sunset chill to late-night energy',
-  },
-  {
-    src: '/assets/spaces/signature-rig-setup.jpg',
-    title: lang === 'ru' ? 'Авторский сетап' : lang === 'he' ? 'עמדת DJ ייחודית' : 'Signature Stage Rig',
-    caption: lang === 'ru' ? 'Тёплое янтарное свечение ретро-сот и чистая геометрия' : lang === 'he' ? 'תאורת חלת דבש ענברית חמה וגאומטריה נקייה' : 'Warm amber vintage honeycomb glow & clean geometry',
-  },
-  {
-    src: '/assets/spaces/day-session-nature.jpg',
-    title: lang === 'ru' ? 'Эстетика дневных сессий' : lang === 'he' ? 'אסתטיקה של סטים ביום' : 'Daylight Sessions Aesthetics',
-    caption: lang === 'ru' ? 'Глубокий Organic House в естественном природном окружении' : lang === 'he' ? 'אורגניק האוס עמוק בחיבור מושלם לטבע' : 'Deep Organic House set against raw natural landscapes',
-  },
-  {
-    src: '/assets/spaces/twilight-setup.jpg',
-    title: lang === 'ru' ? 'Афро-грув на винодельне' : lang === 'he' ? 'אפרו-גרוב ביקב בוטיק' : 'Winery Afro-Groove Session',
-    caption: lang === 'ru' ? 'Плотный закатный ритм и тёплое мерцание свечей' : lang === 'he' ? 'מקצב שקיעה עשיר ואור נרות חם' : 'Rich sunset rhythm & warm flickering candlelight',
-  },
-  {
-    src: '/assets/spaces/winery-courtyard-setup.jpg',
-    title: lang === 'ru' ? 'Акустика открытой террасы' : lang === 'he' ? 'אקוסטיקה בטרסה פתוחה' : 'Open Terrace Acoustics',
-    caption: lang === 'ru' ? 'Чистый звук, аккуратно вписанный в каменный дворик винодельни' : lang === 'he' ? 'סאונד צלול המשתלב ברגישות בחצר האבן של היקב' : 'Pristine sound blended into a stone winery courtyard',
-  },
-  {
-    src: '/assets/spaces/picnic-open-air-setup.jpg',
-    title: lang === 'ru' ? 'Летний дневной опен-эйр' : lang === 'he' ? 'אופן-אייר קייצי ביום' : 'Summer Daytime Open-Air',
-    caption: lang === 'ru' ? 'Лёгкий грув под кронами для пикников и загородных праздников' : lang === 'he' ? 'גרוב קליל תחת צמרות העצים לפיקניקים ולאירועי טבע' : 'Breezy daytime groove beneath canopies for picnics & gatherings',
-  },
-];
 ---
 
 <div class="video-reel-container" id="aboutVideoReel">
@@ -52,7 +20,7 @@ const reelFrames = [
       >
         <img
           src={frame.src}
-          alt={frame.title}
+          alt={frame.title[lang]}
           class="reel-image"
           loading={index === 0 ? 'eager' : 'lazy'}
         />
@@ -62,8 +30,8 @@ const reelFrames = [
             <span>{t("videoReelLiveTag") || "LIVE SETUP ATELIER"}</span>
           </div>
           <div class="reel-captions">
-            <h4 class="reel-title">{frame.title}</h4>
-            <p class="reel-subtitle">{frame.caption}</p>
+            <h4 class="reel-title">{frame.title[lang]}</h4>
+            <p class="reel-subtitle">{frame.caption[lang]}</p>
           </div>
         </div>
       </div>

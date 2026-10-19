@@ -12,7 +12,9 @@ import AboutBookingSection from "./AboutBookingSection.astro";
 import AboutFooter from "./AboutFooter.astro";
 import StickyActionBar from "./StickyActionBar.astro";
 import type { SupportedLang } from "../../i18n/ui";
-import { useTranslations, SITE_CONTACTS } from "../../i18n/ui";
+import { useTranslations } from "../../i18n/ui";
+import { SITE_CONTACTS } from "../../data/contacts";
+import { faqs } from "../../data/about";
 
 interface Props {
   lang: SupportedLang;
@@ -70,40 +72,14 @@ const structuredData = {
     {
       "@type": "FAQPage",
       "@id": `${fullCanonicalUrl}#faq`,
-      mainEntity: [
-        {
-          "@type": "Question",
-          name: t("faq1Q"),
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: t("faq1A"),
-          },
+      mainEntity: faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question[lang],
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.answer[lang],
         },
-        {
-          "@type": "Question",
-          name: t("faq2Q"),
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: t("faq2A"),
-          },
-        },
-        {
-          "@type": "Question",
-          name: t("faq3Q"),
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: t("faq3A"),
-          },
-        },
-        {
-          "@type": "Question",
-          name: t("faq4Q"),
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: t("faq4A"),
-          },
-        },
-      ],
+      })),
     },
   ],
 };

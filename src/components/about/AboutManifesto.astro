@@ -1,6 +1,7 @@
 ---
 import type { SupportedLang } from "../../i18n/ui";
 import { useTranslations } from "../../i18n/ui";
+import { manifestoParagraphs } from "../../data/about";
 
 interface Props {
   lang: SupportedLang;
@@ -22,9 +23,9 @@ const t = useTranslations(lang);
     </div>
 
     <div class="manifesto-card">
-      <p class="manifesto-lead">{t("manifestoP1")}</p>
+      <p class="manifesto-lead">{manifestoParagraphs[0][lang]}</p>
       <div class="manifesto-divider" aria-hidden="true"></div>
-      <p class="manifesto-secondary">{t("manifestoP2")}</p>
+      <p class="manifesto-secondary">{manifestoParagraphs[1][lang]}</p>
     </div>
   </div>
 </section>

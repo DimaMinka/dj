@@ -1,6 +1,7 @@
 ---
 import type { SupportedLang } from "../../i18n/ui";
 import { useTranslations } from "../../i18n/ui";
+import { faqs } from "../../data/about";
 
 interface Props {
   lang: SupportedLang;
@@ -23,57 +24,20 @@ const t = useTranslations(lang);
     </div>
 
     <div class="faq-list">
-      <details class="faq-item" open>
-        <summary class="faq-question">
-          <span class="faq-q-text">{t("faq1Q")}</span>
-          <span
-            class="material-symbols-outlined faq-arrow"
-            aria-hidden="true">expand_more</span
-          >
-        </summary>
-        <div class="faq-answer">
-          <p>{t("faq1A")}</p>
-        </div>
-      </details>
-
-      <details class="faq-item">
-        <summary class="faq-question">
-          <span class="faq-q-text">{t("faq2Q")}</span>
-          <span
-            class="material-symbols-outlined faq-arrow"
-            aria-hidden="true">expand_more</span
-          >
-        </summary>
-        <div class="faq-answer">
-          <p>{t("faq2A")}</p>
-        </div>
-      </details>
-
-      <details class="faq-item">
-        <summary class="faq-question">
-          <span class="faq-q-text">{t("faq3Q")}</span>
-          <span
-            class="material-symbols-outlined faq-arrow"
-            aria-hidden="true">expand_more</span
-          >
-        </summary>
-        <div class="faq-answer">
-          <p>{t("faq3A")}</p>
-        </div>
-      </details>
-
-      <details class="faq-item">
-        <summary class="faq-question">
-          <span class="faq-q-text">{t("faq4Q")}</span>
-          <span
-            class="material-symbols-outlined faq-arrow"
-            aria-hidden="true">expand_more</span
-          >
-        </summary>
-        <div class="faq-answer">
-          <p>{t("faq4A")}</p>
-        </div>
-      </details>
+      {faqs.map((faq, index) => (
+        <details class="faq-item" open={index === 0}>
+          <summary class="faq-question">
+            <span class="faq-q-text">{faq.question[lang]}</span>
+            <span
+              class="material-symbols-outlined faq-arrow"
+              aria-hidden="true">expand_more</span
+            >
+          </summary>
+          <div class="faq-answer">
+            <p>{faq.answer[lang]}</p>
+          </div>
+        </details>
+      ))}
     </div>
   </div>
 </section>

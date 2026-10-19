@@ -1,6 +1,8 @@
 ---
 import type { SupportedLang } from "../../i18n/ui";
-import { useTranslations, getWhatsAppLink } from "../../i18n/ui";
+import { useTranslations } from "../../i18n/ui";
+import { getWhatsAppLink } from "../../data/contacts";
+import { packages } from "../../data/about";
 
 interface Props {
   lang: SupportedLang;
@@ -24,141 +26,44 @@ const waLink = getWhatsAppLink(lang);
     </div>
 
     <div class="packages-grid">
-      <!-- Package 1: Sunset & Wine -->
-      <div class="package-card">
-        <div class="pkg-top">
-          <span class="pkg-scale">{t("pkg1Scale")}</span>
-          <h3 class="pkg-title">{t("pkg1Title")}</h3>
-          <p class="pkg-desc">{t("pkg1Desc")}</p>
+      {packages.map((pkg) => (
+        <div class={`package-card ${pkg.featured ? 'featured-pkg' : ''}`}>
+          {pkg.featured && (
+            <div class="pkg-badge-featured">
+              {t("pkgBadgeRecommended") || "RECOMMENDED"}
+            </div>
+          )}
+          <div class="pkg-top">
+            <span class="pkg-scale">{pkg.scale[lang]}</span>
+            <h3 class="pkg-title">{pkg.title[lang]}</h3>
+            <p class="pkg-desc">{pkg.desc[lang]}</p>
+          </div>
+          <ul class="pkg-features">
+            {pkg.features[lang].map((feat) => (
+              <li>
+                <span
+                  class="material-symbols-outlined check-icon"
+                  aria-hidden="true">done</span
+                >
+                <span>{feat}</span>
+              </li>
+            ))}
+          </ul>
+          <div class="pkg-action">
+            <a
+              href={waLink}
+              class={`pkg-btn ${pkg.featured ? 'featured-btn' : ''}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>{pkg.ctaText ? pkg.ctaText[lang] : (t("pkgBtnSelect") || "Inquire Format")}</span>
+              <span class="material-symbols-outlined" aria-hidden="true"
+                >arrow_forward</span
+              >
+            </a>
+          </div>
         </div>
-        <ul class="pkg-features">
-          <li>
-            <span
-              class="material-symbols-outlined check-icon"
-              aria-hidden="true">done</span
-            >
-            <span>{t("pkg1Feat1")}</span>
-          </li>
-          <li>
-            <span
-              class="material-symbols-outlined check-icon"
-              aria-hidden="true">done</span
-            >
-            <span>{t("pkg1Feat2")}</span>
-          </li>
-          <li>
-            <span
-              class="material-symbols-outlined check-icon"
-              aria-hidden="true">done</span
-            >
-            <span>{t("pkg1Feat3")}</span>
-          </li>
-        </ul>
-        <div class="pkg-action">
-          <a
-            href={waLink}
-            class="pkg-btn"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span>{t("pkgBtnSelect") || "Inquire Format"}</span>
-            <span class="material-symbols-outlined" aria-hidden="true"
-              >arrow_forward</span
-            >
-          </a>
-        </div>
-      </div>
-
-      <!-- Package 2: Private Villa & Retreat (Featured) -->
-      <div class="package-card featured-pkg">
-        <div class="pkg-badge-featured">{t("pkgBadgeRecommended") || "RECOMMENDED"}</div>
-        <div class="pkg-top">
-          <span class="pkg-scale">{t("pkg2Scale")}</span>
-          <h3 class="pkg-title">{t("pkg2Title")}</h3>
-          <p class="pkg-desc">{t("pkg2Desc")}</p>
-        </div>
-        <ul class="pkg-features">
-          <li>
-            <span
-              class="material-symbols-outlined check-icon"
-              aria-hidden="true">done</span
-            >
-            <span>{t("pkg2Feat1")}</span>
-          </li>
-          <li>
-            <span
-              class="material-symbols-outlined check-icon"
-              aria-hidden="true">done</span
-            >
-            <span>{t("pkg2Feat2")}</span>
-          </li>
-          <li>
-            <span
-              class="material-symbols-outlined check-icon"
-              aria-hidden="true">done</span
-            >
-            <span>{t("pkg2Feat3")}</span>
-          </li>
-        </ul>
-        <div class="pkg-action">
-          <a
-            href={waLink}
-            class="pkg-btn featured-btn"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span>{t("pkgBtnSelect") || "Inquire Format"}</span>
-            <span class="material-symbols-outlined" aria-hidden="true"
-              >arrow_forward</span
-            >
-          </a>
-        </div>
-      </div>
-
-      <!-- Package 3: Custom Production -->
-      <div class="package-card">
-        <div class="pkg-top">
-          <span class="pkg-scale">{t("pkg3Scale")}</span>
-          <h3 class="pkg-title">{t("pkg3Title")}</h3>
-          <p class="pkg-desc">{t("pkg3Desc")}</p>
-        </div>
-        <ul class="pkg-features">
-          <li>
-            <span
-              class="material-symbols-outlined check-icon"
-              aria-hidden="true">done</span
-            >
-            <span>{t("pkg3Feat1")}</span>
-          </li>
-          <li>
-            <span
-              class="material-symbols-outlined check-icon"
-              aria-hidden="true">done</span
-            >
-            <span>{t("pkg3Feat2")}</span>
-          </li>
-          <li>
-            <span
-              class="material-symbols-outlined check-icon"
-              aria-hidden="true">done</span
-            >
-            <span>{t("pkg3Feat3")}</span>
-          </li>
-        </ul>
-        <div class="pkg-action">
-          <a
-            href={waLink}
-            class="pkg-btn"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span>{t("pkgBtnInquire") || "Inquire Format"}</span>
-            <span class="material-symbols-outlined" aria-hidden="true"
-              >arrow_forward</span
-            >
-          </a>
-        </div>
-      </div>
+      ))}
     </div>
   </div>
 </section>

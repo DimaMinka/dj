@@ -1,6 +1,7 @@
 ---
 import type { SupportedLang } from "../../i18n/ui";
 import { useTranslations } from "../../i18n/ui";
+import { specCards, hardwareRider } from "../../data/about";
 
 interface Props {
   lang: SupportedLang;
@@ -23,69 +24,26 @@ const t = useTranslations(lang);
     </div>
 
     <div class="specs-grid">
-      <!-- Sound Rig Card -->
-      <div class="spec-card">
-        <div class="spec-card-icon" aria-hidden="true">
-          <span class="material-symbols-outlined">graphic_eq</span>
+      {specCards.map((card) => (
+        <div class="spec-card">
+          <div class="spec-card-icon" aria-hidden="true">
+            <span class="material-symbols-outlined">{card.icon}</span>
+          </div>
+          <h3 class="spec-card-title">{card.title[lang]}</h3>
+          <p class="spec-card-desc">{card.desc[lang]}</p>
+          <ul class="spec-card-list">
+            {card.items[lang].map((item) => (
+              <li>
+                <span
+                  class="material-symbols-outlined check-icon"
+                  aria-hidden="true">check</span
+                >
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
         </div>
-        <h3 class="spec-card-title">{t("specSoundTitle")}</h3>
-        <p class="spec-card-desc">{t("specSoundDesc")}</p>
-        <ul class="spec-card-list">
-          <li>
-            <span
-              class="material-symbols-outlined check-icon"
-              aria-hidden="true">check</span
-            >
-            <span>{t("specSoundItem1")}</span>
-          </li>
-          <li>
-            <span
-              class="material-symbols-outlined check-icon"
-              aria-hidden="true">check</span
-            >
-            <span>{t("specSoundItem2")}</span>
-          </li>
-          <li>
-            <span
-              class="material-symbols-outlined check-icon"
-              aria-hidden="true">check</span
-            >
-            <span>{t("specSoundItem3")}</span>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Light Rig Card -->
-      <div class="spec-card">
-        <div class="spec-card-icon" aria-hidden="true">
-          <span class="material-symbols-outlined">wb_incandescent</span>
-        </div>
-        <h3 class="spec-card-title">{t("specLightTitle")}</h3>
-        <p class="spec-card-desc">{t("specLightDesc")}</p>
-        <ul class="spec-card-list">
-          <li>
-            <span
-              class="material-symbols-outlined check-icon"
-              aria-hidden="true">check</span
-            >
-            <span>{t("specLightItem1")}</span>
-          </li>
-          <li>
-            <span
-              class="material-symbols-outlined check-icon"
-              aria-hidden="true">check</span
-            >
-            <span>{t("specLightItem2")}</span>
-          </li>
-          <li>
-            <span
-              class="material-symbols-outlined check-icon"
-              aria-hidden="true">check</span
-            >
-            <span>{t("specLightItem3")}</span>
-          </li>
-        </ul>
-      </div>
+      ))}
     </div>
 
     <!-- Collapsible Detailed Rider for Producers & Sound Techs -->
@@ -102,22 +60,12 @@ const t = useTranslations(lang);
         >
       </summary>
       <div class="rider-content">
-        <div class="rider-item">
-          <span class="rider-label">{t("specsRiderConsole")}</span>
-          <span class="rider-val">{t("specsRiderConsoleVal")}</span>
-        </div>
-        <div class="rider-item">
-          <span class="rider-label">{t("specsRiderDmx")}</span>
-          <span class="rider-val">{t("specsRiderDmxVal")}</span>
-        </div>
-        <div class="rider-item">
-          <span class="rider-label">{t("specsRiderMoving")}</span>
-          <span class="rider-val">{t("specsRiderMovingVal")}</span>
-        </div>
-        <div class="rider-item">
-          <span class="rider-label">{t("specsRiderWash")}</span>
-          <span class="rider-val">{t("specsRiderWashVal")}</span>
-        </div>
+        {hardwareRider.map((rider) => (
+          <div class="rider-item">
+            <span class="rider-label">{rider.label[lang]}</span>
+            <span class="rider-val">{rider.val[lang]}</span>
+          </div>
+        ))}
       </div>
     </details>
   </div>

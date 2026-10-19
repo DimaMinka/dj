@@ -3,6 +3,7 @@ import AudioPreview from "./AudioPreview.astro";
 import VideoReel from "./VideoReel.astro";
 import type { SupportedLang } from "../../i18n/ui";
 import { useTranslations } from "../../i18n/ui";
+import { audioPreviews } from "../../data/about";
 
 interface Props {
   lang: SupportedLang;
@@ -21,32 +22,21 @@ const t = useTranslations(lang);
           <h2 class="col-title">{t("audioPreviewTitle") || "Sunset Sessions & Melodic Drift"}</h2>
         </div>
         <div class="audio-card-stack">
-          <AudioPreview
-            id="aboutAudioPreview"
-            trackId="sunset"
-            lang={lang}
-            audioSrc="/assets/audio/desert-sunset-resonance.mp3"
-            badgeTag={t("audioBadgeTag") || "DESERT SUNSET"}
-            badgeBpm={t("audioBadgeBpm") || "105 BPM ORGANIC"}
-            trackTitle={t("audioTrackTitle") || "Desert Dusk Resonance"}
-            trackSubtitle={t("audioTrackSubtitle") || "Oriental Organic House • Warm desert winds & calm sunset horizons"}
-            ariaLabel={t("audioPlayAria") || "Play Desert Dusk Resonance oriental soundscape preview"}
-            baseFreq={432}
-            subFreq={216}
-          />
-          <AudioPreview
-            id="aboutAudioPreviewNight"
-            trackId="night"
-            lang={lang}
-            audioSrc="/assets/audio/winery-cocktail-groove.mp3"
-            badgeTag={t("audio2BadgeTag") || "WINERY COCKTAIL"}
-            badgeBpm={t("audio2BadgeBpm") || "124 BPM MELODIC"}
-            trackTitle={t("audio2TrackTitle") || "Industrial Winery Groove"}
-            trackSubtitle={t("audio2TrackSubtitle") || "Upbeat Melodic House • Crisp driving rhythm & cocktail energy in concrete cellar arches"}
-            ariaLabel={t("audio2PlayAria") || "Play Industrial Winery Groove upbeat melodic house preview"}
-            baseFreq={440}
-            subFreq={220}
-          />
+          {audioPreviews.map((track) => (
+            <AudioPreview
+              id={track.id}
+              trackId={track.trackId}
+              lang={lang}
+              audioSrc={track.audioSrc}
+              badgeTag={track.badgeTag[lang]}
+              badgeBpm={track.badgeBpm[lang]}
+              trackTitle={track.trackTitle[lang]}
+              trackSubtitle={track.trackSubtitle[lang]}
+              ariaLabel={track.ariaLabel[lang]}
+              baseFreq={track.baseFreq}
+              subFreq={track.subFreq}
+            />
+          ))}
         </div>
       </div>
 

@@ -1,6 +1,7 @@
 ---
 import type { SupportedLang } from '../../i18n/ui';
-import { useTranslations, getWhatsAppLink, SITE_CONTACTS } from '../../i18n/ui';
+import { useTranslations } from '../../i18n/ui';
+import { getWhatsAppLink, SITE_CONTACTS } from '../../data/contacts';
 
 interface Props {
   lang: SupportedLang;
@@ -13,8 +14,8 @@ const currentYear = new Date().getFullYear();
 
 // Path prefix for global links
 const homeHref = lang === 'en' ? '/' : `/${lang}`;
-const vibesHref = '/vibes/aegean';
-const telegramChannelUrl = 'https://t.me/djdimaminka';
+const vibesHref = lang === 'en' ? '/vibes/aegean' : `/${lang}/vibes/aegean`;
+const telegramChannelUrl = SITE_CONTACTS.telegramChannelUrl;
 ---
 
 <footer class="about-footer" id="about-footer" aria-label="About Page Footer">
