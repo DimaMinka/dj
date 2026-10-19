@@ -93,6 +93,7 @@ export const spaces: Space[] = [
     bpm: 120,
     frequency: 432,
     keySignature: 'G major',
+    audioSrc: '/assets/audio/aegean-terraces-resonance.mp3',
     glowColor: '#4d7c0f',
     glowRgb: '77, 124, 15',
     glowColorDark: '#84cc16',
