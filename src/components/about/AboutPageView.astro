@@ -1,6 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import IntroHeader from "../../components/intro/IntroHeader.astro";
+import SiteHeader from "../../components/common/SiteHeader.astro";
 import AtmosphereBackground from "../../components/intro/AtmosphereBackground.astro";
 import AboutHero from "./AboutHero.astro";
 import AboutManifesto from "./AboutManifesto.astro";
@@ -144,7 +144,7 @@ const pageDescription =
 
   <main class="about-viewport pt-safe pb-safe">
     <AtmosphereBackground />
-    <IntroHeader lang={lang} currentSection="about" />
+    <SiteHeader lang={lang} currentSection="about" />
 
     <!-- 1. Hero Section -->
     <AboutHero lang={lang} />

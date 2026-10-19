@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import AtmosphereBackground from '../components/intro/AtmosphereBackground.astro';
-import IntroHeader from '../components/intro/IntroHeader.astro';
+import SiteHeader from '../components/common/SiteHeader.astro';
 import SonicPortal from '../components/intro/SonicPortal.astro';
 import GatewayTrigger from '../components/intro/GatewayTrigger.astro';
 import { defaultLang } from '../i18n/ui';
@@ -13,7 +13,7 @@ import { defaultLang } from '../i18n/ui';
     <AtmosphereBackground />
 
     <!-- Top Navigation & Resonance Switcher -->
-    <IntroHeader lang={defaultLang} />
+    <SiteHeader lang={defaultLang} currentSection="intro" />
 
     <!-- Central Sensory Portal 432 Hz -->
     <SonicPortal lang={defaultLang} />

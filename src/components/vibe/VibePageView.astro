@@ -1,7 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import VibeAtmosphere from "../../components/vibe/VibeAtmosphere.astro";
-import VibeHeader from "../../components/vibe/VibeHeader.astro";
+import SiteHeader from "../../components/common/SiteHeader.astro";
 import SpacesCarousel from "../../components/vibe/SpacesCarousel.astro";
 import VibeSoundDock from "../../components/vibe/VibeSoundDock.astro";
 import VibeSetupDrawer from "../../components/vibe/VibeSetupDrawer.astro";
@@ -42,7 +42,12 @@ const currentDesc = space.poetry[lang] || space.poetry.en || "Explore the site-s
     </div>
 
     <!-- Compact upper navigation bar with inline language switcher -->
-    <VibeHeader lang={lang} initialIndex={initialIndex} currentSlug={space.slug} />
+    <SiteHeader
+      lang={lang}
+      currentSection="vibes"
+      initialIndex={initialIndex}
+      currentSlug={space.slug}
+    />
 
     <!-- In-Place Atmospheric Sound Worlds Stage -->
     <SpacesCarousel spaces={spaces} initialIndex={initialIndex} lang={lang} />
