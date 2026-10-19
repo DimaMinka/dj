@@ -524,15 +524,15 @@ export const spaces: Space[] = [
         ru: 'Ботанические сады, лесные усадьбы севера, тенистые рощи и уединенные поляны — до 120 гостей.',
         he: 'גנים בוטניים, אחוזות יער בצפון, מטעי זיתים מוצלים וקרחות יער מבודדות — עד 120 אורחים.',
       },
-      image: '/assets/spaces/garden-bg-desktop.jpg',
+      image: '/assets/spaces/signature-rig-setup.jpg',
       gallery: {
-        lights: '/assets/spaces/garden-bg-desktop.jpg',
+        lights: '/assets/spaces/signature-rig-setup.jpg',
         lightsTitle: {
-          en: 'CANOPY FLOOD & AMBER LIGHTS',
-          ru: 'ПОДСВЕТКА КРОН & ЯНТАРНЫЙ СВЕТ',
-          he: 'תאורת צמרות וענבר חם',
+          en: 'CANOPY LIGHT & RETRO BLINDERS',
+          ru: 'СВЕТ В КРОНАХ & РЕТРО-ПРИБОРЫ',
+          he: 'תאורת צמרות וגופי רטרו חמים',
         },
-        sound: '/assets/spaces/signature-rig-setup.jpg',
+        sound: '/assets/spaces/picnic-open-air-setup.jpg',
         soundTitle: {
           en: 'ACOUSTIC 360° WOODEN CONSOLE',
           ru: '360° АКУСТИЧЕСКАЯ КОНСОЛЬ ИЗ ДЕРЕВА',
@@ -625,15 +625,15 @@ export const spaces: Space[] = [
         ru: 'Исторические усадьбы, сады приватных вилл, камерные свадьбы и закрытые вечерние приемы — до 100 гостей.',
         he: 'אחוזות אבן היסטוריות, גני וילות פרטיות, חתונות בוטיק ואירועי קוקטייל אקסקלוסיביים — עד 100 אורחים.',
       },
-      image: '/assets/spaces/estate-bg-desktop.jpg',
+      image: '/assets/spaces/winery-courtyard-setup.jpg',
       gallery: {
-        lights: '/assets/spaces/estate-bg-desktop.jpg',
+        lights: '/assets/spaces/winery-courtyard-setup.jpg',
         lightsTitle: {
           en: 'FIRE TORCHES & ARCHITECTURAL WASH',
           ru: 'ЖИВЫЕ ФАКЕЛЫ & АРХИТЕКТУРНЫЙ СВЕТ',
           he: 'לפידי אש חיים ותאורת אבן',
         },
-        sound: '/assets/spaces/winery-courtyard-setup.jpg',
+        sound: '/assets/spaces/signature-rig-setup.jpg',
         soundTitle: {
           en: 'BOUTIQUE ESTATE DJ CONSOLE',
           ru: 'БУТИКОВАЯ DJ-КОНСОЛЬ ПОМЕСТЬЯ',
@@ -726,9 +726,9 @@ export const spaces: Space[] = [
         ru: 'Уединенные глэмпинги, пустынные ретриты, смотровые плато и ночные стоянки под звездами — до 100 гостей.',
         he: 'מתחמי גלמפינג מבודדים, ריטריטים במדבר, תצפיות מצוקים ומפגשי כוכבים ליליים — עד 100 אורחים.',
       },
-      image: '/assets/spaces/desert-bg-desktop.jpg',
+      image: '/assets/spaces/day-session-nature.jpg',
       gallery: {
-        lights: '/assets/spaces/desert-bg-desktop.jpg',
+        lights: '/assets/spaces/picnic-open-air-setup.jpg',
         lightsTitle: {
           en: 'CAMPFIRE & LOW AMBER PODS',
           ru: 'ОГОНЬ КОСТРА & ЯНТАРНЫЕ ФОНАРИ',
@@ -827,15 +827,15 @@ export const spaces: Space[] = [
         ru: 'Высокогорные шале Голан и Хермона, панорамные террасы над ущельем и зимние винные ретриты — до 100 гостей.',
         he: 'בקתות שאלה ברמת הגולן והחרמון, טרסות מצוק פנורמיות מעל ואדיות ואירועי חורף יוקרתיים — עד 100 אורחים.',
       },
-      image: '/assets/spaces/nordic-bg-desktop.jpg',
+      image: '/assets/spaces/signature-rig-setup.jpg',
       gallery: {
-        lights: '/assets/spaces/nordic-bg-desktop.jpg',
+        lights: '/assets/spaces/signature-rig-setup.jpg',
         lightsTitle: {
           en: 'MIST BEAMS & FLAME PYRAMIDS',
           ru: 'ЛУЧИ В ТУМАНЕ & ПИРАМИДЫ ОГНЯ',
           he: 'אלומות בערפל ותנורי להבה',
         },
-        sound: '/assets/spaces/winery-courtyard-setup.jpg',
+        sound: '/assets/spaces/day-session-nature.jpg',
         soundTitle: {
           en: 'WEATHERPROOF ALPINE CONSOLE',
           ru: 'ВСЕПОГОДНАЯ АЛЬПИЙСКАЯ DJ-КОНСОЛЬ',
