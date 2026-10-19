@@ -21,7 +21,7 @@ interface Props {
 }
 
 const { space, initialIndex } = Astro.props;
-const currentLang: SupportedLang = defaultLang;
+const currentLang: SupportedLang = 'ru';
 const currentTitle = `DJ Dima Minka — ${space.title[currentLang] || space.title.en} (Vibe Space)`;
 const currentDesc = space.poetry[currentLang] || space.poetry.en || "Explore the site-specific soundscapes of DJ Dima Minka.";
 ---
