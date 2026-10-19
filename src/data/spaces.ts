@@ -33,6 +33,7 @@ export interface Space {
   bpm: number;
   frequency: number;
   keySignature: string;
+  audioSrc?: string;
   glowColor: string; // Day / Light mode accent
   glowRgb: string;
   glowColorDark: string; // Night / Dark mode luminous accent
@@ -681,23 +682,24 @@ export const spaces: Space[] = [
       he: 'סשן אקוסטי פרטי בין דיונות הקטיפה. חמימות מדורה בוערת, עששיות ברבריות ומקצבי נוודים מהפנטים תחת כיפת השמיים.',
     },
     tags: {
-      en: ['🔥 AFRO & ORIENTAL', '⏱ 121 BPM', '🌌 STARLIGHT VIBE'],
-      ru: ['🔥 АФРО & ВОСТОК', '⏱ 121 УД/МИН', '🌌 ЗВЕЗДНЫЙ ВАЙБ'],
-      he: ['🔥 אפרו ואוריינטל', '⏱ 121 פעימות/דקה', '🌌 אווירת כוכבים'],
+      en: ['🔥 AFRO & ORIENTAL', '⏱ 105 BPM', '🌌 DESERT DUSK'],
+      ru: ['🔥 АФРО & ВОСТОК', '⏱ 105 УД/МИН', '🌌 ЗАКАТ В ПУСТЫНЕ'],
+      he: ['🔥 אפרו ואוריינטל', '⏱ 105 פעימות/דקה', '🌌 שקיעה מדברית'],
     },
     trackTitle: {
-      en: 'Dune Resonance & Firelight',
-      ru: 'Дыхание дюн и костра',
-      he: 'תהודת דיונות ואור מדורה',
+      en: 'Desert Dusk Resonance',
+      ru: 'Desert Dusk Resonance',
+      he: 'Desert Dusk Resonance',
     },
     trackSubtitle: {
-      en: 'Desert Live • Nomadic Afro-Deep',
-      ru: 'Живая сессия • Номадический Afro-Deep',
-      he: 'סשן חי במדבר • אפרו-דיפ נוודים',
+      en: 'Oriental Organic House • Sunset Horizon',
+      ru: 'Восточный Organic House • Закатный горизонт',
+      he: 'אורגניק האוס אוריינטלי • אופק שקיעה רגוע',
     },
-    bpm: 121,
+    bpm: 105,
     frequency: 432,
     keySignature: 'E minor',
+    audioSrc: '/assets/audio/desert-sunset-resonance.mp3',
     glowColor: '#c2410c',
     glowRgb: '194, 65, 12',
     glowColorDark: '#fb923c',

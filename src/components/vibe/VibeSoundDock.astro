@@ -21,6 +21,8 @@ const initialSpace = spaces[initialIndex] || spaces[0];
 >
   <!-- Minimalist Live Audio Stream Bar from Stitch -->
   <div class="audio-stream-card">
+    <!-- Dedicated HTML5 audio element for spaces with MP3 audioSrc -->
+    <audio id="dockAudioElement" preload="metadata" aria-hidden="true"></audio>
     <div class="stream-telemetry">
       <button
         id="dockAudioToggle"
@@ -114,18 +116,51 @@ const initialSpace = spaces[initialIndex] || spaces[0];
     const eqBars = document.querySelectorAll('.wave-bar');
 
     const container = document.getElementById('soundDockContainer');
+    const audioElement = document.getElementById('dockAudioElement') as HTMLAudioElement | null;
     let currentSlug = container?.dataset?.initialSlug || 'aegean';
-    let isHarmonicActive = false;
+    let currentSpace = spaces.find(s => s.slug === currentSlug) || spaces[0];
+    let isPlaying = false;
     let audioCtx: AudioContext | null = null;
     let osc: OscillatorNode | null = null;
     let gainNode: GainNode | null = null;
 
+    function stopPlayback() {
+      // 1. Stop MP3 element if active
+      if (audioElement && !audioElement.paused) {
+        audioElement.pause();
+        audioElement.currentTime = 0;
+      }
+      // 2. Stop Web Audio synthesizer if active
+      if (gainNode && audioCtx) {
+        try {
+          gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.3);
+          setTimeout(() => {
+            osc?.stop();
+            osc?.disconnect();
+            osc = null;
+          }, 300);
+        } catch (e) {}
+      }
+      isPlaying = false;
+      if (playIcon) playIcon.textContent = 'play_arrow';
+      window.dispatchEvent(new CustomEvent('dj:audio-state-change', { detail: { isPlaying: false } }));
+    }
+
     // Space change updates
     window.addEventListener('dj:space-change', ((e: CustomEvent) => {
       const { index, slug } = e.detail || {};
-      if (typeof index === 'number' && spaces[index]) {
-        const space = spaces[index];
+      const targetIndex = typeof index === 'number' ? index : spaces.findIndex(s => s.slug === slug);
+      if (targetIndex !== -1 && spaces[targetIndex]) {
+        const space = spaces[targetIndex];
+        const prevSlug = currentSlug;
         currentSlug = space.slug;
+        currentSpace = space;
+
+        // If currently playing and space changed, gracefully stop or switch
+        if (isPlaying && prevSlug !== space.slug) {
+          stopPlayback();
+        }
+
         const pageLang = (container?.dataset?.lang as 'en' | 'ru' | 'he') || 'en';
         const trTitle = typeof space.trackTitle === 'object' ? ((space.trackTitle as any)[pageLang] || space.trackTitle.en) : space.trackTitle;
         const trSub = typeof space.trackSubtitle === 'object' ? ((space.trackSubtitle as any)[pageLang] || space.trackSubtitle.en) : space.trackSubtitle;
@@ -142,58 +177,71 @@ const initialSpace = spaces[initialIndex] || spaces[0];
       }
     }) as EventListener);
 
-    // Web Audio Harmonic Ambient Synthesizer
-    function toggleAmbientSound() {
+    // Audio Playback: MP3 when audioSrc exists, harmonic 432 Hz synthesizer fallback otherwise
+    function toggleAudio() {
       try {
-        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
-        if (!audioCtx) {
-          audioCtx = new AudioContextClass();
+        if (isPlaying) {
+          stopPlayback();
+          return;
         }
 
-        if (isHarmonicActive) {
-          if (gainNode && audioCtx) {
-            gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.4);
-            setTimeout(() => {
-              osc?.stop();
-              osc?.disconnect();
-              osc = null;
-            }, 400);
+        if (currentSpace.audioSrc && audioElement) {
+          // Play real MP3 track
+          if (audioElement.src !== window.location.origin + currentSpace.audioSrc && !audioElement.src.endsWith(currentSpace.audioSrc)) {
+            audioElement.src = currentSpace.audioSrc;
           }
-          isHarmonicActive = false;
-          if (playIcon) playIcon.textContent = 'play_arrow';
-          window.dispatchEvent(new CustomEvent('dj:audio-state-change', { detail: { isPlaying: false } }));
+          audioElement.play().then(() => {
+            isPlaying = true;
+            if (playIcon) playIcon.textContent = 'pause';
+            window.dispatchEvent(new CustomEvent('dj:audio-state-change', { detail: { isPlaying: true } }));
+          }).catch((err) => {
+            console.warn('MP3 playback blocked or failed, falling back to harmonic:', err);
+            startHarmonicSynth();
+          });
+
+          audioElement.onended = () => {
+            stopPlayback();
+          };
         } else {
-          if (audioCtx.state === 'suspended') {
-            audioCtx.resume();
-          }
-
-          osc = audioCtx.createOscillator();
-          gainNode = audioCtx.createGain();
-
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(432, audioCtx.currentTime);
-
-          gainNode.gain.setValueAtTime(0.0001, audioCtx.currentTime);
-          gainNode.gain.exponentialRampToValueAtTime(0.06, audioCtx.currentTime + 0.6);
-
-          osc.connect(gainNode);
-          gainNode.connect(audioCtx.destination);
-
-          osc.start();
-          isHarmonicActive = true;
-          if (playIcon) playIcon.textContent = 'pause';
-          window.dispatchEvent(new CustomEvent('dj:audio-state-change', { detail: { isPlaying: true } }));
+          startHarmonicSynth();
         }
       } catch (e) {
         console.warn('Dock sound error:', e);
       }
     }
 
-    playBtn?.addEventListener('click', toggleAmbientSound);
+    function startHarmonicSynth() {
+      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+      if (!audioCtx) {
+        audioCtx = new AudioContextClass();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      osc = audioCtx.createOscillator();
+      gainNode = audioCtx.createGain();
+
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(currentSpace.frequency || 432, audioCtx.currentTime);
+
+      gainNode.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.06, audioCtx.currentTime + 0.6);
+
+      osc.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+
+      osc.start();
+      isPlaying = true;
+      if (playIcon) playIcon.textContent = 'pause';
+      window.dispatchEvent(new CustomEvent('dj:audio-state-change', { detail: { isPlaying: true } }));
+    }
+
+    playBtn?.addEventListener('click', toggleAudio);
 
     // Global audio toggle event from card player
     window.addEventListener('dj:toggle-audio', (() => {
-      toggleAmbientSound();
+      toggleAudio();
     }) as EventListener);
 
     // Dynamic wave animation
