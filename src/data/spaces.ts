@@ -194,6 +194,7 @@ export const spaces: Space[] = [
     bpm: 123,
     frequency: 432,
     keySignature: 'D minor',
+    audioSrc: '/assets/audio/twilight-vineyard-resonance.mp3',
     glowColor: '#6d28d9',
     glowRgb: '109, 40, 217',
     glowColorDark: '#a855f7',
