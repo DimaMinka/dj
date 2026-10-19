@@ -524,9 +524,9 @@ export const spaces: Space[] = [
         ru: 'Ботанические сады, лесные усадьбы севера, тенистые рощи и уединенные поляны — до 120 гостей.',
         he: 'גנים בוטניים, אחוזות יער בצפון, מטעי זיתים מוצלים וקרחות יער מבודדות — עד 120 אורחים.',
       },
-      image: '/assets/spaces/garden-setup.jpg',
+      image: '/assets/spaces/garden-bg-desktop.jpg',
       gallery: {
-        lights: '/assets/spaces/garden-setup.jpg',
+        lights: '/assets/spaces/garden-bg-desktop.jpg',
         lightsTitle: {
           en: 'CANOPY FLOOD & AMBER LIGHTS',
           ru: 'ПОДСВЕТКА КРОН & ЯНТАРНЫЙ СВЕТ',
@@ -625,9 +625,9 @@ export const spaces: Space[] = [
         ru: 'Исторические усадьбы, сады приватных вилл, камерные свадьбы и закрытые вечерние приемы — до 100 гостей.',
         he: 'אחוזות אבן היסטוריות, גני וילות פרטיות, חתונות בוטיק ואירועי קוקטייל אקסקלוסיביים — עד 100 אורחים.',
       },
-      image: '/assets/spaces/estate-setup.jpg',
+      image: '/assets/spaces/estate-bg-desktop.jpg',
       gallery: {
-        lights: '/assets/spaces/estate-setup.jpg',
+        lights: '/assets/spaces/estate-bg-desktop.jpg',
         lightsTitle: {
           en: 'FIRE TORCHES & ARCHITECTURAL WASH',
           ru: 'ЖИВЫЕ ФАКЕЛЫ & АРХИТЕКТУРНЫЙ СВЕТ',
@@ -726,9 +726,9 @@ export const spaces: Space[] = [
         ru: 'Уединенные глэмпинги, пустынные ретриты, смотровые плато и ночные стоянки под звездами — до 100 гостей.',
         he: 'מתחמי גלמפינג מבודדים, ריטריטים במדבר, תצפיות מצוקים ומפגשי כוכבים ליליים — עד 100 אורחים.',
       },
-      image: '/assets/spaces/desert-setup.jpg',
+      image: '/assets/spaces/desert-bg-desktop.jpg',
       gallery: {
-        lights: '/assets/spaces/desert-setup.jpg',
+        lights: '/assets/spaces/desert-bg-desktop.jpg',
         lightsTitle: {
           en: 'CAMPFIRE & LOW AMBER PODS',
           ru: 'ОГОНЬ КОСТРА & ЯНТАРНЫЕ ФОНАРИ',
@@ -827,9 +827,9 @@ export const spaces: Space[] = [
         ru: 'Высокогорные шале Голан и Хермона, панорамные террасы над ущельем и зимние винные ретриты — до 100 гостей.',
         he: 'בקתות שאלה ברמת הגולן והחרמון, טרסות מצוק פנורמיות מעל ואדיות ואירועי חורף יוקרתיים — עד 100 אורחים.',
       },
-      image: '/assets/spaces/nordic-setup.jpg',
+      image: '/assets/spaces/nordic-bg-desktop.jpg',
       gallery: {
-        lights: '/assets/spaces/nordic-setup.jpg',
+        lights: '/assets/spaces/nordic-bg-desktop.jpg',
         lightsTitle: {
           en: 'MIST BEAMS & FLAME PYRAMIDS',
           ru: 'ЛУЧИ В ТУМАНЕ & ПИРАМИДЫ ОГНЯ',
