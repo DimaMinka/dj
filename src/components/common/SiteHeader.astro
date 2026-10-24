@@ -8,7 +8,7 @@ import { spaces } from "../../data/spaces";
 
 interface Props {
   lang?: SupportedLang;
-  currentSection?: "intro" | "about" | "vibes";
+  currentSection?: "intro" | "about" | "vibes" | "quote";
   initialIndex?: number;
   currentSlug?: string;
 }
@@ -28,6 +28,7 @@ const currentPath = Astro.url.pathname;
 const cleanPath = currentPath.replace(/^\/(ru|he)(\/|$)/, "$2") || "/";
 const isAbout = currentSection === "about" || cleanPath.startsWith("/about");
 const isVibes = currentSection === "vibes" || cleanPath.startsWith("/vibes");
+const isQuote = currentSection === "quote" || cleanPath.startsWith("/quote");
 
 // Language links depending on current section
 let enHref: string;
@@ -42,6 +43,10 @@ if (isVibes) {
   enHref = "/about";
   ruHref = "/ru/about";
   heHref = "/he/about";
+} else if (isQuote) {
+  enHref = "/quote";
+  ruHref = "/ru/quote";
+  heHref = "/he/quote";
 } else {
   // Intro portal
   enHref = "/";
@@ -51,7 +56,7 @@ if (isVibes) {
 
 // Action button target
 const aboutHref = lang === "en" ? "/about" : `/${lang}/about`;
-const vibesHref = lang === "en" ? `/vibes/${currentSlug}` : `/${lang}/vibes/${currentSlug}`;
+const vibesHref = "/vibes";
 ---
 
 <header
@@ -83,7 +88,7 @@ const vibesHref = lang === "en" ? `/vibes/${currentSlug}` : `/${lang}/vibes/${cu
         <span class="artist-title">{t("artistName")}</span>
       </a>
       {
-        isAbout || isVibes ? (
+        isAbout || isVibes || isQuote ? (
           <nav class="lang-switch-inline" aria-label="Language selection">
             <a
               href={enHref}
@@ -129,7 +134,7 @@ const vibesHref = lang === "en" ? `/vibes/${currentSlug}` : `/${lang}/vibes/${cu
   <!-- Actions Group: Contextual Navigation Link + Theme Resonance Toggle Pill -->
   <div class="actions-group">
     {
-      isAbout ? (
+      isAbout || isQuote ? (
         <a href={vibesHref} class="nav-about-link">
           <span>{t("navVibes") || "Vibes"}</span>
         </a>

@@ -1,0 +1,124 @@
+---
+import type { SupportedLang } from '../../../i18n/ui';
+import { useTranslations } from '../../../i18n/ui';
+import type { QuotePreset } from '../../../types/quote';
+
+interface Props {
+  presets: QuotePreset[];
+  activePresetId?: string;
+  lang: SupportedLang;
+}
+
+const { presets, activePresetId = 'sunset_cocktail', lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<div class="presets-bar">
+  <span class="presets-label">{t("quotePresetLabel")}:</span>
+  <div class="presets-pills">
+    {presets.map((preset) => {
+      const isActive = preset.id === activePresetId;
+      return (
+        <button
+          type="button"
+          class={`preset-pill ${isActive ? 'active' : ''}`}
+          data-preset-id={preset.id}
+        >
+          <span>{preset.name[lang]}</span>
+        </button>
+      );
+    })}
+  </div>
+</div>
+
+<style>
+  .presets-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: clamp(0.65rem, 2vw, 0.85rem) clamp(0.85rem, 2.5vw, 1.25rem);
+    border-radius: var(--radius-lg);
+    margin-block-end: 2rem;
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .presets-label {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-subtle);
+    white-space: nowrap;
+  }
+
+  .presets-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 640px) {
+    .presets-bar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+      width: 100%;
+    }
+
+    .presets-pills {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      padding-block-end: 0.25rem;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+    }
+
+    .presets-pills::-webkit-scrollbar {
+      display: none;
+    }
+
+    .preset-pill {
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+  }
+
+  .preset-pill {
+    background: transparent;
+    border: 1px solid var(--color-glass-border);
+    color: var(--color-text-main);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .preset-pill:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .preset-pill.featured {
+    border-color: var(--color-primary);
+    background: var(--color-primary-glow);
+  }
+
+  .preset-pill.active {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    border-color: var(--color-primary);
+  }
+</style>
