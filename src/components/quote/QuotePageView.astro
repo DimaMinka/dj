@@ -1670,14 +1670,20 @@ const clientConfig = {
   }
 
   .toggle-equip-btn:hover {
-    border-color: var(--color-primary);
+    border-color: var(--color-glass-border);
     color: var(--color-text-main);
   }
 
   .toggle-equip-btn.active {
-    background: var(--color-primary-glow);
-    border-color: var(--color-primary);
-    color: var(--color-primary);
+    background: rgba(220, 76, 76, 0.12);
+    border-color: rgba(220, 76, 76, 0.35);
+    color: #e06c75;
+  }
+
+  .toggle-equip-btn.active:hover {
+    background: rgba(220, 76, 76, 0.2);
+    border-color: rgba(220, 76, 76, 0.5);
+    color: #ef8b93;
   }
 
   .mandatory-item {
