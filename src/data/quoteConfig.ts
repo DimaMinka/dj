@@ -320,9 +320,9 @@ export const PRESETS: QuotePreset[] = [
   {
     id: 'sunset_cocktail',
     name: {
-      en: 'Sunset & Cocktail (Acoustic)',
-      ru: 'Закатный коктейль (Камерный вечер)',
-      he: 'קוקטייל שקיעה (אינטימי)',
+      en: 'Sunset & Cocktail',
+      ru: 'Закатный коктейль',
+      he: 'קוקטייל שקיעה',
     },
     description: {
       en: 'Sound console + warm retro center lamp and amber bars for intimate villa wine evenings.',
@@ -347,9 +347,9 @@ export const PRESETS: QuotePreset[] = [
   {
     id: 'full_production_signature',
     name: {
-      en: 'Signature Full Rig (Sound & Light)',
-      ru: 'Авторский сетап (Полный свет и звук)',
-      he: 'הפקת פרימיום (סאונד ותאורה מלאה)',
+      en: 'Signature Full Rig',
+      ru: 'Авторский сетап',
+      he: 'הפקת פרימיום',
     },
     description: {
       en: 'All 16 fixtures, moving heads, SoundSwitch DMX programming, discreet cabling, and bespoke music pre-production.',
@@ -368,9 +368,9 @@ export const PRESETS: QuotePreset[] = [
   {
     id: 'weekend_retreat',
     name: {
-      en: 'Weekend Villa Retreat (2 Days)',
-      ru: 'Уикенд на вилле (2 суток)',
-      he: 'ריטריט וילה (יומיים מלאים)',
+      en: 'Weekend Villa Retreat',
+      ru: 'Уикенд на вилле',
+      he: 'ריטריט וילה',
     },
     description: {
       en: 'Full sound & lighting setup across Friday sunset and Saturday night party with 1.6x weekend equipment multiplier.',
