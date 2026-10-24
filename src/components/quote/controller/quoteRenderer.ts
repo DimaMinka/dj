@@ -129,11 +129,15 @@ export function syncControlsToDom(
     if (hasItem) {
       btn.classList.add('active');
       btn.setAttribute('aria-pressed', 'true');
+      btn.setAttribute('aria-label', config.labels.removeBtn);
+      btn.setAttribute('title', config.labels.removeBtn);
       if (icon) icon.textContent = 'check';
       if (text) text.textContent = config.labels.removeBtn;
     } else {
       btn.classList.remove('active');
       btn.setAttribute('aria-pressed', 'false');
+      btn.setAttribute('aria-label', config.labels.addBtn);
+      btn.setAttribute('title', config.labels.addBtn);
       if (icon) icon.textContent = 'add';
       if (text) text.textContent = config.labels.addBtn;
     }

@@ -133,6 +133,8 @@ export function initQuoteApp(): void {
         state.itemsQty[itemId] = 0;
         btn.classList.remove('active');
         btn.setAttribute('aria-pressed', 'false');
+        btn.setAttribute('aria-label', config.labels.addBtn);
+        btn.setAttribute('title', config.labels.addBtn);
         const icon = btn.querySelector('.toggle-icon');
         const text = btn.querySelector('.toggle-text');
         if (icon) icon.textContent = 'add';
@@ -141,6 +143,8 @@ export function initQuoteApp(): void {
         state.itemsQty[itemId] = defaultQty;
         btn.classList.add('active');
         btn.setAttribute('aria-pressed', 'true');
+        btn.setAttribute('aria-label', config.labels.removeBtn);
+        btn.setAttribute('title', config.labels.removeBtn);
         const icon = btn.querySelector('.toggle-icon');
         const text = btn.querySelector('.toggle-text');
         if (icon) icon.textContent = 'check';
