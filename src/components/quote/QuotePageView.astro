@@ -509,14 +509,9 @@ const clientConfig = {
           <aside class="builder-receipt-col">
             <div class="receipt-card sticky-receipt">
               <div class="receipt-header">
-                <span class="receipt-badge">{t("quoteLiveEstimateBadge")}</span>
-                <h3 class="receipt-title">{t("quoteSummaryTitle")}</h3>
-              </div>
-
-              <!-- Iceberg Indicator inside Receipt -->
-              <div class="receipt-iceberg">
-                <div class="iceberg-top">
-                  <span>{t("quoteTotalHours")}: <strong id="recTotalHours">22.5h</strong></span>
+                <div class="receipt-header-top">
+                  <span class="receipt-badge">{t("quoteLiveEstimateBadge")}</span>
+                  <!-- Iceberg Ratio moved directly into Receipt Header -->
                   <div class="iceberg-ratio-box" id="recIcebergRatioBox" tabindex="0" role="button" aria-label={t("quoteIcebergTitle")}>
                     <span class="iceberg-ratio-tag">1 : <span id="recIcebergRatioVal">5.4</span></span>
                     <span class="material-symbols-outlined ratio-info-icon" aria-hidden="true">info</span>
@@ -524,6 +519,15 @@ const clientConfig = {
                       {t("quoteIcebergTooltip").replace("{ratio}", "5.4")}
                     </div>
                   </div>
+                </div>
+                <h3 class="receipt-title">{t("quoteSummaryTitle")}</h3>
+              </div>
+
+              <!-- Iceberg Indicator inside Receipt -->
+              <div class="receipt-iceberg">
+                <div class="iceberg-top">
+                  <span>{t("quoteTotalHours")}: <strong id="recTotalHours">22.5h</strong></span>
+                  <span class="iceberg-hours-hint">{t("quoteIcebergTitle")}</span>
                 </div>
                 <div class="iceberg-bar">
                   <div class="iceberg-segment stage" id="recStageBar" style="width: 16%;"></div>
@@ -1836,6 +1840,13 @@ const clientConfig = {
     margin-block-end: 1rem;
   }
 
+  .receipt-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
   .receipt-badge {
     font-family: var(--font-mono);
     font-size: 0.7rem;
@@ -1857,6 +1868,13 @@ const clientConfig = {
     border-radius: var(--radius-md);
     padding: 1rem;
     margin-block-end: 1.25rem;
+  }
+
+  .iceberg-hours-hint {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-text-subtle);
+    letter-spacing: 0.04em;
   }
 
   .iceberg-top,
