@@ -11,7 +11,13 @@
 
 :root[dir="rtl"],
 html[dir="rtl"] {
+  --font-display: 'Rubik', 'Heebo', sans-serif;
   --font-mono: 'Heebo', sans-serif;
+}
+
+:root[lang="ru"],
+html[lang="ru"] {
+  --font-display: 'Unbounded', 'Syne', sans-serif;
 }
 
 :root {
