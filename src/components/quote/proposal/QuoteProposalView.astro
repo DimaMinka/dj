@@ -206,14 +206,15 @@ const t = useTranslations(lang);
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: 1rem 1.25rem;
+    padding: clamp(0.75rem, 2.5vw, 1.15rem) clamp(0.75rem, 3vw, 1.25rem);
     background: transparent;
     border: none;
     color: inherit;
     cursor: pointer;
     text-align: start;
-    gap: 0.75rem;
+    gap: 0.65rem;
     transition: background 0.2s ease;
+    box-sizing: border-box;
   }
 
   .proposal-accordion-toggle:hover {
@@ -223,45 +224,46 @@ const t = useTranslations(lang);
   .accordion-title-col {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.2rem;
     min-width: 0;
-    flex: 1;
+    flex: 1 1 auto;
   }
 
   .accordion-heading-row {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.45rem;
   }
 
   .section-icon {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     color: var(--color-primary);
     flex-shrink: 0;
   }
 
   .section-heading {
     font-family: var(--font-display);
-    font-size: clamp(1rem, 3vw, 1.15rem);
+    font-size: clamp(0.92rem, 3vw, 1.15rem);
     color: var(--color-text-main);
     margin: 0;
     line-height: 1.3;
+    word-break: break-word;
   }
 
   .section-notice {
     display: flex;
     align-items: flex-start;
     gap: 0.35rem;
-    font-size: 0.78rem;
+    font-size: clamp(0.72rem, 2.2vw, 0.78rem);
     color: var(--color-text-subtle);
-    margin: 0.2rem 0 0 0;
+    margin: 0.15rem 0 0 0;
     line-height: 1.35;
   }
 
   .section-notice .icon {
     font-family: 'Material Symbols Outlined', sans-serif;
     color: var(--color-primary);
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     flex-shrink: 0;
     margin-top: 0.1rem;
   }
@@ -269,20 +271,25 @@ const t = useTranslations(lang);
   .accordion-meta-col {
     display: flex;
     align-items: center;
-    gap: 0.65rem;
+    gap: 0.4rem;
     flex-shrink: 0;
   }
 
   .accordion-price {
     font-family: var(--font-mono);
-    font-size: clamp(1.05rem, 3vw, 1.25rem);
+    font-size: clamp(0.95rem, 3.2vw, 1.25rem);
     font-weight: 700;
     color: var(--color-primary);
     white-space: nowrap;
+    text-align: end;
+  }
+
+  :global([dir="rtl"]) .accordion-price {
+    text-align: start;
   }
 
   .accordion-arrow {
-    font-size: 1.35rem;
+    font-size: 1.25rem;
     color: var(--color-text-subtle);
     transition: transform 0.2s ease;
     flex-shrink: 0;
