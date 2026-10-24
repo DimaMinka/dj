@@ -58,6 +58,7 @@ const clientConfig = {
     badgeProducer: t("quoteBadgeProducer"),
     badgeClientView: t("quoteBadgeClientView"),
     badgeEstimate: t("quoteBadge"),
+    defaultHeading: t("quoteDefaultHeading"),
   },
 };
 ---
@@ -925,12 +926,13 @@ const clientConfig = {
           clientProposalSection?.classList.remove('hidden');
           if (viewModeIndicator) viewModeIndicator.textContent = config.labels.badgeClientView;
           if (quoteStatusBadge) quoteStatusBadge.textContent = config.labels.grandTotal;
-          if (pageMainHeading) pageMainHeading.textContent = quote.client.venueName || 'Production Quote';
+          if (pageMainHeading) pageMainHeading.textContent = quote.client.venueName || config.labels.defaultHeading || 'Production Quote';
         } else {
           clientProposalSection?.classList.add('hidden');
           builderSection?.classList.remove('hidden');
           if (viewModeIndicator) viewModeIndicator.textContent = config.labels.badgeProducer;
           if (quoteStatusBadge) quoteStatusBadge.textContent = config.labels.badgeEstimate;
+          if (pageMainHeading) pageMainHeading.textContent = config.labels.pageTitle || pageMainHeading.textContent;
         }
       }
 
