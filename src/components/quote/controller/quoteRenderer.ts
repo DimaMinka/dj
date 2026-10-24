@@ -131,7 +131,7 @@ export function syncControlsToDom(
       btn.setAttribute('aria-pressed', 'true');
       btn.setAttribute('aria-label', config.labels.removeBtn);
       btn.setAttribute('title', config.labels.removeBtn);
-      if (icon) icon.textContent = 'check';
+      if (icon) icon.textContent = 'close';
       if (text) text.textContent = config.labels.removeBtn;
     } else {
       btn.classList.remove('active');

@@ -147,7 +147,7 @@ export function initQuoteApp(): void {
         btn.setAttribute('title', config.labels.removeBtn);
         const icon = btn.querySelector('.toggle-icon');
         const text = btn.querySelector('.toggle-text');
-        if (icon) icon.textContent = 'check';
+        if (icon) icon.textContent = 'close';
         if (text) text.textContent = config.labels.removeBtn;
       }
 
