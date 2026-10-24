@@ -431,15 +431,15 @@ const clientConfig = {
               <div class="trips-selector-block">
                 <span class="field-title">{t("quoteTripsCountLabel")}:</span>
                 <div class="trips-toggle-group">
-                  <button type="button" class="trip-toggle-btn active" data-trips="1">
+                  <button type="button" class="trip-toggle-btn hidden" data-trips="1" id="tripBtn1">
                     <span class="trip-badge">1×</span>
                     <span>{t("quoteTripOne")}</span>
                   </button>
-                  <button type="button" class="trip-toggle-btn" data-trips="2">
+                  <button type="button" class="trip-toggle-btn active" data-trips="2" id="tripBtn2">
                     <span class="trip-badge">2×</span>
                     <span>{t("quoteTripTwo")}</span>
                   </button>
-                  <button type="button" class="trip-toggle-btn" data-trips="3">
+                  <button type="button" class="trip-toggle-btn" data-trips="3" id="tripBtn3">
                     <span class="trip-badge">3×</span>
                     <span>{t("quoteTripThree")}</span>
                   </button>
@@ -618,7 +618,8 @@ const clientConfig = {
         clientName: '',
         eventDate: new Date().toISOString().split('T')[0],
         locationZone: 'upper_galilee',
-        tripsCount: 1,
+        tripsCount: 2,
+        minTripsCount: 2,
         djHours: 3.5,
         preprodHours: 6.0,
         setupHours: 9.0,
@@ -1062,6 +1063,31 @@ const clientConfig = {
           state.setupFee = matched.setupFee;
           state.daysCount = matched.daysCount;
           state.locationZone = matched.locationZone;
+
+          // Sync Trips Count & minimum trips constraint
+          const minTrips = matched.minTripsCount || 1;
+          state.minTripsCount = minTrips;
+          if ((state.tripsCount || 1) < minTrips) {
+            state.tripsCount = matched.tripsCount || minTrips;
+          }
+
+          const tripBtn1 = document.getElementById('tripBtn1');
+          if (tripBtn1) {
+            if (minTrips >= 2) {
+              tripBtn1.classList.add('hidden');
+            } else {
+              tripBtn1.classList.remove('hidden');
+            }
+          }
+
+          // Update active trip button
+          document.querySelectorAll('.trip-toggle-btn').forEach((b) => {
+            if (Number(b.getAttribute('data-trips')) === state.tripsCount) {
+              b.classList.add('active');
+            } else {
+              b.classList.remove('active');
+            }
+          });
 
           if (sliderDjHours) sliderDjHours.value = String(matched.djHours);
           if (sliderPreprodHours) sliderPreprodHours.value = String(matched.preprodHours);

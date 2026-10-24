@@ -104,6 +104,8 @@ export interface QuotePreset {
   preprodHours: number;
   setupFee: number;
   daysCount: number;
+  tripsCount?: number;
+  minTripsCount?: number;
   equipmentItemIds: { id: string; qty?: number }[];
   locationZone: LocationZoneId;
   featured?: boolean;

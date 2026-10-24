@@ -361,6 +361,8 @@ export const PRESETS: QuotePreset[] = [
     preprodHours: 6.0,
     setupFee: 1080, // 9h @ 120 ₪/h
     daysCount: 1,
+    tripsCount: 2,
+    minTripsCount: 2,
     locationZone: 'upper_galilee',
     equipmentItemIds: EQUIPMENT_CATALOG.map((item) => ({ id: item.id, qty: item.defaultQty })),
   },
@@ -380,6 +382,8 @@ export const PRESETS: QuotePreset[] = [
     preprodHours: 6.0,
     setupFee: 1080, // 9h @ 120 ₪/h
     daysCount: 2,
+    tripsCount: 2,
+    minTripsCount: 2,
     locationZone: 'upper_galilee',
     equipmentItemIds: EQUIPMENT_CATALOG.map((item) => ({ id: item.id, qty: item.defaultQty })),
   },
