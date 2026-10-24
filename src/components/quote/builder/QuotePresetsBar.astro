@@ -44,6 +44,9 @@ const t = useTranslations(lang);
     padding: clamp(0.65rem, 2vw, 0.85rem) clamp(0.85rem, 2.5vw, 1.25rem);
     border-radius: var(--radius-lg);
     margin-block-end: 2rem;
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow: hidden;
   }
 
   .presets-label {
@@ -66,15 +69,19 @@ const t = useTranslations(lang);
       flex-direction: column;
       align-items: flex-start;
       gap: 0.5rem;
+      width: 100%;
     }
 
     .presets-pills {
       flex-wrap: nowrap;
       overflow-x: auto;
       width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
       padding-block-end: 0.25rem;
       scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
     }
 
     .presets-pills::-webkit-scrollbar {
