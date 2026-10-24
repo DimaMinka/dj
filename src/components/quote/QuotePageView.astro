@@ -54,6 +54,7 @@ const clientConfig = {
     vat18: t("quoteVat18"),
     grandTotal: t("quoteGrandTotal"),
     icebergTooltipTemplate: t("quoteIcebergTooltip"),
+    minTripsWarning: t("quoteMinTripsWarning"),
     badgeProducer: t("quoteBadgeProducer"),
     badgeClientView: t("quoteBadgeClientView"),
     badgeEstimate: t("quoteBadge"),
@@ -993,7 +994,7 @@ const clientConfig = {
       document.querySelectorAll('.trip-toggle-btn').forEach((btn) => {
         btn.addEventListener('click', () => {
           if (btn.classList.contains('disabled-preset')) {
-            showToast('В авторском сетапе требуется минимум 2 выезда');
+            showToast(config.labels.minTripsWarning || 'Requires minimum 2 vehicle trips');
             return;
           }
           document.querySelectorAll('.trip-toggle-btn').forEach((b) => b.classList.remove('active'));

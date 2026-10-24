@@ -229,6 +229,7 @@ export const ui = {
     quoteRemoveBtn: 'Remove',
     quoteLiveRequestsNotice: 'Live guest requests supported directly via Apple Music / YouTube streaming to console',
     quoteCustomSetupNotice: '100% wired power lines and DMX routes seamlessly concealed along the perimeter',
+    quoteMinTripsWarning: 'Signature full rig requires minimum 2 vehicle trips (pre-rigging + show day)',
   },
 
   ru: {
@@ -448,6 +449,7 @@ export const ui = {
     quoteRemoveBtn: 'Убрать',
     quoteLiveRequestsNotice: 'Поддержка live-запросов гостей напрямую через Apple Music / YouTube на консоль',
     quoteCustomSetupNotice: '100% проводная разводка питания и DMX со скрытой прокладкой по внешнему периметру',
+    quoteMinTripsWarning: 'В авторском сетапе требуется минимум 2 выезда (предмонтаж трасс + день события)',
   },
 
   he: {
@@ -667,6 +669,7 @@ export const ui = {
     quoteRemoveBtn: 'הסרה',
     quoteLiveRequestsNotice: 'תמיכה בבקשות שירים חיות מהאורחים ישירות מ-Apple Music / YouTube לקונסולה',
     quoteCustomSetupNotice: 'חיווט חוטי 100% והזנות מתח ו-DMX מוסתרות לחלוטין בהיקף השטח',
+    quoteMinTripsWarning: 'בהפקת פרימיום נדרשות לפחות 2 נסיעות רכב (פריסה מוקדמת יום קודם + יום האירוע)',
   },
 } as const;
 
