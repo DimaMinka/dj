@@ -2550,9 +2550,12 @@ const clientConfig = {
 
   .proposal-table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
     font-size: 0.875rem;
     border: 1px solid var(--color-glass-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
   }
 
   .proposal-table thead th {
@@ -2569,30 +2572,34 @@ const clientConfig = {
     box-sizing: border-box;
   }
 
+  .proposal-table thead th:last-child {
+    border-inline-end: none;
+  }
+
   :global(html[data-theme="day"]:not(.dark)) .proposal-table thead th {
     background: var(--color-surface-container);
     color: var(--color-primary-container);
-    border-block-end: 1px solid rgba(217, 119, 6, 0.2);
-    border-inline-end: 1px solid rgba(217, 119, 6, 0.15);
+    border-block-end: 1px solid rgba(217, 119, 6, 0.25);
+    border-inline-end: 1px solid rgba(217, 119, 6, 0.2);
   }
 
   :global(html[data-theme="day"]:not(.dark)) .proposal-table {
-    border-color: rgba(217, 119, 6, 0.18);
+    border-color: rgba(217, 119, 6, 0.25);
     background: var(--color-surface);
   }
 
   :global(html[data-theme="day"]:not(.dark)) .prop-table-row td {
-    border-block-end-color: rgba(217, 119, 6, 0.12);
-    border-inline-end-color: rgba(217, 119, 6, 0.12);
+    border-block-end: 1px solid rgba(217, 119, 6, 0.18) !important;
+    border-inline-end: 1px solid rgba(217, 119, 6, 0.18) !important;
+  }
+
+  :global(html[data-theme="day"]:not(.dark)) .prop-table-row td:last-child {
+    border-inline-end: none !important;
   }
 
   :global(html[data-theme="day"]:not(.dark)) .proposal-accordion-content {
     background: #faf6f8;
-    border-block-start-color: rgba(217, 119, 6, 0.18);
-  }
-
-  .proposal-table thead th:last-child {
-    border-inline-end: none;
+    border-block-start-color: rgba(217, 119, 6, 0.25);
   }
 
   .proposal-table thead th.th-name {
@@ -2621,12 +2628,12 @@ const clientConfig = {
     box-sizing: border-box;
   }
 
-  .prop-table-row:last-child td {
-    border-block-end: none;
-  }
-
   .prop-table-row td:last-child {
     border-inline-end: none;
+  }
+
+  .prop-table-row:last-child td {
+    border-block-end: none;
   }
 
   .prop-table-row td.td-name {
