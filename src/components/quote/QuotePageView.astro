@@ -171,8 +171,8 @@ const clientConfig = {
                 <table class="proposal-table">
                   <thead>
                     <tr>
-                      <th class="th-qty">{t("quoteThQty")}</th>
                       <th class="th-name">{t("quoteThName")}</th>
+                      <th class="th-qty">{t("quoteThQty")}</th>
                       <th class="th-price">{t("quoteThPrice")}</th>
                     </tr>
                   </thead>
@@ -910,8 +910,8 @@ const clientConfig = {
                   : `<bdi>${formatCurrency(item.totalPrice)} ₪</bdi>`;
                 return `
                 <tr class="prop-table-row">
-                  <td class="td-qty"><span class="table-qty-badge">${item.quantity}</span></td>
                   <td class="td-name"><span class="table-item-name">${item.name[config.lang] || item.name.en}</span></td>
+                  <td class="td-qty"><span class="table-qty-badge">${item.quantity}</span></td>
                   <td class="td-price">${priceDisplay}</td>
                 </tr>
               `;
