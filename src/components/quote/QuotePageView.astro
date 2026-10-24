@@ -2550,6 +2550,7 @@ const clientConfig = {
 
   .proposal-table {
     width: 100%;
+    table-layout: fixed;
     border-collapse: separate;
     border-spacing: 0;
     font-size: 0.875rem;
@@ -2570,6 +2571,7 @@ const clientConfig = {
     border-block-end: 1px solid var(--color-glass-border);
     border-inline-end: 1px solid var(--color-glass-border);
     box-sizing: border-box;
+    vertical-align: middle;
   }
 
   .proposal-table thead th:last-child {
@@ -2602,21 +2604,32 @@ const clientConfig = {
     border-block-start-color: rgba(217, 119, 6, 0.25);
   }
 
-  .proposal-table thead th.th-name {
+  /* Specific column widths & perfect header-data alignment */
+  .proposal-table th.th-name,
+  .proposal-table td.td-name {
     text-align: start;
-    padding-inline-start: 1.25rem;
+    padding-inline: 1.25rem;
+    box-sizing: border-box;
   }
 
-  .proposal-table thead th.th-qty {
+  .proposal-table th.th-qty,
+  .proposal-table td.td-qty {
     width: 90px;
+    min-width: 90px;
+    max-width: 90px;
     text-align: center;
     padding-inline: 0.5rem;
+    box-sizing: border-box;
   }
 
-  .proposal-table thead th.th-price {
-    width: 140px;
+  .proposal-table th.th-price,
+  .proposal-table td.td-price {
+    width: 150px;
+    min-width: 150px;
+    max-width: 150px;
     text-align: start;
-    padding-inline-start: 1.25rem;
+    padding-inline: 1.25rem;
+    box-sizing: border-box;
   }
 
   .prop-table-row td {
@@ -2636,21 +2649,6 @@ const clientConfig = {
     border-block-end: none;
   }
 
-  .prop-table-row td.td-name {
-    text-align: start;
-    padding-inline-start: 1.25rem;
-  }
-
-  .prop-table-row td.td-qty {
-    text-align: center;
-    padding-inline: 0.5rem;
-  }
-
-  .prop-table-row td.td-price {
-    text-align: start;
-    padding-inline-start: 1.25rem;
-  }
-
   .table-qty-badge {
     display: inline-flex;
     align-items: center;
@@ -2666,11 +2664,14 @@ const clientConfig = {
     padding: 0 0.5rem;
     border-radius: var(--radius-sm);
     box-sizing: border-box;
+    margin-inline: auto;
   }
 
   .table-item-name {
+    display: block;
     font-weight: 500;
     line-height: 1.4;
+    text-align: start;
   }
 
   .td-price {
