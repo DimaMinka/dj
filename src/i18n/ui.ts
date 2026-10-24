@@ -167,6 +167,8 @@ export const ui = {
     // Quote & Cost Calculator
     quotePageTitle: 'Production Quote & Cost Calculator',
     quoteDefaultHeading: 'Production Quote',
+    quoteDefaultEventName: 'Bespoke Event Production',
+    quoteDefaultVenue: 'Venue / Villa',
     quotePageSubtitle: 'Transparent sound and architectural lighting production estimate for events in Galilee & Golan Heights.',
     quoteBadge: 'PRODUCTION ESTIMATE',
     quoteBadgeProducer: 'PRODUCER / BUILDER',
@@ -388,6 +390,8 @@ export const ui = {
     // Quote & Cost Calculator
     quotePageTitle: 'Калькулятор продакшна и сметы',
     quoteDefaultHeading: 'Смета продакшна',
+    quoteDefaultEventName: 'Авторский продакшн события',
+    quoteDefaultVenue: 'Локация / Площадка',
     quotePageSubtitle: 'Прозрачный детальный расчёт звукового и светового продакшна для вашего события в Галилее и на Голанах.',
     quoteBadge: 'РАСЧЁТ ПРОДАКШНА',
     quoteBadgeProducer: 'РЕЖИМ КОНСТРУКТОРА',
@@ -609,6 +613,8 @@ export const ui = {
     // Quote & Cost Calculator
     quotePageTitle: 'מחשבון הפקה והצעת מחיר',
     quoteDefaultHeading: 'הצעת מחיר להפקה',
+    quoteDefaultEventName: 'הפקת אירוע בהתאמה אישית',
+    quoteDefaultVenue: 'מקום האירוע / וילה',
     quotePageSubtitle: 'הצעת מחיר שקופה ומפורטת למערך סאונד ותאורה חמה לאירוע שלכם בגליל ובגולן.',
     quoteBadge: 'הצעת מחיר והפקה מותאמת',
     quoteBadgeProducer: 'מצב עריכה והפקה',

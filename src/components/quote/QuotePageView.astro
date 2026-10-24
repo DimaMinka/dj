@@ -59,6 +59,8 @@ const clientConfig = {
     badgeClientView: t("quoteBadgeClientView"),
     badgeEstimate: t("quoteBadge"),
     defaultHeading: t("quoteDefaultHeading"),
+    defaultEventName: t("quoteDefaultEventName"),
+    defaultVenue: t("quoteDefaultVenue"),
   },
 };
 ---
@@ -106,9 +108,9 @@ const clientConfig = {
           <div class="proposal-top-header">
             <div>
               <span class="proposal-meta-tag">{t("quoteClientViewBadge")}</span>
-              <h2 class="proposal-event-name" id="propEventName">Bespoke Event Production</h2>
+              <h2 class="proposal-event-name" id="propEventName">{t("quoteDefaultEventName")}</h2>
               <div class="proposal-event-meta">
-                <span id="propVenue">Dalton Winery</span>
+                <span id="propVenue">{t("quoteDefaultVenue")}</span>
                 <span class="sep">•</span>
                 <span id="propDate">2026-10-24</span>
                 <span class="sep">•</span>
@@ -831,8 +833,8 @@ const clientConfig = {
         }
 
         // Render Proposal View Elements
-        if (propEventName) propEventName.textContent = quote.client.venueName || 'Bespoke Event Production';
-        if (propVenue) propVenue.textContent = quote.client.venueName || 'Venue';
+        if (propEventName) propEventName.textContent = quote.client.venueName || config.labels.defaultEventName || 'Bespoke Event Production';
+        if (propVenue) propVenue.textContent = quote.client.venueName || config.labels.defaultVenue || 'Venue';
         if (propDate) propDate.textContent = quote.client.eventDate || new Date().toISOString().split('T')[0];
         if (propZone) {
           const matchedZone = config.zones.find((z: any) => z.id === quote.client.locationZone);
