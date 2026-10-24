@@ -431,17 +431,21 @@ const clientConfig = {
               <div class="trips-selector-block">
                 <span class="field-title">{t("quoteTripsCountLabel")}:</span>
                 <div class="trips-toggle-group">
-                  <button type="button" class="trip-toggle-btn hidden" data-trips="1" id="tripBtn1">
+                  <button type="button" class="trip-toggle-btn disabled-preset" data-trips="1" id="tripBtn1" title={t("quoteAlwaysIncluded")}>
                     <span class="trip-badge">1×</span>
-                    <span>{t("quoteTripOne")}</span>
+                    <span class="trip-title-text">{t("quoteTripOne")}</span>
+                    <span class="trip-lock-badge">
+                      <span class="icon">lock</span>
+                      <span>{t("quoteIncludedBadge")}</span>
+                    </span>
                   </button>
                   <button type="button" class="trip-toggle-btn active" data-trips="2" id="tripBtn2">
                     <span class="trip-badge">2×</span>
-                    <span>{t("quoteTripTwo")}</span>
+                    <span class="trip-title-text">{t("quoteTripTwo")}</span>
                   </button>
                   <button type="button" class="trip-toggle-btn" data-trips="3" id="tripBtn3">
                     <span class="trip-badge">3×</span>
-                    <span>{t("quoteTripThree")}</span>
+                    <span class="trip-title-text">{t("quoteTripThree")}</span>
                   </button>
                 </div>
               </div>
@@ -988,6 +992,10 @@ const clientConfig = {
       // Trips Count Toggle Buttons
       document.querySelectorAll('.trip-toggle-btn').forEach((btn) => {
         btn.addEventListener('click', () => {
+          if (btn.classList.contains('disabled-preset')) {
+            showToast('В авторском сетапе требуется минимум 2 выезда');
+            return;
+          }
           document.querySelectorAll('.trip-toggle-btn').forEach((b) => b.classList.remove('active'));
           btn.classList.add('active');
           state.tripsCount = Number(btn.getAttribute('data-trips') || 1);
@@ -1073,10 +1081,13 @@ const clientConfig = {
 
           const tripBtn1 = document.getElementById('tripBtn1');
           if (tripBtn1) {
+            const lockBadge = tripBtn1.querySelector('.trip-lock-badge');
             if (minTrips >= 2) {
-              tripBtn1.classList.add('hidden');
+              tripBtn1.classList.add('disabled-preset');
+              if (lockBadge) lockBadge.classList.remove('hidden');
             } else {
-              tripBtn1.classList.remove('hidden');
+              tripBtn1.classList.remove('disabled-preset');
+              if (lockBadge) lockBadge.classList.add('hidden');
             }
           }
 
@@ -1801,6 +1812,38 @@ const clientConfig = {
     border-color: var(--color-primary);
     color: var(--color-primary);
     font-weight: 600;
+  }
+
+  .trip-toggle-btn.disabled-preset {
+    opacity: 0.65;
+    background: rgba(229, 169, 60, 0.04);
+    cursor: not-allowed;
+    border-color: rgba(229, 169, 60, 0.25);
+  }
+
+  .trip-title-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .trip-lock-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    background: var(--color-primary-glow);
+    border: 1px solid var(--color-primary);
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-full);
+    flex-shrink: 0;
+  }
+
+  .trip-lock-badge .icon {
+    font-size: 0.8rem;
   }
 
   .trip-badge {
