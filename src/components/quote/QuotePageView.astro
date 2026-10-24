@@ -509,9 +509,10 @@ const clientConfig = {
           <aside class="builder-receipt-col">
             <div class="receipt-card sticky-receipt">
               <div class="receipt-header">
-                <div class="receipt-header-top">
-                  <span class="receipt-badge">{t("quoteLiveEstimateBadge")}</span>
-                  <!-- Iceberg Ratio moved directly into Receipt Header -->
+                <span class="receipt-badge">{t("quoteLiveEstimateBadge")}</span>
+                <div class="receipt-title-row">
+                  <h3 class="receipt-title">{t("quoteSummaryTitle")}</h3>
+                  <!-- Iceberg Ratio in one line with Summary Title -->
                   <div class="iceberg-ratio-box" id="recIcebergRatioBox" tabindex="0" role="button" aria-label={t("quoteIcebergTitle")}>
                     <span class="iceberg-ratio-tag">1 : <span id="recIcebergRatioVal">5.4</span></span>
                     <span class="material-symbols-outlined ratio-info-icon" aria-hidden="true">info</span>
@@ -520,7 +521,6 @@ const clientConfig = {
                     </div>
                   </div>
                 </div>
-                <h3 class="receipt-title">{t("quoteSummaryTitle")}</h3>
               </div>
 
               <!-- Iceberg Indicator inside Receipt -->
@@ -1840,11 +1840,12 @@ const clientConfig = {
     margin-block-end: 1rem;
   }
 
-  .receipt-header-top {
+  .receipt-title-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 0.5rem;
+    gap: 0.75rem;
+    margin-block-start: 0.35rem;
   }
 
   .receipt-badge {
@@ -1857,7 +1858,7 @@ const clientConfig = {
   .receipt-title {
     font-family: var(--font-display);
     font-size: 1.25rem;
-    margin: 0.35rem 0 0 0;
+    margin: 0;
   }
 
   /* Iceberg */
