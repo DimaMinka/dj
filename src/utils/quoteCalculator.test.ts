@@ -130,7 +130,6 @@ describe('calculateQuote engine', () => {
 
   it('calculates the default "Sunset & Cocktail" preset with exact expected financials', () => {
     expect(DEFAULT_PRESET.id).toBe('sunset_cocktail');
-    expect(DEFAULT_PRESET.featured).toBe(true);
 
     const items = DEFAULT_PRESET.equipmentItemIds.map((spec) => {
       const catItem = EQUIPMENT_CATALOG.find((c) => c.id === spec.id)!;
@@ -165,15 +164,15 @@ describe('calculateQuote engine', () => {
 
     // denon_prime (0) + udg_stand (0) + sound_column (650) + retro_center (180) + retro_side_round (2*80=160) = 990 ₪
     expect(quote.equipment.subtotal).toBe(990);
-    // DJ: 2h * 400 = 800; Preprod: 1h * 150 = 150; Setup: 480; Logistics: 100 => 1,530 ₪
-    expect(quote.services.subtotal).toBe(1530);
-    // Gross: 990 + 1530 = 2,520 ₪
-    expect(quote.financials.grossTotal).toBe(2520);
-    expect(quote.financials.netTotal).toBe(2520);
-    // VAT 18%: 2520 * 0.18 = 453.6 => Math.round = 454 ₪
-    expect(quote.financials.vatAmount).toBe(454);
-    // Grand total: 2520 + 454 = 2,974 ₪
-    expect(quote.financials.grandTotal).toBe(2974);
+    // DJ: 2h * 400 = 800; Preprod: 1h * 150 = 150; Setup: 1h * 120 = 120; Logistics: 100 => 1,170 ₪
+    expect(quote.services.subtotal).toBe(1170);
+    // Gross: 990 + 1170 = 2,160 ₪
+    expect(quote.financials.grossTotal).toBe(2160);
+    expect(quote.financials.netTotal).toBe(2160);
+    // VAT 18%: 2160 * 0.18 = 388.8 => Math.round = 389 ₪
+    expect(quote.financials.vatAmount).toBe(389);
+    // Grand total: 2160 + 389 = 2,549 ₪
+    expect(quote.financials.grandTotal).toBe(2549);
   });
 });
 

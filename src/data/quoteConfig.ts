@@ -329,10 +329,9 @@ export const PRESETS: QuotePreset[] = [
       ru: 'Звуковая консоль + ретро-свет янтарного спектра для вилл и виноделен до 40 гостей.',
       he: 'עמדת סאונד מלאה + תאורת רטרו ענברית חמה לאירועי יין ושקיעה עד 40 אורחים.',
     },
-    featured: true,
     djHours: 2.0,
     preprodHours: 1.0,
-    setupFee: 480, // 4h @ 120 ₪/h
+    setupFee: 120, // 1h @ 120 ₪/h
     daysCount: 1,
     tripsCount: 1,
     minTripsCount: 1,
