@@ -285,24 +285,24 @@ export const LOCATION_ZONES: LocationZoneConfig[] = [
     defaultFee: 100,
   },
   {
-    id: 'golan',
-    name: {
-      en: 'Golan Heights & Merom Golan',
-      ru: 'Голанские высоты и Мером-Голан',
-      he: 'רמת הגולן ומרום גולן',
-    },
-    defaultDurationMin: 35,
-    defaultFee: 180,
-  },
-  {
     id: 'kinneret',
     name: {
       en: 'Sea of Galilee & Jordan Valley',
       ru: 'Озеро Кинерет и Иорданская долина',
       he: 'סובב כנרת ועמק הירדן',
     },
-    defaultDurationMin: 25,
-    defaultFee: 130,
+    defaultDurationMin: 45,
+    defaultFee: 200,
+  },
+  {
+    id: 'golan',
+    name: {
+      en: 'Golan Heights & Merom Golan',
+      ru: 'Голанские высоты и Мером-Голан',
+      he: 'רמת הגולן ומרום גולן',
+    },
+    defaultDurationMin: 60,
+    defaultFee: 250,
   },
   {
     id: 'custom',
@@ -311,8 +311,8 @@ export const LOCATION_ZONES: LocationZoneConfig[] = [
       ru: 'Центр / Индивидуальная локация',
       he: 'מרכז הארץ / מיקום מותאם אישית',
     },
-    defaultDurationMin: 60,
-    defaultFee: 300,
+    defaultDurationMin: 120,
+    defaultFee: 500,
   },
 ];
 
