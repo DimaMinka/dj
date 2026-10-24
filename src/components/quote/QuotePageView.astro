@@ -171,9 +171,9 @@ const clientConfig = {
                 <table class="proposal-table">
                   <thead>
                     <tr>
-                      <th class="th-qty">Кол-во</th>
-                      <th class="th-name">Наименование</th>
-                      <th class="th-price">Стоимость</th>
+                      <th class="th-qty">{t("quoteThQty")}</th>
+                      <th class="th-name">{t("quoteThName")}</th>
+                      <th class="th-price">{t("quoteThPrice")}</th>
                     </tr>
                   </thead>
                   <tbody id="propEquipmentList">
@@ -207,8 +207,8 @@ const clientConfig = {
                 <table class="proposal-table">
                   <thead>
                     <tr>
-                      <th class="th-name">Этап / Услуга</th>
-                      <th class="th-price">Стоимость</th>
+                      <th class="th-name">{t("quoteThService")}</th>
+                      <th class="th-price">{t("quoteThPrice")}</th>
                     </tr>
                   </thead>
                   <tbody id="propServicesList">
@@ -914,7 +914,7 @@ const clientConfig = {
                   : `<bdi>${formatCurrency(item.totalPrice)} ₪</bdi>`;
                 return `
                 <tr class="prop-table-row">
-                  <td class="td-qty"><span class="table-qty-badge">${item.quantity}×</span></td>
+                  <td class="td-qty"><span class="table-qty-badge">${item.quantity}</span></td>
                   <td class="td-name"><span class="table-item-name">${item.name[config.lang] || item.name.en}</span></td>
                   <td class="td-price">${priceDisplay}</td>
                 </tr>
@@ -2560,14 +2560,20 @@ const clientConfig = {
 
   .proposal-table thead th {
     font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-size: 0.725rem;
+    font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--color-text-subtle);
-    background: rgba(0, 0, 0, 0.15);
-    padding: 0.65rem 1.25rem;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 0.75rem 1.25rem;
     text-align: start;
     border-block-end: 1px solid var(--color-glass-border);
+    border-inline-end: 1px solid var(--color-glass-border);
+  }
+
+  .proposal-table thead th:last-child {
+    border-inline-end: none;
   }
 
   .proposal-table thead th.th-price,
@@ -2577,13 +2583,25 @@ const clientConfig = {
 
   .proposal-table thead th.th-qty,
   .proposal-table td.td-qty {
-    width: 60px;
+    width: 70px;
+    text-align: center;
   }
 
   .prop-table-row td {
     padding: 0.75rem 1.25rem;
     border-block-end: 1px solid var(--color-glass-border);
+    border-inline-end: 1px solid var(--color-glass-border);
     color: var(--color-text-main);
+    text-align: start;
+    vertical-align: middle;
+  }
+
+  .prop-table-row td:last-child {
+    border-inline-end: none;
+  }
+
+  .prop-table-row td.td-qty {
+    text-align: center;
   }
 
   .prop-table-row:last-child td {
@@ -2591,12 +2609,17 @@ const clientConfig = {
   }
 
   .table-qty-badge {
+    display: inline-block;
+    min-width: 24px;
     font-family: var(--font-mono);
     font-weight: 700;
+    font-size: 0.85rem;
     color: var(--color-primary);
     background: var(--color-primary-glow);
-    padding: 0.15rem 0.45rem;
+    border: 1px solid rgba(229, 169, 60, 0.25);
+    padding: 0.2rem 0.5rem;
     border-radius: var(--radius-sm);
+    text-align: center;
   }
 
   .table-item-name {
