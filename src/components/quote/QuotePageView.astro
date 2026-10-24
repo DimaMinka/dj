@@ -397,7 +397,7 @@ const clientConfig = {
               </div>
               <div class="form-grid">
                 <div class="form-field">
-                  <label for="inputSetupFee">Setup, Cabling & Teardown (₪)</label>
+                  <label for="inputSetupFee">{t("quoteSetupFeeLabel")}</label>
                   <input
                     type="number"
                     id="inputSetupFee"
@@ -405,18 +405,18 @@ const clientConfig = {
                     step="50"
                     value="500"
                   />
-                  <span class="field-hint">2h site rigging + 1.5h teardown & warehouse packing</span>
+                  <span class="field-hint">{t("quoteSetupFeeHint")}</span>
                 </div>
                 <div class="form-field">
-                  <label for="inputLogisticsFee">Travel & Logistics (₪)</label>
+                  <label for="inputLogisticsFee">{t("quoteLogisticsFeeLabel")}</label>
                   <input
                     type="number"
                     id="inputLogisticsFee"
                     min="0"
                     step="50"
-                    value="150"
+                    value="100"
                   />
-                  <span class="field-hint" id="logisticsHint">Upper Galilee (40 min one-way)</span>
+                  <span class="field-hint" id="logisticsHint">{LOCATION_ZONES[0].name[lang]} ({LOCATION_ZONES[0].defaultDurationMin} min)</span>
                 </div>
               </div>
             </div>
@@ -444,11 +444,11 @@ const clientConfig = {
                 </div>
                 <div class="discount-inputs hidden" id="discountInputsRow">
                   <div class="form-field">
-                    <label for="inputDiscountVal" id="discountValLabel">Value</label>
+                    <label for="inputDiscountVal" id="discountValLabel">{t("quoteDiscountValLabel")}</label>
                     <input type="number" id="inputDiscountVal" min="0" value="10" />
                   </div>
                   <div class="form-field">
-                    <label for="inputDiscountReason">Reason (Optional)</label>
+                    <label for="inputDiscountReason">{t("quoteDiscountReasonLabel")}</label>
                     <input
                       type="text"
                       id="inputDiscountReason"
@@ -460,7 +460,7 @@ const clientConfig = {
 
               <!-- VAT Mode Switch -->
               <div class="vat-mode-block">
-                <span class="field-title">VAT (מע״מ) 18%:</span>
+                <span class="field-title">{t("quoteVatTitle")}</span>
                 <div class="vat-toggle-group">
                   <button type="button" class="vat-btn active" data-vat="false">
                     {t("quotePriceWithoutVat")}
@@ -478,13 +478,13 @@ const clientConfig = {
             <div class="receipt-card sticky-receipt">
               <div class="receipt-header">
                 <span class="receipt-badge">LIVE ESTIMATE</span>
-                <h3 class="receipt-title">Production Summary</h3>
+                <h3 class="receipt-title">{t("quoteSummaryTitle")}</h3>
               </div>
 
               <!-- Iceberg Indicator inside Receipt -->
               <div class="receipt-iceberg">
                 <div class="iceberg-top">
-                  <span>Total Time: <strong id="recTotalHours">22.5h</strong></span>
+                  <span>{t("quoteTotalHours")}: <strong id="recTotalHours">22.5h</strong></span>
                   <span class="iceberg-ratio">1 : 5.4</span>
                 </div>
                 <div class="iceberg-bar">
@@ -492,27 +492,27 @@ const clientConfig = {
                   <div class="iceberg-segment behind" id="recBehindBar" style="width: 84%;"></div>
                 </div>
                 <div class="iceberg-legend">
-                  <span class="tag-stage">Stage: <strong id="recStageHours">3.5h</strong></span>
-                  <span class="tag-behind">Prep & Rig: <strong id="recBehindHours">19.0h</strong></span>
+                  <span class="tag-stage">{t("quoteStageHours")}: <strong id="recStageHours">3.5h</strong></span>
+                  <span class="tag-behind">{t("quoteBehindHours")}: <strong id="recBehindHours">19.0h</strong></span>
                 </div>
               </div>
 
               <!-- Itemized Receipt Lines -->
               <div class="receipt-lines">
                 <div class="rec-line">
-                  <span>Equipment Rental</span>
+                  <span>{t("quoteEquipRentalLabel")}</span>
                   <span class="rec-val"><bdi id="recEquipSubtotal">2,950 ₪</bdi></span>
                 </div>
                 <div class="rec-line">
-                  <span>Music & Services</span>
+                  <span>{t("quoteMusicServicesLabel")}</span>
                   <span class="rec-val"><bdi id="recServicesSubtotal">2,800 ₪</bdi></span>
                 </div>
                 <div class="rec-line gross-line">
-                  <span>Gross Subtotal</span>
+                  <span>{t("quoteGrossSubtotalLabel")}</span>
                   <span class="rec-val"><bdi id="recGrossTotal">5,750 ₪</bdi></span>
                 </div>
                 <div class="rec-line discount-line hidden" id="recDiscountLine">
-                  <span>Discount</span>
+                  <span>{t("quoteDiscountLabel")}</span>
                   <span class="rec-val discount-val">- <bdi id="recDiscountAmount">0 ₪</bdi></span>
                 </div>
                 <div class="rec-line net-line">
@@ -537,11 +537,11 @@ const clientConfig = {
                 </button>
                 <button type="button" class="btn-preview-prop" id="btnPreviewProposal">
                   <span class="icon">visibility</span>
-                  <span>Preview Client View</span>
+                  <span>{t("quotePreviewClientBtn")}</span>
                 </button>
                 <a href="#" class="btn-whatsapp-send" id="btnWhatsAppDirect" target="_blank" rel="noopener noreferrer">
                   <span class="icon">send</span>
-                  <span>Discuss on WhatsApp</span>
+                  <span>{t("quoteDiscussWhatsAppBtn")}</span>
                 </a>
                 <button type="button" class="btn-copy-json" id="btnCopyJsonSnapshot">
                   <span class="icon">data_object</span>

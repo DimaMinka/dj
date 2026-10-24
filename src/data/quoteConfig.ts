@@ -281,8 +281,8 @@ export const LOCATION_ZONES: LocationZoneConfig[] = [
       ru: 'Верхняя Галилея (Рош-Пина, Цфат, Дальтон)',
       he: 'גליל עליון (ראש פינה, צפת, דלתון)',
     },
-    defaultDurationMin: 40,
-    defaultFee: 150,
+    defaultDurationMin: 20,
+    defaultFee: 100,
   },
   {
     id: 'golan',
@@ -291,8 +291,8 @@ export const LOCATION_ZONES: LocationZoneConfig[] = [
       ru: 'Голанские высоты и Мером-Голан',
       he: 'רמת הגולן ומרום גולן',
     },
-    defaultDurationMin: 60,
-    defaultFee: 250,
+    defaultDurationMin: 35,
+    defaultFee: 180,
   },
   {
     id: 'kinneret',
@@ -301,8 +301,8 @@ export const LOCATION_ZONES: LocationZoneConfig[] = [
       ru: 'Озеро Кинерет и Иорданская долина',
       he: 'סובב כנרת ועמק הירדן',
     },
-    defaultDurationMin: 45,
-    defaultFee: 180,
+    defaultDurationMin: 25,
+    defaultFee: 130,
   },
   {
     id: 'custom',
@@ -311,8 +311,8 @@ export const LOCATION_ZONES: LocationZoneConfig[] = [
       ru: 'Центр / Индивидуальная локация',
       he: 'מרכז הארץ / מיקום מותאם אישית',
     },
-    defaultDurationMin: 90,
-    defaultFee: 400,
+    defaultDurationMin: 60,
+    defaultFee: 300,
   },
 ];
 
