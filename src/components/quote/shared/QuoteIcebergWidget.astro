@@ -24,7 +24,7 @@ const tooltipText = t('quoteIcebergTooltip').replace('{ratio}', ratioMultiplier)
     <div class="iceberg-header">
       <span class="iceberg-title">{t("quoteIcebergTitle")}</span>
       <div class="iceberg-ratio-box" id="propIcebergRatioBox" tabindex="0" role="button" aria-label={t("quoteIcebergTitle")}>
-        <span class="iceberg-ratio-tag">1 : <span id="propIcebergRatioVal">{ratioMultiplier}</span></span>
+        <span class="iceberg-ratio-tag"><bdi>1&nbsp;:&nbsp;<span id="propIcebergRatioVal">{ratioMultiplier}</span></bdi></span>
         <span class="material-symbols-outlined ratio-info-icon" aria-hidden="true">info</span>
         <div class="ratio-tooltip" id="propIcebergTooltip" role="tooltip">
           {tooltipText}
@@ -177,8 +177,8 @@ const tooltipText = t('quoteIcebergTooltip').replace('{ratio}', ratioMultiplier)
     position: relative;
     display: inline-flex;
     align-items: center;
-    gap: 0.3rem;
-    padding: 0.2rem 0.55rem;
+    gap: 0.25rem;
+    padding: 0.15rem clamp(0.35rem, 1.5vw, 0.5rem);
     background: rgba(147, 197, 253, 0.08);
     border: 1px solid rgba(147, 197, 253, 0.25);
     border-radius: var(--radius-full);
@@ -186,6 +186,7 @@ const tooltipText = t('quoteIcebergTooltip').replace('{ratio}', ratioMultiplier)
     user-select: none;
     transition: all 0.2s ease;
     flex-shrink: 0;
+    white-space: nowrap;
   }
 
   .iceberg-ratio-box:hover,
@@ -197,15 +198,17 @@ const tooltipText = t('quoteIcebergTooltip').replace('{ratio}', ratioMultiplier)
 
   .iceberg-ratio-tag {
     font-family: var(--font-mono);
-    font-size: 0.75rem;
+    font-size: clamp(0.68rem, 2vw, 0.75rem);
     font-weight: 600;
     color: var(--color-resonance);
-    letter-spacing: 0.04em;
+    letter-spacing: 0.02em;
     white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
   }
 
   .ratio-info-icon {
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     color: var(--color-resonance);
     opacity: 0.85;
     flex-shrink: 0;
