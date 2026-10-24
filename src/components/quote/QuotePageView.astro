@@ -408,6 +408,26 @@ const clientConfig = {
                 <span class="icon">local_shipping</span>
                 <h2>{t("quoteLogisticsSection")}</h2>
               </div>
+
+              <!-- Trips Selector -->
+              <div class="trips-selector-block">
+                <span class="field-title">{t("quoteTripsCountLabel")}:</span>
+                <div class="trips-toggle-group">
+                  <button type="button" class="trip-toggle-btn active" data-trips="1">
+                    <span class="trip-badge">1×</span>
+                    <span>{t("quoteTripOne")}</span>
+                  </button>
+                  <button type="button" class="trip-toggle-btn" data-trips="2">
+                    <span class="trip-badge">2×</span>
+                    <span>{t("quoteTripTwo")}</span>
+                  </button>
+                  <button type="button" class="trip-toggle-btn" data-trips="3">
+                    <span class="trip-badge">3×</span>
+                    <span>{t("quoteTripThree")}</span>
+                  </button>
+                </div>
+              </div>
+
               <div class="form-grid">
                 <div class="form-field">
                   <label for="inputSetupFee">{t("quoteSetupFeeLabel")}</label>
@@ -421,15 +441,12 @@ const clientConfig = {
                   <span class="field-hint">{t("quoteSetupFeeHint")}</span>
                 </div>
                 <div class="form-field">
-                  <label for="inputLogisticsFee">{t("quoteLogisticsFeeLabel")}</label>
-                  <input
-                    type="number"
-                    id="inputLogisticsFee"
-                    min="0"
-                    step="50"
-                    value="100"
-                  />
-                  <span class="field-hint" id="logisticsHint">{LOCATION_ZONES[0].name[lang]} ({LOCATION_ZONES[0].defaultDurationMin} min)</span>
+                  <label>{t("quoteLogisticsFeeLabel")}</label>
+                  <div class="computed-logistics-box">
+                    <span class="computed-val" id="computedLogisticsVal"><bdi>100 ₪</bdi></span>
+                    <span class="computed-calc-hint" id="computedLogisticsHint">1 trip × 100 ₪</span>
+                  </div>
+                  <span class="field-hint">{t("quoteLogisticsFeeHint")}</span>
                 </div>
               </div>
             </div>
@@ -591,10 +608,10 @@ const clientConfig = {
         clientName: '',
         eventDate: new Date().toISOString().split('T')[0],
         locationZone: 'upper_galilee',
+        tripsCount: 1,
         djHours: 3.5,
         preprodHours: 5.0,
         setupFee: 500,
-        logisticsFee: 150,
         daysCount: 1,
         itemsQty: {} as Record<string, number>,
         discountType: 'none' as 'none' | 'percentage' | 'fixed',
@@ -650,8 +667,8 @@ const clientConfig = {
       const preprodHoursVal = document.getElementById('preprodHoursVal');
       const preprodCostVal = document.getElementById('preprodCostVal');
       const inputSetupFee = document.getElementById('inputSetupFee') as HTMLInputElement;
-      const inputLogisticsFee = document.getElementById('inputLogisticsFee') as HTMLInputElement;
-      const logisticsHint = document.getElementById('logisticsHint');
+      const computedLogisticsVal = document.getElementById('computedLogisticsVal');
+      const computedLogisticsHint = document.getElementById('computedLogisticsHint');
       const discountInputsRow = document.getElementById('discountInputsRow');
       const inputDiscountVal = document.getElementById('inputDiscountVal') as HTMLInputElement;
       const inputDiscountReason = document.getElementById('inputDiscountReason') as HTMLInputElement;
@@ -695,6 +712,9 @@ const clientConfig = {
           quantity: state.itemsQty[catItem.id] || 0,
         }));
 
+        const matchedZone = config.zones.find((z: any) => z.id === state.locationZone) || config.zones[0];
+        const computedLogisticsFee = (matchedZone.defaultFee || 100) * (state.tripsCount || 1);
+
         const discountVal =
           state.discountType === 'none' ? 0 : Number(state.discountVal) || 0;
 
@@ -713,7 +733,7 @@ const clientConfig = {
           preprodHours: state.preprodHours,
           preprodRatePerHour: config.rates.preprodPerHour,
           setupTeardownFee: state.setupFee,
-          logisticsFee: state.logisticsFee,
+          logisticsFee: computedLogisticsFee,
           discount: {
             type: state.discountType === 'percentage' ? 'percentage' : 'fixed',
             value: discountVal,
@@ -742,6 +762,13 @@ const clientConfig = {
         if (djCostVal) djCostVal.textContent = `${formatCurrency(stageH * config.rates.djPerHour)} ₪`;
         if (preprodHoursVal) preprodHoursVal.textContent = `${quote.services.preprodHours.toFixed(1)}h`;
         if (preprodCostVal) preprodCostVal.textContent = `${formatCurrency(quote.services.preprodHours * config.rates.preprodPerHour)} ₪`;
+
+        // Render Computed Logistics in Builder
+        if (computedLogisticsVal) computedLogisticsVal.innerHTML = `<bdi>${formatCurrency(quote.services.logisticsFee)} ₪</bdi>`;
+        if (computedLogisticsHint) {
+          const matchedZone = config.zones.find((z: any) => z.id === state.locationZone) || config.zones[0];
+          computedLogisticsHint.textContent = `${state.tripsCount || 1} × ${matchedZone.defaultFee} ₪ (${matchedZone.defaultDurationMin} min)`;
+        }
 
         // Render Live Receipt
         if (recTotalHours) recTotalHours.textContent = `${totalH.toFixed(1)}h`;
@@ -949,13 +976,17 @@ const clientConfig = {
       selectLocationZone?.addEventListener('change', (e) => {
         const zoneId = (e.target as HTMLSelectElement).value;
         state.locationZone = zoneId;
-        const matched = config.zones.find((z: any) => z.id === zoneId);
-        if (matched) {
-          state.logisticsFee = matched.defaultFee;
-          if (inputLogisticsFee) inputLogisticsFee.value = String(matched.defaultFee);
-          if (logisticsHint) logisticsHint.textContent = `${matched.name[config.lang]} (${matched.defaultDurationMin} min)`;
-        }
         renderApp();
+      });
+
+      // Trips Count Toggle Buttons
+      document.querySelectorAll('.trip-toggle-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.trip-toggle-btn').forEach((b) => b.classList.remove('active'));
+          btn.classList.add('active');
+          state.tripsCount = Number(btn.getAttribute('data-trips') || 1);
+          renderApp();
+        });
       });
 
       sliderDjHours?.addEventListener('input', (e) => {
@@ -970,11 +1001,6 @@ const clientConfig = {
 
       inputSetupFee?.addEventListener('input', (e) => {
         state.setupFee = Math.max(0, Number((e.target as HTMLInputElement).value) || 0);
-        renderApp();
-      });
-
-      inputLogisticsFee?.addEventListener('input', (e) => {
-        state.logisticsFee = Math.max(0, Number((e.target as HTMLInputElement).value) || 0);
         renderApp();
       });
 
@@ -1701,6 +1727,73 @@ const clientConfig = {
     grid-template-columns: 1fr 2fr;
     gap: 0.75rem;
     margin-block-start: 0.85rem;
+  }
+
+  /* Trips Selector & Computed Box */
+  .trips-selector-block {
+    margin-block-end: 1.25rem;
+  }
+
+  .trips-toggle-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .trip-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 1rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-glass-border);
+    color: var(--color-text-main);
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-align: start;
+    transition: all 0.2s;
+  }
+
+  .trip-toggle-btn.active {
+    background: var(--color-primary-glow);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .trip-badge {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    background: var(--color-surface-container);
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-md);
+  }
+
+  .computed-logistics-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--color-surface);
+    border: 1px solid var(--color-glass-border);
+    border-radius: var(--radius-md);
+    padding: 0.65rem 0.85rem;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .computed-val {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--color-primary);
+    font-size: 1.05rem;
+  }
+
+  .computed-calc-hint {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-text-subtle);
   }
 
   /* Right Column: Sticky Live Receipt */
