@@ -1,0 +1,200 @@
+---
+import type { SupportedLang } from '../../../i18n/ui';
+import { useTranslations } from '../../../i18n/ui';
+import { LABOR_RATES } from '../../../data/quoteConfig';
+import { formatCurrency } from '../../../utils/quoteCalculator';
+
+interface Props {
+  initialDjHours?: number;
+  initialPreprodHours?: number;
+  lang: SupportedLang;
+}
+
+const {
+  initialDjHours = 2.0,
+  initialPreprodHours = 1.0,
+  lang,
+} = Astro.props;
+
+const t = useTranslations(lang);
+const djCost = initialDjHours * LABOR_RATES.djPerHour;
+const preprodCost = initialPreprodHours * LABOR_RATES.preprodPerHour;
+---
+
+<div class="control-card">
+  <div class="card-header">
+    <span class="icon">headphones</span>
+    <h2>{t("quoteLaborSection")}</h2>
+  </div>
+
+  <!-- Live DJ Hours -->
+  <div class="slider-group">
+    <div class="slider-top">
+      <span class="slider-title">{t("quoteStageHours")}</span>
+      <span class="rate-badge"><bdi>{LABOR_RATES.djPerHour} ₪ / h</bdi></span>
+      <span class="slider-val" id="djHoursVal">{initialDjHours.toFixed(1)}h</span>
+    </div>
+    <input
+      type="range"
+      id="sliderDjHours"
+      min="1"
+      max="8"
+      step="0.5"
+      value={initialDjHours}
+    />
+    <div class="slider-sub">
+      <span>1h</span>
+      <span class="highlight-cost" id="djCostVal"><bdi>{formatCurrency(djCost)} ₪</bdi></span>
+      <span>8h</span>
+    </div>
+  </div>
+
+  <!-- Pre-Production Hours -->
+  <div class="slider-group">
+    <div class="slider-top">
+      <span class="slider-title">{t("quoteServicePreprod")}</span>
+      <span class="rate-badge"><bdi>{LABOR_RATES.preprodPerHour} ₪ / h</bdi></span>
+      <span class="slider-val" id="preprodHoursVal">{initialPreprodHours.toFixed(1)}h</span>
+    </div>
+    <input
+      type="range"
+      id="sliderPreprodHours"
+      min="0"
+      max="8"
+      step="0.5"
+      value={initialPreprodHours}
+    />
+    <div class="slider-sub">
+      <span>0h</span>
+      <span class="highlight-cost" id="preprodCostVal"><bdi>{formatCurrency(preprodCost)} ₪</bdi></span>
+      <span>8h</span>
+    </div>
+  </div>
+
+  <div class="callout-box">
+    <span class="icon">music_cast</span>
+    <p>{t("quoteLiveRequestsNotice")}</p>
+  </div>
+</div>
+
+<style>
+  .control-card {
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--radius-lg);
+    padding: clamp(1rem, 3.5vw, 1.75rem);
+    box-sizing: border-box;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-block-end: 1.25rem;
+    border-block-end: 1px solid var(--color-glass-border);
+    padding-block-end: 0.85rem;
+  }
+
+  .card-header .icon {
+    font-family: 'Material Symbols Outlined', sans-serif;
+    color: var(--color-primary);
+    font-size: 1.5rem;
+  }
+
+  .card-header h2 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    margin: 0;
+    color: var(--color-text-main);
+  }
+
+  /* Sliders */
+  .slider-group {
+    background: var(--color-surface);
+    border: 1px solid var(--color-glass-border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    margin-block-end: 1rem;
+  }
+
+  .slider-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-block-end: 0.75rem;
+  }
+
+  .slider-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .rate-badge {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-primary);
+    background: var(--color-primary-glow);
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-full);
+  }
+
+  .slider-val {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-primary);
+  }
+
+  input[type="range"] {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--color-surface-container);
+    outline: none;
+    accent-color: var(--color-primary);
+    cursor: pointer;
+  }
+
+  .slider-sub {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--color-text-subtle);
+    margin-block-start: 0.5rem;
+  }
+
+  .highlight-cost {
+    font-family: var(--font-mono);
+    color: var(--color-text-main);
+    font-weight: 600;
+  }
+
+  /* Callout box */
+  .callout-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    background: var(--color-surface);
+    border-inline-start: 3px solid var(--color-primary);
+    padding: 0.85rem 1rem;
+    border-radius: var(--radius-md);
+    margin-block-start: 0.75rem;
+  }
+
+  .callout-box .icon {
+    font-family: 'Material Symbols Outlined', sans-serif;
+    color: var(--color-primary);
+    font-size: 1.25rem;
+    flex-shrink: 0;
+    margin-block-start: 0.1rem;
+  }
+
+  .callout-box p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    line-height: 1.4;
+  }
+</style>

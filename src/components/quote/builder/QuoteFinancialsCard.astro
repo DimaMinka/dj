@@ -1,0 +1,164 @@
+---
+import type { SupportedLang } from '../../../i18n/ui';
+import { useTranslations } from '../../../i18n/ui';
+
+interface Props {
+  lang: SupportedLang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<div class="control-card">
+  <div class="card-header">
+    <span class="icon">payments</span>
+    <h2>{t("quoteFinancialsSection")}</h2>
+  </div>
+
+  <!-- Discount Configuration -->
+  <div class="discount-block">
+    <span class="field-title">{t("quoteDiscountLabel")}:</span>
+    <div class="discount-type-tabs">
+      <button type="button" class="tab-btn" data-type="percentage">
+        {t("quoteDiscountPercent")}
+      </button>
+      <button type="button" class="tab-btn" data-type="fixed">
+        {t("quoteDiscountFixed")}
+      </button>
+    </div>
+    <div class="discount-inputs hidden" id="discountInputsRow">
+      <div class="form-field">
+        <label for="inputDiscountVal" id="discountValLabel">{t("quoteDiscountValLabel")}</label>
+        <input type="number" id="inputDiscountVal" min="0" value="10" />
+      </div>
+      <div class="form-field">
+        <label for="inputDiscountReason">{t("quoteDiscountReasonLabel")}</label>
+        <input
+          type="text"
+          id="inputDiscountReason"
+          placeholder={t("quoteDiscountReasonPlaceholder")}
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .control-card {
+    background: var(--color-surface-glass);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: var(--radius-lg);
+    padding: clamp(1rem, 3.5vw, 1.75rem);
+    box-sizing: border-box;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-block-end: 1.25rem;
+    border-block-end: 1px solid var(--color-glass-border);
+    padding-block-end: 0.85rem;
+  }
+
+  .card-header .icon {
+    font-family: 'Material Symbols Outlined', sans-serif;
+    color: var(--color-primary);
+    font-size: 1.5rem;
+  }
+
+  .card-header h2 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    margin: 0;
+    color: var(--color-text-main);
+  }
+
+  .field-title {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    margin-block-end: 0.5rem;
+  }
+
+  .discount-type-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .discount-type-tabs .tab-btn {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.65rem 1rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-glass-border);
+    color: var(--color-text-main);
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .discount-type-tabs .tab-btn.active {
+    background: var(--color-primary-glow);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .discount-inputs {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 0.75rem;
+    margin-block-start: 0.85rem;
+  }
+
+  @media (max-width: 480px) {
+    .discount-inputs {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .form-field label {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+  }
+
+  .form-field input {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    padding: 0.65rem 0.85rem;
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    color: var(--color-text-main);
+    border: 1px solid var(--color-glass-border);
+    outline: none;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    transition: border-color 0.2s;
+  }
+
+  .form-field input:focus {
+    border-color: var(--color-primary);
+  }
+
+  .hidden {
+    display: none !important;
+  }
+</style>

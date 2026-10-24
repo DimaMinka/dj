@@ -1,0 +1,251 @@
+---
+import type { SupportedLang } from '../../../i18n/ui';
+import { useTranslations } from '../../../i18n/ui';
+
+interface Props {
+  variant?: 'proposal' | 'receipt';
+  stageHours: number;
+  behindHours: number;
+  lang: SupportedLang;
+}
+
+const { variant = 'proposal', stageHours, behindHours, lang } = Astro.props;
+const t = useTranslations(lang);
+
+const totalH = (stageHours + behindHours).toFixed(1);
+const stagePct = Math.round((stageHours / Math.max(1, stageHours + behindHours)) * 100);
+const behindPct = 100 - stagePct;
+const ratioMultiplier = stageHours > 0 ? (behindHours / stageHours).toFixed(1) : '0.0';
+const tooltipText = t('quoteIcebergTooltip').replace('{ratio}', ratioMultiplier);
+---
+
+{variant === 'proposal' ? (
+  <div class="iceberg-panel">
+    <div class="iceberg-header">
+      <span class="iceberg-title">{t("quoteIcebergTitle")}</span>
+      <div class="iceberg-ratio-box" id="propIcebergRatioBox" tabindex="0" role="button" aria-label={t("quoteIcebergTitle")}>
+        <span class="iceberg-ratio-tag">1 : <span id="propIcebergRatioVal">{ratioMultiplier}</span></span>
+        <span class="material-symbols-outlined ratio-info-icon" aria-hidden="true">info</span>
+        <div class="ratio-tooltip" id="propIcebergTooltip" role="tooltip">
+          {tooltipText}
+        </div>
+      </div>
+      <span class="iceberg-total" id="propTotalHoursVal">{totalH}h</span>
+    </div>
+    <div class="iceberg-bar">
+      <div class="iceberg-segment stage" id="propStageSegment" style={`width: ${stagePct}%;`}></div>
+      <div class="iceberg-segment behind" id="propBehindSegment" style={`width: ${behindPct}%;`}></div>
+    </div>
+    <div class="iceberg-legend">
+      <div class="legend-item">
+        <span class="dot stage"></span>
+        <span>{t("quoteStageHours")}: <strong id="propStageHoursVal">{stageHours.toFixed(1)}h</strong></span>
+      </div>
+      <div class="legend-item">
+        <span class="dot behind"></span>
+        <span>{t("quoteBehindHours")}: <strong id="propBehindHoursVal">{behindHours.toFixed(1)}h</strong></span>
+      </div>
+    </div>
+  </div>
+) : (
+  <div class="receipt-iceberg">
+    <div class="iceberg-top">
+      <span>{t("quoteTotalHours")}: <strong id="recTotalHours">{totalH}h</strong></span>
+      <span class="iceberg-hours-hint">{t("quoteIcebergTitle")}</span>
+    </div>
+    <div class="iceberg-bar">
+      <div class="iceberg-segment stage" id="recStageBar" style={`width: ${stagePct}%;`}></div>
+      <div class="iceberg-segment behind" id="recBehindBar" style={`width: ${behindPct}%;`}></div>
+    </div>
+    <div class="iceberg-legend">
+      <span class="tag-stage">{t("quoteStageHours")}: <strong id="recStageHours">{stageHours.toFixed(1)}h</strong></span>
+      <span class="tag-behind">{t("quoteBehindHours")}: <strong id="recBehindHours">{behindHours.toFixed(1)}h</strong></span>
+    </div>
+  </div>
+)}
+
+<style>
+  .iceberg-panel,
+  .receipt-iceberg {
+    background: var(--color-surface);
+    border: 1px solid var(--color-glass-border);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    margin-block-end: 1.25rem;
+    box-sizing: border-box;
+  }
+
+  .iceberg-header,
+  .iceberg-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    margin-block-end: 0.5rem;
+    gap: 0.5rem;
+  }
+
+  .iceberg-title {
+    font-weight: 600;
+    color: var(--color-text-main);
+  }
+
+  .iceberg-total {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--color-primary);
+  }
+
+  .iceberg-hours-hint {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-text-subtle);
+    letter-spacing: 0.04em;
+  }
+
+  .iceberg-bar {
+    display: flex;
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    background: var(--color-surface-dim);
+    margin-block-end: 0.5rem;
+  }
+
+  .iceberg-segment.stage {
+    background: var(--color-primary);
+    transition: width 0.3s ease;
+  }
+
+  .iceberg-segment.behind {
+    background: var(--color-resonance);
+    transition: width 0.3s ease;
+  }
+
+  .iceberg-legend {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--color-text-subtle);
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .dot.stage,
+  .tag-stage {
+    background: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .tag-stage {
+    background: transparent;
+  }
+
+  .dot.behind,
+  .tag-behind {
+    background: var(--color-resonance);
+    color: var(--color-resonance);
+  }
+
+  .tag-behind {
+    background: transparent;
+  }
+
+  /* Interactive Iceberg Ratio Box & Tooltip */
+  .iceberg-ratio-box {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.2rem 0.55rem;
+    background: rgba(147, 197, 253, 0.08);
+    border: 1px solid rgba(147, 197, 253, 0.25);
+    border-radius: var(--radius-full);
+    cursor: help;
+    user-select: none;
+    transition: all 0.2s ease;
+  }
+
+  .iceberg-ratio-box:hover,
+  .iceberg-ratio-box:focus-visible {
+    background: rgba(147, 197, 253, 0.16);
+    border-color: var(--color-resonance);
+    outline: none;
+  }
+
+  .iceberg-ratio-tag {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-resonance);
+    letter-spacing: 0.04em;
+  }
+
+  .ratio-info-icon {
+    font-size: 0.95rem;
+    color: var(--color-resonance);
+    opacity: 0.85;
+  }
+
+  .ratio-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    right: 50%;
+    transform: translateX(50%) translateY(4px);
+    width: max-content;
+    max-width: min(280px, calc(100vw - 32px));
+    padding: 0.65rem 0.85rem;
+    background: rgba(15, 17, 23, 0.96);
+    border: 1px solid var(--color-glass-border);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: var(--radius-md);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    color: var(--color-text-main);
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    line-height: 1.45;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+    z-index: 50;
+    text-align: start;
+  }
+
+  :global([dir="rtl"]) .ratio-tooltip {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    text-align: start;
+  }
+
+  .iceberg-ratio-box:hover .ratio-tooltip,
+  .iceberg-ratio-box:focus-visible .ratio-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(50%) translateY(0);
+  }
+
+  :global([dir="rtl"]) .iceberg-ratio-box:hover .ratio-tooltip,
+  :global([dir="rtl"]) .iceberg-ratio-box:focus-visible .ratio-tooltip {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  :global(html[data-theme="day"]:not(.dark)) .ratio-tooltip {
+    background: rgba(255, 255, 255, 0.96);
+    border-color: rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    color: #1a1a1a;
+  }
+</style>
