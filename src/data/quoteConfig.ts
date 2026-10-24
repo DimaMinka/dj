@@ -320,9 +320,9 @@ export const PRESETS: QuotePreset[] = [
   {
     id: 'sunset_cocktail',
     name: {
-      en: 'Sunset & Cocktail Acoustic',
-      ru: 'Sunset & Cocktail (Камерный вечер)',
-      he: 'סשן שקיעה וקוקטייל (אינטימי)',
+      en: 'Sunset & Cocktail (Acoustic)',
+      ru: 'Закатный коктейль (Камерный вечер)',
+      he: 'קוקטייל שקיעה (אינטימי)',
     },
     description: {
       en: 'Sound console + warm retro center lamp and amber bars for intimate villa wine evenings.',
@@ -345,21 +345,21 @@ export const PRESETS: QuotePreset[] = [
     ],
   },
   {
-    id: 'full_production_22h',
+    id: 'full_production_signature',
     name: {
-      en: 'Signature Full Rig (22.5h Full Cycle)',
-      ru: 'Signature Full Rig (Полный цикл 22.5ч)',
-      he: 'הפקה מלאה חתימה (סבב מלא 22.5 שעות)',
+      en: 'Signature Full Rig (Sound & Light)',
+      ru: 'Авторский сетап (Полный свет и звук)',
+      he: 'הפקת פרימיום (סאונד ותאורה מלאה)',
     },
     description: {
       en: 'All 16 fixtures, moving heads, SoundSwitch DMX programming, discreet cabling, and bespoke music pre-production.',
-      ru: 'Полный парк из 16 приборов, головы, лазер, SoundSwitch DMX режиссура, скрытая проводка и 5ч пре-продакшна.',
+      ru: 'Полный парк из 16 приборов, головы, лазер, SoundSwitch DMX режиссура, скрытая проводка и авторский пре-продакшн.',
       he: 'כל 16 גופי התאורה, מובינג הדס, סאונדסוויץ׳ DMX, כבילה מוסתרת והכנה מוזיקלית מלאה.',
     },
     featured: true,
     djHours: 3.5,
     preprodHours: 5.0,
-    setupFee: 500, // 2h setup + 1.5h teardown/warehouse at 120-150₪/h
+    setupFee: 500,
     daysCount: 1,
     locationZone: 'upper_galilee',
     equipmentItemIds: EQUIPMENT_CATALOG.map((item) => ({ id: item.id, qty: item.defaultQty })),
@@ -368,8 +368,8 @@ export const PRESETS: QuotePreset[] = [
     id: 'weekend_retreat',
     name: {
       en: 'Weekend Villa Retreat (2 Days)',
-      ru: 'Weekend Villa Retreat (2 суток / Уикенд)',
-      he: 'ריטריט וילה לסופ״ש (יומיים)',
+      ru: 'Уикенд на вилле (2 суток)',
+      he: 'ריטריט וילה (יומיים מלאים)',
     },
     description: {
       en: 'Full sound & lighting setup across Friday sunset and Saturday night party with 1.6x weekend equipment multiplier.',
