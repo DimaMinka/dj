@@ -448,14 +448,11 @@ const clientConfig = {
 
               <div class="form-grid">
                 <div class="form-field">
-                  <label for="inputSetupFee">{t("quoteSetupFeeLabel")}</label>
-                  <input
-                    type="number"
-                    id="inputSetupFee"
-                    min="0"
-                    step="50"
-                    value="500"
-                  />
+                  <label>{t("quoteSetupFeeLabel")}</label>
+                  <div class="computed-logistics-box">
+                    <span class="computed-val" id="computedSetupVal"><bdi>1,080 ₪</bdi></span>
+                    <span class="computed-calc-hint" id="computedSetupHint">9.0h × 120 ₪/h</span>
+                  </div>
                   <span class="field-hint">{t("quoteSetupFeeHint")}</span>
                 </div>
                 <div class="form-field">
@@ -623,8 +620,9 @@ const clientConfig = {
         locationZone: 'upper_galilee',
         tripsCount: 1,
         djHours: 3.5,
-        preprodHours: 5.0,
-        setupFee: 500,
+        preprodHours: 6.0,
+        setupHours: 9.0,
+        setupFee: 1080,
         daysCount: 1,
         itemsQty: {} as Record<string, number>,
         discountType: 'none' as 'none' | 'percentage' | 'fixed',
@@ -681,7 +679,8 @@ const clientConfig = {
       const sliderPreprodHours = document.getElementById('sliderPreprodHours') as HTMLInputElement;
       const preprodHoursVal = document.getElementById('preprodHoursVal');
       const preprodCostVal = document.getElementById('preprodCostVal');
-      const inputSetupFee = document.getElementById('inputSetupFee') as HTMLInputElement;
+      const computedSetupVal = document.getElementById('computedSetupVal');
+      const computedSetupHint = document.getElementById('computedSetupHint');
       const computedLogisticsVal = document.getElementById('computedLogisticsVal');
       const computedLogisticsHint = document.getElementById('computedLogisticsHint');
       const discountInputsRow = document.getElementById('discountInputsRow');
@@ -765,11 +764,7 @@ const clientConfig = {
 
         // 1. Time / Iceberg calculation
         const stageH = quote.services.djPerformanceHours;
-        const behindH =
-          quote.services.preprodHours +
-          2.0 + // On-site rigging & soundcheck
-          1.5 + // Teardown & packing
-          1.5;  // Warehouse / cable management
+        const behindH = quote.services.preprodHours + (state.setupHours || 9.0);
         const totalH = stageH + behindH;
         const stagePct = Math.round((stageH / Math.max(1, totalH)) * 100);
         const behindPct = 100 - stagePct;
@@ -781,6 +776,12 @@ const clientConfig = {
         if (djCostVal) djCostVal.textContent = `${formatCurrency(stageH * config.rates.djPerHour)} ₪`;
         if (preprodHoursVal) preprodHoursVal.textContent = `${quote.services.preprodHours.toFixed(1)}h`;
         if (preprodCostVal) preprodCostVal.textContent = `${formatCurrency(quote.services.preprodHours * config.rates.preprodPerHour)} ₪`;
+
+        // Render Computed Setup & Rigging Fee (Fixed based on preset / hours)
+        if (computedSetupVal) computedSetupVal.innerHTML = `<bdi>${formatCurrency(quote.services.setupTeardownFee)} ₪</bdi>`;
+        if (computedSetupHint) {
+          computedSetupHint.textContent = `${(state.setupHours || 9.0).toFixed(1)}h × ${config.rates.setupPerHour || 120} ₪/h`;
+        }
 
         // Render Computed Logistics in Builder
         if (computedLogisticsVal) computedLogisticsVal.innerHTML = `<bdi>${formatCurrency(quote.services.logisticsFee)} ₪</bdi>`;
@@ -879,7 +880,7 @@ const clientConfig = {
                 : ''
             }
             <div class="prop-service-row">
-              <span class="service-name">Site Rigging, Discreet Cabling & Teardown</span>
+              <span class="service-name">Site Rigging, Discreet Cabling & Teardown (${(state.setupHours || 9.0).toFixed(1)}h @ ${config.rates.setupPerHour || 120} ₪/h)</span>
               <span class="service-price"><bdi>${formatCurrency(quote.services.setupTeardownFee)} ₪</bdi></span>
             </div>
             <div class="prop-service-row">
@@ -1003,11 +1004,6 @@ const clientConfig = {
         renderApp();
       });
 
-      inputSetupFee?.addEventListener('input', (e) => {
-        state.setupFee = Math.max(0, Number((e.target as HTMLInputElement).value) || 0);
-        renderApp();
-      });
-
       // Toggle buttons for Equipment Catalog (Add / Remove)
       document.querySelectorAll('.toggle-equip-btn').forEach((btn) => {
         btn.addEventListener('click', () => {
@@ -1062,13 +1058,13 @@ const clientConfig = {
 
           state.djHours = matched.djHours;
           state.preprodHours = matched.preprodHours;
+          state.setupHours = Math.round(matched.setupFee / (config.rates.setupPerHour || 120));
           state.setupFee = matched.setupFee;
           state.daysCount = matched.daysCount;
           state.locationZone = matched.locationZone;
 
           if (sliderDjHours) sliderDjHours.value = String(matched.djHours);
           if (sliderPreprodHours) sliderPreprodHours.value = String(matched.preprodHours);
-          if (inputSetupFee) inputSetupFee.value = String(matched.setupFee);
           if (selectLocationZone) selectLocationZone.value = matched.locationZone;
 
           // Reset all equipment quantities and apply preset items

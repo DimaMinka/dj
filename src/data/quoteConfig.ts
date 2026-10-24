@@ -331,7 +331,7 @@ export const PRESETS: QuotePreset[] = [
     },
     djHours: 3.0,
     preprodHours: 2.0,
-    setupFee: 300,
+    setupFee: 480, // 4h @ 120 ₪/h
     daysCount: 1,
     locationZone: 'upper_galilee',
     equipmentItemIds: [
@@ -358,8 +358,8 @@ export const PRESETS: QuotePreset[] = [
     },
     featured: true,
     djHours: 3.5,
-    preprodHours: 5.0,
-    setupFee: 500,
+    preprodHours: 6.0,
+    setupFee: 1080, // 9h @ 120 ₪/h
     daysCount: 1,
     locationZone: 'upper_galilee',
     equipmentItemIds: EQUIPMENT_CATALOG.map((item) => ({ id: item.id, qty: item.defaultQty })),
@@ -377,8 +377,8 @@ export const PRESETS: QuotePreset[] = [
       he: 'מערך סאונד ותאורה לשישי שקיעה ומסיבת שבת עם מקדם השכרה מוזל של 1.6 לסופ״ש.',
     },
     djHours: 6.0,
-    preprodHours: 5.0,
-    setupFee: 600,
+    preprodHours: 6.0,
+    setupFee: 1080, // 9h @ 120 ₪/h
     daysCount: 2,
     locationZone: 'upper_galilee',
     equipmentItemIds: EQUIPMENT_CATALOG.map((item) => ({ id: item.id, qty: item.defaultQty })),
