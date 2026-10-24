@@ -462,9 +462,6 @@ const clientConfig = {
               <div class="discount-block">
                 <span class="field-title">{t("quoteDiscountLabel")}:</span>
                 <div class="discount-type-tabs">
-                  <button type="button" class="tab-btn active" data-type="none">
-                    {t("quoteDiscountNone")}
-                  </button>
                   <button type="button" class="tab-btn" data-type="percentage">
                     {t("quoteDiscountPercent")}
                   </button>
@@ -1101,19 +1098,28 @@ const clientConfig = {
         });
       });
 
-      // Discount Tabs
+      // Discount Tabs (Toggle on / off)
       document.querySelectorAll('.discount-type-tabs .tab-btn').forEach((btn) => {
         btn.addEventListener('click', () => {
-          document.querySelectorAll('.discount-type-tabs .tab-btn').forEach((b) => b.classList.remove('active'));
-          btn.classList.add('active');
-          const type = (btn.getAttribute('data-type') || 'none') as any;
-          state.discountType = type;
+          const type = (btn.getAttribute('data-type') || 'percentage') as any;
+          const wasActive = btn.classList.contains('active');
 
-          if (type === 'none') {
-            discountInputsRow?.classList.add('hidden');
+          if (wasActive) {
+            // Unselect discount
+            btn.classList.remove('active');
+            state.discountType = 'none';
             state.discountVal = 0;
+            discountInputsRow?.classList.add('hidden');
           } else {
+            // Select this discount type
+            document.querySelectorAll('.discount-type-tabs .tab-btn').forEach((b) => b.classList.remove('active'));
+            btn.classList.add('active');
+            state.discountType = type;
             discountInputsRow?.classList.remove('hidden');
+            if (!state.discountVal) {
+              state.discountVal = type === 'percentage' ? 10 : 200;
+              if (inputDiscountVal) inputDiscountVal.value = String(state.discountVal);
+            }
           }
           renderApp();
         });
