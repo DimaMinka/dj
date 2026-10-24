@@ -28,6 +28,24 @@ const categoriesOrder: EquipmentCategory[] = [
   'wash_fx',
   'stands',
 ];
+
+function formatItemsCount(count: number, currentLang: SupportedLang): string {
+  if (currentLang === 'ru') {
+    const mod10 = count % 10;
+    const mod100 = count % 100;
+    if (mod10 === 1 && mod100 !== 11) {
+      return `${count} ${t('quoteItemsCountOne')}`;
+    }
+    if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) {
+      return `${count} ${t('quoteItemsCountFew')}`;
+    }
+    return `${count} ${t('quoteItemsCountMany')}`;
+  }
+  if (currentLang === 'he') {
+    return `${count} ${count === 1 ? t('quoteItemsCountOne') : t('quoteItemsCountMany')}`;
+  }
+  return `${count} ${count === 1 ? t('quoteItemsCountOne') : t('quoteItemsCountMany')}`;
+}
 ---
 
 <div class="control-card">
@@ -72,7 +90,7 @@ const categoriesOrder: EquipmentCategory[] = [
         <div class="category-block">
           <div class="category-header">
             <span class="category-title">{CATEGORIES[catKey][lang]}</span>
-            <span class="category-count">{catItems.length} items</span>
+            <span class="category-count">{formatItemsCount(catItems.length, lang)}</span>
           </div>
           <div class="items-list">
             {catItems.map((item) => {

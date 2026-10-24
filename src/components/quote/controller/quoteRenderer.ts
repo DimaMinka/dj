@@ -189,7 +189,8 @@ export function renderApp(
   if (dom.computedLogisticsHint) {
     const matchedZone =
       config.zones.find((z) => z.id === state.locationZone) || config.zones[0];
-    dom.computedLogisticsHint.textContent = `${state.tripsCount || 1} × ${matchedZone.defaultFee} ₪ (${matchedZone.defaultDurationMin} min)`;
+    const minUnit = config.labels.minutesUnit || 'min';
+    dom.computedLogisticsHint.textContent = `${state.tripsCount || 1} × ${matchedZone.defaultFee} ₪ (${matchedZone.defaultDurationMin} ${minUnit})`;
   }
 
   // 4. Render Live Receipt (with strict <bdi> isolation)

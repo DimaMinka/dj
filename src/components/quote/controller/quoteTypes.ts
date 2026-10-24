@@ -39,6 +39,7 @@ export interface ClientQuoteConfig {
     serviceLogistics: string;
     tripsUnit: string;
     presetLoadedToast: string;
+    minutesUnit: string;
   };
 }
 

@@ -24,7 +24,7 @@ const t = useTranslations(lang);
       <input
         type="text"
         id="inputEventName"
-        placeholder="e.g. Ben Zimra Winery / Private Villa"
+        placeholder={t("quoteVenuePlaceholder")}
         value=""
       />
     </div>
@@ -33,7 +33,7 @@ const t = useTranslations(lang);
       <input
         type="text"
         id="inputClientName"
-        placeholder="e.g. Daniel & Maya"
+        placeholder={t("quoteClientNamePlaceholder")}
         value=""
       />
     </div>
@@ -50,7 +50,7 @@ const t = useTranslations(lang);
       <select id="selectLocationZone">
         {zones.map((zone) => (
           <option value={zone.id} selected={zone.id === selectedZoneId}>
-            {zone.name[lang]} ({zone.defaultDurationMin} min)
+            {zone.name[lang]} ({zone.defaultDurationMin} {t("quoteMinutesUnit")})
           </option>
         ))}
       </select>
