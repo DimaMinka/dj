@@ -43,6 +43,19 @@ dj/
 │   │   │   ├── IntroHeader.astro            # Vector DM logo, inline language switcher, theme toggle
 │   │   │   ├── SonicPortal.astro            # 432 Hz pulsating portal & ambient wave
 │   │   │   └── GatewayTrigger.astro         # 800ms tactile hold-to-enter ritual + transition to /vibe
+│   │   ├── quote/
+│   │   │   ├── QuotePageView.astro          # Master interactive quote view & mobile sticky summary
+│   │   │   ├── builder/
+│   │   │   │   ├── QuotePresetsBar.astro    # Curated production presets selector
+│   │   │   │   ├── QuoteEventCard.astro     # Stage duration, preprod, setup & date/client form
+│   │   │   │   ├── QuoteCatalogCard.astro   # Sound, lighting & atmosphere equipment picker
+│   │   │   │   ├── QuoteLogisticsCard.astro # Distance zones & vehicle trips calculator
+│   │   │   │   └── QuoteStickyReceipt.astro # Live pricing, Iceberg ratio & WhatsApp sharing
+│   │   │   ├── proposal/
+│   │   │   │   └── QuoteProposalView.astro  # Shareable client proposal view with card list
+│   │   │   └── controller/
+│   │   │       ├── quoteController.ts       # Reactive client-side DOM coordinator
+│   │   │       └── quoteRenderer.ts         # Proposal rendering & live calculations
 │   │   └── vibe/
 │   │       ├── VibeAtmosphere.astro         # Dynamic chromatic glow & watercolor crossfade
 │   │       ├── VibeHeader.astro             # Return navigation, monogram & 01/05 counter
@@ -51,18 +64,25 @@ dj/
 │   │       ├── VibeSoundDock.astro          # Floating micro-player with 432 Hz Solfeggio synth
 │   │       └── VibeSetupDrawer.astro        # Bottom-sheet modal rider for light & acoustics
 │   ├── data/
-│   │   └── spaces.ts                        # Data model & riders for 8 Sound Worlds
+│   │   ├── spaces.ts                        # Data model & riders for 8 Sound Worlds
+│   │   └── quoteConfig.ts                   # Equipment catalog, presets, rates & logistics config
 │   ├── i18n/
 │   │   └── ui.ts                            # UI dictionaries (en, ru, he), contacts & WhatsApp links
 │   ├── layouts/
 │   │   └── Layout.astro                     # Base HTML, fonts (Syne/Manrope/Mono/Heebo), Zero-FOUC
 │   ├── styles/
 │   │   └── tokens.css                       # Design tokens, themes & page transitions
+│   ├── utils/
+│   │   ├── quoteCalculator.ts               # Core quote financial engine & LZ-String compressor
+│   │   └── quoteCalculator.test.ts          # Vitest suite for financial & snapshot calculation
 │   └── pages/
 │       ├── index.astro                      # Intro Gateway page entrypoint
 │       ├── about.astro                      # About page (English)
 │       ├── ru/about.astro                   # About page (Russian)
 │       ├── he/about.astro                   # About page (Hebrew, RTL)
+│       ├── quote.astro                      # Interactive event production calculator (English)
+│       ├── ru/quote.astro                   # Quote calculator (Russian)
+│       ├── he/quote.astro                   # Quote calculator (Hebrew, RTL)
 │       ├── vibe.astro                       # Legacy alias (redirects to /vibes/sunset)
 │       └── vibes/
 │           ├── index.astro                  # Redirect to /vibes/sunset
@@ -118,19 +138,27 @@ Follow guidelines from [AGENTS.md](./AGENTS.md):
    * **Curated Northern Social Proof Ticker:** Seamless infinite marquee (`LocalSocialProof.astro`) showcasing premier terroirs and venues (Dalton Winery, Harei Galilee, Rosh Pina Private Villas, Golan Heights Terroir, Kinneret Lakeside Terraces, Pelter Winery Estate). Fully pinned to the bottom on desktop and cleanly scoped to the bottom sheet on mobile.
    * **Contextual WhatsApp Direct Booking CTA:** Deep-linked direct inquiry button with pre-filled space interest message (`getWhatsAppContextualLink()`) and pastel glassmorphic styling aligned with the aesthetic design tokens.
 
+6. [x] **Phase 6: Interactive Event Production Quote Calculator** (`feature/quote-calculator` -> PR [#7](https://github.com/DimaMinka/dj/pull/7)) — Complete transparent estimation & proposal engine:
+   * **Dynamic Pricing Engine:** Real-time financial calculations across DJ performance hours, music pre-production, setup & engineering labor, round-trip vehicle logistics, and itemized sound/light gear rentals with mandatory 18% VAT and discount toggles.
+   * **Iceberg Ratio Visualization:** Proprietary visual and metric indicator revealing the ratio of invisible pre-production & engineering hours versus visible stage time, highlighting the backstage craft behind boutique events.
+   * **Curated Sound & Light Presets:** Instant configuration switching for *Sunset & Cocktail*, *Private Villa Party*, and *Signature Full Rig* with automated constraints (e.g. minimum vehicle trips, setup hours).
+   * **Client Proposal Mode:** Sharable client-facing estimate cards with collapsible gear categories, live WhatsApp instant booking message pre-fill, and shareable URLs compressed via `lz-string` hash encoding.
+   * **Full Multilingual & RTL Support:** Seamless parity across English (`/quote`), Russian (`/ru/quote`), and Hebrew RTL (`/he/quote`) with localized placeholders, Slavic pluralization for gear counts, and language-specific display fonts (`Unbounded` on RU).
+   * **Mobile-First Ergonomics:** Fixed floating summary receipt on mobile viewports (360–393px), touch-optimized steppers and icon-only toggles, and safe viewport padding.
+   * **Test Suite:** Comprehensive Vitest coverage verifying all math formulas, discounts, weekend multipliers, and snapshot encode/decode cycles.
+
 ---
 
-## 📊 Resource & Quota Consumption (Today's Development Cycle)
+## 📊 Resource & Quota Consumption (Development Sprints Telemetry)
 
-Antigravity and CLI quota consumption telemetry measured across the development sprints (including Sound Worlds interactive tabs, WhatsApp contextual booking, social proof ticker, and aesthetic glassmorphism refinements):
+Antigravity quota consumption telemetry measured across the development sprints:
 
-### Antigravity Environment (Active Session `/usage`)
+### Antigravity Environment Usage Snapshot
 | Model Category | Metric | Consumed | Remaining | Reset Window |
 | :--- | :--- | :--- | :--- | :--- |
-| **Gemini Models** *(Flash, Pro)* | 5-Hour Limit | **24.59%** | **75.41%** | Refreshes in 2h 57m |
-| **Gemini Models** *(Flash, Pro)* | Weekly Limit | **13.60%** | **86.40%** | Refreshes in 145h 22m (~6d) |
-| **Gemini 4 Argon** | Weekly Limit | **8.84%** | **91.16%** | Refreshes in 145h 52m (~6d) |
-| **Claude & GPT Models** *(Opus, Sonnet, OSS)* | 5-Hour Limit | **0.00%** | **100.00%** | Quota available |
-| **Claude & GPT Models** *(Opus, Sonnet, OSS)* | Weekly Limit | **0.00%** | **100.00%** | Quota available |
+| **Gemini Models** *(Flash, Pro)* | 5-Hour Limit | **69%** | **31%** | Refreshes in 11 minutes |
+| **Gemini Models** *(Flash, Pro)* | Weekly Limit | **23%** | **77%** | Refreshes in 6 days, 11 hours |
+| **Claude and GPT models** | 5-Hour Limit | **0%** | **100%** | Quota pristine |
+| **Claude and GPT models** | Weekly Limit | **0%** | **100%** | Quota pristine |
 
-*Efficiency Summary: The multi-phase sprint—spanning complete interactive tabs with shimmer crossfading, localized social proof ticker marquee, scoped CSS isolation for responsive viewports, and pastel aesthetic tuning—consumed minimal quota, retaining **75.4%** on the 5-hour window, **86.4%** on the weekly Gemini limit, and **100%** pristine Claude/GPT quota.*
+*Efficiency Summary: The entire end-to-end implementation of Phase 6 (Quote Calculator engine, client proposal views, LZ-String state compression, full i18n/RTL, and responsive mobile architecture) was delivered within a single 5-hour Gemini window, leaving **31%** of the 5-hour limit and **77%** of the weekly limit intact, with **100%** Claude/GPT capacity reserved.*
