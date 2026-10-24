@@ -48,6 +48,8 @@ const clientConfig = {
     copiedLink: t("quoteLinkCopied"),
     copiedJson: t("quoteJsonCopied"),
     included: t("quoteIncludedBadge"),
+    addBtn: t("quoteAddBtn"),
+    removeBtn: t("quoteRemoveBtn"),
     subtotalBeforeVat: t("quoteSubtotalBeforeVat"),
     vat18: t("quoteVat18"),
     grandTotal: t("quoteGrandTotal"),
@@ -361,27 +363,38 @@ const clientConfig = {
                         <span class="category-count">{catItems.length} items</span>
                       </div>
                       <div class="items-list">
-                        {catItems.map((item) => (
-                          <div class="item-row" data-item-id={item.id} data-price={item.dailyRentalPrice}>
-                            <div class="item-info">
-                              <span class="item-name">{item.name[lang]}</span>
-                              <span class="item-rate">
-                                <bdi>{item.dailyRentalPrice} ₪</bdi> / day
-                              </span>
+                        {catItems.map((item) => {
+                          const isMandatory = item.id === 'denon_prime' || item.id === 'udg_stand';
+                          return (
+                            <div class={`item-row ${isMandatory ? 'mandatory-item' : ''}`} data-item-id={item.id} data-price={item.dailyRentalPrice}>
+                              <div class="item-info">
+                                <span class="item-name">{item.name[lang]}</span>
+                                <span class="item-rate">
+                                  <bdi>{item.dailyRentalPrice} ₪</bdi> / day
+                                </span>
+                              </div>
+                              <div class="item-toggle-action">
+                                {isMandatory ? (
+                                  <span class="badge-mandatory" title={t("quoteAlwaysIncluded")}>
+                                    <span class="icon">lock</span>
+                                    <span>{t("quoteIncludedBadge")}</span>
+                                  </span>
+                                ) : (
+                                  <button
+                                    type="button"
+                                    class="toggle-equip-btn active"
+                                    data-id={item.id}
+                                    data-qty={item.defaultQty}
+                                    aria-pressed="true"
+                                  >
+                                    <span class="toggle-icon">check</span>
+                                    <span class="toggle-text">{t("quoteRemoveBtn")}</span>
+                                  </button>
+                                )}
+                              </div>
                             </div>
-                            <div class="qty-stepper">
-                              <button type="button" class="stepper-btn btn-minus" data-id={item.id} aria-label="Decrease">
-                                −
-                              </button>
-                              <span class="qty-val" id={`qty-${item.id}`}>
-                                {item.defaultQty}
-                              </span>
-                              <button type="button" class="stepper-btn btn-plus" data-id={item.id} data-max={item.maxQty} aria-label="Increase">
-                                +
-                              </button>
-                            </div>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     </div>
                   );
@@ -965,23 +978,34 @@ const clientConfig = {
         renderApp();
       });
 
-      // Steppers for Equipment Catalog
-      document.querySelectorAll('.stepper-btn').forEach((btn) => {
+      // Toggle buttons for Equipment Catalog (Add / Remove)
+      document.querySelectorAll('.toggle-equip-btn').forEach((btn) => {
         btn.addEventListener('click', () => {
           const itemId = btn.getAttribute('data-id');
           if (!itemId) return;
-          const isMinus = btn.classList.contains('btn-minus');
-          const max = Number(btn.getAttribute('data-max') || 10);
+          const defaultQty = Number(btn.getAttribute('data-qty') || 1);
           const current = state.itemsQty[itemId] || 0;
 
-          if (isMinus) {
-            state.itemsQty[itemId] = Math.max(0, current - 1);
+          if (current > 0) {
+            // Remove
+            state.itemsQty[itemId] = 0;
+            btn.classList.remove('active');
+            btn.setAttribute('aria-pressed', 'false');
+            const icon = btn.querySelector('.toggle-icon');
+            const text = btn.querySelector('.toggle-text');
+            if (icon) icon.textContent = 'add';
+            if (text) text.textContent = config.labels.addBtn;
           } else {
-            state.itemsQty[itemId] = Math.min(max, current + 1);
+            // Add
+            state.itemsQty[itemId] = defaultQty;
+            btn.classList.add('active');
+            btn.setAttribute('aria-pressed', 'true');
+            const icon = btn.querySelector('.toggle-icon');
+            const text = btn.querySelector('.toggle-text');
+            if (icon) icon.textContent = 'check';
+            if (text) text.textContent = config.labels.removeBtn;
           }
 
-          const labelEl = document.getElementById(`qty-${itemId}`);
-          if (labelEl) labelEl.textContent = String(state.itemsQty[itemId]);
           renderApp();
         });
       });
@@ -1025,10 +1049,25 @@ const clientConfig = {
             state.itemsQty[spec.id] = spec.qty ?? 1;
           });
 
-          // Sync quantities in DOM
-          config.catalog.forEach((item: any) => {
-            const labelEl = document.getElementById(`qty-${item.id}`);
-            if (labelEl) labelEl.textContent = String(state.itemsQty[item.id] || 0);
+          // Sync toggle buttons in DOM
+          document.querySelectorAll('.toggle-equip-btn').forEach((btn) => {
+            const itemId = btn.getAttribute('data-id');
+            if (!itemId) return;
+            const hasItem = (state.itemsQty[itemId] || 0) > 0;
+            const icon = btn.querySelector('.toggle-icon');
+            const text = btn.querySelector('.toggle-text');
+
+            if (hasItem) {
+              btn.classList.add('active');
+              btn.setAttribute('aria-pressed', 'true');
+              if (icon) icon.textContent = 'check';
+              if (text) text.textContent = config.labels.removeBtn;
+            } else {
+              btn.classList.remove('active');
+              btn.setAttribute('aria-pressed', 'false');
+              if (icon) icon.textContent = 'add';
+              if (text) text.textContent = config.labels.addBtn;
+            }
           });
 
           renderApp();
@@ -1583,40 +1622,66 @@ const clientConfig = {
     color: var(--color-primary);
   }
 
-  /* Stepper */
-  .qty-stepper {
+  /* Action Button / Badge for Equipment row */
+  .item-toggle-action {
     display: flex;
     align-items: center;
-    border: 1px solid var(--color-glass-border);
-    border-radius: var(--radius-full);
-    overflow: hidden;
-    background: var(--color-surface-dim);
   }
 
-  .stepper-btn {
-    background: transparent;
-    border: none;
-    color: var(--color-text-main);
-    font-size: 1.1rem;
-    width: 32px;
-    height: 32px;
-    display: flex;
+  .badge-mandatory {
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-
-  .stepper-btn:hover {
-    background: var(--color-surface-container);
-  }
-
-  .qty-val {
+    gap: 0.35rem;
     font-family: var(--font-mono);
-    font-size: 0.9rem;
+    font-size: 0.75rem;
     font-weight: 600;
-    min-width: 24px;
-    text-align: center;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    background: var(--color-primary-glow);
+    border: 1px solid var(--color-primary);
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--radius-full);
+  }
+
+  .badge-mandatory .icon {
+    font-size: 0.9rem;
+  }
+
+  .toggle-equip-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.4rem 0.85rem;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    background: var(--color-surface-container);
+    border: 1px solid var(--color-glass-border);
+    color: var(--color-text-subtle);
+    transition: all 0.2s ease;
+  }
+
+  .toggle-equip-btn .toggle-icon {
+    font-family: 'Material Symbols Outlined', sans-serif;
+    font-size: 1rem;
+  }
+
+  .toggle-equip-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-text-main);
+  }
+
+  .toggle-equip-btn.active {
+    background: var(--color-primary-glow);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .mandatory-item {
+    background: rgba(229, 169, 60, 0.03);
   }
 
   /* Discount & VAT blocks */
