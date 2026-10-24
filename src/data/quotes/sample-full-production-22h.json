@@ -1,0 +1,235 @@
+{
+  "v": 1,
+  "id": "2026-10-signature-production-e9b2a1",
+  "createdAt": "2026-10-24T18:00:00.000Z",
+  "validUntil": "2026-11-07T18:00:00.000Z",
+  "language": "ru",
+  "client": {
+    "name": "Alex & Maria",
+    "eventDate": "2026-10-30",
+    "venueName": "Dalton Winery Estate",
+    "locationZone": "upper_galilee"
+  },
+  "equipment": {
+    "daysCount": 1,
+    "daysMultiplier": 1,
+    "subtotal": 2950,
+    "items": [
+      {
+        "id": "denon_prime",
+        "name": {
+          "en": "Denon DJ Prime Console",
+          "ru": "Консоль Denon DJ Prime",
+          "he": "קונסולת Denon DJ Prime"
+        },
+        "category": "sound",
+        "unitPrice": 600,
+        "quantity": 1,
+        "totalPrice": 600
+      },
+      {
+        "id": "udg_stand",
+        "name": {
+          "en": "UDG Mobile DJ Case & Stand",
+          "ru": "Мобильный кейс-стойка UDG",
+          "he": "עמדת קייס מקצועית UDG"
+        },
+        "category": "sound",
+        "unitPrice": 150,
+        "quantity": 1,
+        "totalPrice": 150
+      },
+      {
+        "id": "sound_column",
+        "name": {
+          "en": "Column Sound System (Tops + Subs)",
+          "ru": "Колонный звук (сабвуферы + топы)",
+          "he": "מערכת סאונד קולונה (סאבים + טופים)"
+        },
+        "category": "sound",
+        "unitPrice": 650,
+        "quantity": 1,
+        "totalPrice": 650
+      },
+      {
+        "id": "retro_center",
+        "name": {
+          "en": "Retro Center Round Statement Lamp",
+          "ru": "Ретро-центр (круглая лампа)",
+          "he": "גוף רטרו מרכזי עגול"
+        },
+        "category": "retro",
+        "unitPrice": 180,
+        "quantity": 1,
+        "totalPrice": 180
+      },
+      {
+        "id": "retro_side_round",
+        "name": {
+          "en": "Side Circular Warm Retro Fixtures",
+          "ru": "Боковые круглые ретро-приборы",
+          "he": "גופי רטרו עגולים צדדיים"
+        },
+        "category": "retro",
+        "unitPrice": 80,
+        "quantity": 2,
+        "totalPrice": 160
+      },
+      {
+        "id": "retro_vertical_bars",
+        "name": {
+          "en": "Side Vertical Warm Retro Light Bars",
+          "ru": "Боковые вертикальные ретро-бары",
+          "he": "עמודי תאורת רטרו אנכיים"
+        },
+        "category": "retro",
+        "unitPrice": 150,
+        "quantity": 2,
+        "totalPrice": 300
+      },
+      {
+        "id": "moving_lm70s",
+        "name": {
+          "en": "LED Wash/Beam Moving Heads (LM70S)",
+          "ru": "Головы LED Wash/Beam LM70S",
+          "he": "מובינג הדס LED Wash/Beam (LM70S)"
+        },
+        "category": "moving_heads",
+        "unitPrice": 65,
+        "quantity": 4,
+        "totalPrice": 260
+      },
+      {
+        "id": "moving_spot",
+        "name": {
+          "en": "LED Spot Moving Heads",
+          "ru": "Головы LED Spot Moving Head",
+          "he": "מובינג הדס LED Spot"
+        },
+        "category": "moving_heads",
+        "unitPrice": 75,
+        "quantity": 2,
+        "totalPrice": 150
+      },
+      {
+        "id": "led_bar_10",
+        "name": {
+          "en": "Linear LED Bar (10 Lenses Warm/Color)",
+          "ru": "Линейная панель LED Bar (10 линз)",
+          "he": "פס תאורה ליניארי LED Bar (10 עדשות)"
+        },
+        "category": "wash_fx",
+        "unitPrice": 120,
+        "quantity": 1,
+        "totalPrice": 120
+      },
+      {
+        "id": "led_par_18",
+        "name": {
+          "en": "LED Par 18 Flood Wash (RGB/RGBW)",
+          "ru": "Прожекторы заливки LED Par 18 RGB/RGBW",
+          "he": "פנסי שטיפה LED Par 18"
+        },
+        "category": "wash_fx",
+        "unitPrice": 40,
+        "quantity": 2,
+        "totalPrice": 80
+      },
+      {
+        "id": "led_par_uv",
+        "name": {
+          "en": "LED Par 36 UV Ultraviolet Flood",
+          "ru": "Прожектор LED Par 36 UV (ультрафиолет)",
+          "he": "פנס אולטרה-סגול LED Par 36 UV"
+        },
+        "category": "wash_fx",
+        "unitPrice": 35,
+        "quantity": 1,
+        "totalPrice": 35
+      },
+      {
+        "id": "mirror_ball",
+        "name": {
+          "en": "Motorized Disco Mirror Ball",
+          "ru": "Зеркальный шар с мотором",
+          "he": "כדור מראות ממונע"
+        },
+        "category": "wash_fx",
+        "unitPrice": 60,
+        "quantity": 1,
+        "totalPrice": 60
+      },
+      {
+        "id": "pinspot_white",
+        "name": {
+          "en": "Narrow Beam White Pinspot",
+          "ru": "Белый направленный пинспот",
+          "he": "פינספוט לבן ממוקד"
+        },
+        "category": "wash_fx",
+        "unitPrice": 30,
+        "quantity": 1,
+        "totalPrice": 30
+      },
+      {
+        "id": "laser_system",
+        "name": {
+          "en": "Laser Show System FX",
+          "ru": "Лазерная система Laser Show System",
+          "he": "מערכת מופע לייזר"
+        },
+        "category": "wash_fx",
+        "unitPrice": 35,
+        "quantity": 1,
+        "totalPrice": 35
+      },
+      {
+        "id": "led_candles",
+        "name": {
+          "en": "Ambiance LED Candle Set",
+          "ru": "Электронные свечи LED Candles (набор)",
+          "he": "סט נרות אווירה LED"
+        },
+        "category": "wash_fx",
+        "unitPrice": 60,
+        "quantity": 1,
+        "totalPrice": 60
+      },
+      {
+        "id": "stands_rig",
+        "name": {
+          "en": "Heavy-Duty Light & Sound Stands (Tripods & T-bars)",
+          "ru": "Стойки под свет и звук (штативы, Т-бары)",
+          "he": "סטנדים כבדים לתאורה וסאונד (חצובות וקורות T)"
+        },
+        "category": "stands",
+        "unitPrice": 80,
+        "quantity": 1,
+        "totalPrice": 80
+      }
+    ]
+  },
+  "services": {
+    "djPerformanceHours": 3.5,
+    "djRatePerHour": 400,
+    "preprodHours": 5,
+    "preprodRatePerHour": 150,
+    "setupTeardownFee": 500,
+    "logisticsFee": 150,
+    "subtotal": 2800
+  },
+  "financials": {
+    "grossTotal": 5750,
+    "discount": {
+      "type": "fixed",
+      "value": 0,
+      "amount": 0
+    },
+    "netTotal": 5750,
+    "applyVat": false,
+    "vatRate": 0.18,
+    "vatAmount": 0,
+    "grandTotal": 5750
+  },
+  "notes": "Full 22.5h production: 3.5h live DJ set, 5h bespoke pre-production & SoundSwitch DMX programming, 16 fixtures, discreet cable routing, Upper Galilee logistics."
+}
