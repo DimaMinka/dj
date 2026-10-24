@@ -66,7 +66,7 @@ export const EQUIPMENT_CATALOG: EquipmentItemConfig[] = [
     defaultQty: 1,
     maxQty: 1,
     purchasePrice: 12000,
-    dailyRentalPrice: 600,
+    dailyRentalPrice: 0,
   },
   {
     id: 'udg_stand',
@@ -79,7 +79,7 @@ export const EQUIPMENT_CATALOG: EquipmentItemConfig[] = [
     defaultQty: 1,
     maxQty: 1,
     purchasePrice: 1200,
-    dailyRentalPrice: 150,
+    dailyRentalPrice: 0,
   },
   {
     id: 'sound_column',

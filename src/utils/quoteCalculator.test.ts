@@ -34,9 +34,10 @@ describe('calculateQuote engine', () => {
     applyVat: false,
   };
 
-  it('calculates the exact equipment catalog total of 2,950 ₪ for 1 day', () => {
+  it('calculates the exact equipment catalog total of 2,200 ₪ for 1 day (core console & stand included at 0 ₪)', () => {
     const quote = calculateQuote(baseInput);
-    expect(quote.equipment.subtotal).toBe(2950);
+    // Total catalog rental excluding denon_prime (0) and udg_stand (0) is 2,200 ₪
+    expect(quote.equipment.subtotal).toBe(2200);
     expect(quote.equipment.items.length).toBe(16);
   });
 
@@ -46,9 +47,9 @@ describe('calculateQuote engine', () => {
       daysCount: 2,
     };
     const quote = calculateQuote(weekendInput);
-    // 2950 * 1.6 = 4720
+    // 2200 * 1.6 = 3520
     expect(quote.equipment.daysMultiplier).toBe(1.6);
-    expect(quote.equipment.subtotal).toBe(4720);
+    expect(quote.equipment.subtotal).toBe(3520);
   });
 
   it('calculates labor and services accurately', () => {
@@ -59,10 +60,10 @@ describe('calculateQuote engine', () => {
     // Logistics: 150
     // Total services = 2800
     expect(quote.services.subtotal).toBe(2800);
-    // Gross = 2950 + 2800 = 5750
-    expect(quote.financials.grossTotal).toBe(5750);
-    expect(quote.financials.netTotal).toBe(5750);
-    expect(quote.financials.grandTotal).toBe(5750);
+    // Gross = 2200 + 2800 = 5000
+    expect(quote.financials.grossTotal).toBe(5000);
+    expect(quote.financials.netTotal).toBe(5000);
+    expect(quote.financials.grandTotal).toBe(5000);
   });
 
   it('applies percentage discount strictly before VAT', () => {
@@ -76,15 +77,15 @@ describe('calculateQuote engine', () => {
       applyVat: true,
     };
     const quote = calculateQuote(inputWithDiscount);
-    // Gross: 5750
-    // Discount 10%: 575
-    // Net: 5175
-    // VAT 18%: 5175 * 0.18 = 931.5 -> 932
-    // Grand Total: 5175 + 932 = 6107
-    expect(quote.financials.discount.amount).toBe(575);
-    expect(quote.financials.netTotal).toBe(5175);
-    expect(quote.financials.vatAmount).toBe(932);
-    expect(quote.financials.grandTotal).toBe(6107);
+    // Gross: 5000
+    // Discount 10%: 500
+    // Net: 4500
+    // VAT 18%: 4500 * 0.18 = 810
+    // Grand Total: 4500 + 810 = 5310
+    expect(quote.financials.discount.amount).toBe(500);
+    expect(quote.financials.netTotal).toBe(4500);
+    expect(quote.financials.vatAmount).toBe(810);
+    expect(quote.financials.grandTotal).toBe(5310);
   });
 
   it('applies fixed discount with proper clamping', () => {
@@ -97,7 +98,7 @@ describe('calculateQuote engine', () => {
       },
     };
     const quote = calculateQuote(inputHighDiscount);
-    expect(quote.financials.discount.amount).toBe(5750);
+    expect(quote.financials.discount.amount).toBe(5000);
     expect(quote.financials.netTotal).toBe(0);
     expect(quote.financials.grandTotal).toBe(0);
 
@@ -111,7 +112,7 @@ describe('calculateQuote engine', () => {
     };
     const quoteNeg = calculateQuote(inputNegDiscount);
     expect(quoteNeg.financials.discount.amount).toBe(0);
-    expect(quoteNeg.financials.grandTotal).toBe(5750);
+    expect(quoteNeg.financials.grandTotal).toBe(5000);
   });
 
   it('correctly toggles VAT 18%', () => {
@@ -122,9 +123,9 @@ describe('calculateQuote engine', () => {
 
     const inputWithVat: CalculationInput = { ...baseInput, applyVat: true };
     const quoteVat = calculateQuote(inputWithVat);
-    // 5750 * 0.18 = 1035
-    expect(quoteVat.financials.vatAmount).toBe(1035);
-    expect(quoteVat.financials.grandTotal).toBe(5750 + 1035);
+    // 5000 * 0.18 = 900
+    expect(quoteVat.financials.vatAmount).toBe(900);
+    expect(quoteVat.financials.grandTotal).toBe(5000 + 900);
   });
 });
 

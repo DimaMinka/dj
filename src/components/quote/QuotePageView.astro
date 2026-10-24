@@ -382,7 +382,13 @@ const clientConfig = {
                               <div class="item-info">
                                 <span class="item-name">{item.name[lang]}</span>
                                 <span class="item-rate">
-                                  <bdi>{item.dailyRentalPrice} ₪</bdi> / day
+                                  {isMandatory ? (
+                                    <span class="rate-included">{t("quoteIncludedBadge")} (0 ₪)</span>
+                                  ) : (
+                                    <>
+                                      <bdi>{item.dailyRentalPrice} ₪</bdi> / day
+                                    </>
+                                  )}
                                 </span>
                               </div>
                               <div class="item-toggle-action">
@@ -533,7 +539,7 @@ const clientConfig = {
               <div class="receipt-lines">
                 <div class="rec-line">
                   <span>{t("quoteEquipRentalLabel")}</span>
-                  <span class="rec-val"><bdi id="recEquipSubtotal">2,950 ₪</bdi></span>
+                  <span class="rec-val"><bdi id="recEquipSubtotal">2,200 ₪</bdi></span>
                 </div>
                 <div class="rec-line">
                   <span>{t("quoteMusicServicesLabel")}</span>
@@ -541,7 +547,7 @@ const clientConfig = {
                 </div>
                 <div class="rec-line gross-line">
                   <span>{t("quoteGrossSubtotalLabel")}</span>
-                  <span class="rec-val"><bdi id="recGrossTotal">5,750 ₪</bdi></span>
+                  <span class="rec-val"><bdi id="recGrossTotal">5,000 ₪</bdi></span>
                 </div>
                 <div class="rec-line discount-line hidden" id="recDiscountLine">
                   <span>{t("quoteDiscountLabel")}</span>
@@ -549,15 +555,15 @@ const clientConfig = {
                 </div>
                 <div class="rec-line net-line">
                   <span>{t("quoteSubtotalBeforeVat")}</span>
-                  <span class="rec-val"><bdi id="recNetTotal">5,750 ₪</bdi></span>
+                  <span class="rec-val"><bdi id="recNetTotal">5,000 ₪</bdi></span>
                 </div>
                 <div class="rec-line vat-line" id="recVatLine">
                   <span>{t("quoteVat18")}</span>
-                  <span class="rec-val">+ <bdi id="recVatAmount">1,035 ₪</bdi></span>
+                  <span class="rec-val">+ <bdi id="recVatAmount">900 ₪</bdi></span>
                 </div>
                 <div class="rec-total-line">
                   <span id="recTotalLabel">{t("quoteGrandTotal")}</span>
-                  <span class="grand-price"><bdi id="recGrandTotal">6,785 ₪</bdi></span>
+                  <span class="grand-price"><bdi id="recGrandTotal">5,900 ₪</bdi></span>
                 </div>
               </div>
 
@@ -834,13 +840,19 @@ const clientConfig = {
           const activeItems = quote.equipment.items.filter((i) => i.quantity > 0);
           propEquipmentList.innerHTML = activeItems
             .map(
-              (item) => `
-              <div class="prop-item-row">
-                <span class="prop-item-qty">${item.quantity}×</span>
-                <span class="prop-item-name">${item.name[config.lang] || item.name.en}</span>
-                <span class="prop-item-price"><bdi>${formatCurrency(item.totalPrice)} ₪</bdi></span>
-              </div>
-            `
+              (item) => {
+                const isItemIncluded = item.id === 'denon_prime' || item.id === 'udg_stand';
+                const priceDisplay = isItemIncluded
+                  ? `<span class="rate-included">${config.labels.included || 'INCLUDED'}</span>`
+                  : `<bdi>${formatCurrency(item.totalPrice)} ₪</bdi>`;
+                return `
+                <div class="prop-item-row">
+                  <span class="prop-item-qty">${item.quantity}×</span>
+                  <span class="prop-item-name">${item.name[config.lang] || item.name.en}</span>
+                  <span class="prop-item-price">${priceDisplay}</span>
+                </div>
+              `;
+              }
             )
             .join('');
         }
@@ -1710,6 +1722,12 @@ const clientConfig = {
 
   .mandatory-item {
     background: rgba(229, 169, 60, 0.03);
+  }
+
+  .rate-included {
+    font-family: var(--font-mono);
+    color: var(--color-primary);
+    font-weight: 600;
   }
 
   /* Discount & VAT blocks */
