@@ -329,10 +329,13 @@ export const PRESETS: QuotePreset[] = [
       ru: 'Звуковая консоль + ретро-свет янтарного спектра для вилл и виноделен до 40 гостей.',
       he: 'עמדת סאונד מלאה + תאורת רטרו ענברית חמה לאירועי יין ושקיעה עד 40 אורחים.',
     },
-    djHours: 3.0,
-    preprodHours: 2.0,
+    featured: true,
+    djHours: 2.0,
+    preprodHours: 1.0,
     setupFee: 480, // 4h @ 120 ₪/h
     daysCount: 1,
+    tripsCount: 1,
+    minTripsCount: 1,
     locationZone: 'upper_galilee',
     equipmentItemIds: [
       { id: 'denon_prime', qty: 1 },
@@ -340,8 +343,6 @@ export const PRESETS: QuotePreset[] = [
       { id: 'sound_column', qty: 1 },
       { id: 'retro_center', qty: 1 },
       { id: 'retro_side_round', qty: 2 },
-      { id: 'led_candles', qty: 1 },
-      { id: 'stands_rig', qty: 1 },
     ],
   },
   {
@@ -356,7 +357,6 @@ export const PRESETS: QuotePreset[] = [
       ru: 'Полный парк из 16 приборов, головы, лазер, SoundSwitch DMX режиссура, скрытая проводка и авторский пре-продакшн.',
       he: 'כל 16 גופי התאורה, מובינג הדס, סאונדסוויץ׳ DMX, כבילה מוסתרת והכנה מוזיקלית מלאה.',
     },
-    featured: true,
     djHours: 3.5,
     preprodHours: 5.0,
     setupFee: 1080, // 9h @ 120 ₪/h
@@ -388,3 +388,6 @@ export const PRESETS: QuotePreset[] = [
     equipmentItemIds: EQUIPMENT_CATALOG.map((item) => ({ id: item.id, qty: item.defaultQty })),
   },
 ];
+
+export const DEFAULT_PRESET: QuotePreset = PRESETS.find((p) => p.featured) || PRESETS[0];
+

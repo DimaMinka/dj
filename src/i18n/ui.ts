@@ -237,6 +237,12 @@ export const ui = {
     quoteThPrice: 'Amount',
     quoteCustomSetupNotice: '100% wired power lines and DMX routes seamlessly concealed along the perimeter',
     quoteMinTripsWarning: 'Signature full rig requires minimum 2 vehicle trips (pre-rigging + show day)',
+    quoteServiceDjSet: 'Live DJ Set',
+    quoteServicePreprod: 'Music Pre-Production & SoundSwitch',
+    quoteServiceSetup: 'Site Rigging, Discreet Cabling & Teardown',
+    quoteServiceLogistics: 'Logistics & Location Travel',
+    quoteTripsUnit: 'trips',
+    quotePresetLoadedToast: 'Preset loaded',
   },
 
   ru: {
@@ -464,6 +470,12 @@ export const ui = {
     quoteThPrice: 'Стоимость',
     quoteCustomSetupNotice: '100% проводная разводка питания и DMX со скрытой прокладкой по внешнему периметру',
     quoteMinTripsWarning: 'В авторском сетапе требуется минимум 2 выезда (предмонтаж трасс + день события)',
+    quoteServiceDjSet: 'Живой DJ-сет',
+    quoteServicePreprod: 'Музыкальный препродакшн и SoundSwitch',
+    quoteServiceSetup: 'Монтаж, скрытая коммутация и демонтаж',
+    quoteServiceLogistics: 'Логистика и выезд на локацию',
+    quoteTripsUnit: 'выезд(а)',
+    quotePresetLoadedToast: 'Пресет загружен',
   },
 
   he: {
@@ -691,6 +703,12 @@ export const ui = {
     quoteThPrice: 'עלות',
     quoteCustomSetupNotice: 'חיווט חוטי 100% והזנות מתח ו-DMX מוסתרות לחלוטין בהיקף השטח',
     quoteMinTripsWarning: 'בהפקת פרימיום נדרשות לפחות 2 נסיעות רכב (פריסה מוקדמת יום קודם + יום האירוע)',
+    quoteServiceDjSet: 'סט דיג׳יי חי',
+    quoteServicePreprod: 'הכנה מוזיקלית ותכנות תאורה (SoundSwitch)',
+    quoteServiceSetup: 'הקמה, כבילה מוסתרת ופירוק',
+    quoteServiceLogistics: 'לוגיסטיקה ושינוע לאתר',
+    quoteTripsUnit: 'נסיעות',
+    quotePresetLoadedToast: 'תבנית נטענה',
   },
 } as const;
 
