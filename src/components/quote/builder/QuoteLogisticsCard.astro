@@ -153,6 +153,7 @@ const isTrip1Locked = initialMinTripsCount >= 2;
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    min-height: 44px;
     padding: clamp(0.55rem, 2vw, 0.65rem) clamp(0.65rem, 2vw, 1rem);
     background: var(--color-surface);
     border: 1px solid var(--color-glass-border);
@@ -163,6 +164,7 @@ const isTrip1Locked = initialMinTripsCount >= 2;
     cursor: pointer;
     text-align: start;
     transition: all 0.2s;
+    box-sizing: border-box;
   }
 
   .trip-toggle-btn.active {
