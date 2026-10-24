@@ -106,7 +106,7 @@ const t = useTranslations(lang);
       </div>
       <div class="financial-row vat-row" id="propVatRow">
         <span>{t("quoteVat18")}</span>
-        <span class="val">+ <span id="propVatVal"><bdi>{formatCurrency(initialQuote.financials.vatAmount)} ₪</bdi></span></span>
+        <span class="val" id="propVatVal"><bdi>+ {formatCurrency(initialQuote.financials.vatAmount)} ₪</bdi></span>
       </div>
       <div class="financial-row total-row">
         <span id="propTotalLabel">{t("quoteGrandTotal")}</span>

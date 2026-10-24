@@ -226,7 +226,7 @@ export function renderApp(
     dom.recNetTotal.innerHTML = `<bdi>${formatCurrency(quote.financials.netTotal)} ₪</bdi>`;
   }
   if (dom.recVatAmount) {
-    dom.recVatAmount.innerHTML = `<bdi>${formatCurrency(quote.financials.vatAmount)} ₪</bdi>`;
+    dom.recVatAmount.innerHTML = `<bdi>+ ${formatCurrency(quote.financials.vatAmount)} ₪</bdi>`;
   }
   if (dom.recTotalLabel) dom.recTotalLabel.textContent = config.labels.grandTotal;
   if (dom.recGrandTotal) {
@@ -378,7 +378,7 @@ export function renderApp(
   }
 
   if (dom.propVatVal) {
-    dom.propVatVal.innerHTML = `<bdi>${formatCurrency(quote.financials.vatAmount)} ₪</bdi>`;
+    dom.propVatVal.innerHTML = `<bdi>+ ${formatCurrency(quote.financials.vatAmount)} ₪</bdi>`;
   }
   if (dom.propTotalLabel) dom.propTotalLabel.textContent = config.labels.grandTotal;
   if (dom.propGrandTotalVal) {
