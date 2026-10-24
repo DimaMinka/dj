@@ -171,7 +171,7 @@ const clientConfig = {
               <span id="propDiscountLabel">{t("quoteDiscountLabel")}</span>
               <span class="val discount-val">- <bdi id="propDiscountVal">0 ₪</bdi></span>
             </div>
-            <div class="financial-row vat-row hidden" id="propVatRow">
+            <div class="financial-row vat-row" id="propVatRow">
               <span>{t("quoteVat18")}</span>
               <span class="val">+ <bdi id="propVatVal">0 ₪</bdi></span>
             </div>
@@ -484,19 +484,6 @@ const clientConfig = {
                   </div>
                 </div>
               </div>
-
-              <!-- VAT Mode Switch -->
-              <div class="vat-mode-block">
-                <span class="field-title">{t("quoteVatTitle")}</span>
-                <div class="vat-toggle-group">
-                  <button type="button" class="vat-btn active" data-vat="false">
-                    {t("quotePriceWithoutVat")}
-                  </button>
-                  <button type="button" class="vat-btn" data-vat="true">
-                    {t("quotePriceWithVat")}
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
 
@@ -546,13 +533,13 @@ const clientConfig = {
                   <span>{t("quoteSubtotalBeforeVat")}</span>
                   <span class="rec-val"><bdi id="recNetTotal">5,750 ₪</bdi></span>
                 </div>
-                <div class="rec-line vat-line hidden" id="recVatLine">
+                <div class="rec-line vat-line" id="recVatLine">
                   <span>{t("quoteVat18")}</span>
                   <span class="rec-val">+ <bdi id="recVatAmount">1,035 ₪</bdi></span>
                 </div>
                 <div class="rec-total-line">
                   <span id="recTotalLabel">{t("quoteGrandTotal")}</span>
-                  <span class="grand-price"><bdi id="recGrandTotal">5,750 ₪</bdi></span>
+                  <span class="grand-price"><bdi id="recGrandTotal">6,785 ₪</bdi></span>
                 </div>
               </div>
 
@@ -614,7 +601,7 @@ const clientConfig = {
         discountType: 'none' as 'none' | 'percentage' | 'fixed',
         discountVal: 0,
         discountReason: '',
-        applyVat: false,
+        applyVat: true,
         viewMode: 'builder' as 'builder' | 'client',
       };
 
@@ -788,21 +775,8 @@ const clientConfig = {
         }
 
         if (recNetTotal) recNetTotal.textContent = `${formatCurrency(quote.financials.netTotal)} ₪`;
-
-        if (recVatLine) {
-          if (quote.financials.applyVat) {
-            recVatLine.classList.remove('hidden');
-            if (recVatAmount) recVatAmount.textContent = `${formatCurrency(quote.financials.vatAmount)} ₪`;
-          } else {
-            recVatLine.classList.add('hidden');
-          }
-        }
-
-        if (recTotalLabel) {
-          recTotalLabel.textContent = quote.financials.applyVat
-            ? config.labels.grandTotal
-            : config.labels.subtotalBeforeVat;
-        }
+        if (recVatAmount) recVatAmount.textContent = `${formatCurrency(quote.financials.vatAmount)} ₪`;
+        if (recTotalLabel) recTotalLabel.textContent = config.labels.grandTotal;
         if (recGrandTotal) recGrandTotal.textContent = `${formatCurrency(quote.financials.grandTotal)} ₪`;
 
         // Direct WhatsApp link in receipt
@@ -884,20 +858,8 @@ const clientConfig = {
           }
         }
 
-        if (propVatRow) {
-          if (quote.financials.applyVat) {
-            propVatRow.classList.remove('hidden');
-            if (propVatVal) propVatVal.textContent = `${formatCurrency(quote.financials.vatAmount)} ₪`;
-          } else {
-            propVatRow.classList.add('hidden');
-          }
-        }
-
-        if (propTotalLabel) {
-          propTotalLabel.textContent = quote.financials.applyVat
-            ? config.labels.grandTotal
-            : config.labels.subtotalBeforeVat;
-        }
+        if (propVatVal) propVatVal.textContent = `${formatCurrency(quote.financials.vatAmount)} ₪`;
+        if (propTotalLabel) propTotalLabel.textContent = config.labels.grandTotal;
         if (propGrandTotalVal) propGrandTotalVal.textContent = `${formatCurrency(quote.financials.grandTotal)} ₪`;
 
         // WhatsApp Confirmation CTA in proposal
