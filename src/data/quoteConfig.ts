@@ -84,9 +84,9 @@ export const EQUIPMENT_CATALOG: EquipmentItemConfig[] = [
   {
     id: 'sound_column',
     name: {
-      en: 'Column Sound System (Tops + Subs)',
-      ru: 'Колонный звук (сабвуферы + топы)',
-      he: 'מערכת סאונד קולונה (סאבים + טופים)',
+      en: 'Acoustic Sound System Polman Lion 1000 (Stereo Pair)',
+      ru: 'Акустическая система Polman Lion 1000 (Стереопара)',
+      he: 'מערכת הגברה Polman Lion 1000 (זוג רמקולים סטריאו)',
     },
     category: 'sound',
     defaultQty: 1,
