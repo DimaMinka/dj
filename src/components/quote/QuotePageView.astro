@@ -53,6 +53,9 @@ const clientConfig = {
     subtotalBeforeVat: t("quoteSubtotalBeforeVat"),
     vat18: t("quoteVat18"),
     grandTotal: t("quoteGrandTotal"),
+    badgeProducer: t("quoteBadgeProducer"),
+    badgeClientView: t("quoteBadgeClientView"),
+    badgeEstimate: t("quoteBadge"),
   },
 };
 ---
@@ -88,7 +91,7 @@ const clientConfig = {
       <header class="quote-header">
         <div class="badge-row">
           <span class="badge-pill" id="quoteStatusBadge">{t("quoteBadge")}</span>
-          <span class="badge-subtle" id="viewModeIndicator">PRODUCER / BUILDER</span>
+          <span class="badge-subtle" id="viewModeIndicator">{t("quoteBadgeProducer")}</span>
         </div>
         <h1 class="quote-title" id="pageMainHeading">{t("quotePageTitle")}</h1>
         <p class="quote-subtitle">{t("quotePageSubtitle")}</p>
@@ -163,6 +166,10 @@ const clientConfig = {
 
           <!-- Financial Summary -->
           <div class="proposal-financials">
+            <div class="financial-row">
+              <span>{t("quoteSubtotalBeforeVat")}</span>
+              <span class="val"><bdi id="propSubtotalVal">0 ₪</bdi></span>
+            </div>
             <div class="financial-row discount-row hidden" id="propDiscountRow">
               <span id="propDiscountLabel">{t("quoteDiscountLabel")}</span>
               <span class="val discount-val">- <bdi id="propDiscountVal">0 ₪</bdi></span>
@@ -517,9 +524,17 @@ const clientConfig = {
                   <span>{t("quoteMusicServicesLabel")}</span>
                   <span class="rec-val"><bdi id="recServicesSubtotal">2,800 ₪</bdi></span>
                 </div>
+                <div class="rec-line gross-line">
+                  <span>{t("quoteGrossSubtotalLabel")}</span>
+                  <span class="rec-val"><bdi id="recGrossTotal">5,750 ₪</bdi></span>
+                </div>
                 <div class="rec-line discount-line hidden" id="recDiscountLine">
                   <span>{t("quoteDiscountLabel")}</span>
                   <span class="rec-val discount-val">- <bdi id="recDiscountAmount">0 ₪</bdi></span>
+                </div>
+                <div class="rec-line net-line">
+                  <span>{t("quoteSubtotalBeforeVat")}</span>
+                  <span class="rec-val"><bdi id="recNetTotal">5,750 ₪</bdi></span>
                 </div>
                 <div class="rec-line vat-line" id="recVatLine">
                   <span>{t("quoteVat18")}</span>
@@ -859,14 +874,14 @@ const clientConfig = {
         if (state.viewMode === 'client') {
           builderSection?.classList.add('hidden');
           clientProposalSection?.classList.remove('hidden');
-          if (viewModeIndicator) viewModeIndicator.textContent = 'CLIENT PRESENTATION';
+          if (viewModeIndicator) viewModeIndicator.textContent = config.labels.badgeClientView;
           if (quoteStatusBadge) quoteStatusBadge.textContent = config.labels.grandTotal;
           if (pageMainHeading) pageMainHeading.textContent = quote.client.venueName || 'Production Quote';
         } else {
           clientProposalSection?.classList.add('hidden');
           builderSection?.classList.remove('hidden');
-          if (viewModeIndicator) viewModeIndicator.textContent = 'PRODUCER / BUILDER';
-          if (quoteStatusBadge) quoteStatusBadge.textContent = 'ESTIMATE BUILDER';
+          if (viewModeIndicator) viewModeIndicator.textContent = config.labels.badgeProducer;
+          if (quoteStatusBadge) quoteStatusBadge.textContent = config.labels.badgeEstimate;
         }
       }
 
