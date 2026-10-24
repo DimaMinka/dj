@@ -232,6 +232,15 @@ export function renderApp(
   if (dom.btnWhatsAppDirect) {
     dom.btnWhatsAppDirect.href = generateQuoteWhatsAppUrl(quote, config.lang);
   }
+  if (dom.mobileWhatsAppBtn) {
+    dom.mobileWhatsAppBtn.href = generateQuoteWhatsAppUrl(quote, config.lang);
+  }
+  if (dom.mobileGrandTotal) {
+    dom.mobileGrandTotal.innerHTML = `<bdi>${formatCurrency(quote.financials.grandTotal)} ₪</bdi>`;
+  }
+  if (dom.mobileTotalHours) {
+    dom.mobileTotalHours.textContent = `${totalH.toFixed(1)}h`;
+  }
 
   // 5. Render Proposal View Elements
   if (dom.propEventName) {
@@ -380,6 +389,7 @@ export function renderApp(
   if (state.viewMode === 'client') {
     dom.builderSection?.classList.add('hidden');
     dom.clientProposalSection?.classList.remove('hidden');
+    dom.mobileStickyBar?.classList.add('hidden');
     if (dom.viewModeIndicator) dom.viewModeIndicator.textContent = config.labels.badgeClientView;
     if (dom.quoteStatusBadge) dom.quoteStatusBadge.textContent = config.labels.grandTotal;
     if (dom.pageMainHeading) {
@@ -389,6 +399,7 @@ export function renderApp(
   } else {
     dom.clientProposalSection?.classList.add('hidden');
     dom.builderSection?.classList.remove('hidden');
+    dom.mobileStickyBar?.classList.remove('hidden');
     if (dom.viewModeIndicator) dom.viewModeIndicator.textContent = config.labels.badgeProducer;
     if (dom.quoteStatusBadge) dom.quoteStatusBadge.textContent = config.labels.badgeEstimate;
     if (dom.pageMainHeading) {

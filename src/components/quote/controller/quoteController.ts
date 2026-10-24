@@ -234,11 +234,14 @@ export function initQuoteApp(): void {
   document.getElementById('btnCopyJsonSnapshot')?.addEventListener('click', copyJsonSnapshot);
 
   // View Mode Switchers
-  document.getElementById('btnPreviewProposal')?.addEventListener('click', () => {
+  const switchToClientView = () => {
     state.viewMode = 'client';
     renderApp(state, dom, config);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+  };
+
+  document.getElementById('btnPreviewProposal')?.addEventListener('click', switchToClientView);
+  dom.mobilePreviewBtn?.addEventListener('click', switchToClientView);
 
   document.getElementById('btnEditQuote')?.addEventListener('click', () => {
     state.viewMode = 'builder';

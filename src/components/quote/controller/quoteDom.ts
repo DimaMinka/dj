@@ -75,6 +75,13 @@ export interface QuoteDomElements {
   // Toast
   toastMessage: HTMLElement | null;
   toastText: HTMLElement | null;
+
+  // Mobile Sticky Bottom Bar
+  mobileStickyBar: HTMLElement | null;
+  mobileGrandTotal: HTMLElement | null;
+  mobileTotalHours: HTMLElement | null;
+  mobilePreviewBtn: HTMLButtonElement | null;
+  mobileWhatsAppBtn: HTMLAnchorElement | null;
 }
 
 export function cacheDomElements(): QuoteDomElements {
@@ -150,5 +157,11 @@ export function cacheDomElements(): QuoteDomElements {
 
     toastMessage: document.getElementById('toastMessage'),
     toastText: document.getElementById('toastText'),
+
+    mobileStickyBar: document.getElementById('mobileStickyBar'),
+    mobileGrandTotal: document.getElementById('mobileGrandTotal'),
+    mobileTotalHours: document.getElementById('mobileTotalHours'),
+    mobilePreviewBtn: document.getElementById('mobilePreviewBtn') as HTMLButtonElement | null,
+    mobileWhatsAppBtn: document.getElementById('mobileWhatsAppBtn') as HTMLAnchorElement | null,
   };
 }

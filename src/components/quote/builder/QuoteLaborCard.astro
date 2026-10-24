@@ -115,20 +115,24 @@ const preprodCost = initialPreprodHours * LABOR_RATES.preprodPerHour;
     background: var(--color-surface);
     border: 1px solid var(--color-glass-border);
     border-radius: var(--radius-md);
-    padding: 1.25rem;
+    padding: clamp(0.85rem, 2.5vw, 1.25rem);
     margin-block-end: 1rem;
   }
 
   .slider-top {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
+    gap: 0.35rem 0.65rem;
     margin-block-end: 0.75rem;
   }
 
   .slider-title {
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: clamp(0.85rem, 2.8vw, 0.95rem);
+    flex: 1 1 auto;
+    min-width: 140px;
   }
 
   .rate-badge {
@@ -138,6 +142,7 @@ const preprodCost = initialPreprodHours * LABOR_RATES.preprodPerHour;
     background: var(--color-primary-glow);
     padding: 0.2rem 0.5rem;
     border-radius: var(--radius-full);
+    white-space: nowrap;
   }
 
   .slider-val {
@@ -145,6 +150,7 @@ const preprodCost = initialPreprodHours * LABOR_RATES.preprodPerHour;
     font-weight: 700;
     font-size: 1.1rem;
     color: var(--color-primary);
+    white-space: nowrap;
   }
 
   input[type="range"] {

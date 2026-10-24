@@ -152,8 +152,8 @@ const isTrip1Locked = initialMinTripsCount >= 2;
   .trip-toggle-btn {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.65rem 1rem;
+    gap: 0.5rem;
+    padding: clamp(0.55rem, 2vw, 0.65rem) clamp(0.65rem, 2vw, 1rem);
     background: var(--color-surface);
     border: 1px solid var(--color-glass-border);
     color: var(--color-text-main);
@@ -180,36 +180,40 @@ const isTrip1Locked = initialMinTripsCount >= 2;
   }
 
   .trip-title-text {
-    flex: 1;
+    flex: 1 1 auto;
     min-width: 0;
+    font-size: clamp(0.8rem, 2.5vw, 0.85rem);
+    line-height: 1.35;
   }
 
   .trip-lock-badge {
     display: inline-flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: 0.2rem;
     font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     font-weight: 600;
     text-transform: uppercase;
     color: var(--color-primary);
     background: var(--color-primary-glow);
     border: 1px solid var(--color-primary);
-    padding: 0.2rem 0.5rem;
+    padding: 0.15rem 0.4rem;
     border-radius: var(--radius-full);
     flex-shrink: 0;
+    white-space: nowrap;
   }
 
   .trip-lock-badge .icon {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
 
   .trip-badge {
     font-family: var(--font-mono);
     font-size: 0.8rem;
     background: var(--color-surface-container);
-    padding: 0.2rem 0.5rem;
+    padding: 0.2rem 0.45rem;
     border-radius: var(--radius-md);
+    flex-shrink: 0;
   }
 
   .form-grid {
@@ -250,13 +254,22 @@ const isTrip1Locked = initialMinTripsCount >= 2;
     padding: 0.65rem 0.85rem;
     box-sizing: border-box;
     width: 100%;
+    gap: 0.5rem;
   }
 
   .computed-val {
     font-family: var(--font-mono);
     font-weight: 700;
     color: var(--color-primary);
-    font-size: 1.05rem;
+    font-size: clamp(0.95rem, 3vw, 1.05rem);
+    white-space: nowrap;
+  }
+
+  .computed-calc-hint {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-text-subtle);
+    white-space: nowrap;
   }
 
   .computed-calc-hint {

@@ -21,7 +21,7 @@ const t = useTranslations(lang);
       return (
         <button
           type="button"
-          class={`preset-pill ${preset.featured ? 'featured' : ''} ${isActive ? 'active' : ''}`}
+          class={`preset-pill ${isActive ? 'active' : ''}`}
           data-preset-id={preset.id}
         >
           <span>{preset.name[lang]}</span>
@@ -41,7 +41,7 @@ const t = useTranslations(lang);
     border: 1px solid var(--color-glass-border);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    padding: 0.85rem 1.25rem;
+    padding: clamp(0.65rem, 2vw, 0.85rem) clamp(0.85rem, 2.5vw, 1.25rem);
     border-radius: var(--radius-lg);
     margin-block-end: 2rem;
   }
@@ -52,12 +52,39 @@ const t = useTranslations(lang);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--color-text-subtle);
+    white-space: nowrap;
   }
 
   .presets-pills {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+  }
+
+  @media (max-width: 640px) {
+    .presets-bar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .presets-pills {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      width: 100%;
+      padding-block-end: 0.25rem;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .presets-pills::-webkit-scrollbar {
+      display: none;
+    }
+
+    .preset-pill {
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
   }
 
   .preset-pill {
