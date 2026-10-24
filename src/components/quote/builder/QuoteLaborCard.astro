@@ -31,8 +31,10 @@ const preprodCost = initialPreprodHours * LABOR_RATES.preprodPerHour;
   <div class="slider-group">
     <div class="slider-top">
       <span class="slider-title">{t("quoteStageHours")}</span>
-      <span class="rate-badge"><bdi>{LABOR_RATES.djPerHour} ₪ / h</bdi></span>
-      <span class="slider-val" id="djHoursVal">{initialDjHours.toFixed(1)}h</span>
+      <div class="slider-meta">
+        <span class="rate-badge"><bdi>{LABOR_RATES.djPerHour} ₪ / h</bdi></span>
+        <span class="slider-val" id="djHoursVal">{initialDjHours.toFixed(1)}h</span>
+      </div>
     </div>
     <input
       type="range"
@@ -53,8 +55,10 @@ const preprodCost = initialPreprodHours * LABOR_RATES.preprodPerHour;
   <div class="slider-group">
     <div class="slider-top">
       <span class="slider-title">{t("quoteServicePreprod")}</span>
-      <span class="rate-badge"><bdi>{LABOR_RATES.preprodPerHour} ₪ / h</bdi></span>
-      <span class="slider-val" id="preprodHoursVal">{initialPreprodHours.toFixed(1)}h</span>
+      <div class="slider-meta">
+        <span class="rate-badge"><bdi>{LABOR_RATES.preprodPerHour} ₪ / h</bdi></span>
+        <span class="slider-val" id="preprodHoursVal">{initialPreprodHours.toFixed(1)}h</span>
+      </div>
     </div>
     <input
       type="range"
@@ -132,7 +136,15 @@ const preprodCost = initialPreprodHours * LABOR_RATES.preprodPerHour;
     font-weight: 600;
     font-size: clamp(0.85rem, 2.8vw, 0.95rem);
     flex: 1 1 auto;
-    min-width: 140px;
+    min-width: 130px;
+    line-height: 1.35;
+  }
+
+  .slider-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
   }
 
   .rate-badge {
