@@ -107,6 +107,7 @@ const t = useTranslations(lang);
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
+    min-width: 0;
   }
 
   .form-field label {
@@ -126,8 +127,28 @@ const t = useTranslations(lang);
     outline: none;
     box-sizing: border-box;
     width: 100%;
+    max-width: 100%;
     min-width: 0;
     transition: border-color 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  /* iOS Safari native date input fixes */
+  .form-field input[type="date"] {
+    position: relative;
+    display: block;
+    -webkit-appearance: none;
+    appearance: none;
+    min-height: 2.75rem;
+    line-height: normal;
+  }
+
+  /* Normalize WebKit internal shadow dom date edit controls */
+  .form-field input[type="date"]::-webkit-date-and-time-value {
+    text-align: start;
+    min-height: 1.2em;
+    margin: 0;
   }
 
   .form-field input:focus,
