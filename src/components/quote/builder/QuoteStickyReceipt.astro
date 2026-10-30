@@ -8,9 +8,10 @@ import QuoteIcebergWidget from '../shared/QuoteIcebergWidget.astro';
 interface Props {
   initialQuote: QuoteSnapshot;
   lang: SupportedLang;
+  initialWhatsAppUrl?: string;
 }
 
-const { initialQuote, lang } = Astro.props;
+const { initialQuote, lang, initialWhatsAppUrl } = Astro.props;
 const t = useTranslations(lang);
 ---
 
@@ -91,7 +92,7 @@ const t = useTranslations(lang);
         <span class="icon">visibility</span>
         <span>{t("quotePreviewClientBtn")}</span>
       </button>
-      <a href="#" class="btn-whatsapp-send" id="btnWhatsAppDirect" target="_blank" rel="noopener noreferrer">
+      <a href={initialWhatsAppUrl || '#'} class="btn-whatsapp-send" id="btnWhatsAppDirect" target="_blank" rel="noopener noreferrer">
         <span class="material-symbols-outlined cta-wa-icon" aria-hidden="true">chat</span>
         <span class="cta-wa-text">{t("quoteDiscussWhatsAppBtn")}</span>
         <span class="material-symbols-outlined cta-arrow-icon" aria-hidden="true">arrow_forward</span>

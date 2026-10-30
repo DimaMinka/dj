@@ -1,6 +1,8 @@
 import { defineAction, ActionError } from 'astro:actions';
 import { z } from 'astro:schema';
 import { env } from 'cloudflare:workers';
+import { generateQuoteShortId } from '../utils/quoteEncoder';
+import type { QuoteSnapshot } from '../types/quote';
 
 export const server = {
   subscribe: defineAction({
@@ -209,6 +211,102 @@ Submitted At: ${new Date().toUTCString()}
         throw new ActionError({
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Failed to send inquiry email. Please try again later.',
+        });
+      }
+    },
+  }),
+
+  createShortQuote: defineAction({
+    input: z.object({
+      quote: z.object({
+        v: z.literal(1).default(1),
+        id: z.string().nullable().optional(),
+        createdAt: z.string().nullable().optional(),
+        validUntil: z.string().nullable().optional(),
+        language: z.enum(['en', 'ru', 'he']).default('en'),
+        client: z.object({
+          name: z.string().default(''),
+          phone: z.string().nullable().optional(),
+          eventDate: z.string().default(''),
+          venueName: z.string().default(''),
+          locationZone: z.string().default('upper_galilee'),
+        }).passthrough(),
+        equipment: z.object({
+          items: z.array(
+            z.object({
+              id: z.string(),
+              name: z.record(z.string()),
+              category: z.string(),
+              unitPrice: z.number(),
+              quantity: z.number(),
+              totalPrice: z.number(),
+            }).passthrough()
+          ),
+          daysCount: z.number().default(1),
+          daysMultiplier: z.number().default(1),
+          subtotal: z.number(),
+        }).passthrough(),
+        services: z.object({
+          djPerformanceHours: z.number(),
+          djRatePerHour: z.number(),
+          preprodHours: z.number(),
+          preprodRatePerHour: z.number(),
+          setupTeardownFee: z.number(),
+          logisticsFee: z.number(),
+          subtotal: z.number(),
+        }).passthrough(),
+        financials: z.object({
+          grossTotal: z.number(),
+          discount: z.object({
+            type: z.enum(['fixed', 'percentage']).default('fixed'),
+            value: z.number().default(0),
+            amount: z.number().default(0),
+            reason: z.string().nullable().optional(),
+          }).passthrough(),
+          netTotal: z.number(),
+          applyVat: z.boolean().default(true),
+          vatRate: z.number().default(0.18),
+          vatAmount: z.number().default(0),
+          grandTotal: z.number(),
+        }).passthrough(),
+        notes: z.string().nullable().optional(),
+      }).passthrough(),
+    }),
+    handler: async (input, context) => {
+      const quote = input.quote as unknown as QuoteSnapshot;
+      const shortId = await generateQuoteShortId(quote);
+      const lang = quote.language || 'en';
+      const path = lang === 'en' ? `/q/${shortId}` : `/${lang}/q/${shortId}`;
+
+      const kv = (env as any)?.QUOTES_KV || (context.locals as any)?.runtime?.env?.QUOTES_KV;
+      if (!kv) {
+        console.warn('[createShortQuote] QUOTES_KV binding unavailable in runtime');
+        throw new ActionError({
+          code: 'SERVICE_UNAVAILABLE',
+          message: 'Quotes storage is currently unavailable.',
+        });
+      }
+
+      const quoteToSave: QuoteSnapshot = {
+        ...quote,
+        id: shortId,
+      };
+
+      try {
+        await kv.put(shortId, JSON.stringify(quoteToSave), {
+          expirationTtl: 60 * 60 * 24 * 180, // 180 days (~6 months)
+        });
+
+        return {
+          success: true,
+          id: shortId,
+          path,
+        };
+      } catch (err: any) {
+        console.error('[createShortQuote] Failed to write quote to KV:', err);
+        throw new ActionError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to save quote.',
         });
       }
     },

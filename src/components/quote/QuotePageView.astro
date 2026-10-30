@@ -14,7 +14,8 @@ import {
   VAT_RATE,
 } from "../../data/quoteConfig";
 import { SITE_CONTACTS } from "../../data/contacts";
-import { calculateQuote } from "../../utils/quoteCalculator";
+import { calculateQuote, formatCurrency } from "../../utils/quoteCalculator";
+import { generateQuoteWhatsAppUrl, getShortQuoteUrl } from "../../utils/quoteEncoder";
 import QuoteProposalView from "./proposal/QuoteProposalView.astro";
 import QuotePresetsBar from "./builder/QuotePresetsBar.astro";
 import QuoteEventCard from "./builder/QuoteEventCard.astro";
@@ -23,54 +24,75 @@ import QuoteCatalogCard from "./builder/QuoteCatalogCard.astro";
 import QuoteLogisticsCard from "./builder/QuoteLogisticsCard.astro";
 import QuoteFinancialsCard from "./builder/QuoteFinancialsCard.astro";
 import QuoteStickyReceipt from "./builder/QuoteStickyReceipt.astro";
+import type { QuoteSnapshot } from "../../types/quote";
 
 interface Props {
   lang: SupportedLang;
+  initialSavedQuote?: QuoteSnapshot;
+  shortId?: string;
 }
 
-const { lang } = Astro.props;
+const { lang, initialSavedQuote, shortId } = Astro.props;
 const t = useTranslations(lang);
 
-const canonicalPath = lang === "en" ? "/quote" : `/${lang}/quote`;
-const pageTitle = `${t("quotePageTitle")} — DJ Dima Minka`;
-const pageDescription = t("quotePageSubtitle");
+const isClientView = Boolean(initialSavedQuote);
+const canonicalPath = shortId
+  ? (lang === "en" ? `/q/${shortId}` : `/${lang}/q/${shortId}`)
+  : (lang === "en" ? "/quote" : `/${lang}/quote`);
 
-// Calculate server-side initial quote strictly from the default preset (Sunset & Cocktail)
+const pageTitle = initialSavedQuote?.client?.venueName
+  ? `${initialSavedQuote.client.venueName} — DJ Dima Minka`
+  : `${t("quotePageTitle")} — DJ Dima Minka`;
+const pageDescription = initialSavedQuote?.client?.venueName
+  ? `${t("quoteBadgeClientView")}: ${initialSavedQuote.client.venueName}`
+  : t("quotePageSubtitle");
+
 const initialPreset = DEFAULT_PRESET;
-const initialItems = initialPreset.equipmentItemIds.map((spec) => {
-  const catItem = EQUIPMENT_CATALOG.find((c) => c.id === spec.id)!;
-  return {
-    id: catItem.id,
-    name: catItem.name,
-    category: catItem.category,
-    unitPrice: catItem.dailyRentalPrice,
-    quantity: spec.qty,
-  };
-});
-
 const matchedZone =
   LOCATION_ZONES.find((z) => z.id === initialPreset.locationZone) || LOCATION_ZONES[0];
 const initialLogisticsFee = (matchedZone.defaultFee || 100) * (initialPreset.tripsCount || 1);
 
-const initialQuote = calculateQuote({
-  client: {
-    name: '',
-    eventDate: new Date().toISOString().split('T')[0],
-    venueName: '',
-    locationZone: initialPreset.locationZone,
-  },
-  language: lang,
-  items: initialItems,
-  daysCount: initialPreset.daysCount,
-  djPerformanceHours: initialPreset.djHours,
-  djRatePerHour: LABOR_RATES.djPerHour,
-  preprodHours: initialPreset.preprodHours,
-  preprodRatePerHour: LABOR_RATES.preprodPerHour,
-  setupTeardownFee: initialPreset.setupFee,
-  logisticsFee: initialLogisticsFee,
-  discount: { type: 'fixed', value: 0 },
-  applyVat: true,
-});
+let initialQuote: QuoteSnapshot;
+
+if (initialSavedQuote) {
+  initialQuote = initialSavedQuote;
+} else {
+  // Calculate server-side initial quote strictly from the default preset (Sunset & Cocktail)
+  const initialItems = initialPreset.equipmentItemIds.map((spec) => {
+    const catItem = EQUIPMENT_CATALOG.find((c) => c.id === spec.id)!;
+    return {
+      id: catItem.id,
+      name: catItem.name,
+      category: catItem.category,
+      unitPrice: catItem.dailyRentalPrice,
+      quantity: spec.qty,
+    };
+  });
+
+  initialQuote = calculateQuote({
+    client: {
+      name: '',
+      eventDate: new Date().toISOString().split('T')[0],
+      venueName: '',
+      locationZone: initialPreset.locationZone,
+    },
+    language: lang,
+    items: initialItems,
+    daysCount: initialPreset.daysCount,
+    djPerformanceHours: initialPreset.djHours,
+    djRatePerHour: LABOR_RATES.djPerHour,
+    preprodHours: initialPreset.preprodHours,
+    preprodRatePerHour: LABOR_RATES.preprodPerHour,
+    setupTeardownFee: initialPreset.setupFee,
+    logisticsFee: initialLogisticsFee,
+    discount: { type: 'fixed', value: 0 },
+    applyVat: true,
+  });
+}
+
+const initialShortUrl = shortId ? getShortQuoteUrl(shortId, lang) : undefined;
+const initialQuoteWhatsAppUrl = generateQuoteWhatsAppUrl(initialQuote, lang, initialShortUrl);
+const totalHours = (initialQuote.services.djPerformanceHours + initialQuote.services.preprodHours + 4.0).toFixed(1);
 
 // Serializable config for the client-side calculator
 const clientConfig = {
@@ -99,6 +121,7 @@ const clientConfig = {
     defaultHeading: t("quoteDefaultHeading"),
     defaultEventName: t("quoteDefaultEventName"),
     defaultVenue: t("quoteDefaultVenue"),
+    quotePageSubtitle: t("quotePageSubtitle"),
     serviceDjSet: t("quoteServiceDjSet"),
     servicePreprod: t("quoteServicePreprod"),
     serviceSetup: t("quoteServiceSetup"),
@@ -132,7 +155,13 @@ const clientConfig = {
     />
   )}
 
-  <main class="quote-viewport pt-safe pb-safe" id="quoteApp" data-config={JSON.stringify(clientConfig)}>
+  <main
+    class="quote-viewport pt-safe pb-safe"
+    id="quoteApp"
+    data-config={JSON.stringify(clientConfig)}
+    data-initial-quote={initialSavedQuote ? JSON.stringify(initialSavedQuote) : undefined}
+    data-short-id={shortId || undefined}
+  >
     <AtmosphereBackground />
     <SiteHeader lang={lang} currentSection="quote" />
 
@@ -140,18 +169,28 @@ const clientConfig = {
       <!-- 1. Header Banner -->
       <header class="quote-header">
         <div class="badge-row">
-          <span class="badge-pill" id="quoteStatusBadge">{t("quoteBadge")}</span>
-          <span class="badge-subtle" id="viewModeIndicator">{t("quoteBadgeProducer")}</span>
+          <span class="badge-pill" id="quoteStatusBadge">
+            {isClientView ? (shortId ? `#${shortId}` : t("quoteBadgeClientView")) : t("quoteBadge")}
+          </span>
+          <span class="badge-subtle" id="viewModeIndicator">
+            {isClientView ? t("quoteBadgeClientView") : t("quoteBadgeProducer")}
+          </span>
         </div>
-        <h1 class="quote-title" id="pageMainHeading">{t("quotePageTitle")}</h1>
-        <p class="quote-subtitle">{t("quotePageSubtitle")}</p>
+        <h1 class="quote-title" id="pageMainHeading">
+          {isClientView ? (initialQuote.client.venueName || t("quoteDefaultHeading")) : t("quotePageTitle")}
+        </h1>
+        <p class="quote-subtitle" id="pageMainSubtitle">
+          {isClientView
+            ? (initialQuote.client.name ? `${initialQuote.client.name}${initialQuote.client.eventDate ? ` • ${initialQuote.client.eventDate}` : ''}` : t("quotePageSubtitle"))
+            : t("quotePageSubtitle")}
+        </p>
       </header>
 
       <!-- 2. CLIENT PRESENTATION VIEW (Proposal) -->
-      <QuoteProposalView initialQuote={initialQuote} lang={lang} />
+      <QuoteProposalView initialQuote={initialQuote} lang={lang} isClientView={isClientView} shortId={shortId} />
 
       <!-- 3. CONSTRUCTOR / BUILDER VIEW -->
-      <section class="builder-view" id="builderSection">
+      <section class={`builder-view ${isClientView ? 'hidden' : ''}`} id="builderSection">
         <QuotePresetsBar
           presets={PRESETS}
           activePresetId={initialPreset.id}
@@ -188,7 +227,7 @@ const clientConfig = {
           </div>
 
           <!-- Right Column: Sticky Live Receipt -->
-          <QuoteStickyReceipt initialQuote={initialQuote} lang={lang} />
+          <QuoteStickyReceipt initialQuote={initialQuote} lang={lang} initialWhatsAppUrl={initialQuoteWhatsAppUrl} />
         </div>
       </section>
 
@@ -199,10 +238,10 @@ const clientConfig = {
       </div>
 
       <!-- Mobile Sticky Bottom Bar (Builder View Only) -->
-      <div class="mobile-sticky-bar" id="mobileStickyBar">
+      <div class={`mobile-sticky-bar ${isClientView ? 'hidden' : ''}`} id="mobileStickyBar">
         <div class="msb-summary">
-          <div class="msb-price" id="mobileGrandTotal"><bdi>2,549 ₪</bdi></div>
-          <div class="msb-hours" id="mobileTotalHours">4.0h</div>
+          <div class="msb-price" id="mobileGrandTotal"><bdi>{formatCurrency(initialQuote.financials.grandTotal)} ₪</bdi></div>
+          <div class="msb-hours" id="mobileTotalHours">{totalHours}h</div>
         </div>
         <div class="msb-actions">
           <button type="button" class="msb-btn-preview" id="mobilePreviewBtn">
@@ -210,7 +249,7 @@ const clientConfig = {
             <span>{t("quotePreviewClientBtn")}</span>
           </button>
           <a
-            href={initialQuote.whatsappUrl}
+            href={initialQuoteWhatsAppUrl}
             class="msb-btn-wa"
             id="mobileWhatsAppBtn"
             target="_blank"

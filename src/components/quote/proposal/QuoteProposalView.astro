@@ -3,18 +3,29 @@ import type { SupportedLang } from '../../../i18n/ui';
 import { useTranslations } from '../../../i18n/ui';
 import type { QuoteSnapshot } from '../../../types/quote';
 import { formatCurrency } from '../../../utils/quoteCalculator';
+import { generateQuoteWhatsAppUrl, getShortQuoteUrl } from '../../../utils/quoteEncoder';
+import { LOCATION_ZONES } from '../../../data/quoteConfig';
 import QuoteIcebergWidget from '../shared/QuoteIcebergWidget.astro';
 
 interface Props {
   initialQuote: QuoteSnapshot;
   lang: SupportedLang;
+  isClientView?: boolean;
+  shortId?: string;
 }
 
-const { initialQuote, lang } = Astro.props;
+const { initialQuote, lang, isClientView = false, shortId } = Astro.props;
 const t = useTranslations(lang);
+
+const shortUrl = shortId ? getShortQuoteUrl(shortId, lang) : undefined;
+const initialQuoteWhatsAppUrl = generateQuoteWhatsAppUrl(initialQuote, lang, shortUrl);
+
+const matchedZone =
+  LOCATION_ZONES.find((z) => z.id === initialQuote.client.locationZone) || LOCATION_ZONES[0];
+const zoneName = matchedZone ? matchedZone.name[lang] : initialQuote.client.locationZone;
 ---
 
-<section class="client-proposal-view hidden" id="clientProposalSection">
+<section class={`client-proposal-view ${isClientView ? '' : 'hidden'}`} id="clientProposalSection">
   <div class="proposal-card">
     <div class="proposal-top-header">
       <div>
@@ -27,7 +38,7 @@ const t = useTranslations(lang);
           <span class="sep">•</span>
           <span id="propDate">{initialQuote.client.eventDate}</span>
           <span class="sep">•</span>
-          <span id="propZone">{initialQuote.client.locationZone}</span>
+          <span id="propZone">{zoneName}</span>
         </div>
       </div>
     </div>
@@ -62,7 +73,26 @@ const t = useTranslations(lang);
       </button>
       <div class="proposal-accordion-content hidden" id="propEquipContent">
         <div class="prop-modern-list" id="propEquipmentList">
-          <!-- Dynamically rendered as modern grid cards -->
+          {initialQuote.equipment.items.filter((i) => i.quantity > 0).map((item) => {
+            const isItemIncluded = item.id === 'denon_prime' || item.id === 'udg_stand';
+            return (
+              <div class="prop-card-row">
+                <div class="prop-card-main">
+                  <span class="prop-card-name">{item.name[lang] || item.name.en}</span>
+                </div>
+                <div class="prop-card-aside">
+                  <span class="prop-qty-pill">{item.quantity}</span>
+                  <span class="prop-card-price">
+                    {isItemIncluded ? (
+                      <span class="rate-included">{t("quoteIncludedBadge")}</span>
+                    ) : (
+                      <bdi>{formatCurrency(item.totalPrice)} ₪</bdi>
+                    )}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
@@ -89,7 +119,44 @@ const t = useTranslations(lang);
       </button>
       <div class="proposal-accordion-content hidden" id="propServicesContent">
         <div class="prop-modern-list" id="propServicesList">
-          <!-- Dynamically rendered as modern grid cards -->
+          <div class="prop-card-row">
+            <div class="prop-card-main">
+              <span class="prop-card-name">{t("quoteServiceDjSet")}</span>
+              <span class="prop-card-sub">{initialQuote.services.djPerformanceHours.toFixed(1)}h @ {initialQuote.services.djRatePerHour} ₪/h</span>
+            </div>
+            <div class="prop-card-aside">
+              <span class="prop-card-price"><bdi>{formatCurrency(initialQuote.services.djPerformanceHours * initialQuote.services.djRatePerHour)} ₪</bdi></span>
+            </div>
+          </div>
+          {initialQuote.services.preprodHours > 0 && (
+            <div class="prop-card-row">
+              <div class="prop-card-main">
+                <span class="prop-card-name">{t("quoteServicePreprod")}</span>
+                <span class="prop-card-sub">{initialQuote.services.preprodHours.toFixed(1)}h @ {initialQuote.services.preprodRatePerHour} ₪/h</span>
+              </div>
+              <div class="prop-card-aside">
+                <span class="prop-card-price"><bdi>{formatCurrency(initialQuote.services.preprodHours * initialQuote.services.preprodRatePerHour)} ₪</bdi></span>
+              </div>
+            </div>
+          )}
+          <div class="prop-card-row">
+            <div class="prop-card-main">
+              <span class="prop-card-name">{t("quoteServiceSetup")}</span>
+              <span class="prop-card-sub">{t("quoteCustomSetupNotice")}</span>
+            </div>
+            <div class="prop-card-aside">
+              <span class="prop-card-price"><bdi>{formatCurrency(initialQuote.services.setupTeardownFee)} ₪</bdi></span>
+            </div>
+          </div>
+          <div class="prop-card-row">
+            <div class="prop-card-main">
+              <span class="prop-card-name">{t("quoteServiceLogistics")}</span>
+              <span class="prop-card-sub">{zoneName}</span>
+            </div>
+            <div class="prop-card-aside">
+              <span class="prop-card-price"><bdi>{formatCurrency(initialQuote.services.logisticsFee)} ₪</bdi></span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -100,11 +167,15 @@ const t = useTranslations(lang);
         <span>{t("quoteSubtotalBeforeVat")}</span>
         <span class="val" id="propSubtotalVal"><bdi>{formatCurrency(initialQuote.financials.grossTotal)} ₪</bdi></span>
       </div>
-      <div class="financial-row discount-row hidden" id="propDiscountRow">
-        <span id="propDiscountLabel">{t("quoteDiscountLabel")}</span>
-        <span class="val discount-val">- <span id="propDiscountVal"><bdi>0 ₪</bdi></span></span>
+      <div class={`financial-row discount-row ${initialQuote.financials.discount?.amount > 0 ? '' : 'hidden'}`} id="propDiscountRow">
+        <span id="propDiscountLabel">
+          {initialQuote.financials.discount?.reason
+            ? `${t("quoteDiscountLabel")} (${initialQuote.financials.discount.reason})`
+            : t("quoteDiscountLabel")}
+        </span>
+        <span class="val discount-val">- <span id="propDiscountVal"><bdi>{formatCurrency(initialQuote.financials.discount?.amount || 0)} ₪</bdi></span></span>
       </div>
-      <div class="financial-row vat-row" id="propVatRow">
+      <div class={`financial-row vat-row ${initialQuote.financials.applyVat ? '' : 'hidden'}`} id="propVatRow">
         <span>{t("quoteVat18")}</span>
         <span class="val" id="propVatVal"><bdi>+ {formatCurrency(initialQuote.financials.vatAmount)} ₪</bdi></span>
       </div>
@@ -116,7 +187,7 @@ const t = useTranslations(lang);
 
     <!-- Proposal Call To Actions -->
     <div class="proposal-actions">
-      <a href="#" class="btn-primary-action btn-whatsapp-send" id="propWhatsAppConfirmBtn" target="_blank" rel="noopener noreferrer">
+      <a href={initialQuoteWhatsAppUrl} class="btn-primary-action btn-whatsapp-send" id="propWhatsAppConfirmBtn" target="_blank" rel="noopener noreferrer">
         <span class="material-symbols-outlined cta-wa-icon" aria-hidden="true">chat</span>
         <span class="cta-wa-text">{t("quoteConfirmWhatsApp")}</span>
         <span class="material-symbols-outlined cta-arrow-icon" aria-hidden="true">arrow_forward</span>

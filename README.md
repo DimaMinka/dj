@@ -83,6 +83,12 @@ dj/
 │       ├── quote.astro                      # Interactive event production calculator (English)
 │       ├── ru/quote.astro                   # Quote calculator (Russian)
 │       ├── he/quote.astro                   # Quote calculator (Hebrew, RTL)
+│       ├── q/
+│       │   └── [id].astro                   # Dynamic Cloudflare KV short quote SSR route (English)
+│       ├── ru/q/
+│       │   └── [id].astro                   # Dynamic Cloudflare KV short quote SSR route (Russian)
+│       ├── he/q/
+│       │   └── [id].astro                   # Dynamic Cloudflare KV short quote SSR route (Hebrew, RTL)
 │       ├── vibe.astro                       # Legacy alias (redirects to /vibes/sunset)
 │       └── vibes/
 │           ├── index.astro                  # Redirect to /vibes/sunset
@@ -138,14 +144,16 @@ Follow guidelines from [AGENTS.md](./AGENTS.md):
    * **Curated Northern Social Proof Ticker:** Seamless infinite marquee (`LocalSocialProof.astro`) showcasing premier terroirs and venues (Dalton Winery, Harei Galilee, Rosh Pina Private Villas, Golan Heights Terroir, Kinneret Lakeside Terraces, Pelter Winery Estate). Fully pinned to the bottom on desktop and cleanly scoped to the bottom sheet on mobile.
    * **Contextual WhatsApp Direct Booking CTA:** Deep-linked direct inquiry button with pre-filled space interest message (`getWhatsAppContextualLink()`) and pastel glassmorphic styling aligned with the aesthetic design tokens.
 
-6. [x] **Phase 6: Interactive Event Production Quote Calculator** (`feature/quote-calculator` -> PR [#7](https://github.com/DimaMinka/dj/pull/7)) — Complete transparent estimation & proposal engine:
+6. [x] **Phase 6: Interactive Event Production Quote Calculator & Short Links** (`feature/quote-calculator` -> PR [#7](https://github.com/DimaMinka/dj/pull/7)) — Complete transparent estimation, proposal engine & Cloudflare KV short URLs:
    * **Dynamic Pricing Engine:** Real-time financial calculations across DJ performance hours, music pre-production, setup & engineering labor, round-trip vehicle logistics, and itemized sound/light gear rentals with mandatory 18% VAT and discount toggles.
+   * **Cloudflare KV Short Links (`/q/:id`, `/ru/q/:id`, `/he/q/:id`):** Server-rendered dynamic shareable links powered by Cloudflare KV (`QUOTES_KV`). Generates deterministic 7-character Base62 keys from SHA-256 state hashes, eliminating duplicate entries while keeping clean URLs in browser address bars.
+   * **Safari-Safe Async Clipboard & Fallback:** iOS/macOS-safe clipboard copy via `ClipboardItem(Promise<Blob>)` with automatic seamless fallback to compressed `lz-string` `#q=...` URLs if offline or if KV is unavailable.
    * **Iceberg Ratio Visualization:** Proprietary visual and metric indicator revealing the ratio of invisible pre-production & engineering hours versus visible stage time, highlighting the backstage craft behind boutique events.
    * **Curated Sound & Light Presets:** Instant configuration switching for *Sunset & Cocktail*, *Private Villa Party*, and *Signature Full Rig* with automated constraints (e.g. minimum vehicle trips, setup hours).
-   * **Client Proposal Mode:** Sharable client-facing estimate cards with collapsible gear categories, live WhatsApp instant booking message pre-fill, and shareable URLs compressed via `lz-string` hash encoding.
+   * **Client Proposal Mode:** Sharable client-facing estimate cards with collapsible gear categories, live WhatsApp instant booking message pre-fill (incorporating short URLs), and full language synchronization (`EN • RU • עב`) across `/q/:id`.
    * **Full Multilingual & RTL Support:** Seamless parity across English (`/quote`), Russian (`/ru/quote`), and Hebrew RTL (`/he/quote`) with localized placeholders, Slavic pluralization for gear counts, and language-specific display fonts (`Unbounded` on RU).
    * **Mobile-First Ergonomics:** Fixed floating summary receipt on mobile viewports (360–393px), touch-optimized steppers and icon-only toggles, and safe viewport padding.
-   * **Test Suite:** Comprehensive Vitest coverage verifying all math formulas, discounts, weekend multipliers, and snapshot encode/decode cycles.
+   * **Test Suite:** 20 comprehensive Vitest tests verifying all math formulas, discounts, weekend multipliers, Base62 ID determinism, canonical string normalization, and safe KV decoding.
 
 ---
 

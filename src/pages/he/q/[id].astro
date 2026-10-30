@@ -1,0 +1,28 @@
+---
+export const prerender = false;
+
+import QuotePageView from '../../../components/quote/QuotePageView.astro';
+import { env } from 'cloudflare:workers';
+import { loadQuoteFromKv } from '../../../utils/quoteEncoder';
+
+const { id } = Astro.params;
+const lang = 'he';
+const fallbackPath = '/he/quote';
+
+if (!id || typeof id !== 'string' || !/^[0-9a-zA-Z_-]{4,32}$/.test(id)) {
+  return Astro.redirect(fallbackPath, 302);
+}
+
+const kv = (env as any)?.QUOTES_KV || (Astro.locals as any)?.runtime?.env?.QUOTES_KV;
+if (!kv) {
+  console.warn(`[SSR /he/q/:id] QUOTES_KV binding unavailable in runtime`);
+  return Astro.redirect(fallbackPath, 302);
+}
+
+const savedQuote = await loadQuoteFromKv(kv, id);
+if (!savedQuote) {
+  return Astro.redirect(fallbackPath, 302);
+}
+---
+
+<QuotePageView lang={lang} initialSavedQuote={savedQuote} shortId={id} />

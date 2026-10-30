@@ -1,6 +1,14 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { calculateQuote, formatCurrency } from './quoteCalculator';
-import { encodeQuoteToHash, decodeQuoteFromHash, generateQuoteWhatsAppUrl } from './quoteEncoder';
+import {
+  encodeQuoteToHash,
+  decodeQuoteFromHash,
+  generateQuoteWhatsAppUrl,
+  generateQuoteShortId,
+  getShortQuoteUrl,
+  getCanonicalQuoteString,
+  loadQuoteFromKv,
+} from './quoteEncoder';
 import { EQUIPMENT_CATALOG, LABOR_RATES, DEFAULT_PRESET, PRESETS } from '../data/quoteConfig';
 import type { CalculationInput } from './quoteCalculator';
 
@@ -257,6 +265,276 @@ describe('quoteEncoder & URL hash compression', () => {
     // Text should contain venue and amount encoded
     expect(decodeURIComponent(waUrl)).toContain('Dalton Winery');
     expect(decodeURIComponent(waUrl)).toContain('1,200 ₪');
+  });
+
+  it('generates a WhatsApp URL with custom short URL appended when provided', () => {
+    const quote = calculateQuote({
+      client: {
+        name: 'Dima',
+        venueName: 'Dalton Winery',
+        locationZone: 'upper_galilee',
+        eventDate: '2026-10-30',
+      },
+      language: 'ru',
+      items: [],
+      daysCount: 1,
+      djPerformanceHours: 2,
+      djRatePerHour: 400,
+      preprodHours: 0,
+      preprodRatePerHour: 150,
+      setupTeardownFee: 0,
+      logisticsFee: 0,
+      discount: { type: 'fixed', value: 0 },
+      applyVat: false,
+    });
+    const waUrl = generateQuoteWhatsAppUrl(quote, 'ru', 'https://dj.dimaminka.com/ru/q/7xK9p2');
+    const decoded = decodeURIComponent(waUrl);
+    expect(decoded).toContain('https://dj.dimaminka.com/ru/q/7xK9p2');
+  });
+
+  it('generates deterministic 7-character Base62 short IDs', async () => {
+    const input: CalculationInput = {
+      client: {
+        name: 'Aviv & Noa',
+        eventDate: '2026-11-15',
+        venueName: 'Kinneret Terraces Villa',
+        locationZone: 'kinneret',
+      },
+      language: 'he',
+      items: EQUIPMENT_CATALOG.slice(0, 3).map((item) => ({
+        id: item.id,
+        name: item.name,
+        category: item.category,
+        unitPrice: item.dailyRentalPrice,
+        quantity: item.defaultQty,
+      })),
+      daysCount: 1,
+      djPerformanceHours: 4.0,
+      djRatePerHour: 400,
+      preprodHours: 2.0,
+      preprodRatePerHour: 150,
+      setupTeardownFee: 300,
+      logisticsFee: 150,
+      discount: { type: 'fixed', value: 100 },
+      applyVat: true,
+    };
+
+    const quoteA = calculateQuote({ ...input, id: 'temp-id-1', createdAt: '2026-10-01T10:00:00Z' });
+    const quoteB = calculateQuote({ ...input, id: 'temp-id-2', createdAt: '2026-10-30T19:45:00Z' });
+
+    const shortIdA = await generateQuoteShortId(quoteA);
+    const shortIdB = await generateQuoteShortId(quoteB);
+
+    // 1. Length and charset
+    expect(shortIdA).toMatch(/^[0-9a-zA-Z]{7}$/);
+    expect(shortIdA.length).toBe(7);
+
+    // 2. Determinism across different temporary IDs and creation timestamps
+    expect(shortIdA).toBe(shortIdB);
+
+    // 3. Order independence in items
+    const reorderedQuote = {
+      ...quoteA,
+      equipment: {
+        ...quoteA.equipment,
+        items: [...quoteA.equipment.items].reverse(),
+      },
+    };
+    const shortIdReordered = await generateQuoteShortId(reorderedQuote);
+    expect(shortIdReordered).toBe(shortIdA);
+
+    // 4. Mutation sensitivity: different venue produces different ID
+    const quoteDifferentVenue = calculateQuote({
+      ...input,
+      client: { ...input.client, venueName: 'Another Venue' },
+    });
+    const shortIdDifferent = await generateQuoteShortId(quoteDifferentVenue);
+    expect(shortIdDifferent).not.toBe(shortIdA);
+  });
+
+  it('generates correct short URLs per language', () => {
+    expect(getShortQuoteUrl('7xK9p2', 'en')).toBe('https://dj.dimaminka.com/q/7xK9p2');
+    expect(getShortQuoteUrl('7xK9p2', 'ru')).toBe('https://dj.dimaminka.com/ru/q/7xK9p2');
+    expect(getShortQuoteUrl('7xK9p2', 'he')).toBe('https://dj.dimaminka.com/he/q/7xK9p2');
+  });
+
+  it('handles edge case inputs cleanly in generateQuoteShortId (empty items, missing client fields)', async () => {
+    const minimalQuote = calculateQuote({
+      client: {
+        name: '',
+        eventDate: '',
+        venueName: '',
+        locationZone: 'upper_galilee',
+      },
+      language: 'en',
+      items: [],
+      daysCount: 1,
+      djPerformanceHours: 0,
+      djRatePerHour: 0,
+      preprodHours: 0,
+      preprodRatePerHour: 0,
+      setupTeardownFee: 0,
+      logisticsFee: 0,
+      discount: { type: 'fixed', value: 0 },
+      applyVat: false,
+    });
+
+    const shortId = await generateQuoteShortId(minimalQuote);
+    expect(shortId).toMatch(/^[0-9a-zA-Z]{7}$/);
+    expect(shortId.length).toBe(7);
+
+    // Language difference must yield a distinct short ID for correct canonical routing
+    const minimalQuoteRu = { ...minimalQuote, language: 'ru' as const };
+    const shortIdRu = await generateQuoteShortId(minimalQuoteRu);
+    expect(shortIdRu).not.toBe(shortId);
+  });
+
+  it('formats WhatsApp messages for English and Russian with custom short URL', () => {
+    const quote = calculateQuote({
+      client: {
+        name: 'Alex',
+        venueName: 'Golan Heights Villa',
+        locationZone: 'golan',
+        eventDate: '2026-12-05',
+      },
+      language: 'en',
+      items: [],
+      daysCount: 1,
+      djPerformanceHours: 4,
+      djRatePerHour: 400,
+      preprodHours: 0,
+      preprodRatePerHour: 150,
+      setupTeardownFee: 0,
+      logisticsFee: 0,
+      discount: { type: 'fixed', value: 0 },
+      applyVat: false,
+    });
+
+    const enWaUrl = generateQuoteWhatsAppUrl(quote, 'en', 'https://dj.dimaminka.com/q/aB3x9Z1');
+    expect(decodeURIComponent(enWaUrl)).toContain('Hi Dima!');
+    expect(decodeURIComponent(enWaUrl)).toContain('Golan Heights Villa');
+    expect(decodeURIComponent(enWaUrl)).toContain('https://dj.dimaminka.com/q/aB3x9Z1');
+
+    const ruWaUrl = generateQuoteWhatsAppUrl(quote, 'ru', 'https://dj.dimaminka.com/ru/q/aB3x9Z1');
+    expect(decodeURIComponent(ruWaUrl)).toContain('Привет, Дима!');
+    expect(decodeURIComponent(ruWaUrl)).toContain('Golan Heights Villa');
+    expect(decodeURIComponent(ruWaUrl)).toContain('https://dj.dimaminka.com/ru/q/aB3x9Z1');
+  });
+
+  it('generates canonical representation correctly, excluding volatile fields and trimming strings', () => {
+    const quote = calculateQuote({
+      client: {
+        name: '  Sarah   ',
+        venueName: '  Villa Galilee  ',
+        locationZone: 'upper_galilee',
+        eventDate: '2026-11-20',
+      },
+      language: 'ru',
+      items: [
+        {
+          id: 'b_item',
+          name: { en: 'B', ru: 'Б', he: 'ב' },
+          category: 'sound',
+          unitPrice: 200,
+          quantity: 2,
+        },
+        {
+          id: 'zero_item',
+          name: { en: 'Zero', ru: 'Ноль', he: 'אפס' },
+          category: 'sound',
+          unitPrice: 500,
+          quantity: 0,
+        },
+        {
+          id: 'a_item',
+          name: { en: 'A', ru: 'А', he: 'א' },
+          category: 'sound',
+          unitPrice: 100,
+          quantity: 1,
+        },
+      ],
+      daysCount: 1,
+      djPerformanceHours: 3,
+      djRatePerHour: 400,
+      preprodHours: 1,
+      preprodRatePerHour: 150,
+      setupTeardownFee: 200,
+      logisticsFee: 100,
+      discount: { type: 'fixed', value: 50, reason: '  Early Bird  ' },
+      applyVat: true,
+      notes: '  Need wireless mic  ',
+    });
+
+    const canonicalJson = getCanonicalQuoteString(quote);
+    const parsed = JSON.parse(canonicalJson);
+
+    // Volatile properties must not be present
+    expect(parsed.id).toBeUndefined();
+    expect(parsed.createdAt).toBeUndefined();
+    expect(parsed.validUntil).toBeUndefined();
+
+    // Strings must be trimmed
+    expect(parsed.client.name).toBe('Sarah');
+    expect(parsed.client.venueName).toBe('Villa Galilee');
+    expect(parsed.financials.discount.reason).toBe('Early Bird');
+    expect(parsed.notes).toBe('Need wireless mic');
+
+    // 0-quantity items filtered out and remaining sorted by id
+    expect(parsed.equipment.items.length).toBe(2);
+    expect(parsed.equipment.items[0].id).toBe('a_item');
+    expect(parsed.equipment.items[1].id).toBe('b_item');
+  });
+});
+
+describe('loadQuoteFromKv', () => {
+  it('safely loads and validates a well-formed quote from KV', async () => {
+    const validQuote = calculateQuote({
+      client: { name: 'Dan', venueName: 'Venue', locationZone: 'golan', eventDate: '2026-11-01' },
+      language: 'en',
+      items: [],
+      daysCount: 1,
+      djPerformanceHours: 2,
+      djRatePerHour: 400,
+      preprodHours: 0,
+      preprodRatePerHour: 0,
+      setupTeardownFee: 0,
+      logisticsFee: 0,
+      discount: { type: 'fixed', value: 0 },
+      applyVat: false,
+    });
+
+    const mockKv = {
+      get: vi.fn().mockResolvedValue(JSON.stringify(validQuote)),
+    };
+
+    const loaded = await loadQuoteFromKv(mockKv, 'validId');
+    expect(loaded).not.toBeNull();
+    expect(loaded?.client.name).toBe('Dan');
+    expect(loaded?.financials.grandTotal).toBe(validQuote.financials.grandTotal);
+  });
+
+  it('returns null on missing key, null KV, or corrupted payload', async () => {
+    expect(await loadQuoteFromKv(null, 'id')).toBeNull();
+    expect(await loadQuoteFromKv({}, 'id')).toBeNull();
+
+    const notFoundKv = { get: vi.fn().mockResolvedValue(null) };
+    expect(await loadQuoteFromKv(notFoundKv, 'missingId')).toBeNull();
+
+    const corruptedKv = { get: vi.fn().mockResolvedValue('not-valid-json{{{') };
+    expect(await loadQuoteFromKv(corruptedKv, 'badId')).toBeNull();
+
+    const errorKv = { get: vi.fn().mockRejectedValue(new Error('KV connection error')) };
+    expect(await loadQuoteFromKv(errorKv, 'errorId')).toBeNull();
+  });
+
+  it('rejects payloads missing essential sub-trees or schema versions', async () => {
+    const missingEquip = { v: 1, client: {}, financials: {}, services: {} };
+    const mockKv1 = { get: vi.fn().mockResolvedValue(JSON.stringify(missingEquip)) };
+    expect(await loadQuoteFromKv(mockKv1, 'test')).toBeNull();
+
+    const wrongVersion = { v: 2, client: {}, financials: {}, equipment: { items: [] }, services: {} };
+    const mockKv2 = { get: vi.fn().mockResolvedValue(JSON.stringify(wrongVersion)) };
+    expect(await loadQuoteFromKv(mockKv2, 'test')).toBeNull();
   });
 });
 

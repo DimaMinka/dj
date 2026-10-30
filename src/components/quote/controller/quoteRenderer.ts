@@ -151,7 +151,8 @@ export function syncControlsToDom(
 export function renderApp(
   state: QuoteInternalState,
   dom: QuoteDomElements,
-  config: ClientQuoteConfig
+  config: ClientQuoteConfig,
+  shortUrl?: string | null
 ): void {
   const quote = computeQuote(state, config);
 
@@ -235,10 +236,10 @@ export function renderApp(
   }
 
   if (dom.btnWhatsAppDirect) {
-    dom.btnWhatsAppDirect.href = generateQuoteWhatsAppUrl(quote, config.lang);
+    dom.btnWhatsAppDirect.href = generateQuoteWhatsAppUrl(quote, config.lang, shortUrl || undefined);
   }
   if (dom.mobileWhatsAppBtn) {
-    dom.mobileWhatsAppBtn.href = generateQuoteWhatsAppUrl(quote, config.lang);
+    dom.mobileWhatsAppBtn.href = generateQuoteWhatsAppUrl(quote, config.lang, shortUrl || undefined);
   }
   if (dom.mobileGrandTotal) {
     dom.mobileGrandTotal.innerHTML = `<bdi>${formatCurrency(quote.financials.grandTotal)} ₪</bdi>`;
@@ -387,7 +388,7 @@ export function renderApp(
   }
 
   if (dom.propWhatsAppConfirmBtn) {
-    dom.propWhatsAppConfirmBtn.href = generateQuoteWhatsAppUrl(quote, config.lang);
+    dom.propWhatsAppConfirmBtn.href = generateQuoteWhatsAppUrl(quote, config.lang, shortUrl || undefined);
   }
 
   // 9. View Mode Toggle
@@ -396,10 +397,20 @@ export function renderApp(
     dom.clientProposalSection?.classList.remove('hidden');
     dom.mobileStickyBar?.classList.add('hidden');
     if (dom.viewModeIndicator) dom.viewModeIndicator.textContent = config.labels.badgeClientView;
-    if (dom.quoteStatusBadge) dom.quoteStatusBadge.textContent = config.labels.grandTotal;
+    if (dom.quoteStatusBadge) {
+      const shortIdMatch = shortUrl ? shortUrl.match(/\/q\/([0-9a-zA-Z_-]+)/) : null;
+      dom.quoteStatusBadge.textContent = shortIdMatch
+        ? `#${shortIdMatch[1]}`
+        : config.labels.badgeClientView;
+    }
     if (dom.pageMainHeading) {
       dom.pageMainHeading.textContent =
         quote.client.venueName || config.labels.defaultHeading || 'Production Quote';
+    }
+    if (dom.pageMainSubtitle) {
+      dom.pageMainSubtitle.textContent = quote.client.name
+        ? `${quote.client.name}${quote.client.eventDate ? ` • ${quote.client.eventDate}` : ''}`
+        : (config.labels.quotePageSubtitle || '');
     }
   } else {
     dom.clientProposalSection?.classList.add('hidden');
@@ -409,6 +420,9 @@ export function renderApp(
     if (dom.quoteStatusBadge) dom.quoteStatusBadge.textContent = config.labels.badgeEstimate;
     if (dom.pageMainHeading) {
       dom.pageMainHeading.textContent = config.labels.defaultHeading || 'Production Quote & Cost Calculator';
+    }
+    if (dom.pageMainSubtitle) {
+      dom.pageMainSubtitle.textContent = config.labels.quotePageSubtitle || '';
     }
   }
 }

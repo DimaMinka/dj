@@ -1,4 +1,5 @@
-import { decodeQuoteFromHash, getShareableQuoteUrl } from '../../../utils/quoteEncoder';
+import { decodeQuoteFromHash, getShareableQuoteUrl, generateQuoteWhatsAppUrl } from '../../../utils/quoteEncoder';
+import { actions } from 'astro:actions';
 import type { ClientQuoteConfig } from './quoteTypes';
 import { cacheDomElements } from './quoteDom';
 import {
@@ -19,6 +20,64 @@ export function initQuoteApp(): void {
   const dom = cacheDomElements();
   const state = createInitialState(config);
 
+  let cachedShortUrl: string | null = null;
+  let shortUrlPromise: Promise<string> | null = null;
+
+  function invalidateShortUrl(): void {
+    cachedShortUrl = null;
+    shortUrlPromise = null;
+  }
+
+  function syncLanguageLinks(): void {
+    const btnEn = document.getElementById('headerLangBtnEn') as HTMLAnchorElement | null;
+    const btnRu = document.getElementById('headerLangBtnRu') as HTMLAnchorElement | null;
+    const btnHe = document.getElementById('headerLangBtnHe') as HTMLAnchorElement | null;
+    if (!btnEn && !btnRu && !btnHe) return;
+
+    if (cachedShortUrl) {
+      const match = cachedShortUrl.match(/\/q\/([0-9a-zA-Z_-]+)/);
+      if (match) {
+        const sid = match[1];
+        if (btnEn) { btnEn.pathname = `/q/${sid}`; btnEn.hash = ''; }
+        if (btnRu) { btnRu.pathname = `/ru/q/${sid}`; btnRu.hash = ''; }
+        if (btnHe) { btnHe.pathname = `/he/q/${sid}`; btnHe.hash = ''; }
+        return;
+      }
+    }
+
+    // In builder mode with uncommitted edits: preserve live edits across language switch via hash
+    const quote = computeQuote(state, config);
+    const hash = '#' + encodeQuoteToHash(quote);
+    if (btnEn) { btnEn.pathname = '/quote'; btnEn.hash = hash; }
+    if (btnRu) { btnRu.pathname = '/ru/quote'; btnRu.hash = hash; }
+    if (btnHe) { btnHe.pathname = '/he/quote'; btnHe.hash = hash; }
+  }
+
+  function triggerRender(): void {
+    renderApp(state, dom, config, cachedShortUrl);
+    syncLanguageLinks();
+  }
+
+  // Hydrate from SSR props if loaded on /q/:id route
+  const shortIdAttr = appEl.getAttribute('data-short-id');
+  if (shortIdAttr) {
+    const langPrefix = config.lang === 'en' ? '' : `/${config.lang}`;
+    cachedShortUrl = `${window.location.origin}${langPrefix}/q/${shortIdAttr}`;
+  }
+
+  const initialQuoteAttr = appEl.getAttribute('data-initial-quote');
+  if (initialQuoteAttr) {
+    try {
+      const parsedQuote = JSON.parse(initialQuoteAttr);
+      if (parsedQuote && parsedQuote.v === 1) {
+        applyDecodedQuoteToState(state, parsedQuote, config);
+        state.viewMode = 'client';
+      }
+    } catch (err) {
+      console.error('Failed to parse data-initial-quote:', err);
+    }
+  }
+
   let toastTimer: number | null = null;
   function showToast(msg: string): void {
     if (!dom.toastMessage || !dom.toastText) return;
@@ -31,15 +90,16 @@ export function initQuoteApp(): void {
     }, 2500);
   }
 
-  // 1. Process URL Hash (Saved Quote)
+  // 1. Process URL Hash (Legacy Saved Quote via #q=...)
   function processUrlHash(): void {
     const hash = window.location.hash;
     if (hash && hash.includes('q=')) {
       const decoded = decodeQuoteFromHash(hash);
       if (decoded) {
         applyDecodedQuoteToState(state, decoded, config);
+        invalidateShortUrl();
         syncControlsToDom(state, dom, config);
-        renderApp(state, dom, config);
+        triggerRender();
         return;
       }
     }
@@ -65,32 +125,38 @@ export function initQuoteApp(): void {
   // 3. Attach Event Listeners
   dom.inputEventName?.addEventListener('input', (e) => {
     state.eventName = (e.target as HTMLInputElement).value;
-    renderApp(state, dom, config);
+    invalidateShortUrl();
+    triggerRender();
   });
 
   dom.inputClientName?.addEventListener('input', (e) => {
     state.clientName = (e.target as HTMLInputElement).value;
-    renderApp(state, dom, config);
+    invalidateShortUrl();
+    triggerRender();
   });
 
   dom.inputEventDate?.addEventListener('change', (e) => {
     state.eventDate = (e.target as HTMLInputElement).value;
-    renderApp(state, dom, config);
+    invalidateShortUrl();
+    triggerRender();
   });
 
   dom.selectLocationZone?.addEventListener('change', (e) => {
     state.locationZone = (e.target as HTMLSelectElement).value;
-    renderApp(state, dom, config);
+    invalidateShortUrl();
+    triggerRender();
   });
 
   dom.sliderDjHours?.addEventListener('input', (e) => {
     state.djHours = Number((e.target as HTMLInputElement).value);
-    renderApp(state, dom, config);
+    invalidateShortUrl();
+    triggerRender();
   });
 
   dom.sliderPreprodHours?.addEventListener('input', (e) => {
     state.preprodHours = Number((e.target as HTMLInputElement).value);
-    renderApp(state, dom, config);
+    invalidateShortUrl();
+    triggerRender();
   });
 
   // Trips Selector
@@ -105,7 +171,8 @@ export function initQuoteApp(): void {
 
       document.querySelectorAll('.trip-toggle-btn').forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
-      renderApp(state, dom, config);
+      invalidateShortUrl();
+      triggerRender();
     });
   });
 
@@ -117,7 +184,8 @@ export function initQuoteApp(): void {
 
       document.querySelectorAll('.day-toggle-btn').forEach((b) => b.classList.remove('active'));
       btn.classList.add('active');
-      renderApp(state, dom, config);
+      invalidateShortUrl();
+      triggerRender();
     });
   });
 
@@ -151,7 +219,8 @@ export function initQuoteApp(): void {
         if (text) text.textContent = config.labels.removeBtn;
       }
 
-      renderApp(state, dom, config);
+      invalidateShortUrl();
+      triggerRender();
     });
   });
 
@@ -166,8 +235,9 @@ export function initQuoteApp(): void {
       btn.classList.add('active');
 
       applyPresetToState(state, matched, config);
+      invalidateShortUrl();
       syncControlsToDom(state, dom, config);
-      renderApp(state, dom, config);
+      triggerRender();
 
       showToast(`${config.labels.presetLoadedToast || 'Preset loaded'}: ${matched.name[config.lang]}`);
     });
@@ -194,29 +264,97 @@ export function initQuoteApp(): void {
           if (dom.inputDiscountVal) dom.inputDiscountVal.value = String(state.discountVal);
         }
       }
-      renderApp(state, dom, config);
+      invalidateShortUrl();
+      triggerRender();
     });
   });
 
   dom.inputDiscountVal?.addEventListener('input', (e) => {
     state.discountVal = Math.max(0, Number((e.target as HTMLInputElement).value) || 0);
-    renderApp(state, dom, config);
+    invalidateShortUrl();
+    triggerRender();
   });
 
   dom.inputDiscountReason?.addEventListener('input', (e) => {
     state.discountReason = (e.target as HTMLInputElement).value;
-    renderApp(state, dom, config);
+    invalidateShortUrl();
+    triggerRender();
   });
 
-  // Copy Shareable Link Action
+  // Asynchronous Short URL generator with KV storage and fallback
+  async function getOrFetchShortUrl(): Promise<string> {
+    if (cachedShortUrl) {
+      return cachedShortUrl;
+    }
+    if (shortUrlPromise) {
+      return shortUrlPromise;
+    }
+
+    const quote = computeQuote(state, config);
+    const fallbackUrl = getShareableQuoteUrl(quote, window.location.origin);
+
+    shortUrlPromise = (async () => {
+      try {
+        const result = await actions.createShortQuote({ quote: quote as any });
+        if (result.data?.path) {
+          cachedShortUrl = `${window.location.origin}${result.data.path}`;
+          if (typeof window !== 'undefined' && window.history?.replaceState) {
+            window.history.replaceState(null, '', result.data.path);
+            window.dispatchEvent(
+              new CustomEvent('dj:quote-url-change', {
+                detail: { shortId: result.data.id, path: result.data.path },
+              })
+            );
+          }
+          triggerRender();
+          return cachedShortUrl;
+        }
+        console.warn('[copyShareableLink] Short quote creation returned error:', result.error);
+        return fallbackUrl;
+      } catch (err) {
+        console.warn('[copyShareableLink] Failed to call createShortQuote, falling back to hash:', err);
+        return fallbackUrl;
+      } finally {
+        shortUrlPromise = null;
+      }
+    })();
+
+    return shortUrlPromise;
+  }
+
+  // Copy Shareable Link Action (Safari-safe async ClipboardItem)
   async function copyShareableLink(): Promise<void> {
     const quote = computeQuote(state, config);
-    const fullUrl = getShareableQuoteUrl(quote, window.location.origin);
+    const fallbackUrl = getShareableQuoteUrl(quote, window.location.origin);
+
+    // Modern Safari / Chromium: ClipboardItem with Promise<Blob> maintains user activation
+    if (typeof ClipboardItem !== 'undefined' && navigator.clipboard?.write) {
+      try {
+        const urlPromise = getOrFetchShortUrl();
+        const item = new ClipboardItem({
+          'text/plain': urlPromise
+            .catch(() => fallbackUrl)
+            .then((url) => new Blob([url], { type: 'text/plain' })),
+        });
+        await navigator.clipboard.write([item]);
+        showToast(config.labels.copiedLink);
+        return;
+      } catch (err) {
+        console.warn('ClipboardItem write failed, trying writeText fallback:', err);
+      }
+    }
+
+    // Classic writeText fallback
     try {
-      await navigator.clipboard.writeText(fullUrl);
-      showToast(config.labels.copiedLink);
+      const url = await getOrFetchShortUrl().catch(() => fallbackUrl);
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(url);
+        showToast(config.labels.copiedLink);
+      } else {
+        prompt('Copy link:', url);
+      }
     } catch {
-      prompt('Copy link:', fullUrl);
+      prompt('Copy link:', fallbackUrl);
     }
   }
 
@@ -240,8 +378,13 @@ export function initQuoteApp(): void {
   // View Mode Switchers
   const switchToClientView = () => {
     state.viewMode = 'client';
-    renderApp(state, dom, config);
+    triggerRender();
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Background prefetch short URL for instant WhatsApp confirmation and link copying
+    if (!cachedShortUrl) {
+      getOrFetchShortUrl().catch(() => {});
+    }
   };
 
   document.getElementById('btnPreviewProposal')?.addEventListener('click', switchToClientView);
@@ -250,7 +393,7 @@ export function initQuoteApp(): void {
   document.getElementById('btnEditQuote')?.addEventListener('click', () => {
     state.viewMode = 'builder';
     syncControlsToDom(state, dom, config);
-    renderApp(state, dom, config);
+    triggerRender();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
@@ -258,13 +401,22 @@ export function initQuoteApp(): void {
   setupAccordion('togglePropEquip', 'propEquipContent');
   setupAccordion('togglePropServices', 'propServicesContent');
 
-  // Boot: hashcheck or initial preset render
-  processUrlHash();
+  // Boot: if loaded without SSR short ID, check URL hash; otherwise ignore stale hash
+  if (!shortIdAttr) {
+    processUrlHash();
+  }
   syncControlsToDom(state, dom, config);
-  renderApp(state, dom, config);
+  triggerRender();
+
+  // If booted into client view without a short URL (e.g. from #q=...), prefetch short link
+  if (state.viewMode === 'client' && !cachedShortUrl) {
+    getOrFetchShortUrl().catch(() => {});
+  }
 
   // Listen to popstate/hashchange
   window.addEventListener('hashchange', () => {
-    processUrlHash();
+    if (!shortIdAttr) {
+      processUrlHash();
+    }
   });
 }

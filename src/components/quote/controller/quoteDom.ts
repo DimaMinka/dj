@@ -5,6 +5,7 @@ export interface QuoteDomElements {
   viewModeIndicator: HTMLElement | null;
   quoteStatusBadge: HTMLElement | null;
   pageMainHeading: HTMLElement | null;
+  pageMainSubtitle: HTMLElement | null;
 
   // Proposal Elements
   propEventName: HTMLElement | null;
@@ -91,6 +92,7 @@ export function cacheDomElements(): QuoteDomElements {
     viewModeIndicator: document.getElementById('viewModeIndicator'),
     quoteStatusBadge: document.getElementById('quoteStatusBadge'),
     pageMainHeading: document.getElementById('pageMainHeading'),
+    pageMainSubtitle: document.getElementById('pageMainSubtitle'),
 
     propEventName: document.getElementById('propEventName'),
     propVenue: document.getElementById('propVenue'),

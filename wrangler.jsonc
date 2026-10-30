@@ -19,6 +19,13 @@
 			"name": "SEND_EMAIL"
 		}
 	],
+	"kv_namespaces": [
+		{
+			"binding": "QUOTES_KV",
+			"id": "2f2054a83e8541139744d91fceded901",
+			"preview_id": "b04d161925224686965bc831882080a4"
+		}
+	],
 	"observability": {
 		"enabled": true
 	}

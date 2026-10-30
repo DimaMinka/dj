@@ -28,7 +28,8 @@ const currentPath = Astro.url.pathname;
 const cleanPath = currentPath.replace(/^\/(ru|he)(\/|$)/, "$2") || "/";
 const isAbout = currentSection === "about" || cleanPath.startsWith("/about");
 const isVibes = currentSection === "vibes" || cleanPath.startsWith("/vibes");
-const isQuote = currentSection === "quote" || cleanPath.startsWith("/quote");
+const isShortQuote = cleanPath.startsWith("/q/") || cleanPath === "/q";
+const isQuote = currentSection === "quote" || cleanPath.startsWith("/quote") || isShortQuote;
 
 // Language links depending on current section
 let enHref: string;
@@ -39,6 +40,17 @@ if (isVibes) {
   enHref = `/vibes/${currentSlug}`;
   ruHref = `/ru/vibes/${currentSlug}`;
   heHref = `/he/vibes/${currentSlug}`;
+} else if (isShortQuote) {
+  const shortId = cleanPath.replace(/^\/q\/?/, '').split('/')[0];
+  if (shortId) {
+    enHref = `/q/${shortId}`;
+    ruHref = `/ru/q/${shortId}`;
+    heHref = `/he/q/${shortId}`;
+  } else {
+    enHref = "/quote";
+    ruHref = "/ru/quote";
+    heHref = "/he/quote";
+  }
 } else if (isAbout) {
   enHref = "/about";
   ruHref = "/ru/about";
@@ -275,11 +287,46 @@ const vibesHref = "/vibes";
 
       // Initial sync
       updateLogoVibe(currentIndex);
-    } else {
       window.addEventListener("dj:theme-change", ((e: CustomEvent) => {
         if (e.detail?.theme) updateLabel(e.detail.theme);
       }) as EventListener);
     }
+
+    function syncHashToQuoteLangLinks() {
+      const hash = window.location.hash;
+      if (!hash || !hash.includes("q=")) return;
+      const btnEn = document.getElementById("headerLangBtnEn") as HTMLAnchorElement | null;
+      const btnRu = document.getElementById("headerLangBtnRu") as HTMLAnchorElement | null;
+      const btnHe = document.getElementById("headerLangBtnHe") as HTMLAnchorElement | null;
+      [btnEn, btnRu, btnHe].forEach((btn) => {
+        if (btn && (btn.pathname.includes("/quote") || btn.pathname.includes("/q/"))) {
+          btn.hash = hash;
+        }
+      });
+    }
+
+    syncHashToQuoteLangLinks();
+    window.addEventListener("hashchange", syncHashToQuoteLangLinks);
+
+    window.addEventListener("dj:quote-url-change", ((e: CustomEvent) => {
+      const { shortId } = e.detail || {};
+      if (!shortId) return;
+      const btnEn = document.getElementById("headerLangBtnEn") as HTMLAnchorElement | null;
+      const btnRu = document.getElementById("headerLangBtnRu") as HTMLAnchorElement | null;
+      const btnHe = document.getElementById("headerLangBtnHe") as HTMLAnchorElement | null;
+      if (btnEn) {
+        btnEn.pathname = `/q/${shortId}`;
+        btnEn.hash = "";
+      }
+      if (btnRu) {
+        btnRu.pathname = `/ru/q/${shortId}`;
+        btnRu.hash = "";
+      }
+      if (btnHe) {
+        btnHe.pathname = `/he/q/${shortId}`;
+        btnHe.hash = "";
+      }
+    }) as EventListener);
   }
 
   initSiteHeader();

@@ -33,6 +33,7 @@ export interface ClientQuoteConfig {
     defaultHeading: string;
     defaultEventName: string;
     defaultVenue: string;
+    quotePageSubtitle?: string;
     serviceDjSet: string;
     servicePreprod: string;
     serviceSetup: string;
